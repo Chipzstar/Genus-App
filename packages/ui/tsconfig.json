@@ -1,0 +1,14 @@
+{
+  "extends": "@genus/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components": [
+        "./src"
+      ]
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+  },
+  "include": ["*.ts", "src"],
+  "exclude": ["node_modules"],
+}

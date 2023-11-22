@@ -1,0 +1,11 @@
+model User {
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  firstname String
+  lastname  String
+  posts     Post[]
+  groups    GroupUser[]
+  messages  Message[]
+  threads   Thread[]
+  comments  Comment[]
+}

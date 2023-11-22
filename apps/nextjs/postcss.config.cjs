@@ -1,1 +1,2 @@
-module.exports = require("@acme/tailwind-config/postcss");
+// @ts-expect-error - No types for postcss
+module.exports = require("@genus/tailwind-config/postcss");

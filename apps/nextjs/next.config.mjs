@@ -9,10 +9,13 @@
 const config = {
   reactStrictMode: true,
   swcMinify: true,
-  transpilePackages: ["@acme/api", "@acme/db"],
+  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui"],
   // We already do linting on GH actions
   eslint: {
     ignoreDuringBuilds: !!process.env.CI,
+  },
+  typescript: {
+    ignoreBuildErrors: !!process.env.CI,
   },
 };
 

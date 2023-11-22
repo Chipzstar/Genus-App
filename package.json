@@ -1,10 +1,10 @@
 {
-  "name": "t3-turbo-and-clerk",
+  "name": "genus-app",
   "private": true,
   "packageManager": "pnpm@7.13.0",
   "scripts": {
     "build": "turbo build",
-    "clean": "rm -rf node_modules",
+    "clean": "rm -rf node_modules pnpm-lock.yaml",
     "clean:workspaces": "turbo clean",
     "db-generate": "turbo db-generate",
     "db-push": "turbo db-push",
@@ -16,13 +16,14 @@
   },
   "dependencies": {
     "@manypkg/cli": "^0.19.2",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
+    "@turbo/gen": "^1.10.16",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.28.0",
-    "prettier": "^2.8.7",
-    "prettier-plugin-tailwindcss": "^0.1.13",
-    "turbo": "^1.8.8",
-    "typescript": "^4.9.3"
+    "prettier": "^3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2"
   },
   "pnpm": {
     "patchedDependencies": {

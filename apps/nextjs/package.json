@@ -1,5 +1,5 @@
 {
-  "name": "@acme/nextjs",
+  "name": "@genus/nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,21 +12,35 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@acme/api": "*",
-    "@acme/db": "*",
-    "@acme/tailwind-config": "*",
     "@clerk/nextjs": "^4.11.0",
+    "@genus/api": "*",
+    "@genus/db": "*",
+    "@genus/ui": "*",
+    "@hookform/resolvers": "^3.3.2",
+    "@next/font": "^13.1.6",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^4.16.1",
     "@trpc/client": "^10.1.0",
     "@trpc/next": "^10.1.0",
     "@trpc/react-query": "^10.1.0",
     "@trpc/server": "^10.1.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.292.0",
     "next": "^13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@genus/eslint-config": "workspace:^0.2.0",
+    "@genus/prettier-config": "workspace:^0.1.0",
+    "@genus/tailwind-config": "workspace:^0.1.0",
+    "@genus/tsconfig": "workspace:^0.1.0",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
@@ -35,6 +49,14 @@
     "eslint-config-next": "13.1.6",
     "postcss": "^8.4.19",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.3"
+    "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@genus/eslint-config/base",
+      "@genus/eslint-config/nextjs",
+      "@genus/eslint-config/react"
+    ]
   }
 }

@@ -9,19 +9,23 @@
     "db-generate": "turbo db-generate",
     "db-push": "turbo db-push",
     "dev": "turbo dev --parallel",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo lint",
+    "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "FIXME:lint": "turbo lint && manypkg check",
     "type-check": "turbo type-check"
   },
   "dependencies": {
     "@manypkg/cli": "^0.19.2",
-    "@turbo/gen": "^1.10.16",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.28.0",
+    "eslint": "^8.28.0"
+  },
+  "devDependencies": {
+    "@genus/prettier-config": "workspace:^0.1.0",
+    "@turbo/gen": "^1.10.16",
     "prettier": "^3.1.0",
-    "prettier-plugin-tailwindcss": "^0.5.7",
     "turbo": "^1.10.16",
     "typescript": "^5.2.2"
   },

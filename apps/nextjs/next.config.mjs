@@ -16,7 +16,7 @@ const config = {
   },
   typescript: {
     ignoreBuildErrors: !!process.env.CI,
-  },
+  }
 };
 
 export default config;

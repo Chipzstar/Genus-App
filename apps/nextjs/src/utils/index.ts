@@ -3,7 +3,11 @@ export const PATHS = {
     LOGIN: '/login',
     SIGNUP: '/signup',
     FORGOT_PASSWORD: '/forgot-password',
-    RESET_PASSWORD: '/reset-password'
+    RESET_PASSWORD: '/reset-password',
+    INSIGHTS: '/insights',
+    PROFILE: '/profile',
+    NOTIFICATIONS: '/notifications',
+    GROUPS: '/groups',
 }
 
 export function formatString(str: string): string {

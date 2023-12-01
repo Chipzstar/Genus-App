@@ -1,5 +1,5 @@
 import React from 'react';
-import {Montserrat as FontSans} from '@next/font/google';
+import {Montserrat as FontSans} from 'next/font/google';
 import Head from 'next/head';
 
 interface Props {
@@ -13,6 +13,7 @@ const Layout = ({children}: Props) => {
             <Head>
                 <title>Genus Networks</title>
             </Head>
+
             <main className={fontSans.className}>
                 {children}
             </main>

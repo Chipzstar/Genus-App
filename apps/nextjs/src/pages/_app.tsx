@@ -6,6 +6,7 @@ import {trpc} from '~/utils/trpc';
 import type {ReactElement, ReactNode} from "react";
 import type {NextPage} from 'next';
 import Layout from "~/layout/Layout";
+import { NextUIProvider } from '@nextui-org/react';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode
@@ -17,13 +18,15 @@ type AppPropsWithLayout = AppProps & {
 
 type AppTypeWithLayout = ({Component, pageProps: {...pageProps}}: AppPropsWithLayout) => any
 
-const MyApp : AppTypeWithLayout = ({Component, pageProps: {...pageProps}}: AppPropsWithLayout) => {
+const MyApp: AppTypeWithLayout = ({Component, pageProps: {...pageProps}}: AppPropsWithLayout) => {
     const getLayout = Component.getLayout ?? ((page) => page)
     return getLayout(
         <ClerkProvider {...pageProps} publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <NextUIProvider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </NextUIProvider>
         </ClerkProvider>
     )
 };

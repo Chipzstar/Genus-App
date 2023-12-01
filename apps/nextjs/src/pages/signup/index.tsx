@@ -14,7 +14,6 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@ge
 import {formatString} from "~/utils";
 
 const Signup: NextPageWithLayout = () => {
-
     // 1. Define your form.
     const form = useForm<z.infer<typeof signupSchema>>({
         defaultValues: {

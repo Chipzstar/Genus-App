@@ -10,8 +10,8 @@
     "db:studio": "pnpm with-env prisma studio --port 5556",
     "db:push": "pnpm with-env prisma db push",
     "db:generate": "pnpm with-env prisma generate",
-    "db:merge": "pnpm with-env prismerge",
-    "db:sync": "pnpm with-env prisma generate && pnpm with-env prisma db push"
+    "db:merge": "pnpm prismerge",
+    "db:sync": "pnpm prismerge && pnpm with-env prisma generate && pnpm with-env prisma db push"
   },
   "dependencies": {
     "@prisma-utils/prismerge": "^1.7.0",

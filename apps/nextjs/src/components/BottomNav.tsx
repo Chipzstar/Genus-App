@@ -3,10 +3,10 @@ import {Bell, Home, Search, Users, User2 } from 'lucide-react';
 import React from 'react';
 import {PATHS} from "~/utils";
 
-
 interface Props {
     activePage: string;
 }
+
 const BottomNav = ({activePage=PATHS.HOME} : Props) => {
     return (
         <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-primary border-t border-gray-2000">

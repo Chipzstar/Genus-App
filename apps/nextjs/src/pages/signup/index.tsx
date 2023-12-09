@@ -4,16 +4,21 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@g
 import {Input} from "@genus/ui/input";
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {career_interests, genders, signupSchema} from "~/schemas";
+import {broad_course_categories, career_interests, genders, signupSchema} from "~/schemas";
 import AuthLayout from "../../layout/AuthLayout";
-import React, {ReactElement} from "react";
+import React, {ReactElement, useEffect} from "react";
 import type {NextPageWithLayout} from '../_app';
 import {Avatar, AvatarFallback} from "@genus/ui/avatar";
 import {User} from 'lucide-react'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
-import {formatString} from "~/utils";
+import {formatString, labelEncode} from "~/utils";
+import {trpc} from "~/utils/trpc";
 
 const Signup: NextPageWithLayout = () => {
+    const {error, data: universities} = trpc.auth.getUniversities.useQuery(undefined, {
+        placeholderData: ['The London School of Economics and Political Science']
+    })
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof signupSchema>>({
         defaultValues: {
@@ -24,7 +29,7 @@ const Signup: NextPageWithLayout = () => {
             confirmPassword: '',
             gender: 'male',
             completion_year: '',
-            broad_degree_course: '',
+            broad_degree_course: 'economics',
             university: 'kings-college-london',
             degree_name: '',
             career_interests: 'banking_finance'
@@ -131,7 +136,10 @@ const Signup: NextPageWithLayout = () => {
                                             </FormControl>
                                             <SelectContent>
                                                 {genders.map(gender => (
-                                                    <SelectItem value={gender}>{formatString(gender)}</SelectItem>
+                                                    <SelectItem
+                                                        key={gender}
+                                                        value={gender}>{formatString(gender)}
+                                                    </SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
@@ -145,9 +153,54 @@ const Signup: NextPageWithLayout = () => {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormLabel>University</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} className='rounded-xl'/>
-                                        </FormControl>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger className='rounded-xl'>
+                                                    <SelectValue placeholder="Select a verified email to display"/>
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {universities?.map((university, index) => {
+                                                    if (university)
+                                                        return (
+                                                            <SelectItem
+                                                                key={index}
+                                                                value={labelEncode(university)}>
+                                                                {university}
+                                                            </SelectItem>
+                                                        )
+                                                })}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="broad_degree_course"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Broad Degree Course</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger className='rounded-xl'>
+                                                    <SelectValue placeholder="Select your degree field category"/>
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {broad_course_categories?.map((course, index) => {
+                                                    if (course)
+                                                        return (
+                                                            <SelectItem
+                                                                key={index}
+                                                                value={course}>
+                                                                {formatString(course)}
+                                                            </SelectItem>
+                                                        )
+                                                })}
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
@@ -191,8 +244,9 @@ const Signup: NextPageWithLayout = () => {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {career_interests.map(career_interest => (
-                                                    <SelectItem value={career_interest}>{formatString(career_interest)}</SelectItem>
+                                                {career_interests.map((career_interest, index) => (
+                                                    <SelectItem key={index}
+                                                                value={career_interest}>{formatString(career_interest)}</SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>

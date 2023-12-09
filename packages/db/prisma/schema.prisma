@@ -84,6 +84,7 @@ model Thread {
 
 model User {
   id        Int         @id @default(autoincrement())
+  clerk_id  String      @unique
   email     String      @unique
   firstname String
   lastname  String

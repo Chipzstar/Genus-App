@@ -16,3 +16,17 @@ export function formatString(str: string): string {
         .replace(/\b\w/g, l => l.toUpperCase());
 }
 
+/**
+ * Sanitizes a string by converting it to lowercase and replacing spaces with hyphens.
+ * @param str
+ */
+export function labelEncode(str: string): string {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '')
+      .replace(/--+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
+}
+

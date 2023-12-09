@@ -5,14 +5,16 @@
   "scripts": {
     "with-env": "dotenv -e ../../.env --",
     "dev": "pnpm with-env next dev --port 3001",
+    "ngrok": "ngrok http --domain=present-shepherd-shining.ngrok-free.app 3001",
     "build": "pnpm with-env next build",
     "clean": "rm -rf .next .turbo node_modules",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "dopper:sync-env": "doppler secrets download --no-file --format env > .env.doppler"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.11.0",
+    "@clerk/nextjs": "^4.27.3",
     "@genus/api": "*",
     "@genus/db": "*",
     "@genus/ui": "*",
@@ -27,12 +29,16 @@
     "@trpc/server": "^10.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "cors": "^2.8.5",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.292.0",
+    "micro": "^10.0.1",
     "next": "^13.5.6",
+    "next-axiom": "^1.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
+    "svix": "^1.15.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.18.0"
@@ -42,6 +48,7 @@
     "@genus/prettier-config": "workspace:^0.1.0",
     "@genus/tailwind-config": "workspace:^0.1.0",
     "@genus/tsconfig": "workspace:^0.1.0",
+    "@types/cors": "^2.8.17",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",

@@ -1,0 +1,3 @@
+setup:
+  - project: web-app
+    config: dev

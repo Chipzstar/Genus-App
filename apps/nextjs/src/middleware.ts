@@ -4,9 +4,8 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
   publicRoutes: [
-    "/",
-    "/sign-in",
-    "/sign-up",
+    "/login",
+    "/signup",
     "/forgot-password",
     "/api",
     "/api/:path/:trpc"

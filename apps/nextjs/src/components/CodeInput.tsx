@@ -63,7 +63,7 @@ const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
         }
     })
 
-    return <Dialog open={true} onOpenChange={setOpen}>
+    return <Dialog open={opened} onOpenChange={setOpen}>
         <Form {...form}>
             <form id="code-form" onSubmit={form.handleSubmit(onSubmit)}>
                 <DialogContent className="max-w-sm sm:max-w-md p-8">

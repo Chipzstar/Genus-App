@@ -10,7 +10,7 @@ import {
     DialogTrigger
 } from "@genus/ui/dialog";
 import {Form, FormField} from "@genus/ui/form";
-import {useForm} from 'react-hook-form';
+import {UseFormReturn, useForm} from 'react-hook-form';
 
 const focusNextInput = (el: React.KeyboardEvent<HTMLInputElement>, prevId: string, nextId: string) => {
     const targetInput = el.target as HTMLInputElement;
@@ -52,14 +52,28 @@ interface Props {
 }
 
 const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
+    const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>, form: UseFormReturn<CodeFormValues>) => {
+        event.preventDefault();
+        let copyValue = event.clipboardData.getData('Text').trim();
+        if (copyValue.length !== 6) {
+            copyValue = copyValue.slice(0, 6)
+        }
+        form.setValue("code1", copyValue.charAt(0))
+        form.setValue("code2", copyValue.charAt(1))
+        form.setValue("code3", copyValue.charAt(2))
+        form.setValue("code4", copyValue.charAt(3))
+        form.setValue("code5", copyValue.charAt(4))
+        form.setValue("code6", copyValue.charAt(5))
+    };
+
     const form = useForm<CodeFormValues>({
         defaultValues: {
-            code1: '',
-            code2: '',
-            code3: '',
-            code4: '',
-            code5: '',
-            code6: ''
+            code1: undefined,
+            code2: undefined,
+            code3: undefined,
+            code4: undefined,
+            code5: undefined,
+            code6: undefined
         }
     })
 
@@ -80,6 +94,7 @@ const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
                             const prevId = `code-${current - 1}`;
                             const nextId = `code-${current + 1}`;
                             return <FormField
+                                key={index}
                                 control={form.control}
                                 name={name as KeyUnion}
                                 render={({field}) => (
@@ -88,10 +103,13 @@ const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
                                         <input
                                             {...field}
                                             type="number"
+                                            max={9}
+                                            min={0}
                                             maxLength={1}
                                             onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => focusNextInput(event, prevId, nextId)}
                                             id={currentId}
                                             className="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 number-input"
+                                            onPaste={(event) => handlePaste(event, form)}
                                             required
                                         />
                                     </div>
@@ -100,10 +118,10 @@ const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
                         })}
                     </div>
                     <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        Please enter the 4 digit code we sent via email.
+                        Please enter the 6 digit code we sent via email.
                     </p>
                     <DialogFooter className="sm:justify-end">
-                        <Button type="submit" variant="secondary" form="code-form">
+                        <Button disabled={false} type="submit" variant="secondary" form="code-form">
                             Submit
                         </Button>
                     </DialogFooter>

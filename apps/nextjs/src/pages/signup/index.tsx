@@ -122,6 +122,7 @@ const Signup: NextPageWithLayout = () => {
             });
         } catch (error) {
             setLoading(false);
+            console.error(error)
             toast({
                 title: "Uh oh! Something went wrong.",
                 description: "There was a problem signing you up.",

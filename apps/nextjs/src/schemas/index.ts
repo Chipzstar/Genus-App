@@ -52,7 +52,7 @@ export const signupSchema = z.object({
     }),
     confirmPassword: z.string(),
     gender: gendersSchema,
-    university: z.enum(["london-school-of-economics", "kings-college-london"]).default("london-school-of-economics"),
+    university: z.string(),
     broad_degree_course: broadCourseCategorySchema,
     degree_name: z.string({required_error: "Please enter your degree."}).min(2),
     completion_year: completionYearSchema,

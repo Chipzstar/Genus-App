@@ -14,7 +14,9 @@
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "FIXME:lint": "turbo lint && manypkg check",
-    "type-check": "turbo type-check"
+    "type-check": "turbo type-check",
+    "vercel:dev": "dotenv -e .env -- vercel dev -p 3001",
+    "vercel:build": "dotenv -e .env -- vercel build"
   },
   "dependencies": {
     "@manypkg/cli": "^0.19.2",

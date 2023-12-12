@@ -25,6 +25,7 @@
     "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",
     "./toast": "./src/ui/toast.tsx",
+    "./toaster": "./src/ui/toaster.tsx",
     "./textarea": "./src/ui/textarea.tsx",
     "./use-toast": "./src/ui/use-toast.ts"
   },

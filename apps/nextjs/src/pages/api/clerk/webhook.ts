@@ -6,7 +6,7 @@ import { buffer } from 'micro';
 import { Webhook, WebhookRequiredHeaders } from 'svix';
 import { IncomingHttpHeaders } from 'http';
 import { createNewUser, deleteUser, updateUser } from '~/server/handlers/clerk';
-import { ClerkEvent } from '~/utils/types';
+import type { WebhookEvent } from "@clerk/clerk-sdk-node"
 
 // Disable the bodyParser so we can access the raw
 // request body for verification.
@@ -26,14 +26,13 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
             // Verify the webhook signature
             // See https://docs.svix.com/receiving/verifying-payloads/how
             // Validate the incoming data and return 400 if it's not what is expected
-            console.log(req.body)
             const payload = (await buffer(req)).toString();
             log.info(payload);
             const headers = req.headers;
             const wh = new Webhook(webhookSecret);
-            let event: ClerkEvent | null = null;
-            event = wh.verify(payload, headers) as ClerkEvent;
-
+            let event: WebhookEvent | null = null;
+            event = wh.verify(payload, headers) as WebhookEvent;
+            console.log(event)
             // Handle the webhook
             switch (event.type) {
                 case 'user.created':

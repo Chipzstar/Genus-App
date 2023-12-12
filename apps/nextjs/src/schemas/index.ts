@@ -3,14 +3,16 @@ import {labelEncode} from "~/utils";
 
 export const genders = ["male", "female", "non-binary", "other"] as const;
 export const career_interests = ["banking_finance", "consulting", "law", "tech"] as const;
-
 export const broad_course_categories = ["accounting-and-finance", "agriculture-and-environmental-sciences", "architecture-and-planning", "arts-and-design", "business-and-management", "computer-science-and-it", "economics", "education", "engineering", "health-and-medicine", "humanities-and-social-sciences", "law-and-legal-studies", "language-and-linguistics", "mathematics-and-statistics", "media-and-communications", "natural-sciences", "sports-and-exercise-science"] as const
+export const completion_years = ["2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030"] as const
 
 const gendersSchema = z.enum(genders)
 
 const careerInterestsSchema = z.enum(career_interests)
 
 const broadCourseCategorySchema = z.enum(broad_course_categories)
+
+const completionYearSchema = z.enum(completion_years)
 
 export const loginSchema = z.object({
     email: z
@@ -53,7 +55,7 @@ export const signupSchema = z.object({
     university: z.enum(["london-school-of-economics", "kings-college-london"]).default("london-school-of-economics"),
     broad_degree_course: broadCourseCategorySchema,
     degree_name: z.string({required_error: "Please enter your degree."}).min(2),
-    completion_year: z.string({required_error: "Please enter your completion year."}),
+    completion_year: completionYearSchema,
     career_interests: careerInterestsSchema,
 }).refine(
     (values) => {

@@ -1,20 +1,31 @@
+"use client"
+
 import {zodResolver} from "@hookform/resolvers/zod"
 import {Button} from "@genus/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@genus/ui/form";
 import {Input} from "@genus/ui/input";
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {broad_course_categories, career_interests, genders, signupSchema} from "~/schemas";
+import {broad_course_categories, career_interests, genders, completion_years, signupSchema} from "~/schemas";
 import AuthLayout from "../../layout/AuthLayout";
-import React, {ReactElement, useEffect} from "react";
+import React, {ReactElement, useCallback, useEffect, useState} from "react";
 import type {NextPageWithLayout} from '../_app';
 import {Avatar, AvatarFallback} from "@genus/ui/avatar";
-import {User} from 'lucide-react'
+import {Check, User} from 'lucide-react'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
 import {formatString, labelEncode} from "~/utils";
 import {trpc} from "~/utils/trpc";
+import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
+import {useToast} from "@genus/ui/use-toast";
+import {useRouter} from "next/router";
+import {SignUp, useSignUp} from '@clerk/nextjs';
+import {Toast} from "@genus/ui/toast";
 
 const Signup: NextPageWithLayout = () => {
+    const {toast} = useToast();
+    const router = useRouter()
+    const {isLoaded, signUp} = useSignUp();
+    const [loading, setLoading] = useState(false);
     const {error, data: universities} = trpc.auth.getUniversities.useQuery(undefined, {
         placeholderData: ['The London School of Economics and Political Science']
     })
@@ -28,7 +39,7 @@ const Signup: NextPageWithLayout = () => {
             password: '',
             confirmPassword: '',
             gender: 'male',
-            completion_year: '',
+            completion_year: '2024',
             broad_degree_course: 'economics',
             university: 'kings-college-london',
             degree_name: '',
@@ -37,11 +48,71 @@ const Signup: NextPageWithLayout = () => {
         resolver: zodResolver(signupSchema),
     })
 
-    function onSubmit(values: z.infer<typeof signupSchema>) {
-        // Do something with the form values.
+    /*const confirmSignUp = useCallback(
+        async (code: string) => {
+            setLoading(true);
+            try {
+                // @ts-ignore
+                const result = await signUp.attemptEmailAddressVerification({
+                    code
+                });
+                // @ts-ignore
+                await setActive({ session: result.createdSessionId });
+                // @ts-ignore
+                await setSession(result.createdSessionId);
+                showCodeForm(false);
+                setLoading(false);
+                notifySuccess('verification-success', 'Verification successful!', <IconCheck size={20} />);
+                router.push(PATHS.HOME);
+            } catch (error) {
+                setLoading(false);
+                notifyError('signup-failure', 'Signup failed. Please try again', <IconX size={20} />);
+            }
+        },
+        [router]
+    );*/
+
+    const onSubmit = useCallback(async (values: z.infer<typeof signupSchema>) => {
         // ✅ This will be type-safe and validated.
-        alert(JSON.stringify(values, null, 2))
-    }
+        setLoading(true);
+        if (!isLoaded) {
+            // handle loading state
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem signing you up.",
+                action: <ToastAction altText="Try again">Try again</ToastAction>,
+            })
+            return null;
+        }
+        try {
+            const result = await signUp.create({
+                externalAccountActionCompleteRedirectUrl: "/",
+                gender: values.gender,
+                emailAddress: values.email,
+                password: values.password,
+                firstName: values.firstname,
+                lastName: values.lastname
+            });
+            // Prepare the verification process for the email address.
+            // This method will send a one-time code to the email address supplied to the current sign-up.
+            signUp.prepareEmailAddressVerification().then(result => console.log(result));
+            // showCodeForm(true);
+            setLoading(false);
+            toast({
+                title: "Email Verification Sent",
+                description: 'We have sent you an email with a verification code. Please check your inbox.',
+                action: <ToastAction altText="Verifiation email sent"><Check size={20}/></ToastAction>
+            });
+        } catch (error) {
+            setLoading(false);
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem signing you up.",
+                action: <ToastAction altText="Try again">Try again</ToastAction>,
+                duration: 5000
+            })
+        }
+    }, [isLoaded, signUp]);
 
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
@@ -223,10 +294,26 @@ const Signup: NextPageWithLayout = () => {
                                 name="completion_year"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Completion year</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} className='rounded-xl'/>
-                                        </FormControl>
+                                        <FormLabel>Completion Year</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger className='rounded-xl'>
+                                                    <SelectValue placeholder="Select your completion year"/>
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {completion_years?.map((course, index) => {
+                                                    if (course)
+                                                        return (
+                                                            <SelectItem
+                                                                key={index}
+                                                                value={course}>
+                                                                {formatString(course)}
+                                                            </SelectItem>
+                                                        )
+                                                })}
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage/>
                                     </FormItem>
                                 )}

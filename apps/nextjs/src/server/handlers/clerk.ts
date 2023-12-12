@@ -1,15 +1,15 @@
 import type { PrismaClient } from '@prisma/client';
-import { ClerkEvent } from '~/utils/types';
 import { log } from 'next-axiom';
+import { DeletedObjectJSON, UserJSON, UserWebhookEvent, WebhookEvent } from '@clerk/nextjs/dist/types/api';
 
-export const createNewUser = async ({ event, prisma }: { event: ClerkEvent; prisma: PrismaClient }) => {
+export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent; prisma: PrismaClient }) => {
     try {
-        const payload = event.data;
+        const payload = event.data as UserJSON;
         // create the user
         const user = await prisma.user.create({
             data: {
-                clerk_id: event.data.id,
-                email: payload.email_addresses[0]?.email_address ?? "test@gmail.com",
+                clerk_id: String(event.data.id),
+                email: String(payload.email_addresses[0]?.email_address),
                 firstname: payload.first_name,
                 lastname: payload.last_name
             }
@@ -24,9 +24,9 @@ export const createNewUser = async ({ event, prisma }: { event: ClerkEvent; pris
     }
 };
 
-export const updateUser = async ({ event, prisma }: { event: ClerkEvent; prisma: PrismaClient }) => {
+export const updateUser = async ({ event, prisma }: { event: UserWebhookEvent; prisma: PrismaClient }) => {
     try {
-        const payload = event.data;
+        const payload = event.data as UserJSON;
         // create the user
         const user = await prisma.user.update({
             where: {
@@ -48,9 +48,9 @@ export const updateUser = async ({ event, prisma }: { event: ClerkEvent; prisma:
     }
 };
 
-export const deleteUser = async ({ event, prisma }: { event: ClerkEvent; prisma: PrismaClient }) => {
+export const deleteUser = async ({ event, prisma }: { event: UserWebhookEvent; prisma: PrismaClient }) => {
     try {
-        const payload = event.data;
+        const payload = event.data as DeletedObjectJSON;
         const user = await prisma.user.delete({
             where: {
                 clerk_id: payload.id

@@ -11,21 +11,22 @@ import AuthLayout from "../../layout/AuthLayout";
 import React, {ReactElement, useCallback, useEffect, useState} from "react";
 import type {NextPageWithLayout} from '../_app';
 import {Avatar, AvatarFallback} from "@genus/ui/avatar";
-import {Check, User} from 'lucide-react'
+import {Mail, User, X, Check} from 'lucide-react'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
-import {formatString, labelEncode} from "~/utils";
+import {formatString, labelEncode, PATHS} from "~/utils";
 import {trpc} from "~/utils/trpc";
 import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
 import {useToast} from "@genus/ui/use-toast";
 import {useRouter} from "next/router";
 import {SignUp, useSignUp} from '@clerk/nextjs';
-import {Toast} from "@genus/ui/toast";
+import CodeInput, {CodeFormValues} from "~/components/CodeInput";
 
 const Signup: NextPageWithLayout = () => {
     const {toast} = useToast();
     const router = useRouter()
-    const {isLoaded, signUp} = useSignUp();
+    const {isLoaded, signUp, setActive} = useSignUp();
     const [loading, setLoading] = useState(false);
+    const [isOpen, setCodeVerification] = useState(false);
     const {error, data: universities} = trpc.auth.getUniversities.useQuery(undefined, {
         placeholderData: ['The London School of Economics and Political Science']
     })
@@ -48,29 +49,45 @@ const Signup: NextPageWithLayout = () => {
         resolver: zodResolver(signupSchema),
     })
 
-    /*const confirmSignUp = useCallback(
-        async (code: string) => {
+    const confirmSignUp = useCallback(
+        async (digits: CodeFormValues) => {
             setLoading(true);
+            if (!isLoaded) {
+                // handle loading state
+                toast({
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem signing you up.",
+                    action: <ToastAction altText="Try again">Try again</ToastAction>,
+                })
+                return null;
+            }
             try {
                 // @ts-ignore
+                const code = Object.values(digits).join("")
                 const result = await signUp.attemptEmailAddressVerification({
                     code
                 });
                 // @ts-ignore
                 await setActive({ session: result.createdSessionId });
-                // @ts-ignore
-                await setSession(result.createdSessionId);
-                showCodeForm(false);
+                setCodeVerification(false)
                 setLoading(false);
-                notifySuccess('verification-success', 'Verification successful!', <IconCheck size={20} />);
-                router.push(PATHS.HOME);
+                toast({
+                    title: "Verification successful!",
+                    description: "verification-success",
+                    action: <ToastAction altText="Email Verified"> <Check size={20} /> </ToastAction>,
+                })
+                router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
             } catch (error) {
                 setLoading(false);
-                notifyError('signup-failure', 'Signup failed. Please try again', <IconX size={20} />);
+                toast({
+                    title: "Signup failed. Please try again",
+                    description: "signup-failure",
+                    action: <ToastAction altText="Signup Failed"> <X size={20} /> </ToastAction>,
+                })
             }
         },
-        [router]
-    );*/
+        [isLoaded, router, signUp]
+    );
 
     const onSubmit = useCallback(async (values: z.infer<typeof signupSchema>) => {
         // ✅ This will be type-safe and validated.
@@ -87,21 +104,21 @@ const Signup: NextPageWithLayout = () => {
         try {
             const result = await signUp.create({
                 externalAccountActionCompleteRedirectUrl: "/",
-                gender: values.gender,
                 emailAddress: values.email,
                 password: values.password,
                 firstName: values.firstname,
                 lastName: values.lastname
             });
+            console.log(result)
             // Prepare the verification process for the email address.
             // This method will send a one-time code to the email address supplied to the current sign-up.
-            signUp.prepareEmailAddressVerification().then(result => console.log(result));
-            // showCodeForm(true);
+            await signUp.prepareEmailAddressVerification()
+            setCodeVerification(true)
             setLoading(false);
             toast({
                 title: "Email Verification Sent",
                 description: 'We have sent you an email with a verification code. Please check your inbox.',
-                action: <ToastAction altText="Verifiation email sent"><Check size={20}/></ToastAction>
+                action: <ToastAction altText="Verifiation email sent"><Mail size={20}/></ToastAction>
             });
         } catch (error) {
             setLoading(false);
@@ -116,6 +133,7 @@ const Signup: NextPageWithLayout = () => {
 
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
+            <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} />
             <div className='flex flex-col space-y-4 justify-center items-center'>
                 <Avatar className='h-20 w-20 lg:h-30 lg:w-30'>
                     <AvatarFallback className='bg-neutral-100'>
@@ -126,7 +144,7 @@ const Signup: NextPageWithLayout = () => {
             </div>
             <div className='flex flex-col space-y-12 md:w-1/2 w-full'>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
                         <section className="grid lg:grid-cols-2 gap-x-12 gap-y-4">
                             <FormField
                                 control={form.control}
@@ -343,7 +361,7 @@ const Signup: NextPageWithLayout = () => {
                             />
                         </section>
                         <div className='pt-12'>
-                            <Button type="submit" size='lg' className='w-full h-12 font-semibold'>Complete</Button>
+                            <Button type="submit" form="signup-form" size='lg' className='w-full h-12 font-semibold'>Complete</Button>
                         </div>
                     </form>
                 </Form>

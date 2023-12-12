@@ -76,6 +76,7 @@
     }
     body {
         @apply bg-background text-foreground;
+        font-family: Montserrat, sans-serif;
         font-feature-settings: "rlig" 1, "calt" 1;
     }
 }
@@ -94,5 +95,17 @@
 
 .test4 {
     border: 4px solid pink;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.number-input {
+    -moz-appearance: textfield;
 }
 

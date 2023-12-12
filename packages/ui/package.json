@@ -11,7 +11,7 @@
     "./checkbox": "./src/checkbox.tsx",
     "./command": "./src/command.tsx",
     "./data-table": "./src/data-table.tsx",
-    "./dialog": "./src/dialog.tsx",
+    "./dialog": "./src/ui/dialog.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./form": "./src/ui/form.tsx",
     "./icons": "./src/icons.tsx",
@@ -47,6 +47,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",

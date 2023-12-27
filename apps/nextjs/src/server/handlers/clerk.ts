@@ -8,7 +8,7 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
         // create the user
         const user = await prisma.user.create({
             data: {
-                clerk_id: String(event.data.id),
+                clerkId: String(event.data.id),
                 email: String(payload.email_addresses[0]?.email_address),
                 firstname: payload.first_name,
                 lastname: payload.last_name
@@ -30,7 +30,7 @@ export const updateUser = async ({ event, prisma }: { event: UserWebhookEvent; p
         // create the user
         const user = await prisma.user.update({
             where: {
-                clerk_id: event.data.id
+                clerkId: event.data.id
             },
             data: {
                 email: payload.email_addresses[0]?.email_address,
@@ -53,7 +53,7 @@ export const deleteUser = async ({ event, prisma }: { event: UserWebhookEvent; p
         const payload = event.data as DeletedObjectJSON;
         const user = await prisma.user.delete({
             where: {
-                clerk_id: payload.id
+                clerkId: payload.id
             }
         });
         if (user) {

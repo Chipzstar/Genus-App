@@ -81,6 +81,12 @@
     }
 }
 
+@layer utilities {
+    .h-container {
+        height: calc(100vh - 67px)
+    }
+}
+
 .test1 {
     border: 1px solid red;
 }

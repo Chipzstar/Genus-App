@@ -73,3 +73,12 @@ export interface GeneratePaperPayload {
     num_questions: number | string;
     num_marks: number | string;
 }
+
+export type Message = {
+    id: string;
+    createdAt: number;
+    content: string;
+    authorId: string;
+    groupId: string;
+    thread?: boolean
+}

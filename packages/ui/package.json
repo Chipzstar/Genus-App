@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts",
+    "./alert": "./src/ui/alert.tsx",
     "./avatar": "./src/ui/avatar.tsx",
     "./button": "./src/ui/button.tsx",
     "./calendar": "./src/calendar.tsx",
@@ -57,6 +58,7 @@
     "clsx": "^2.0.0",
     "lucide-react": "^0.292.0",
     "react-hook-form": "^7.48.2",
+    "react-loader-spinner": "^6.1.6",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.18.0"

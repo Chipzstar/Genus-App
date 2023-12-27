@@ -10,9 +10,29 @@ import {
     NavbarMenuItem
 } from "@nextui-org/react";
 import Image from 'next/image';
-import { Button } from "@genus/ui/button";
-import { useClerk } from '@clerk/nextjs';
+import {Button} from "@genus/ui/button";
+import {SignedIn, useClerk, clerkClient} from '@clerk/nextjs';
+import { useRouter } from 'next/router';
+import {PATHS} from "~/utils";
+/*import { getAuth, buildClerkProps } from '@clerk/nextjs/server';
 
+export const getServerSideProps = async ctx => {
+    const { userId } = getAuth(ctx.req);
+
+    if (!userId) return {props: {}}; // This will pass an empty props object and the component will handle the "not logged in" state
+
+    const userFromClerk = userId ? await clerkClient.users.getUser(userId) : null;
+    const user = userFromClerk
+        ? {
+            id: userFromClerk.id,
+            firstName: userFromClerk.firstName,
+            lastName: userFromClerk.lastName,
+            // ... Add other necessary fields here
+        }
+        : null;
+
+    return { props: { user, ...buildClerkProps(ctx.req) } };
+};*/
 
 const images = [
     {
@@ -32,7 +52,8 @@ const images = [
 ]
 
 const Home = () => {
-    const { signOut } = useClerk();
+    const router = useRouter()
+    const {signOut} = useClerk();
     return (
         <div className='min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8'>
             <Navbar classNames={{
@@ -40,15 +61,17 @@ const Home = () => {
             }}>
                 <NavbarBrand>
                     <Image src='/images/white-logo.svg' alt='genus-white' width={100} height={75}/>
+                    <div className='absolute right-4'>
+                    <SignedIn>
+                        <Button onClick={(e) => signOut()}>Logout</Button>
+                    </SignedIn>
+                    </div>
                 </NavbarBrand>
-                <div className='right-5 px-4'>
-                    <Button onClick={(e) => signOut()}>Logout</Button>
-                </div>
             </Navbar>
             <div className='bg-white h-full p-6 sm:px-12 sm:pt-12'>
                 <header className='text-3xl font-semibold'>Home: Finance & Banking</header>
                 <section className='pt-12'>
-                    <div className='flex flex-col space-y-4 justify-center'>
+                    <div className='flex flex-col space-y-4 justify-center' role="button" onClick={() => router.push(PATHS.GROUPS)}>
                         <header className='text-xl font-semibold'>JOIN the group!</header>
                         <Image src='/images/spring-weeks-ldn.svg' alt="Spring Weeks London" width={200} height={150}
                                objectFit=""/>
@@ -59,10 +82,10 @@ const Home = () => {
                     <div className='flex flex-col space-y-4 justify-center'>
                         <div className='flex justify-between items-center'>
                             <header className='text-xl font-semibold'>Industry insights</header>
-                            <span role="button" className="text-sm">See all</span>
+                            <span role="button" className="text-sm font-semibold">See all</span>
                         </div>
                         <div className='flex space-y-4 sm:space-y-0 sm:space-x-4'>
-                            {images.map(({src,  height, width, alt, desc}, index) => (
+                            {images.map(({src, height, width, alt, desc}, index) => (
                                 <div key={index} className="flex flex-col space-y-4 truncate sm:w-48">
                                     <Image
                                         src={src}

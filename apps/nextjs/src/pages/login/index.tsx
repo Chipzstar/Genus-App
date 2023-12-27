@@ -13,22 +13,20 @@ import {
     FormMessage
 } from "@genus/ui/form";
 import {Input} from "@genus/ui/input";
-import { useToast } from "@genus/ui/use-toast"
+import {useToast} from "@genus/ui/use-toast"
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {loginSchema, signupSchema} from "~/schemas";
 import AuthLayout from "../../layout/AuthLayout";
 import React, {ReactElement, useCallback} from "react";
-import { SignIn, useSignIn } from '@clerk/nextjs';
+import {SignIn, useSignIn} from '@clerk/nextjs';
 import type {NextPageWithLayout} from '../_app';
 import {PATHS} from "~/utils";
-import { useRouter } from "next/router";
-import { ToastAction } from "@genus/ui/toast";
-import {trpc} from "~/utils/trpc";
+import {useRouter} from "next/router";
 
 const Login: NextPageWithLayout = () => {
-    const { isLoaded, signIn, setActive } = useSignIn();
-    const { toast } = useToast()
+    const {isLoaded, signIn, setActive} = useSignIn();
+    const {toast} = useToast()
     const [loading, setLoading] = React.useState(false);
 
     const router = useRouter();
@@ -46,19 +44,17 @@ const Login: NextPageWithLayout = () => {
         // ✅ This will be type-safe and validated.
         try {
             setLoading(true);
-            if (!isLoaded) {
-                // handle loading state
-                return null;
-            }
-            console.log(values)
+            // handle loading state
+            if (!isLoaded) return null;
             const result = await signIn.create({
                 identifier: values.email,
                 password: values.password
             });
+            console.log(result.status)
             if (result.status === 'complete' && !!result.createdSessionId) {
                 // @ts-ignore
-                await setActive({ session: result.createdSessionId });
-                await router.replace('/');
+                await setActive({session: result.createdSessionId});
+                await router.replace(PATHS.HOME);
                 return;
             } else {
                 // Something went wrong
@@ -69,20 +65,25 @@ const Login: NextPageWithLayout = () => {
                 } else {
                     toast({
                         title: "Password is incorrect",
-                        description: "There was a problem with your request.",
-                        action: <ToastAction altText="Try again">Try again</ToastAction>,
+                        description: "There was a problem with your request."
                     })
                 }
             }
             setLoading(false);
-        } catch (error) {
+        } catch (error: any) {
             setLoading(false);
-            console.error(error);
-            toast({
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
-                action: <ToastAction altText="Try again">Try again</ToastAction>,
-            })
+            console.error("error", error.errors[0])
+            if (error.errors.length) {
+                toast({
+                    title: error.errors[0]['message'],
+                    description: error.errors[0]["longMessage"]
+                })
+            } else {
+                toast({
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request."
+                })
+            }
         }
     }, [isLoaded])
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Group, Message } from "@prisma/client";
 
 declare global {
   // allow global `var` declarations

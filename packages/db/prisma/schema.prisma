@@ -16,31 +16,45 @@ datasource db {
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String
   createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
-  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  threadId  Int
+  updatedAt DateTime @updatedAt
+  commentId String   @unique
+  content   String
+  author    User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  authorId  String
+  thread    Thread   @relation(fields: [threadId], references: [threadId], onDelete: Cascade)
+  threadId  String
 
   @@index([authorId, threadId])
 }
 
-model GroupUser {
-  id      Int   @id @default(autoincrement())
-  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  Int
-  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId Int
-
-  @@index([userId, groupId])
+model Group {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  groupId   String      @unique
+  slug      String      @unique
+  name      String
+  members   GroupUser[]
+  messages  Message[]
 }
 
-model Group {
-  id       Int         @id @default(autoincrement())
-  name     String
-  members  GroupUser[]
-  messages Message[]
+enum GroupRole {
+  ADMIN
+  EXPERT
+  MEMBER
+}
+
+model GroupUser {
+  id      Int       @id @default(autoincrement())
+  user    User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId  String
+  email   String    @unique
+  group   Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId String
+  role    GroupRole @default(MEMBER)
+
+  @@index([userId, groupId])
 }
 
 model Message {
@@ -48,33 +62,24 @@ model Message {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  groupId   Int
+  messageId String   @unique
+  author    User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  authorId  String
+  group     Group    @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId   String
   thread    Thread?
 
   @@index([authorId, groupId])
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
-
-  @@index([authorId])
-}
-
 model Thread {
   id        Int       @id @default(autoincrement())
-  content   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
+  threadId  String    @unique
+  content   String
+  author    User      @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  authorId  String
   message   Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
   messageId Int       @unique
   comments  Comment[]
@@ -84,13 +89,14 @@ model Thread {
 
 model User {
   id        Int         @id @default(autoincrement())
-  clerk_id  String      @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  clerkId   String      @unique
   email     String      @unique
   firstname String
   lastname  String
-  posts     Post[]
-  groups    GroupUser[]
   messages  Message[]
   threads   Thread[]
   comments  Comment[]
+  GroupUser GroupUser[]
 }

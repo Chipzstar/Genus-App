@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@genus/db": "*",
-    "@trpc/client": "^10.1.0",
-    "@trpc/server": "^10.1.0",
+    "@genus/redis": "*",
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0",
+    "dayjs": "^1.11.10",
     "superjson": "^1.9.1",
     "zod": "^3.18.0"
   },

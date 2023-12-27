@@ -1,6 +1,10 @@
 model Group {
-  id       Int         @id @default(autoincrement())
-  name     String
-  members  GroupUser[]
-  messages Message[]
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  groupId   String      @unique
+  slug      String      @unique
+  name      String
+  members   GroupUser[]
+  messages  Message[]
 }

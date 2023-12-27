@@ -32,7 +32,6 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
             const wh = new Webhook(webhookSecret);
             let event: WebhookEvent | null = null;
             event = wh.verify(payload, headers) as WebhookEvent;
-            console.log(event)
             // Handle the webhook
             switch (event.type) {
                 case 'user.created':

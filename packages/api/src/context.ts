@@ -1,4 +1,5 @@
 import { prisma } from "@genus/db";
+import { redis } from "@genus/redis";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { getAuth } from "@clerk/nextjs/server";
@@ -23,6 +24,7 @@ export const createContextInner = async ({ auth }: AuthContextProps) => {
   return {
     auth,
     prisma,
+    redis,
   };
 };
 

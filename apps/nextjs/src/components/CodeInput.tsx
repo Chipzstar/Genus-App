@@ -49,9 +49,10 @@ interface Props {
     opened: boolean;
     setOpen: (val: boolean) => void;
     onSubmit: (code: CodeFormValues) => void
+    loading: boolean;
 }
 
-const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
+const CodeInput = ({onSubmit, opened, setOpen, loading}: Props) => {
     const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>, form: UseFormReturn<CodeFormValues>) => {
         event.preventDefault();
         let copyValue = event.clipboardData.getData('Text').trim();
@@ -121,7 +122,7 @@ const CodeInput = ({onSubmit, opened, setOpen}: Props) => {
                         Please enter the 6 digit code we sent via email.
                     </p>
                     <DialogFooter className="sm:justify-end">
-                        <Button disabled={false} type="submit" variant="secondary" form="code-form">
+                        <Button loading={loading} disabled={false} type="submit" variant="secondary" form="code-form">
                             Submit
                         </Button>
                     </DialogFooter>

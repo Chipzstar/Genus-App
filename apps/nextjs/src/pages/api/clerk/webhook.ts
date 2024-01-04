@@ -32,21 +32,22 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
             const wh = new Webhook(webhookSecret);
             let event: WebhookEvent | null = null;
             event = wh.verify(payload, headers) as WebhookEvent;
+            let data;
             // Handle the webhook
             switch (event.type) {
                 case 'user.created':
-                    await createNewUser({event, prisma})
+                    data = await createNewUser({event, prisma})
                     break;
                 case 'user.updated':
-                    await updateUser({event, prisma})
+                    data = await updateUser({event, prisma})
                     break;
                 case 'user.deleted':
-                    await deleteUser({event, prisma})
+                    data = await deleteUser({event, prisma})
                     break;
                 default:
                     console.log(`Unhandled event type ${event.type}`);
             }
-            return res.status(200).json({ received: true, message: `Webhook received!` });
+            return res.status(200).json({ received: true, message: `Webhook received!`,  data: data ?? undefined });
         } catch (error) {
             // Catch and log errors - return a 500 with a message
             console.error(error);

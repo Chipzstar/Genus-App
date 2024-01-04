@@ -40,7 +40,7 @@ const GroupSlug = (props: any) => {
             }}>
                 <NavbarBrand>
                     <Image src='/images/spring-weeks-ldn.svg' alt='genus-white' width={100} height={75}/>
-                    <span className="text-white text-2xl font-semibold">Pre Spring Week Chat</span>
+                    <span className="text-white text-2xl font-semibold">InternGen: Spring into Banking</span>
                 </NavbarBrand>
                 <div className='right-5 px-4 self-end'>
                     <Button onClick={(e) => signOut()}>Logout</Button>

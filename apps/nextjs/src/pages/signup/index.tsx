@@ -109,7 +109,6 @@ const Signup: NextPageWithLayout = () => {
                 firstName: values.firstname,
                 lastName: values.lastname
             });
-            console.log(result)
             // Prepare the verification process for the email address.
             // This method will send a one-time code to the email address supplied to the current sign-up.
             await signUp.prepareEmailAddressVerification()
@@ -134,7 +133,7 @@ const Signup: NextPageWithLayout = () => {
 
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
-            <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} />
+            <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
             <div className='flex flex-col space-y-4 justify-center items-center'>
                 <Avatar className='h-20 w-20 lg:h-30 lg:w-30'>
                     <AvatarFallback className='bg-neutral-100'>

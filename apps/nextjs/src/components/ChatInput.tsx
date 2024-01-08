@@ -16,7 +16,7 @@ const ChatInput: FC<ChatInputProps> = ({chatId}) => {
     const { mutateAsync: createMessage } = trpc.message.createMessage.useMutation({
         onSuccess(data) {
             console.log(data)
-            utils.invalidate()
+            utils.group.invalidate()
         }
     })
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -49,7 +49,7 @@ const ChatInput: FC<ChatInputProps> = ({chatId}) => {
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault()
-                            sendMessage()
+                            sendMessage().then(r => console.log("Message sent!"))
                         }
                     }}
                     rows={1}

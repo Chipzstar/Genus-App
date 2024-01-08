@@ -62,8 +62,9 @@ export const deleteUser = async ({ event, prisma }: { event: UserWebhookEvent; p
             log.info('-----------------------------------------------');
         }
         return;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (err: any) {
+        console.error(err.meta);
+        // console.error(err.meta.cause);
+        throw new Error(err.meta.cause);
     }
 };

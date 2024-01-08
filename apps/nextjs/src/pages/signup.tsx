@@ -4,34 +4,44 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import {Button} from "@genus/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@genus/ui/form";
 import {Input} from "@genus/ui/input";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
+import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
+import {useToast} from "@genus/ui/use-toast";
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {broad_course_categories, career_interests, genders, completion_years, signupSchema} from "~/schemas";
-import AuthLayout from "../../layout/AuthLayout";
+import AuthLayout from "../layout/AuthLayout";
 import React, {ReactElement, useCallback, useEffect, useState} from "react";
-import type {NextPageWithLayout} from '../_app';
-import {Avatar, AvatarFallback} from "@genus/ui/avatar";
+import type {NextPageWithLayout} from './_app';
+import {Avatar, AvatarFallback, AvatarImage} from "@genus/ui/avatar";
 import {Mail, User, X, Check} from 'lucide-react'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
 import {formatString, labelEncode, PATHS} from "~/utils";
 import {trpc} from "~/utils/trpc";
-import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
-import {useToast} from "@genus/ui/use-toast";
 import {useRouter} from "next/router";
 import {SignUp, useSignUp} from '@clerk/nextjs';
 import CodeInput, {CodeFormValues} from "~/components/CodeInput";
+import { useUploadThing } from "~/utils/uploadthing";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useDropzone } from "@uploadthing/react/hooks";
+
 
 const Signup: NextPageWithLayout = () => {
+    // STATE
+    const [loading, setLoading] = useState(false);
+    const [isOpen, setCodeVerification] = useState(false);
+    const [files, setFiles] = useState<File[]>([]);
+    const onDrop = useCallback((acceptedFile: File[]) => {
+        setFiles(acceptedFile);
+    }, []);
+
+    // HOOKS
     const {toast} = useToast();
     const router = useRouter()
     const {isLoaded, signUp, setActive} = useSignUp();
-    const [loading, setLoading] = useState(false);
-    const [isOpen, setCodeVerification] = useState(false);
     const {error, data: universities} = trpc.auth.getUniversities.useQuery(undefined, {
         placeholderData: ['The London School of Economics and Political Science']
     })
 
-    // 1. Define your form.
     const form = useForm<z.infer<typeof signupSchema>>({
         defaultValues: {
             firstname: '',
@@ -49,45 +59,32 @@ const Signup: NextPageWithLayout = () => {
         resolver: zodResolver(signupSchema),
     })
 
-    const confirmSignUp = useCallback(
-        async (digits: CodeFormValues) => {
-            setLoading(true);
-            if (!isLoaded) {
-                // handle loading state
-                toast({
-                    title: "Uh oh! Something went wrong.",
-                    description: "There was a problem signing you up.",
-                    action: <ToastAction altText="Try again">Try again</ToastAction>,
-                })
-                return null;
-            }
-            try {
-                // @ts-ignore
-                const code = Object.values(digits).join("")
-                const result = await signUp.attemptEmailAddressVerification({
-                    code
-                });
-                // @ts-ignore
-                await setActive({ session: result.createdSessionId });
-                setCodeVerification(false)
-                setLoading(false);
-                toast({
-                    title: "Verification successful!",
-                    description: "verification-success",
-                    action: <ToastAction altText="Email Verified"> <Check size={20} /> </ToastAction>,
-                })
-                router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
-            } catch (error) {
-                setLoading(false);
-                toast({
-                    title: "Signup failed. Please try again",
-                    description: "signup-failure",
-                    action: <ToastAction altText="Signup Failed"> <X size={20} /> </ToastAction>,
-                })
-            }
+    const { startUpload, permittedFileInfo } = useUploadThing(
+        "imageUploader",
+        {
+            onClientUploadComplete: (res) => {
+                console.log(res)
+                console.log("uploaded successfully!");
+            },
+            onUploadError: (err) => {
+                console.log(err)
+                console.log("error occurred while uploading");
+            },
+            onUploadBegin: () => {
+                console.log("UPLOAD HAS BEGUN");
+            },
         },
-        [isLoaded, router, signUp]
     );
+
+    const fileTypes = permittedFileInfo?.config
+        ? Object.keys(permittedFileInfo?.config)
+        : [];
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
+        maxFiles: 1
+    });
 
     const onSubmit = useCallback(async (values: z.infer<typeof signupSchema>) => {
         // ✅ This will be type-safe and validated.
@@ -129,13 +126,64 @@ const Signup: NextPageWithLayout = () => {
                 duration: 5000
             })
         }
-    }, [isLoaded, signUp]);
+    }, [isLoaded, files, signUp]);
+
+    const confirmSignUp = useCallback(
+        async (digits: CodeFormValues) => {
+            setLoading(true);
+            if (!isLoaded) {
+                // handle loading state
+                toast({
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem signing you up.",
+                    action: <ToastAction altText="Try again">Try again</ToastAction>,
+                })
+                return null;
+            }
+            try {
+                const code = Object.values(digits).join("")
+                const result = await signUp.attemptEmailAddressVerification({
+                    code
+                });
+                await setActive({ session: result.createdSessionId });
+                setCodeVerification(false)
+                setLoading(false);
+                toast({
+                    title: "Verification successful!",
+                    description: "verification-success",
+                    action: <ToastAction altText="Email Verified"> <Check size={20} /> </ToastAction>,
+                })
+                /*if (files.length && clerk) {
+                    startUpload(files).then(() => clerk.user.setProfileImage({
+                        file: files[0]
+                    }).then(() => console.log("profile image set")))
+                });*/
+                files.length && startUpload(files).then(() => console.log("profile image set"));
+                router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
+            } catch (error) {
+                setLoading(false);
+                toast({
+                    title: "Signup failed. Please try again",
+                    description: "signup-failure",
+                    action: <ToastAction altText="Signup Failed"> <X size={20} /> </ToastAction>,
+                })
+            }
+        },
+        [isLoaded, router, signUp, files]
+    );
 
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
             <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
-            <div className='flex flex-col space-y-4 justify-center items-center'>
+            <div {...getRootProps()} className='flex flex-col space-y-4 justify-center items-center'>
+                <input {...getInputProps()} />
                 <Avatar className='h-20 w-20 lg:h-30 lg:w-30'>
+                    <AvatarImage
+                        className="AvatarImage"
+                        src={files[0] ? URL.createObjectURL(files[0]) : undefined}
+                        alt="Avatar Thumbnail"
+                    >
+                    </AvatarImage>
                     <AvatarFallback className='bg-neutral-100'>
                         <User size={30} color='gray'/>
                     </AvatarFallback>
@@ -361,7 +409,7 @@ const Signup: NextPageWithLayout = () => {
                             />
                         </section>
                         <div className='pt-12'>
-                            <Button type="submit" form="signup-form" size='lg' className='w-full h-12 font-semibold'>Complete</Button>
+                            <Button loading={loading} type="submit" form="signup-form" size='lg' className='w-full h-12 font-semibold'>Complete</Button>
                         </div>
                     </form>
                 </Form>

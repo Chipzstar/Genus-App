@@ -45,13 +45,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} disabled={loading} {...props}>
         {loading && (
           <Oval
+            strokeWidth={5}
             visible={true}
             height="15"
             width="15"
             color="#2CEFD8"
             ariaLabel="oval-loading"
             wrapperStyle={{
-              paddingLeft: "10px",
+              paddingRight: "10px",
             }}
             wrapperClass=""
           />

@@ -17,10 +17,10 @@ import {useToast} from "@genus/ui/use-toast"
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {loginSchema, signupSchema} from "~/schemas";
-import AuthLayout from "../../layout/AuthLayout";
+import AuthLayout from "../layout/AuthLayout";
 import React, {ReactElement, useCallback} from "react";
 import {SignIn, useSignIn} from '@clerk/nextjs';
-import type {NextPageWithLayout} from '../_app';
+import type {NextPageWithLayout} from './_app';
 import {PATHS} from "~/utils";
 import {useRouter} from "next/router";
 
@@ -122,7 +122,7 @@ const Login: NextPageWithLayout = () => {
                             <Link href={PATHS.FORGOT_PASSWORD}>Forgot Password?</Link>
                         </div>
                         <div className='flex flex-col items-center space-y-4'>
-                            <Button type="submit" size='lg' className='w-full h-12 font-semibold'>Login</Button>
+                            <Button loading={loading} type="submit" size='lg' className='w-full h-12 font-semibold'>Login</Button>
                             <FormDescription className='text-white font-light'>{"Don't have an account?"}
                                 <Link
                                     className='font-semibold'

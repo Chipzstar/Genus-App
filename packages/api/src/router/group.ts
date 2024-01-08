@@ -1,7 +1,7 @@
 import * as z from "zod";
-import {protectedProcedure, publicProcedure, createTRPCRouter} from "../trpc";
+import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {TRPCError} from "@trpc/server";
-
+import { log } from 'next-axiom';
 export const groupRouter = createTRPCRouter({
     getGroups: protectedProcedure.query(async ({ctx}) => await ctx.prisma.group.findMany()),
     getGroupById: protectedProcedure.input(z.object({
@@ -15,20 +15,29 @@ export const groupRouter = createTRPCRouter({
         }))
         .query(async ({ctx, input}) => {
             try {
-                const group = await ctx.prisma.group.findUnique({
+                return await ctx.prisma.group.findUnique({
                     where: {
                         slug: input.slug,
                     },
                     include: {
                         messages: {
+                            include: {
+                                author: {
+                                    select: {
+                                        firstname: true,
+                                        lastname: true,
+                                        email: true,
+                                    }
+                                }
+                            },
                             orderBy: {
                                 createdAt: 'desc',
                             },
                         }
                     },
                 });
-                return group;
-            } catch (err) {
+            } catch (err: any) {
+                log.error("Something went wrong!", err)
                 throw new TRPCError({
                     code: "NOT_FOUND",
                     message: "Group not found!",

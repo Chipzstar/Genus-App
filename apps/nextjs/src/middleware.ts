@@ -9,6 +9,7 @@ export default authMiddleware({
         "/forgot-password",
         "/api/clerk/webhook",
         "/api/trpc/auth(.*)",
+        "/api/uploadthing",
         "/_axiom/web-vitals"
     ],
     afterAuth(auth, req, evt) {

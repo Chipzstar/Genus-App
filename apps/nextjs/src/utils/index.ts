@@ -30,3 +30,6 @@ export function labelEncode(str: string): string {
       .replace(/-+$/, '');
 }
 
+export function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

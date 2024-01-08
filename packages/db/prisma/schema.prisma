@@ -95,6 +95,8 @@ model User {
   email     String      @unique
   firstname String
   lastname  String
+  imageKey  String?
+  imageUrl  String?
   messages  Message[]
   threads   Thread[]
   comments  Comment[]

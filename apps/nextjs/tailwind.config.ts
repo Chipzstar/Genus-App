@@ -1,8 +1,9 @@
 import type {Config} from "tailwindcss";
 import baseConfig from "@genus/tailwind-config";
 import {nextui} from "@nextui-org/react";
+import { withUt } from "uploadthing/tw";
 
-export default {
+export default withUt({
     content: [
         ...baseConfig.content,
         "../../packages/ui/src/**/*.{ts,tsx}",
@@ -82,4 +83,4 @@ export default {
 
         }
     })],
-} satisfies Config;
+}) satisfies Config;

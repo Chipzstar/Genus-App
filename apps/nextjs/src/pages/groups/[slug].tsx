@@ -10,6 +10,7 @@ import {trpc} from '~/utils/trpc';
 import Messages from "~/components/Messages";
 import {Alert, AlertDescription, AlertTitle} from "@genus/ui/alert";
 import ChatInput from "~/components/ChatInput";
+import {useToast} from "@genus/ui/use-toast";
 
 export const getServerSideProps = (async (ctx) => {
     const params = ctx.params
@@ -21,6 +22,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps
 
 const GroupSlug = (props: any) => {
+    const { toast } = useToast()
     const {signOut} = useClerk()
     const {isSignedIn, session} = useSession()
 
@@ -28,7 +30,14 @@ const GroupSlug = (props: any) => {
         slug: props.slug
     }, {
         onSuccess: (data) => {
-            console.log(data)
+            console.log(typeof data)
+        },
+        onError: (error) => {
+            toast({
+                title: error?.data?.code ?? "Oops!",
+                description: error.message,
+                duration: 3000
+            })
         }
     })
 
@@ -71,11 +80,11 @@ const GroupSlug = (props: any) => {
                         />}
                         <ChatInput chatId={group.groupId}/>
                     </div>
-                ) : <div className='h-full p-6 sm:px-12'>
-                    <Alert>
-                        <AlertTitle>Oops!</AlertTitle>
+                ) : <div className='h-full flex flex-col justify-center p-6 sm:px-12'>
+                    <Alert variant="destructive" className="text-center">
+                        <AlertTitle>Group does not exist!</AlertTitle>
                         <AlertDescription>
-                            {failureReason?.message ?? error?.message}
+                            {failureReason ? failureReason.message : error ? error?.message : "Please check you are using the right URL"}
                         </AlertDescription>
                     </Alert>
                 </div>}

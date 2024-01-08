@@ -2,7 +2,6 @@ import {protectedProcedure, publicProcedure, createTRPCRouter} from "../trpc";
 import fs from "fs/promises";
 import path from 'path';
 import * as process from "process";
-import { redis } from "@genus/redis";
 
 export const authRouter = createTRPCRouter({
     getSession: publicProcedure.query(({ctx}) => {
@@ -15,7 +14,6 @@ export const authRouter = createTRPCRouter({
         try {
 
             let file = await path.join(process.cwd(), 'assets', 'universities.txt')
-            console.log(file)
             let data = await fs.readFile(file, 'utf-8');
             let lines = data.split('\n').map(line => line.trim()); // Remove the newline character from each line
             // Now 'lines' is an array containing each line in the file

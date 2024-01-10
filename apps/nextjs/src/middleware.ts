@@ -13,6 +13,9 @@ export default authMiddleware({
         "/_axiom/web-vitals"
     ],
     afterAuth(auth, req, evt) {
+        console.log("checking auth:", req.nextUrl.pathname)
+        console.log("-----------------------------------------------")
+        console.table(auth)
         // handle users who aren't authenticated navigating to a protected route
         if (!auth.userId && !auth.isPublicRoute) {
             const signInUrl = new URL("/login", req.url);

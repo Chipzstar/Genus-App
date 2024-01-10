@@ -42,6 +42,10 @@ const Signup: NextPageWithLayout = () => {
         placeholderData: ['The London School of Economics and Political Science']
     })
 
+    useEffect(() => {
+        console.log(universities)
+    }, [universities])
+
     const form = useForm<z.infer<typeof signupSchema>>({
         defaultValues: {
             firstname: '',

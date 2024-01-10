@@ -12,8 +12,8 @@ export const authRouter = createTRPCRouter({
     }),
     getUniversities: publicProcedure.query(async () => {
         try {
-
             let file = await path.join(process.cwd(), 'assets', 'universities.txt')
+            console.log("File path:", file)
             let data = await fs.readFile(file, 'utf-8');
             let lines = data.split('\n').map(line => line.trim()); // Remove the newline character from each line
             // Now 'lines' is an array containing each line in the file

@@ -59,7 +59,7 @@ const Signup: NextPageWithLayout = () => {
         resolver: zodResolver(signupSchema),
     })
 
-    const { startUpload, permittedFileInfo } = useUploadThing(
+    const { startUpload, permittedFileInfo, isUploading } = useUploadThing(
         "imageUploader",
         {
             onClientUploadComplete: (res) => {
@@ -128,6 +128,10 @@ const Signup: NextPageWithLayout = () => {
         }
     }, [isLoaded, files, signUp]);
 
+    useEffect(() => {
+        console.table({isUploading})
+    }, [isUploading])
+
     const confirmSignUp = useCallback(
         async (digits: CodeFormValues) => {
             setLoading(true);
@@ -158,13 +162,13 @@ const Signup: NextPageWithLayout = () => {
                         file: files[0]
                     }).then(() => console.log("profile image set")))
                 });*/
-                files.length && startUpload(files).then(() => console.log("profile image set"));
-                router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
-            } catch (error) {
+                files.length && startUpload(files).then(() => console.log("profile image set", files))
+                // router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
+            } catch (err: any) {
                 setLoading(false);
                 toast({
                     title: "Signup failed. Please try again",
-                    description: "signup-failure",
+                    description: err.message,
                     action: <ToastAction altText="Signup Failed"> <X size={20} /> </ToastAction>,
                 })
             }
@@ -175,7 +179,7 @@ const Signup: NextPageWithLayout = () => {
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
             <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
-            <div {...getRootProps()} className='flex flex-col space-y-4 justify-center items-center'>
+            <div {...getRootProps()} role="button" className='flex flex-col space-y-4 justify-center items-center'>
                 <input {...getInputProps()} />
                 <Avatar className='h-20 w-20 lg:h-30 lg:w-30'>
                     <AvatarImage

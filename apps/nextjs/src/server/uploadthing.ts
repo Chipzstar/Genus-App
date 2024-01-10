@@ -1,13 +1,13 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import { currentUser } from "@clerk/nextjs";
 import { prisma } from "@genus/db";
 
 import {createUploadthing, type FileRouter} from "uploadthing/next-legacy";
 import {timeout} from "~/utils";
+import { getAuth } from "@clerk/nextjs/server";
 
 const f = createUploadthing();
 
-const auth = async (req: NextApiRequest, res: NextApiResponse) => {
+const mockAuth = async (req: NextApiRequest, res: NextApiResponse) => {
     await timeout(3000);
     return { id: 1 } // return fake user Id
 }
@@ -18,16 +18,19 @@ export const ourFileRouter = {
     imageUploader: f({image: {maxFileSize: "4MB", maxFileCount: 1}})
         // Set permissions and file types for this FileRoute
         .middleware(async ({req, res}) => {
-            console.log(req.statusMessage);
-            console.log(req.method);
+            console.log(Object.keys(req))
             // This code runs on your server before upload
-            const user = await currentUser();
+            const { userId } = getAuth(req);
 
             // If you throw, the user will not be able to upload
-            if (!user) throw new Error("This user has not yet been authenticated");
+            if (!userId) throw new Error("This user has not yet been authenticated");
 
             // Whatever is returned here is accessible in onUploadComplete as `metadata`
-            return {userId: user.id};
+            return {userId};
+        })
+        .onUploadError(async ({error}) => {
+            console.log(error)
+            throw error;
         })
         .onUploadComplete(async ({metadata, file}) => {
             // This code RUNS ON YOUR SERVER after upload

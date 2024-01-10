@@ -15,7 +15,7 @@ export default authMiddleware({
     afterAuth(auth, req, evt) {
         console.log("checking auth:", req.nextUrl.pathname)
         console.log("-----------------------------------------------")
-        console.table(auth)
+        console.log(auth)
         // handle users who aren't authenticated navigating to a protected route
         if (!auth.userId && !auth.isPublicRoute) {
             const signInUrl = new URL("/login", req.url);

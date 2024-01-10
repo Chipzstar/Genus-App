@@ -13,7 +13,8 @@ export const PATHS = {
 export function formatString(str: string): string {
     return str
         .replace(/[-_]/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase());
+        .replace(/\b\w/g, l => l.toUpperCase())
+        .replace(/'(\w)/g, (_, letter) => "'" + letter.toLowerCase());
 }
 
 /**

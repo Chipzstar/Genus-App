@@ -1,7 +1,6 @@
 import {protectedProcedure, publicProcedure, createTRPCRouter} from "../trpc";
 import fs from "fs/promises";
 import path from 'path';
-import * as process from "process";
 
 export const authRouter = createTRPCRouter({
     getSession: publicProcedure.query(({ctx}) => {

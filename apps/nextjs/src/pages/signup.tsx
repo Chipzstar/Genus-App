@@ -9,7 +9,7 @@ import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
 import {useToast} from "@genus/ui/use-toast";
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {broad_course_categories, career_interests, genders, completion_years, signupSchema} from "~/schemas";
+import {broad_course_categories, universities, career_interests, genders, completion_years, signupSchema} from "~/schemas";
 import AuthLayout from "../layout/AuthLayout";
 import React, {ReactElement, useCallback, useEffect, useState} from "react";
 import type {NextPageWithLayout} from './_app';
@@ -38,9 +38,6 @@ const Signup: NextPageWithLayout = () => {
     const {toast} = useToast();
     const router = useRouter()
     const {isLoaded, signUp, setActive} = useSignUp();
-    const {error, data: universities} = trpc.auth.getUniversities.useQuery(undefined, {
-        placeholderData: ['The London School of Economics and Political Science']
-    })
 
     useEffect(() => {
         console.log(universities)
@@ -56,7 +53,7 @@ const Signup: NextPageWithLayout = () => {
             gender: 'male',
             completion_year: '2024',
             broad_degree_course: 'economics',
-            university: 'kings-college-london',
+            university: "king's-college-london",
             degree_name: '',
             career_interests: 'banking_finance'
         },
@@ -310,8 +307,8 @@ const Signup: NextPageWithLayout = () => {
                                                         return (
                                                             <SelectItem
                                                                 key={index}
-                                                                value={labelEncode(university)}>
-                                                                {university}
+                                                                value={university}>
+                                                                {formatString(university)}
                                                             </SelectItem>
                                                         )
                                                 })}

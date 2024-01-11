@@ -1,14 +1,20 @@
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  clerkId   String    @unique
-  email     String    @unique
-  firstname String
-  lastname  String
-  imageKey  String?
-  imageUrl  String?
-  messages  Message[]
-  threads   Thread[]
-  comments  Comment[]
+  id                Int              @id @default(autoincrement())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  clerkId           String           @unique
+  email             String           @unique
+  firstname         String
+  lastname          String
+  gender            String
+  completionYear    Int
+  broadDegreeCourse String
+  university        String
+  degreeName        String
+  imageKey          String?
+  imageUrl          String?
+  careerInterests   CareerInterest[]
+  messages          Message[]
+  threads           Thread[]
+  comments          Comment[]
 }

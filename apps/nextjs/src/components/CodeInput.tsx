@@ -122,7 +122,7 @@ const CodeInput = ({onSubmit, opened, setOpen, loading}: Props) => {
                         Please enter the 6 digit code we sent via email.
                     </p>
                     <DialogFooter className="sm:justify-end">
-                        <Button loading={loading} disabled={false} type="submit" variant="secondary" form="code-form">
+                        <Button loading={loading} disabled={loading} type="submit" variant="secondary" form="code-form">
                             Submit
                         </Button>
                     </DialogFooter>

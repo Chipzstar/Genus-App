@@ -50,7 +50,6 @@ const Login: NextPageWithLayout = () => {
                 identifier: values.email,
                 password: values.password
             });
-            console.log(result.status)
             if (result.status === 'complete' && !!result.createdSessionId) {
                 // @ts-ignore
                 await setActive({session: result.createdSessionId});
@@ -72,12 +71,17 @@ const Login: NextPageWithLayout = () => {
             setLoading(false);
         } catch (error: any) {
             setLoading(false);
-            console.error("error", error.errors[0])
             if (error.errors.length) {
-                toast({
-                    title: error.errors[0]['message'],
-                    description: error.errors[0]["longMessage"]
-                })
+                if (error.errors[0]['message'] === error.errors[0].longMessage) {
+                    toast({
+                        title: error.errors[0]['message']
+                    })
+                } else {
+                    toast({
+                        title: error.errors[0]['message'],
+                        description: error.errors[0]["longMessage"]
+                    })
+                }
             } else {
                 toast({
                     title: "Uh oh! Something went wrong.",

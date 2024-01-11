@@ -2,27 +2,34 @@
 
 import {zodResolver} from "@hookform/resolvers/zod"
 import {Button} from "@genus/ui/button";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@genus/ui/form";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@genus/ui/form";
 import {Input} from "@genus/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@genus/ui/select";
 import {ToastAction, ToastProvider, ToastViewport} from "@genus/ui/toast";
 import {useToast} from "@genus/ui/use-toast";
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {broad_course_categories, universities, career_interests, genders, completion_years, signupSchema} from "~/schemas";
+import {
+    broad_course_categories,
+    universities,
+    career_interests,
+    genders,
+    completion_years,
+    signupSchema
+} from "~/schemas";
 import AuthLayout from "../layout/AuthLayout";
 import React, {ReactElement, useCallback, useEffect, useState} from "react";
 import type {NextPageWithLayout} from './_app';
 import {Avatar, AvatarFallback, AvatarImage} from "@genus/ui/avatar";
 import {Mail, User, X, Check} from 'lucide-react'
 import {formatString, labelEncode, PATHS} from "~/utils";
-import {trpc} from "~/utils/trpc";
 import {useRouter} from "next/router";
 import {SignUp, useSignUp} from '@clerk/nextjs';
 import CodeInput, {CodeFormValues} from "~/components/CodeInput";
-import { useUploadThing } from "~/utils/uploadthing";
-import { generateClientDropzoneAccept } from "uploadthing/client";
-import { useDropzone } from "@uploadthing/react/hooks";
+import {useUploadThing} from "~/utils/uploadthing";
+import {generateClientDropzoneAccept} from "uploadthing/client";
+import {useDropzone} from "@uploadthing/react/hooks";
+import {Checkbox} from "@genus/ui/checkbox";
 
 
 const Signup: NextPageWithLayout = () => {
@@ -39,10 +46,6 @@ const Signup: NextPageWithLayout = () => {
     const router = useRouter()
     const {isLoaded, signUp, setActive} = useSignUp();
 
-    useEffect(() => {
-        console.log(universities)
-    }, [universities])
-
     const form = useForm<z.infer<typeof signupSchema>>({
         defaultValues: {
             firstname: '',
@@ -55,12 +58,12 @@ const Signup: NextPageWithLayout = () => {
             broad_degree_course: 'economics',
             university: "king's-college-london",
             degree_name: '',
-            career_interests: 'banking_finance'
+            career_interests: []
         },
         resolver: zodResolver(signupSchema),
     })
 
-    const { startUpload, permittedFileInfo, isUploading } = useUploadThing(
+    const {startUpload, permittedFileInfo, isUploading} = useUploadThing(
         "imageUploader",
         {
             onClientUploadComplete: (res) => {
@@ -71,8 +74,8 @@ const Signup: NextPageWithLayout = () => {
                 console.log(err)
                 console.log("error occurred while uploading");
             },
-            onUploadBegin: () => {
-                console.log("UPLOAD HAS BEGUN");
+            onUploadBegin: (filename) => {
+                console.log("UPLOAD HAS BEGUN", filename);
             },
         },
     );
@@ -81,7 +84,7 @@ const Signup: NextPageWithLayout = () => {
         ? Object.keys(permittedFileInfo?.config)
         : [];
 
-    const { getRootProps, getInputProps } = useDropzone({
+    const {getRootProps, getInputProps} = useDropzone({
         onDrop,
         accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
         maxFiles: 1
@@ -100,12 +103,16 @@ const Signup: NextPageWithLayout = () => {
             return null;
         }
         try {
+            const {email, password, firstname, lastname, confirmPassword, ...rest} = values;
             const result = await signUp.create({
                 externalAccountActionCompleteRedirectUrl: "/",
-                emailAddress: values.email,
-                password: values.password,
-                firstName: values.firstname,
-                lastName: values.lastname
+                emailAddress: email,
+                password,
+                firstName: firstname,
+                lastName: lastname,
+                unsafeMetadata: {
+                    ...rest
+                }
             });
             // Prepare the verification process for the email address.
             // This method will send a one-time code to the email address supplied to the current sign-up.
@@ -117,21 +124,27 @@ const Signup: NextPageWithLayout = () => {
                 description: 'We have sent you an email with a verification code. Please check your inbox.',
                 action: <ToastAction altText="Verifiation email sent"><Mail size={20}/></ToastAction>
             });
-        } catch (error) {
+        } catch (error: any) {
             setLoading(false);
-            console.error(error)
-            toast({
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem signing you up.",
-                action: <ToastAction altText="Try again">Try again</ToastAction>,
-                duration: 5000
-            })
+            if (error.errors.length) {
+                if (error.errors[0]['message'] === error.errors[0].longMessage) {
+                    toast({
+                        title: error.errors[0]['message']
+                    })
+                } else {
+                    toast({
+                        title: error.errors[0]['message'],
+                        description: error.errors[0]["longMessage"]
+                    })
+                }
+            } else {
+                toast({
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request."
+                })
+            }
         }
-    }, [isLoaded, files, signUp]);
-
-    useEffect(() => {
-        console.table({isUploading})
-    }, [isUploading])
+    }, [isLoaded, files]);
 
     const confirmSignUp = useCallback(
         async (digits: CodeFormValues) => {
@@ -150,27 +163,27 @@ const Signup: NextPageWithLayout = () => {
                 const result = await signUp.attemptEmailAddressVerification({
                     code
                 });
-                await setActive({ session: result.createdSessionId });
+                await setActive({session: result.createdSessionId});
                 setCodeVerification(false)
                 setLoading(false);
                 toast({
                     title: "Verification successful!",
                     description: "verification-success",
-                    action: <ToastAction altText="Email Verified"> <Check size={20} /> </ToastAction>,
+                    action: <ToastAction altText="Email Verified"> <Check size={20}/> </ToastAction>,
                 })
                 /*if (files.length && clerk) {
                     startUpload(files).then(() => clerk.user.setProfileImage({
                         file: files[0]
                     }).then(() => console.log("profile image set")))
                 });*/
-                files.length && startUpload(files).then(() => console.log("profile image set", files))
+                files.length && setTimeout(() => startUpload(files).then(() => console.log("profile image set", files)), 1000)
                 // router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
             } catch (err: any) {
                 setLoading(false);
                 toast({
                     title: "Signup failed. Please try again",
                     description: err.message,
-                    action: <ToastAction altText="Signup Failed"> <X size={20} /> </ToastAction>,
+                    action: <ToastAction altText="Signup Failed"> <X size={20}/> </ToastAction>,
                 })
             }
         },
@@ -179,7 +192,7 @@ const Signup: NextPageWithLayout = () => {
 
     return (
         <div className='flex grow flex-col items-center justify-center min-h-screen gap-y-12 md:gap-12'>
-            <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
+            <CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading}/>
             <div {...getRootProps()} role="button" className='flex flex-col space-y-4 justify-center items-center'>
                 <input {...getInputProps()} />
                 <Avatar className='h-20 w-20 lg:h-30 lg:w-30'>
@@ -392,29 +405,56 @@ const Signup: NextPageWithLayout = () => {
                             <FormField
                                 control={form.control}
                                 name="career_interests"
-                                render={({field}) => (
+                                render={() => (
                                     <FormItem>
                                         <FormLabel>Career interests</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger className='rounded-xl'>
-                                                    <SelectValue placeholder="Select a verified email to display"/>
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {career_interests.map((career_interest, index) => (
-                                                    <SelectItem key={index}
-                                                                value={career_interest}>{formatString(career_interest)}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage/>
+                                        <FormDescription className="text-neutral-600">
+                                            Select all that apply
+                                        </FormDescription>
+                                        <div
+                                            className="sm:flex sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
+                                            {career_interests.map((item, index) => (
+                                                <FormField
+                                                    key={index}
+                                                    control={form.control}
+                                                    name="career_interests"
+                                                    render={({field}) => {
+                                                        return (
+                                                            <FormItem
+                                                                key={index}
+                                                                className="flex flex-row items-start space-x-3 space-y-0"
+                                                            >
+                                                                <FormControl>
+                                                                    <Checkbox
+                                                                        checked={field.value?.includes(item)}
+                                                                        onCheckedChange={(checked: boolean) => {
+                                                                            return checked
+                                                                                ? field.onChange([...field.value, item])
+                                                                                : field.onChange(
+                                                                                    field.value?.filter(
+                                                                                        (value) => value !== item
+                                                                                    )
+                                                                                )
+                                                                        }}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal whitespace-nowrap">
+                                                                    {formatString(item)}
+                                                                </FormLabel>
+                                                            </FormItem>
+                                                        )
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                        <FormMessage className="text-red-500/75"/>
                                     </FormItem>
                                 )}
                             />
                         </section>
-                        <div className='pt-12'>
-                            <Button loading={loading} type="submit" form="signup-form" size='lg' className='w-full h-12 font-semibold'>Complete</Button>
+                        <div className='pt-6 sm:pt-12'>
+                            <Button loading={loading} type="submit" form="signup-form" size='lg'
+                                    className='w-full h-12 font-semibold'>Complete</Button>
                         </div>
                     </form>
                 </Form>

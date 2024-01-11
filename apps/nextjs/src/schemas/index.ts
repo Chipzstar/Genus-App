@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const genders = ["male", "female", "non-binary", "other"] as const;
-export const career_interests = ["banking_finance", "consulting", "law", "tech"] as const;
+export const career_interests = ["banking-finance", "consulting", "law", "tech"] as const;
 export const broad_course_categories = ["accounting-and-finance", "agriculture-and-environmental-sciences", "architecture-and-planning", "arts-and-design", "business-and-management", "computer-science-and-it", "economics", "education", "engineering", "health-and-medicine", "humanities-and-social-sciences", "law-and-legal-studies", "language-and-linguistics", "mathematics-and-statistics", "media-and-communications", "natural-sciences", "sports-and-exercise-science"] as const
 
 export const universities = [
@@ -225,9 +225,9 @@ export const signupSchema = z.object({
     gender: gendersSchema,
     university: universitiesSchema,
     broad_degree_course: broadCourseCategorySchema,
-    degree_name: z.string({required_error: "Please enter your degree."}).min(2),
+    degree_name: z.string({required_error: "Please enter your degree."}).min(2,  "Degree name must be at least 2 characters"),
     completion_year: completionYearSchema,
-    career_interests: careerInterestsSchema,
+    career_interests: z.array(careerInterestsSchema).nonempty({message: "Please select at least one career interest"}),
 }).refine(
     (values) => {
         return values.password === values.confirmPassword;

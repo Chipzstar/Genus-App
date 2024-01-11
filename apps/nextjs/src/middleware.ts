@@ -1,23 +1,23 @@
 import {NextResponse} from "next/server";
-import type {NextRequest} from "next/server";
 import {authMiddleware, redirectToSignIn,} from "@clerk/nextjs";
 
 export default authMiddleware({
+    debug: true,
     publicRoutes: [
         "/login",
         "/signup",
         "/forgot-password",
         "/api/clerk/webhook",
         "/api/trpc/auth(.*)",
-        "/api/uploadthing",
         "/_axiom/web-vitals"
     ],
     afterAuth(auth, req, evt) {
-        console.log("checking auth:", req.nextUrl.pathname)
-        console.log("-----------------------------------------------")
-        console.log(auth)
+        // MANUAL check for this endpoint to ensure that it bypasses any redirects handled by the below cases
+        if (req.url.includes("/api/uploadthing?slug=imageUploader")) {
+            return NextResponse.next();
+        }
         // handle users who aren't authenticated navigating to a protected route
-        if (!auth.userId && !auth.isPublicRoute) {
+        if (!auth.userId && !auth.isPublicRoute){
             const signInUrl = new URL("/login", req.url);
             return redirectToSignIn({returnBackUrl: req.url});
         }
@@ -30,12 +30,12 @@ export default authMiddleware({
         if (req.nextUrl.pathname === '/groups') {
             return NextResponse.redirect(new URL("/groups/pre-spring-week-chat", req.url));
         }
-        // If the user is logged in and trying to access a protected route, allow them to access route
+        /*// If the user is logged in and trying to access a protected route, allow them to access route
         if (auth.userId && !auth.isPublicRoute) {
             return NextResponse.next()
         }
         // Allow users visiting public routes to access them
-        return NextResponse.next();
+        return NextResponse.next();*/
     }
 })
 

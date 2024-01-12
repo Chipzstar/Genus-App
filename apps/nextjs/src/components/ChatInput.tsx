@@ -8,9 +8,10 @@ import {toast} from "@genus/ui/use-toast";
 
 interface ChatInputProps {
     chatId: string;
+    isMember: boolean;
 }
 
-const ChatInput: FC<ChatInputProps> = ({chatId}) => {
+const ChatInput: FC<ChatInputProps> = ({chatId, isMember}) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const utils = trpc.useUtils();
     const { mutateAsync: createMessage } = trpc.message.createMessage.useMutation({
@@ -45,6 +46,7 @@ const ChatInput: FC<ChatInputProps> = ({chatId}) => {
             <div
                 className='relative flex-1 overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600'>
                 <Textarea
+                    disabled={!isMember}
                     ref={textareaRef}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -69,7 +71,7 @@ const ChatInput: FC<ChatInputProps> = ({chatId}) => {
 
                 <div className='absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2'>
                     <div className='flex-shrin-0'>
-                        <Button loading={isLoading} onClick={sendMessage} type='submit'>
+                        <Button loading={isLoading} disabled={isLoading || !input} onClick={sendMessage} type='submit'>
                             Post
                         </Button>
                     </div>

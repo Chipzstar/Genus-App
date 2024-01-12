@@ -110,6 +110,7 @@ model User {
   degreeName        String
   imageKey          String?
   imageUrl          String?
+  clerkImageHash    String?
   careerInterests   CareerInterest[]
   messages          Message[]
   threads           Thread[]

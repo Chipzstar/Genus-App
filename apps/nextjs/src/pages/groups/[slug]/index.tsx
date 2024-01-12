@@ -76,7 +76,7 @@ const GroupSlug = (props: any) => {
             onClick: (e: React.MouseEvent<HTMLButtonElement>) => joinGroup({slug: props.slug}),
             textSize: "text-xl sm:text-2xl"
         }
-    }, [session, group]);
+    }, [group?.members, session?.user.id, group?.slug, joinGroup, props.slug]);
 
     return (
         <div className='sm:h-container mx-auto max-w-3xl text-primary pt-4 flex flex-col overflow-y-hidden'>

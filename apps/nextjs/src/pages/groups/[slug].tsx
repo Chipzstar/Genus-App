@@ -1,16 +1,16 @@
-import React, {ReactElement, useEffect} from 'react';
+import React, {ReactElement} from 'react';
 import AppLayout from "~/layout/AppLayout";
-import {Button} from "@genus/ui/button";
-import { Navbar, NavbarBrand} from '@nextui-org/react';
+import {Navbar, NavbarBrand} from '@nextui-org/react';
 import Image from 'next/image';
 import {useClerk, useSession} from '@clerk/nextjs';
-import { ThreeDots } from 'react-loader-spinner';
+import {ThreeDots} from 'react-loader-spinner';
 import {GetServerSideProps} from 'next';
 import {trpc} from '~/utils/trpc';
 import Messages from "~/components/Messages";
 import {Alert, AlertDescription, AlertTitle} from "@genus/ui/alert";
 import ChatInput from "~/components/ChatInput";
 import {useToast} from "@genus/ui/use-toast";
+import {LogoutButton} from "~/components/LogoutButton";
 
 export const getServerSideProps = (async (ctx) => {
     const params = ctx.params
@@ -30,7 +30,7 @@ const GroupSlug = (props: any) => {
         slug: props.slug
     }, {
         onSuccess: (data) => {
-            console.log(typeof data)
+            console.log(data)
         },
         onError: (error) => {
             toast({
@@ -42,18 +42,16 @@ const GroupSlug = (props: any) => {
     })
 
     return (
-        <div className='sm:h-container mx-auto max-w-3xl text-primary pt-4 flex flex-col'>
+        <div className='sm:h-container mx-auto max-w-3xl text-primary pt-4 flex flex-col overflow-y-hidden'>
             <Navbar classNames={{
-                base: 'py-3',
+                base: 'px-3 sm:px-0 py-3',
                 brand: 'w-full flex items-center space-x-4',
             }}>
                 <NavbarBrand>
                     <Image src='/images/spring-weeks-ldn.svg' alt='genus-white' width={100} height={75}/>
-                    <span className="text-white text-2xl font-semibold">InternGen: Spring into Banking</span>
+                    <span className="text-white text-lg sm:text-2xl font-semibold whitespace-pre-wrap">InternGen: Spring into Banking</span>
                 </NavbarBrand>
-                <div className='right-5 px-4 self-end'>
-                    <Button onClick={(e) => signOut()}>Logout</Button>
-                </div>
+                <LogoutButton onClick={(e) => signOut()}/>
             </Navbar>
             {isLoading ? (
                     <div className='flex grow justify-center items-center p-6 sm:px-12'>
@@ -72,11 +70,12 @@ const GroupSlug = (props: any) => {
                     </div>
                 ) :
                 group ? (
-                    <div className='flex grow flex-col bg-white p-6 sm:px-12'>
+                    <div className='chat-wrapper'>
                         {isSignedIn && <Messages
                             userId={session.user.id}
                             chatId={group.groupId}
                             messages={group.messages ?? []}
+                            session={session}
                         />}
                         <ChatInput chatId={group.groupId}/>
                     </div>

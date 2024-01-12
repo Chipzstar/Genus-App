@@ -101,11 +101,11 @@ model User {
   email             String           @unique
   firstname         String
   lastname          String
-  gender            String
-  completionYear    Int
-  broadDegreeCourse String
-  university        String
-  degreeName        String
+  gender            String?
+  completionYear    Int?
+  broadDegreeCourse String?
+  university        String?
+  degreeName        String?
   imageKey          String?
   imageUrl          String?
   careerInterests   CareerInterest[]

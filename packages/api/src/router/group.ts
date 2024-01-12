@@ -15,7 +15,7 @@ export const groupRouter = createTRPCRouter({
         }))
         .query(async ({ctx, input}) => {
             try {
-                return await ctx.prisma.group.findUnique({
+                return await ctx.prisma.group.findUniqueOrThrow({
                     where: {
                         slug: input.slug,
                     },
@@ -26,7 +26,7 @@ export const groupRouter = createTRPCRouter({
                                     select: {
                                         firstname: true,
                                         lastname: true,
-                                        email: true,
+                                        imageUrl: true,
                                     }
                                 }
                             },

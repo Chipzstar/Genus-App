@@ -16,7 +16,7 @@ export default {
     },
     extend: {
       fontSize: {
-        mobile: ["0.5rem", { lineHeight: "1rem" }],
+        xxs: ["0.5rem", { lineHeight: "1rem" }],
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

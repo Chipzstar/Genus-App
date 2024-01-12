@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useMemo} from 'react';
 import AppLayout from "~/layout/AppLayout";
 import {Navbar, NavbarBrand} from '@nextui-org/react';
 import Image from 'next/image';
@@ -10,7 +10,8 @@ import Messages from "~/components/Messages";
 import {Alert, AlertDescription, AlertTitle} from "@genus/ui/alert";
 import ChatInput from "~/components/ChatInput";
 import {useToast} from "@genus/ui/use-toast";
-import {LogoutButton} from "~/components/LogoutButton";
+import {GroupStatusButton} from "~/components/GroupStatusButton";
+import router from 'next/router';
 
 export const getServerSideProps = (async (ctx) => {
     const params = ctx.params
@@ -22,10 +23,29 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps
 
 const GroupSlug = (props: any) => {
-    const { toast } = useToast()
+    const {toast} = useToast()
+    const utils = trpc.useUtils();
     const {signOut} = useClerk()
     const {isSignedIn, session} = useSession()
 
+    const {mutate: joinGroup} = trpc.group.joinGroup.useMutation({
+        onSuccess(data) {
+            console.log(data);
+            utils.group.invalidate();
+            toast({
+                title: "Yayy! You're now in the group! 🎉",
+                description: "You can now post to the chat and ask questions",
+            })
+        },
+        onError(error) {
+            console.log(error)
+            toast({
+                title: error.message,
+                description: error.message,
+                duration: 5000
+            })
+        }
+    })
     const {isLoading, data: group, failureReason, error} = trpc.group.getGroupBySlug.useQuery({
         slug: props.slug
     }, {
@@ -39,7 +59,24 @@ const GroupSlug = (props: any) => {
                 duration: 3000
             })
         }
-    })
+    });
+
+    const {isMember, btnText, onClick, textSize} = useMemo(() => {
+        if (group?.members.find(m => m.userId === session?.user.id)) {
+            return {
+                isMember: true,
+                btnText: "Members",
+                onClick: (e: React.MouseEvent<HTMLButtonElement>) => router.push(`/groups/${group.slug}/members`),
+                textSize: "text-base"
+            }
+        }
+        return {
+            isMember: false,
+            btnText: "Join",
+            onClick: (e: React.MouseEvent<HTMLButtonElement>) => joinGroup({slug: props.slug}),
+            textSize: "text-xl sm:text-2xl"
+        }
+    }, [session, group]);
 
     return (
         <div className='sm:h-container mx-auto max-w-3xl text-primary pt-4 flex flex-col overflow-y-hidden'>
@@ -51,7 +88,11 @@ const GroupSlug = (props: any) => {
                     <Image src='/images/spring-weeks-ldn.svg' alt='genus-white' width={100} height={75}/>
                     <span className="text-white text-lg sm:text-2xl font-semibold whitespace-pre-wrap">InternGen: Spring into Banking</span>
                 </NavbarBrand>
-                <LogoutButton onClick={(e) => signOut()}/>
+                <GroupStatusButton
+                    title={btnText}
+                    onClick={onClick}
+                    textSize={textSize}
+                />
             </Navbar>
             {isLoading ? (
                     <div className='flex grow justify-center items-center p-6 sm:px-12'>
@@ -74,10 +115,11 @@ const GroupSlug = (props: any) => {
                         {isSignedIn && <Messages
                             userId={session.user.id}
                             chatId={group.groupId}
-                            messages={group.messages ?? []}
+                            messages={group.messages}
                             session={session}
+                            isMember={isMember}
                         />}
-                        <ChatInput chatId={group.groupId}/>
+                        <ChatInput chatId={group.groupId} isMember={isMember}/>
                     </div>
                 ) : <div className='h-full flex flex-col justify-center p-6 sm:px-12'>
                     <Alert variant="destructive" className="text-center">

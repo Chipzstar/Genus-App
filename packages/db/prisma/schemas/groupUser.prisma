@@ -5,13 +5,15 @@ enum GroupRole {
 }
 
 model GroupUser {
-  id      Int       @id @default(autoincrement())
-  user    User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId  String
-  email   String    @unique
-  group   Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
-  groupId String
-  role    GroupRole @default(MEMBER)
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId    String
+  firstname String
+  lastname  String
+  imageUrl  String?
+  group     Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId   String
+  role      GroupRole @default(MEMBER)
 
   @@index([userId, groupId])
 }

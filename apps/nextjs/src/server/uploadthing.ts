@@ -4,7 +4,9 @@ import { prisma } from "@genus/db";
 import {createUploadthing, type FileRouter} from "uploadthing/next-legacy";
 import {timeout} from "~/utils";
 import { getAuth } from "@clerk/nextjs/server";
+import { UTApi } from "uploadthing/server";
 
+export const utapi = new UTApi();
 const f = createUploadthing();
 
 const mockAuth = async (req: NextApiRequest, res: NextApiResponse) => {

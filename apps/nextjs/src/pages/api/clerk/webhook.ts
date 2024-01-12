@@ -36,11 +36,11 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
             // Handle the webhook
             switch (event.type) {
                 case 'user.created':
-                    data = { message: "User created", status: "SUCCESS", debug: true }
-                    // data = await createNewUser({event, prisma})
+                    data = await createNewUser({event, prisma})
                     break;
                 case 'user.updated':
                     data = await updateUser({event, prisma})
+                    //data = { debug: true}
                     break;
                 case 'user.deleted':
                     data = await deleteUser({event, prisma})

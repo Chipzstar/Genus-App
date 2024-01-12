@@ -1,7 +1,10 @@
 import type {PrismaClient} from '@prisma/client';
 import {log} from 'next-axiom';
 import {DeletedObjectJSON, UserJSON, UserWebhookEvent, WebhookEvent} from '@clerk/nextjs/dist/types/api';
-import {formatString} from "~/utils";
+import {utapi} from "~/server/uploadthing";
+import shortHash from 'shorthash2';
+import {clerkClient} from '@clerk/nextjs';
+import {UploadFileResponse} from 'uploadthing/client';
 
 export const createNewUser = async ({event, prisma}: { event: UserWebhookEvent; prisma: PrismaClient }) => {
     try {
@@ -29,7 +32,7 @@ export const createNewUser = async ({event, prisma}: { event: UserWebhookEvent; 
                 },
                 data: {
                     users: {
-                        connect: { id: user.id }
+                        connect: {id: user.id}
                     }
                 },
                 include: {
@@ -49,18 +52,57 @@ export const createNewUser = async ({event, prisma}: { event: UserWebhookEvent; 
 
 export const updateUser = async ({event, prisma}: { event: UserWebhookEvent; prisma: PrismaClient }) => {
     try {
+        let uploadedFile;
         const payload = event.data as UserJSON;
-        // create the user
-        const user = await prisma.user.update({
+        // check if the user already exists in the db
+        let user = await prisma.user.findFirstOrThrow({
             where: {
                 clerkId: event.data.id
-            },
-            data: {
-                email: payload.email_addresses[0]?.email_address,
-                firstname: payload.first_name,
-                lastname: payload.last_name
             }
         });
+        const careerInterests = payload.unsafe_metadata["career_interests"] as string[]
+        // check if the user has an "imageUrl" field. If they do continue
+        const newImage = !user.imageUrl && payload.has_image
+        const changedImage = user.imageUrl && user.clerkImageHash !== shortHash(payload.image_url)
+        // console.table({newImage, changedImage, currHash: user.clerkImageHash, newHash: shortHash(payload.image_url)})
+        if (newImage || changedImage) {
+            const fileUrl = payload.image_url;
+            uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
+        }
+        // if a new image was uploaded, delete the old one
+        if (uploadedFile?.data && user.imageKey) {
+            await utapi.deleteFiles([user.imageKey]);
+            // update the imageHash within the clerk account
+            const clerkUser = await clerkClient.users.updateUser(payload.id, {
+                privateMetadata: {
+                    ...payload.private_metadata,
+                    image_hash: shortHash(payload.image_url),
+                    UTKey: uploadedFile.data.key,
+                    UTUrl: uploadedFile.data.url
+                }
+            });
+            log.info('-----------------------------------------------');
+            log.debug('Updated clerk user!!', clerkUser);
+            log.info('-----------------------------------------------');
+        }
+        const shouldUpdate = uploadedFile ||
+            user.email !== payload.email_addresses[0]?.email_address ||
+            user.firstname !== payload.first_name || user.lastname !== payload.last_name;
+        // update the user in the db
+        if (shouldUpdate)
+            user = await prisma.user.update({
+                where: {
+                    clerkId: event.data.id
+                },
+                data: {
+                    email: payload.email_addresses[0]?.email_address,
+                    firstname: payload.first_name,
+                    lastname: payload.last_name,
+                    ...(uploadedFile && {imageKey: uploadedFile.data?.key}),
+                    ...(uploadedFile && {imageUrl: uploadedFile.data?.url}),
+                    ...(uploadedFile && {clerkImageHash: shortHash(payload.image_url)})
+                }
+            });
         log.info('-----------------------------------------------');
         log.debug('Updated user!!', user);
         log.info('-----------------------------------------------');

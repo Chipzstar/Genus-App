@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import {authMiddleware, redirectToSignIn,} from "@clerk/nextjs";
 
 export default authMiddleware({
-    debug: true,
+    debug: false,
     publicRoutes: [
         "/login",
         "/signup",

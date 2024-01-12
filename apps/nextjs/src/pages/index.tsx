@@ -14,25 +14,6 @@ import {Button} from "@genus/ui/button";
 import {SignedIn, useClerk, clerkClient} from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import {PATHS} from "~/utils";
-/*import { getAuth, buildClerkProps } from '@clerk/nextjs/server';
-
-export const getServerSideProps = async ctx => {
-    const { userId } = getAuth(ctx.req);
-
-    if (!userId) return {props: {}}; // This will pass an empty props object and the component will handle the "not logged in" state
-
-    const userFromClerk = userId ? await clerkClient.users.getUser(userId) : null;
-    const user = userFromClerk
-        ? {
-            id: userFromClerk.id,
-            firstName: userFromClerk.firstName,
-            lastName: userFromClerk.lastName,
-            // ... Add other necessary fields here
-        }
-        : null;
-
-    return { props: { user, ...buildClerkProps(ctx.req) } };
-};*/
 
 const images = [
     {
@@ -63,7 +44,7 @@ const Home = () => {
                     <Image src='/images/white-logo.svg' alt='genus-white' width={100} height={75}/>
                     <div className='absolute right-4'>
                     <SignedIn>
-                        <Button onClick={(e) => signOut()}>Logout</Button>
+                        <Button size="sm" onClick={(e) => signOut()}>Logout</Button>
                     </SignedIn>
                     </div>
                 </NavbarBrand>
@@ -84,7 +65,7 @@ const Home = () => {
                             <header className='text-xl font-semibold'>Industry insights</header>
                             <span role="button" className="text-sm font-semibold">See all</span>
                         </div>
-                        <div className='flex space-y-4 sm:space-y-0 sm:space-x-4'>
+                        <div className='flex items-center space-y-4 sm:space-y-0 sm:space-x-4'>
                             {images.map(({src, height, width, alt, desc}, index) => (
                                 <div key={index} className="flex flex-col space-y-4 truncate sm:w-48">
                                     <Image

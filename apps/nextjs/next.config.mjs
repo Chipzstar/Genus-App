@@ -11,14 +11,26 @@ import {withAxiom} from "next-axiom";
 const config = {
   reactStrictMode: true,
   swcMinify: true,
-  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui"],
+  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui", "@genus/redis"],
   // We already do linting on GH actions
   eslint: {
     ignoreDuringBuilds: !!process.env.CI,
   },
   typescript: {
     ignoreBuildErrors: !!process.env.CI,
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'utfs.io'
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com'
+      },
+    ],
+  },
 };
 
 export default withAxiom(config);

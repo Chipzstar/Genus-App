@@ -52,20 +52,23 @@ const Messages = ({
                                         'order-2 items-start': !isCurrentUser,
                                     }
                                 )}>
-                <span
-                    className={cn('px-4 py-2 rounded-lg inline-block text-xs sm:text-base', {
-                        'bg-indigo-600 text-white': isCurrentUser,
-                        'bg-gray-200 text-gray-900': !isCurrentUser,
-                        'rounded-br-none':
-                            !hasNextMessageFromSameUser && isCurrentUser,
-                        'rounded-bl-none':
-                            !hasNextMessageFromSameUser && !isCurrentUser,
-                    })}>
-                  {message.content}
-                    <span className='ml-2 text-xxs sm:text-xs text-gray-400'>
+                                <div>
+                                    <div
+                                        className={cn('flex flex-col px-4 py-2 rounded-lg text-gray-900 text-xs sm:text-sm', {
+                                            'bg-chat-bubble-internal': isCurrentUser,
+                                            'bg-chat-bubble-external text-gray-900': !isCurrentUser,
+                                            'rounded-br-none':
+                                                !hasNextMessageFromSameUser && isCurrentUser,
+                                            'rounded-bl-none':
+                                                !hasNextMessageFromSameUser && !isCurrentUser,
+                                        })}>
+                                        <span className="font-medium mb-2">{message.author.firstname}</span>
+                                        <span>{message.content}</span>
+                                    </div>
+                                    <span className='text-end text-xxs sm:text-xs text-gray-400'>
                     {formatTimestamp(message.createdAt)}
                   </span>
-                </span>
+                                </div>
                             </div>
                             <div
                                 className={cn('relative w-6 h-6', {

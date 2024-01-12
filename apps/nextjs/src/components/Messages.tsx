@@ -65,9 +65,12 @@ const Messages = ({
                                         <span className="font-medium mb-2">{message.author.firstname}</span>
                                         <span>{message.content}</span>
                                     </div>
-                                    <span className='text-end text-xxs sm:text-xs text-gray-400'>
+                                    <div className={cn('mt-1 text-xs text-gray-400', {
+                                            'text-end': isCurrentUser,
+                                            'text-start': !isCurrentUser,
+                                        })}>
                     {formatTimestamp(message.createdAt)}
-                  </span>
+                  </div>
                                 </div>
                             </div>
                             <div

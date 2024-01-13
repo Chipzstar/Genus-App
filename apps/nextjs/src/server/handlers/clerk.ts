@@ -70,15 +70,15 @@ export const updateUser = async ({event, prisma}: { event: UserWebhookEvent; pri
             uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
         }
         // if a new image was uploaded, delete the old one
-        if (uploadedFile?.data && user.imageKey) {
-            await utapi.deleteFiles([user.imageKey]);
+        if (uploadedFile?.data) {
+            if (user.imageKey) await utapi.deleteFiles([user.imageKey]);
             // update the imageHash within the clerk account
             const clerkUser = await clerkClient.users.updateUser(payload.id, {
                 privateMetadata: {
                     ...payload.private_metadata,
                     image_hash: shortHash(payload.image_url),
-                    UTKey: uploadedFile.data.key,
-                    UTUrl: uploadedFile.data.url
+                    ut_key: uploadedFile.data.key,
+                    ut_url: uploadedFile.data.url
                 }
             });
             log.info('-----------------------------------------------');
@@ -98,9 +98,9 @@ export const updateUser = async ({event, prisma}: { event: UserWebhookEvent; pri
                     email: payload.email_addresses[0]?.email_address,
                     firstname: payload.first_name,
                     lastname: payload.last_name,
-                    ...(uploadedFile && {imageKey: uploadedFile.data?.key}),
-                    ...(uploadedFile && {imageUrl: uploadedFile.data?.url}),
-                    ...(uploadedFile && {clerkImageHash: shortHash(payload.image_url)})
+                    ...(uploadedFile?.data && {imageKey: uploadedFile.data?.key}),
+                    ...(uploadedFile?.data && {imageUrl: uploadedFile.data?.url}),
+                    ...(uploadedFile?.data && {clerkImageHash: shortHash(payload.image_url)})
                 }
             });
         log.info('-----------------------------------------------');

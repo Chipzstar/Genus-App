@@ -34,9 +34,9 @@ const images = [
 
 const Home = () => {
     const router = useRouter()
-    const {signOut} = useClerk();
+    const { signOut} = useClerk();
     return (
-        <div className='min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8'>
+        <div className='page-container'>
             <Navbar classNames={{
                 brand: 'w-full flex justify-center items-center',
             }}>

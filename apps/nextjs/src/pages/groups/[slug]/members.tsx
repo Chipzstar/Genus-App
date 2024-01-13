@@ -7,7 +7,8 @@ import {GetServerSideProps} from 'next/types';
 import {useToast} from '@genus/ui/use-toast';
 import ListBoxWrapper from "~/components/ListBoxWrapper";
 import {Avatar, AvatarFallback, AvatarImage} from "@genus/ui/avatar";
-import {User} from 'lucide-react';
+import {ArrowLeft, ChevronLeft, User} from 'lucide-react';
+import { useRouter } from 'next/router';
 
 export const getServerSideProps = (async (ctx) => {
     const params = ctx.params
@@ -19,6 +20,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps
 
 const Members = (props: any) => {
+    const router = useRouter()
     const utils = trpc.useUtils();
     const {toast} = useToast();
 
@@ -49,12 +51,16 @@ const Members = (props: any) => {
     return (
         <div className='page-container'>
             <Navbar classNames={{
-                base: 'px-3 sm:px-0 py-3',
-                brand: 'w-full flex flex-col justify-center items-center space-y-2',
+                base: 'px-3 sm:px-0 py-3 text-white',
+                brand: 'w-full flex flex-col justify-center items-center space-y-1',
             }}>
                 <NavbarBrand>
+                    <div className="absolute left-0" role="button" onClick={router.back}>
+                        <ChevronLeft size={40} color="white"/>
+                    </div>
                     <Image src='/images/spring-weeks-ldn.svg' alt='genus-white' width={100} height={75}/>
-                    <span className="text-white text-lg sm:text-2xl font-semibold whitespace-pre-wrap">InternGen: Spring into Banking</span>
+                    <span className="text-lg sm:text-2xl font-semibold whitespace-pre-wrap">InternGen: Spring into Banking</span>
+                    <span className="text-sm sm:text-base">{members?.length} members</span>
                 </NavbarBrand>
             </Navbar>
             <div className="chat-wrapper">

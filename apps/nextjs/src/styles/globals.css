@@ -89,6 +89,9 @@
         height: calc(100vh - 187px);
         @apply flex grow flex-col bg-white p-6 sm:px-12
     }
+    .page-container {
+        @apply min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8
+    }
 }
 
 .test1 {

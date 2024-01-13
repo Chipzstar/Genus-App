@@ -24,6 +24,9 @@ export const groupRouter = createTRPCRouter({
                         members: {
                             select: {
                                 userId: true,
+                                firstname: true,
+                                lastname: true,
+                                imageUrl: true,
                                 role: true
                             }
                         },

@@ -8,8 +8,8 @@ model GroupUser {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
   userId    String
-  firstname String
-  lastname  String
+  firstname String?
+  lastname  String?
   imageUrl  String?
   group     Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
   groupId   String

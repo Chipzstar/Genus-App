@@ -1,3 +1,6 @@
+import type {AppRouter} from "@genus/api";
+import { inferRouterOutputs } from "@trpc/server";
+
 export interface LoginUser {
     email: string;
     password: string;
@@ -74,11 +77,12 @@ export interface GeneratePaperPayload {
     num_marks: number | string;
 }
 
-export type Message = {
-    id: string;
-    createdAt: number;
-    content: string;
-    authorId: string;
-    groupId: string;
-    thread?: boolean
-}
+type GetGroupBySlugOutput = inferRouterOutputs<AppRouter>['group']['getGroupBySlug'];
+
+export type GetThreadByIdOutput = inferRouterOutputs<AppRouter>['thread']['getThreadById'];
+
+export type ThreadComment = Pick<GetThreadByIdOutput, "comments">["comments"][0];
+
+export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
+
+export type Message = Pick<GetGroupBySlugOutput, "messages">["messages"][0];

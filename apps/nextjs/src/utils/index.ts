@@ -1,3 +1,5 @@
+import {format} from 'date-fns';
+
 export const PATHS = {
     HOME: '/',
     LOGIN: '/login',
@@ -33,4 +35,8 @@ export function labelEncode(str: string): string {
 
 export function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function formatTimestamp(timestamp: Date){
+    return format(timestamp.getTime(), 'HH:mm')
 }

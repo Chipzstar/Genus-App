@@ -7,7 +7,7 @@ import {GetServerSideProps} from 'next/types';
 import {useToast} from '@genus/ui/use-toast';
 import ListBoxWrapper from "~/components/ListBoxWrapper";
 import {Avatar, AvatarFallback, AvatarImage} from "@genus/ui/avatar";
-import {ArrowLeft, ChevronLeft, User} from 'lucide-react';
+import { ChevronLeft, User} from 'lucide-react';
 import { useRouter } from 'next/router';
 
 export const getServerSideProps = (async (ctx) => {
@@ -43,15 +43,15 @@ const Members = (props: any) => {
         return group?.members.map((member) =>
             ({
                 key: member.userId,
-                label: `${member.firstname} ${member.lastname}`,
-                image: member.imageUrl
+                label: `${member.user.firstname} ${member.user.lastname}`,
+                image: member.user.imageUrl
             }))
     }, [group?.members])
 
     return (
         <div className='page-container'>
             <Navbar classNames={{
-                base: 'px-3 sm:px-0 py-3 text-white',
+                base: 'px-3 sm:px-0 pb-3 text-white',
                 brand: 'w-full flex flex-col justify-center items-center space-y-1',
             }}>
                 <NavbarBrand>

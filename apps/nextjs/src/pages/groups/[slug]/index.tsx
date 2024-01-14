@@ -88,11 +88,11 @@ const GroupSlug = (props: any) => {
                     <Image src='/images/spring-weeks-ldn.svg' alt='genus-white' width={100} height={75}/>
                     <span className="text-white text-lg sm:text-2xl font-semibold whitespace-pre-wrap">InternGen: Spring into Banking</span>
                 </NavbarBrand>
-                <GroupStatusButton
+                {!isLoading && <GroupStatusButton
                     title={btnText}
                     onClick={onClick}
                     textSize={textSize}
-                />
+                />}
             </Navbar>
             {isLoading ? (
                     <div className='flex grow justify-center items-center p-6 sm:px-12'>
@@ -113,13 +113,12 @@ const GroupSlug = (props: any) => {
                 group ? (
                     <div className='chat-wrapper'>
                         {isSignedIn && <Messages
-                            userId={session.user.id}
                             chatId={group.groupId}
                             messages={group.messages}
                             session={session}
                             isMember={isMember}
                         />}
-                        <ChatInput chatId={group.groupId} isMember={isMember}/>
+                        <ChatInput type="message" chatId={group.groupId} isMember={isMember}/>
                     </div>
                 ) : <div className='h-full flex flex-col justify-center p-6 sm:px-12'>
                     <Alert variant="destructive" className="text-center">

@@ -5,19 +5,33 @@ import {Textarea} from "@genus/ui/textarea";
 import {Button} from '@genus/ui/button'
 import {trpc} from "~/utils/trpc";
 import {toast} from "@genus/ui/use-toast";
+import {Message} from "~/utils/types";
 
-interface ChatInputProps {
+interface ChatMessageProps {
+    type: 'message',
     chatId: string;
     isMember: boolean;
 }
+interface ChatReplyProps {
+    type: "reply";
+    chatId: string | undefined;
+    isMember: boolean;
+    message: Message;
+}
 
-const ChatInput: FC<ChatInputProps> = ({chatId, isMember}) => {
+const ChatInput: FC<ChatMessageProps | ChatReplyProps> = (props) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const utils = trpc.useUtils();
     const { mutateAsync: createMessage } = trpc.message.createMessage.useMutation({
         onSuccess(data) {
             console.log(data)
             utils.group.invalidate()
+        }
+    })
+    const { mutateAsync: createComment } = trpc.comment.createComment.useMutation({
+        onSuccess(data) {
+            console.log(data)
+            utils.thread.invalidate()
         }
     })
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -27,7 +41,17 @@ const ChatInput: FC<ChatInputProps> = ({chatId, isMember}) => {
         if (!input) return
         setIsLoading(true)
         try {
-            const result = await createMessage({content: input, groupId: chatId})
+            let result;
+            if (props.type === "reply") {
+                result = await createComment({
+                    content: input,
+                    threadId: props.chatId,
+                    messageId: props.message.id,
+                    authorId: props.message.authorId
+                })
+            } else {
+                result = await createMessage({content: input, groupId: props.chatId})
+            }
             setInput('')
             textareaRef.current?.focus()
         } catch (err: any) {
@@ -39,14 +63,14 @@ const ChatInput: FC<ChatInputProps> = ({chatId, isMember}) => {
         } finally {
             setIsLoading(false)
         }
-    }, [input, chatId])
+    }, [input, props])
 
     return (
         <div className='border-t border-gray-200 pt-4 mb-2 sm:mb-0'>
             <div
                 className='relative flex-1 overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600'>
                 <Textarea
-                    disabled={!isMember}
+                    disabled={!props.isMember}
                     ref={textareaRef}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -71,8 +95,8 @@ const ChatInput: FC<ChatInputProps> = ({chatId, isMember}) => {
 
                 <div className='absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2'>
                     <div className='flex-shrin-0'>
-                        <Button loading={isLoading} disabled={isLoading || !input} onClick={sendMessage} type='submit'>
-                            Post
+                        <Button loading={isLoading} disabled={isLoading || !input} onClick={sendMessage} type='submit' size="sm">
+                            {props.type === "message" ? "Post" : "Reply"}
                         </Button>
                     </div>
                 </div>

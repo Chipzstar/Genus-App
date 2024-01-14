@@ -8,7 +8,11 @@ export const groupRouter = createTRPCRouter({
     getGroupById: protectedProcedure.input(z.object({
         id: z.number()
     })).query(async ({ctx, input}) => {
-        return ctx.prisma.group.findFirst({where: {id: input.id}});
+        return ctx.prisma.group.findFirst({
+            where: {
+                id: input.id
+            }
+        });
     }),
     getGroupBySlug: protectedProcedure
         .input(z.object({
@@ -24,9 +28,13 @@ export const groupRouter = createTRPCRouter({
                         members: {
                             select: {
                                 userId: true,
-                                firstname: true,
-                                lastname: true,
-                                imageUrl: true,
+                                user: {
+                                  select: {
+                                      firstname: true,
+                                      lastname: true,
+                                      imageUrl: true
+                                  }
+                                },
                                 role: true
                             }
                         },
@@ -38,7 +46,8 @@ export const groupRouter = createTRPCRouter({
                                         lastname: true,
                                         imageUrl: true,
                                     }
-                                }
+                                },
+                                thread: true
                             },
                             orderBy: {
                                 createdAt: 'desc',

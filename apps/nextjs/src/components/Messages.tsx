@@ -2,15 +2,13 @@
 
 import {ActiveSessionResource} from "@clerk/types"
 import {cn} from '@genus/ui';
-import {format} from 'date-fns';
 import Image from 'next/image'
-import React, {useEffect, useRef, useState} from 'react'
-import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
-import type { AppRouter } from '@genus/api';
-
-type GetGroupBySlugOutput = inferRouterOutputs<AppRouter>['group']['getGroupBySlug'];
-
-type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
+import React, {useRef} from 'react'
+import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@genus/ui/context-menu";
+import {Messages} from "~/utils/types";
+import ReplyDialog from "~/components/ReplyDialog";
+import {ChatBubble} from "~/components/ChatBubble";
+import { formatTimestamp } from "~/utils";
 
 interface MessagesProps {
     userId: string;
@@ -21,17 +19,13 @@ interface MessagesProps {
 }
 
 const Messages = ({
-  userId,
-  messages,
-  chatId,
-  session,
-    isMember
-}: MessagesProps) => {
+                      messages,
+                      chatId,
+                      session,
+                      isMember
+                  }: MessagesProps) => {
 
     const scrollDownRef = useRef<HTMLDivElement | null>(null);
-    const formatTimestamp = (timestamp: Date) => {
-        return format(timestamp.getTime(), 'HH:mm')
-    }
 
     return (
         <div
@@ -39,7 +33,7 @@ const Messages = ({
             className='flex h-full flex-1 flex-col-reverse gap-4 py-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch'>
             <div ref={scrollDownRef}/>
             {messages.map((message, index) => {
-                const isCurrentUser = session && message.authorId === userId
+                const isCurrentUser = session && message.authorId === session.user.id
                 let hasNextMessageFromSameUser: boolean;
                 // @ts-ignore
                 hasNextMessageFromSameUser = messages[index - 1]?.authorId === messages[index].authorId;
@@ -60,27 +54,35 @@ const Messages = ({
                                     }
                                 )}>
                                 <div>
-                                    <div
-                                        className={cn('flex flex-col px-4 py-2 rounded-lg text-gray-900 text-xs sm:text-sm', {
-                                            'bg-chat-bubble-internal/50 text-gray-300': isCurrentUser && !isMember,
-                                            'bg-chat-bubble-external/50 text-gray-300': !isCurrentUser && !isMember,
-                                            'bg-chat-bubble-internal': isCurrentUser && isMember,
-                                            'bg-chat-bubble-external': !isCurrentUser && isMember,
-                                            'rounded-br-none':
-                                                !hasNextMessageFromSameUser && isCurrentUser,
-                                            'rounded-bl-none':
-                                                !hasNextMessageFromSameUser && !isCurrentUser,
-                                        })}>
-                                        <span className="font-medium mb-2">{message["author"].firstname}</span>
-                                        <span>{message.content}</span>
+                                    <ContextMenu>
+                                        <ContextMenuTrigger>
+                                            <ChatBubble
+                                                currentUser={isCurrentUser}
+                                                member={isMember}
+                                                hasNextMessageFromSameUser={hasNextMessageFromSameUser}
+                                                message={message}
+                                            />
+                                        </ContextMenuTrigger>
+                                        <ContextMenuContent updatePositionStrategy="optimized" alignOffset={5}>
+                                            <ContextMenuItem>Reply</ContextMenuItem>
+                                            <ContextMenuItem>React</ContextMenuItem>
+                                            <ContextMenuItem>Delete</ContextMenuItem>
+                                        </ContextMenuContent>
+                                    </ContextMenu>
+                                    <div className={cn('flex items-center space-x-1 mt-1 text-xs text-gray-400', {
+                                        'text-gray-400/50': !isMember,
+                                        'justify-end': isCurrentUser,
+                                        'justify-start': !isCurrentUser,
+                                    })}>
+                                        <span className={cn('', {
+                                            'order-2 pl-1': isCurrentUser,
+                                        })}>{formatTimestamp(message.createdAt)}</span>
+                                        <ReplyDialog
+                                            session={session}
+                                            message={message}
+                                            isMember={isMember}
+                                        />
                                     </div>
-                                    <div className={cn('mt-1 text-xs text-gray-400', {
-                                            'text-gray-400/50': !isMember,
-                                            'text-end': isCurrentUser,
-                                            'text-start': !isCurrentUser,
-                                        })}>
-                    {formatTimestamp(message.createdAt)}
-                  </div>
                                 </div>
                             </div>
                             <div

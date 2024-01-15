@@ -6,7 +6,7 @@ export const threadRouter = createTRPCRouter({
     getThreadById: protectedProcedure.input(z.object({
         id: z.number()
     })).query(async ({ctx, input}) => {
-        return ctx.prisma.thread.findFirstOrThrow({
+        return ctx.prisma.thread.findUniqueOrThrow({
             where: {
                 id: input.id
             },

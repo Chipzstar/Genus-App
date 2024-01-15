@@ -40,6 +40,7 @@ const ChatInput: FC<ChatMessageProps | ChatReplyProps> = (props) => {
     const { mutateAsync: createComment } = trpc.comment.createComment.useMutation({
         onSuccess(data) {
             console.log(data)
+            utils.group.invalidate()
             utils.thread.invalidate()
         }
     })

@@ -11,6 +11,7 @@ import {formatTimestamp} from "~/utils";
 import ChatInput from './ChatInput';
 import {ActiveSessionResource} from "@clerk/types"
 import Image from 'next/image'
+import pluralize from "pluralize";
 
 interface Props {
     session: ActiveSessionResource;
@@ -31,8 +32,11 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
     return (
         <Sheet key={message.id}>
             <SheetTrigger key={message.id}>
-                <span>
-                    <Reply strokeWidth={1.5} size={20}/>
+                <span className="text-xs">
+                    {thread?.comments.length ?
+                        <span className="hover:underline">{thread.comments.length} {pluralize('reply', thread.comments.length)}</span> :
+                        <Reply strokeWidth={1.5} size={20}/>
+                    }
                 </span>
             </SheetTrigger>
             <SheetContent className="w-screen sm:w-[540px]" onKeyDown={(e) => e.key === "Escape"}>
@@ -41,10 +45,10 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                         className="text-sm text-gray-500 font-normal">{message.author.firstname}</span>
                     </SheetTitle>
                     <Separator className="my-6"/>
-                    <SheetDescription>
+                    <SheetDescription className="text-start">
                         <div
                             className={cn(
-                                'flex flex-col space-y-2 max-w-xs'
+                                'flex flex-col space-y-2 sm:max-w-xs'
                             )}>
                             <ChatBubble
                                 currentUser={currentMessageAuthor}
@@ -58,8 +62,8 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                 })}>
                                 <div className={cn('mt-1 text-xs text-gray-400', {
                                     'text-gray-400/50': !isMember,
-                                    'mr-1': currentMessageAuthor,
-                                    'ml-1': !currentMessageAuthor
+                                    'order-1 mr-1': currentMessageAuthor,
+                                    'order-2 ml-1': !currentMessageAuthor
                                 })}>
                                     {formatTimestamp(message.createdAt, "distance")}
                                 </div>
@@ -84,12 +88,12 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                 </div>
 
                             </div>
-                            <div>
+                            {thread?.comments.length && <div>
                                 <span
-                                    className="whitespace-nowrap leading-tight tracking-tight flex-nowrap flex items-center text-xs text-gray-500 font-normal">{thread?.comments.length} replies
+                                    className="whitespace-nowrap leading-tight tracking-tight flex-nowrap flex items-center text-xs text-gray-500 font-normal">{`${thread.comments.length} ${pluralize('reply', thread.comments.length)}`}
                                     <hr className="ml-2 w-full"/>
                                 </span>
-                            </div>
+                            </div>}
                             {thread?.comments && <Listbox
                                 items={thread.comments}
                                 aria-label="Dynamic Actions"
@@ -107,19 +111,9 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                 message={c}
                                             />
                                             <div
-                                                className={cn('flex items-center mt-1.5', {
-                                                    'justify-end': isCurrentUser,
-                                                })}>
-                                                <span className={cn('mt-1 text-xs text-gray-400', {
-                                                    'text-gray-400/50': !isMember,
-                                                    'order-1 text-end mr-1': isCurrentUser,
-                                                    'order-2 text-start ml-1': !isCurrentUser,
-                                                })}>{formatTimestamp(c.createdAt, "distance")}</span>
+                                                className='flex items-center mt-1.5'>
                                                 <div
-                                                    className={cn('relative w-6 h-6', {
-                                                        'order-2': isCurrentUser,
-                                                        'order-1': !isCurrentUser
-                                                    })}>
+                                                    className={cn('relative w-6 h-6')}>
                                                     <Image
                                                         fill
                                                         src={
@@ -134,6 +128,10 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                         className='rounded-full'
                                                     />
                                                 </div>
+                                                <span className={cn('mt-1 text-xs text-gray-400 order-2 ml-1', {
+                                                    'text-gray-400/50': !isMember,
+                                                })}>{formatTimestamp(c.createdAt, "distance")}</span>
+
                                             </div>
                                         </ListboxItem>
                                     );

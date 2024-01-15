@@ -68,7 +68,7 @@ const Messages = ({
                                             <ContextMenuItem>Delete</ContextMenuItem>
                                         </ContextMenuContent>
                                     </ContextMenu>
-                                    <div className={cn('flex items-center space-x-1 mt-1 text-xs text-gray-400', {
+                                    <div className={cn('flex w-full items-center space-x-2 mt-1 text-xs text-gray-400', {
                                         'text-gray-400/50': !isMember,
                                         'justify-end': isCurrentUser,
                                         'justify-start': !isCurrentUser,

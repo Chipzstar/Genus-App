@@ -118,14 +118,12 @@ const Signup: NextPageWithLayout = () => {
             // This method will send a one-time code to the email address supplied to the current sign-up.
             await signUp.prepareEmailAddressVerification()
             setCodeVerification(true)
-            setLoading(false);
             toast({
                 title: "Email Verification Sent",
                 description: 'We have sent you an email with a verification code. Please check your inbox.',
                 action: <ToastAction altText="Verifiation email sent"><Mail size={20}/></ToastAction>
             });
         } catch (error: any) {
-            setLoading(false);
             if (error.errors.length) {
                 if (error.errors[0]['message'] === error.errors[0].longMessage) {
                     toast({
@@ -143,7 +141,10 @@ const Signup: NextPageWithLayout = () => {
                     description: "There was a problem with your request."
                 })
             }
+        } finally {
+            setLoading(false);
         }
+
     }, [isLoaded, files]);
 
     const confirmSignUp = useCallback(

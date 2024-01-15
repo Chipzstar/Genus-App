@@ -3,24 +3,35 @@ import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {nanoid} from 'nanoid'
 import { TRPCError } from "@trpc/server";
 
-export const commentRouter = createTRPCRouter({
-    createComment: protectedProcedure.input(z.object({
-        threadId: z.string().optional(),
+const createCommentSchema = z.discriminatedUnion("type", [
+    z.object({
+        type: z.literal("thread"),
+        messageContent: z.string(),
         content: z.string(),
         messageId: z.number(),
         authorId: z.string(),
-    })).mutation(async ({ctx, input}) => {
+    }),
+    z.object({
+        type: z.literal("comment"),
+        threadId: z.string(),
+        content: z.string(),
+        messageId: z.number(),
+        authorId: z.string(),
+    })
+])
+export const commentRouter = createTRPCRouter({
+    createComment: protectedProcedure.input(createCommentSchema).mutation(async ({ctx, input}) => {
         try {
             let result;
             let commentId = `comment_${nanoid(18)}` //=> "V1StGXR8_Z5jdHi6B-myT"
-            if (!input?.threadId) {
+            if (input.type === "thread") {
                 let result = await ctx.prisma.thread.create({
                     data: {
                         comments: {
                             create: {
                                 commentId,
                                 authorId: ctx.auth.userId,
-                                content: input.content
+                                content: input.messageContent,
                             }
                         },
                         threadId: `thread_${nanoid(18)}`,

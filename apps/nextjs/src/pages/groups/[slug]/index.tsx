@@ -115,8 +115,9 @@ const GroupSlug = (props: any) => {
                         {isSignedIn && <Messages
                             chatId={group.groupId}
                             messages={group.messages}
-                            session={session}
                             isMember={isMember}
+                            // @ts-ignore
+                            session={session}
                         />}
                         <ChatInput type="message" chatId={group.groupId} isMember={isMember}/>
                     </div>

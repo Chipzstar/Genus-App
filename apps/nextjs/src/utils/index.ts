@@ -1,4 +1,4 @@
-import {format} from 'date-fns';
+import {format, formatDistance} from 'date-fns';
 
 export const PATHS = {
     HOME: '/',
@@ -25,18 +25,25 @@ export function formatString(str: string): string {
  */
 export function labelEncode(str: string): string {
     return str
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-      .replace(/--+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
 }
 
 export function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function formatTimestamp(timestamp: Date){
-    return format(timestamp.getTime(), 'HH:mm')
+export function formatTimestamp(timestamp: Date, method: string="default") {
+    switch (method) {
+        case 'distance':
+            return formatDistance(timestamp, Date.now(), {
+                addSuffix: true
+            })
+        default:
+            return format(timestamp.getTime(), 'HH:mm')
+    }
 }

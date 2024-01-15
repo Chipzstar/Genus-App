@@ -11,7 +11,6 @@ import {ChatBubble} from "~/components/ChatBubble";
 import { formatTimestamp } from "~/utils";
 
 interface MessagesProps {
-    userId: string;
     messages: Messages;
     chatId: string;
     session: ActiveSessionResource;

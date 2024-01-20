@@ -47,6 +47,7 @@ export const groupRouter = createTRPCRouter({
                                         imageUrl: true,
                                     }
                                 },
+                                reactions: true,
                                 thread: true
                             },
                             orderBy: {

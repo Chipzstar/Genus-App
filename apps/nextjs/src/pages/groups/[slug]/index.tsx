@@ -50,7 +50,7 @@ const GroupSlug = (props: any) => {
         slug: props.slug
     }, {
         onSuccess: (data) => {
-            console.log(data)
+            // console.log(data)
         },
         onError: (error) => {
             toast({
@@ -112,13 +112,13 @@ const GroupSlug = (props: any) => {
                 ) :
                 group ? (
                     <div className='chat-wrapper'>
-                        {isSignedIn && <Messages
+                        <Messages
                             chatId={group.groupId}
                             messages={group.messages}
                             isMember={isMember}
                             // @ts-ignore
                             session={session}
-                        />}
+                        />
                         <ChatInput type="message" chatId={group.groupId} isMember={isMember}/>
                     </div>
                 ) : <div className='h-full flex flex-col justify-center p-6 sm:px-12'>

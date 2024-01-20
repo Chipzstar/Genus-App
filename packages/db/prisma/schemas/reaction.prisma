@@ -1,0 +1,16 @@
+model Reaction {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reactionId String   @unique
+  emoji      String
+  code       String
+  author     User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  authorId   String
+  message    Message? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId  Int?
+  comment    Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId  Int?
+
+  @@index([authorId, messageId, commentId])
+}

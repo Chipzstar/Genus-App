@@ -13,7 +13,8 @@ export const threadRouter = createTRPCRouter({
             include: {
                 comments: {
                     include: {
-                        author: true
+                        author: true,
+                        reactions: true
                     }
                 }
             }

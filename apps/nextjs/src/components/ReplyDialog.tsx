@@ -12,6 +12,7 @@ import ChatInput from './ChatInput';
 import {ActiveSessionResource} from "@clerk/types"
 import Image from 'next/image'
 import pluralize from "pluralize";
+import EmojiDialog from "~/components/EmojiDialog";
 
 interface Props {
     session: ActiveSessionResource;
@@ -35,7 +36,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                 <span className="text-xs">
                     {thread?.comments.length ?
                         <span className="hover:underline">{thread.comments.length} {pluralize('reply', thread.comments.length)}</span> :
-                        <Reply strokeWidth={1.5} size={20}/>
+                        <Reply strokeWidth={1.5} className="mb-0.5" size={20}/>
                     }
                 </span>
             </SheetTrigger>
@@ -54,7 +55,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                 currentUser={currentMessageAuthor}
                                 member={isMember}
                                 hasNextMessageFromSameUser={false}
-                                message={message}
+                                message={{...message, type: 'message'}}
                             />
                             <div
                                 className={cn('flex items-center', {
@@ -108,7 +109,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                 currentUser={isCurrentUser}
                                                 member={isMember}
                                                 hasNextMessageFromSameUser={false}
-                                                message={c}
+                                                message={{...c, type: 'comment'}}
                                             />
                                             <div
                                                 className='flex items-center mt-1.5'>
@@ -131,7 +132,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                 <span className={cn('mt-1 text-xs text-gray-400 order-2 ml-1', {
                                                     'text-gray-400/50': !isMember,
                                                 })}>{formatTimestamp(c.createdAt, "distance")}</span>
-
+                                                <EmojiDialog type="message" isCurrentUser={isCurrentUser} message={message}/>
                                             </div>
                                         </ListboxItem>
                                     );

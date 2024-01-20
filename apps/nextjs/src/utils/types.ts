@@ -1,5 +1,5 @@
 import type {AppRouter} from "@genus/api";
-import { inferRouterOutputs } from "@trpc/server";
+import {inferRouterOutputs} from "@trpc/server";
 
 export interface LoginUser {
     email: string;
@@ -86,3 +86,13 @@ export type ThreadComment = Pick<GetThreadByIdOutput, "comments">["comments"][0]
 export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
 
 export type Message = Pick<GetGroupBySlugOutput, "messages">["messages"][0];
+
+export interface MessagesProps {
+    type: "message"
+    message: Message;
+}
+
+export interface ThreadCommentsProps {
+    type: "comment"
+    message: ThreadComment;
+}

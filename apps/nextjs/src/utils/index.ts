@@ -1,3 +1,4 @@
+import {Reaction} from '@genus/db';
 import {format, formatDistance} from 'date-fns';
 
 export const PATHS = {
@@ -37,7 +38,7 @@ export function timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function formatTimestamp(timestamp: Date, method: string="default") {
+export function formatTimestamp(timestamp: Date, method: string = "default") {
     switch (method) {
         case 'distance':
             return formatDistance(timestamp, Date.now(), {
@@ -46,4 +47,35 @@ export function formatTimestamp(timestamp: Date, method: string="default") {
         default:
             return format(timestamp.getTime(), 'HH:mm')
     }
+}
+
+export const emojis = [
+    "😀",
+    "😃",
+    "😄",
+    "😁",
+    "😆",
+    "😅",
+    "😂",
+    "🤣",
+    "😊",
+];
+
+export function convertToNestedArray(arr: Reaction[] = []) {
+    // Use a Map to count the occurrences of each unique string
+    let countMap = new Map<String, Reaction[]>();
+    // Count occurrences
+    for (let [i, r] of arr.entries()) {
+        let reactions = countMap.get(r.emoji) || [];
+        reactions.push(r)
+        countMap.set(r.emoji, reactions);
+    }
+    // Initialize the nested array
+    let nestedArray: Reaction[][] = [];
+    // Create the nested array with unique items and their counts
+    countMap.forEach((reactions, value) => {
+        nestedArray.push(reactions);
+    });
+    console.log(nestedArray)
+    return nestedArray;
 }

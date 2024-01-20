@@ -21,15 +21,16 @@ model CareerInterest {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  commentId String   @unique
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  commentId String     @unique
   content   String
-  author    User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  author    User       @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
   authorId  String
-  thread    Thread   @relation(fields: [threadId], references: [threadId], onDelete: Cascade)
+  thread    Thread     @relation(fields: [threadId], references: [threadId], onDelete: Cascade)
   threadId  String
+  reactions Reaction[]
 
   @@index([authorId, threadId])
 }
@@ -66,18 +67,36 @@ model GroupUser {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  messageId String   @unique
-  author    User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  messageId String     @unique
+  author    User       @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
   authorId  String
-  group     Group    @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  group     Group      @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
   groupId   String
   thread    Thread?
+  reactions Reaction[]
 
   @@index([authorId, groupId])
+}
+
+model Reaction {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reactionId String   @unique
+  emoji      String
+  code       String
+  author     User     @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  authorId   String
+  message    Message? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId  Int?
+  comment    Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId  Int?
+
+  @@index([authorId, messageId, commentId])
 }
 
 model Thread {
@@ -115,5 +134,6 @@ model User {
   messages          Message[]
   threads           Thread[]
   comments          Comment[]
+  reactions         Reaction[]
   GroupUser         GroupUser[]
 }

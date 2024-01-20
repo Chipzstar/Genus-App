@@ -5,6 +5,7 @@ import {groupRouter} from "./group";
 import {messageRouter} from "./message";
 import {threadRouter} from "./thread";
 import {commentRouter} from "./comment";
+import {reactionRouter} from "./reaction";
 
 export const appRouter = createTRPCRouter({
     user: userRouter,
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
     message: messageRouter,
     thread: threadRouter,
     comment: commentRouter,
+    reaction: reactionRouter
 });
 
 // export type definition of API

@@ -25,7 +25,6 @@ type Props = MessagesProps | ThreadCommentsProps;
 const EmojiDialog: FC<Props> = (props) => {
     const {userId} = useAuth()
     const utils = trpc.useUtils();
-    const [displayEmoji, setDisplayEmoji] = useState<string | null>(null);
     /*const {data: reaction} = trpc.reaction.getReaction.useQuery({
         type: props.type,
         id: props.message.id,
@@ -37,28 +36,27 @@ const EmojiDialog: FC<Props> = (props) => {
     })*/
     const {mutate: upsertReaction} = trpc.reaction.upsertReaction.useMutation({
         onMutate(data){
-            console.log("-----------------------------------------------")
             console.log(data)
         },
         onSuccess(data) {
             console.log(data)
             utils.group.invalidate()
+            utils.thread.invalidate()
         }
     })
 
     const reaction = useMemo(() => {
-        let r = props.message.reactions.find((reaction) => reaction.authorId === userId)
-        console.log(props.message.id, r)
-        return r
+        return props.message.reactions.find((reaction) => reaction.authorId === userId)
     }, [props.message, userId])
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <div
-                    className={cn('flex items-center', {
-                        'order-first pr-1': props.isCurrentUser,
-                        'order-last pl-1': !props.isCurrentUser
+                    className={cn('flex items-center pl-1 grow', {
+                        'justify-end': reaction && props.type === "comment",
+                        'order-first pr-1': props.isCurrentUser && props.type === "message",
+                        'order-last': !props.isCurrentUser,
                     })}
                     role="button"
                 >
@@ -68,7 +66,7 @@ const EmojiDialog: FC<Props> = (props) => {
                             <Reactions message={{...props.message, type: "comment"}} isCurrentUser={props.isCurrentUser}/>}
                 </div>
             </PopoverTrigger>
-            <PopoverContent className="bg-none ">
+            <PopoverContent className="bg-none">
                 <EmojiPicker
                     onEmojiClick={(emoji) => {
                         upsertReaction({
@@ -78,6 +76,7 @@ const EmojiDialog: FC<Props> = (props) => {
                             ...(props.type === "message" && {messageId: props.message.id}),
                             ...(props.type === "comment" && {commentId: props.message.id}),
                         })
+
                     }}
                 />
             </PopoverContent>

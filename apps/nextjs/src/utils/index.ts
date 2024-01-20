@@ -76,6 +76,5 @@ export function convertToNestedArray(arr: Reaction[] = []) {
     countMap.forEach((reactions, value) => {
         nestedArray.push(reactions);
     });
-    console.log(nestedArray)
     return nestedArray;
 }

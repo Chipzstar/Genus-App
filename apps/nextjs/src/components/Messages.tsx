@@ -3,12 +3,14 @@
 import {ActiveSessionResource} from "@clerk/types"
 import {cn} from '@genus/ui';
 import Image from 'next/image'
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@genus/ui/context-menu";
 import {Messages} from "~/utils/types";
 import ReplyDialog from "~/components/ReplyDialog";
 import {ChatBubble} from "~/components/ChatBubble";
-import { formatTimestamp } from "~/utils";
+import {formatTimestamp} from "~/utils";
+import EmojiDialog from "~/components/EmojiDialog";
+import Reactions from "~/components/Reactions";
 
 interface MessagesProps {
     messages: Messages;
@@ -25,7 +27,7 @@ const Messages = ({
                   }: MessagesProps) => {
 
     const scrollDownRef = useRef<HTMLDivElement | null>(null);
-
+    const [emoji, setEmoji] = useState<string>("😀");
     return (
         <div
             id='messages'
@@ -59,28 +61,32 @@ const Messages = ({
                                                 currentUser={isCurrentUser}
                                                 member={isMember}
                                                 hasNextMessageFromSameUser={hasNextMessageFromSameUser}
-                                                message={message}
+                                                message={{...message, type: 'message'}}
                                             />
                                         </ContextMenuTrigger>
                                         <ContextMenuContent updatePositionStrategy="optimized" alignOffset={5}>
-                                            <ContextMenuItem>Reply</ContextMenuItem>
+                                            <ContextMenuItem>{message.id}</ContextMenuItem>
                                             <ContextMenuItem>React</ContextMenuItem>
                                             <ContextMenuItem>Delete</ContextMenuItem>
                                         </ContextMenuContent>
                                     </ContextMenu>
-                                    <div className={cn('flex w-full items-center space-x-2 mt-1 text-xs text-gray-400', {
-                                        'text-gray-400/50': !isMember,
-                                        'justify-end': isCurrentUser,
-                                        'justify-start': !isCurrentUser,
-                                    })}>
+                                    <div
+                                        className={cn('flex w-full items-center space-x-2 mt-1 text-xs text-gray-400', {
+                                            'text-gray-400/50': !isMember,
+                                            'justify-end': isCurrentUser,
+                                            'justify-start': !isCurrentUser,
+                                        })}>
                                         <span className={cn('', {
                                             'order-2 pl-1': isCurrentUser,
                                         })}>{formatTimestamp(message.createdAt)}</span>
-                                        <ReplyDialog
-                                            session={session}
-                                            message={message}
-                                            isMember={isMember}
-                                        />
+                                        <div className="flex items-center">
+                                            <ReplyDialog
+                                                session={session}
+                                                message={message}
+                                                isMember={isMember}
+                                            />
+                                            <EmojiDialog type="message" isCurrentUser={isCurrentUser} message={message}/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -18,4 +18,5 @@ model User {
   messages          Message[]
   threads           Thread[]
   comments          Comment[]
+  reactions         Reaction[]
 }

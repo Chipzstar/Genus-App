@@ -36,6 +36,10 @@ const EmojiDialog: FC<Props> = (props) => {
         }
     })*/
     const {mutate: upsertReaction} = trpc.reaction.upsertReaction.useMutation({
+        onMutate(data){
+            console.log("-----------------------------------------------")
+            console.log(data)
+        },
         onSuccess(data) {
             console.log(data)
             utils.group.invalidate()
@@ -43,29 +47,30 @@ const EmojiDialog: FC<Props> = (props) => {
     })
 
     const reaction = useMemo(() => {
-        return props.message.reactions.find((reaction) => reaction.authorId === userId)
-    }, [props.message.reactions, userId])
+        let r = props.message.reactions.find((reaction) => reaction.authorId === userId)
+        console.log(props.message.id, r)
+        return r
+    }, [props.message, userId])
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <div
-                    className={cn('', {
+                    className={cn('flex items-center', {
                         'order-first pr-1': props.isCurrentUser,
                         'order-last pl-1': !props.isCurrentUser
                     })}
                     role="button"
                 >
-                    {!reaction ? <SmilePlus size={15}/> :
-                        props.type === "message" ?
-                            <Reactions message={{...props.message, type: "message"}}/> :
-                            <Reactions message={{...props.message, type: "comment"}}/>}
+                    {!reaction && <SmilePlus size={15}/>}
+                    {props.type === "message" ?
+                            <Reactions message={{...props.message, type: "message"}} isCurrentUser={props.isCurrentUser}/> :
+                            <Reactions message={{...props.message, type: "comment"}} isCurrentUser={props.isCurrentUser}/>}
                 </div>
             </PopoverTrigger>
             <PopoverContent className="bg-none ">
                 <EmojiPicker
                     onEmojiClick={(emoji) => {
-                        console.log(emoji)
                         upsertReaction({
                             id: reaction?.id ?? -1,
                             emoji: emoji.emoji,

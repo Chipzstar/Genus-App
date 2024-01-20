@@ -138,6 +138,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^4.27.3
         version: 4.27.3(next@13.5.6)(react-dom@18.2.0)(react@18.2.0)
+      '@emoji-mart/data':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@genus/api':
         specifier: '*'
         version: link:../../packages/api
@@ -225,9 +228,6 @@ importers:
       react-hook-form:
         specifier: ^7.48.2
         version: 7.48.2(react@18.2.0)
-      react-input-emoji:
-        specifier: ^5.6.5
-        version: 5.6.5(react-dom@18.2.0)(react@18.2.0)
       react-loader-spinner:
         specifier: ^6.1.6
         version: 6.1.6(react-dom@18.2.0)(react@18.2.0)
@@ -2429,16 +2429,6 @@ packages:
 
   /@emoji-mart/data@1.1.2:
     resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
-    dev: false
-
-  /@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@18.2.0):
-    resolution: {integrity: sha512-NMlFNeWgv1//uPsvLxvGQoIerPuVdXwK/EUek8OOkJ6wVOWPUizRBJU0hDqWZCOROVpfBgCemaC3m6jDOXi03g==}
-    peerDependencies:
-      emoji-mart: ^5.2
-      react: ^16.8 || ^17 || ^18
-    dependencies:
-      emoji-mart: 5.5.2
-      react: 18.2.0
     dev: false
 
   /@emotion/babel-plugin@11.11.0:
@@ -8901,10 +8891,6 @@ packages:
   /electron-to-chromium@1.4.630:
     resolution: {integrity: sha512-osHqhtjojpCsACVnuD11xO5g9xaCyw7Qqn/C2KParkMv42i8jrJJgx3g7mkHfpxwhy9MnOJr8+pKOdZ7qzgizg==}
 
-  /emoji-mart@5.5.2:
-    resolution: {integrity: sha512-Sqc/nso4cjxhOwWJsp9xkVm8OF5c+mJLZJFoFfzRuKO+yWiN7K8c96xmtughYb0d/fZ8UC6cLIQ/p4BR6Pv3/A==}
-    dev: false
-
   /emoji-picker-react@4.6.11(react@18.2.0):
     resolution: {integrity: sha512-MDCaNdRCiNftKVNDNj0jhTmjU8+3/jvG8W9aFUDTOOGf031BsHO5sluF+e6cpJx00OHtFeRG6OQJay7IUPKoMw==}
     engines: {node: '>=10'}
@@ -13037,20 +13023,6 @@ packages:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
       react: 18.2.0
-    dev: false
-
-  /react-input-emoji@5.6.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-TtvWCoco+ext3sr8/0Q/4itCm06H2PXH++XHinblT6Y97V43UU3YzUUnlv0U6eM0yfJuFTxs8LdjAMeS+jj6ag==}
-    engines: {node: '>=8', npm: '>=5'}
-    peerDependencies:
-      react: '>=17.0.x'
-      react-dom: '>=17.0.x'
-    dependencies:
-      '@emoji-mart/data': 1.1.2
-      '@emoji-mart/react': 1.1.1(emoji-mart@5.5.2)(react@18.2.0)
-      emoji-mart: 5.5.2
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-is@16.13.1:

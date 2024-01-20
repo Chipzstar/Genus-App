@@ -1,5 +1,5 @@
 import {Reaction} from '@genus/db';
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, Fragment, useEffect, useMemo} from 'react';
 import {Message, ThreadComment} from "~/utils/types";
 import {convertToNestedArray} from "~/utils";
 import {compareDesc} from 'date-fns';
@@ -33,15 +33,15 @@ const Reactions: FC<Props> = (props: Props) => {
 
 
     return (
-        <div className={cn("flex float-right relative bottom-2", {
-            'order-first right-1': props.isCurrentUser,
-            'order-last left-1': !props.isCurrentUser
+        <div className={cn("flex float-right relative bottom-2 grow", {
+            'order-first right-1': props.isCurrentUser && props.message.type === "message",
+            'order-last left-1': !props.isCurrentUser && props.message.type === "message",
+            'justify-end': props.message.type === "comment",
         })}>
             {reactions.slice(0, 3).map((emojis, index) => (
-                <>
+                <Fragment key={index}>
                     <div
                         role="button"
-                        key={index}
                         className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gray-200 text-gray-900 text-xs sm:text-sm"
                         onContextMenu={(e) => {
                             e.preventDefault();
@@ -53,7 +53,7 @@ const Reactions: FC<Props> = (props: Props) => {
                         {emojis[0]?.emoji}
                     </div>
                     <span className="relative font-medium text-xxs top-2.5 right-1">{emojis.length}</span>
-                </>
+                </Fragment>
             ))}
         </div>
     );

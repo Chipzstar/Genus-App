@@ -26,7 +26,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
     }, {
         enabled: Boolean(message?.thread),
         onSuccess(data) {
-            //console.log(data)
+            console.log(data)
         }
     });
     let currentMessageAuthor = message.authorId === session?.user.id;
@@ -35,7 +35,8 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
             <SheetTrigger key={message.id}>
                 <span className="text-xs">
                     {thread?.comments.length ?
-                        <span className="hover:underline">{thread.comments.length} {pluralize('reply', thread.comments.length)}</span> :
+                        <span
+                            className="hover:underline">{thread.comments.length} {pluralize('reply', thread.comments.length)}</span> :
                         <Reply strokeWidth={1.5} className="mb-0.5" size={20}/>
                     }
                 </span>
@@ -112,7 +113,7 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                 message={{...c, type: 'comment'}}
                                             />
                                             <div
-                                                className='flex items-center mt-1.5'>
+                                                className='flex items-center mt-1.5 grow'>
                                                 <div
                                                     className={cn('relative w-6 h-6')}>
                                                     <Image
@@ -129,10 +130,10 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
                                                         className='rounded-full'
                                                     />
                                                 </div>
-                                                <span className={cn('mt-1 text-xs text-gray-400 order-2 ml-1', {
+                                                <span className={cn('text-xs text-gray-400 ml-1', {
                                                     'text-gray-400/50': !isMember,
                                                 })}>{formatTimestamp(c.createdAt, "distance")}</span>
-                                                <EmojiDialog type="message" isCurrentUser={isCurrentUser} message={message}/>
+                                                <EmojiDialog type="comment" isCurrentUser={isCurrentUser} message={c}/>
                                             </div>
                                         </ListboxItem>
                                     );

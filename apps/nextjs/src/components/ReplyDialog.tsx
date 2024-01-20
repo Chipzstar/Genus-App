@@ -26,10 +26,10 @@ const ReplyDialog = ({message, isMember, session}: Props) => {
     }, {
         enabled: Boolean(message?.thread),
         onSuccess(data) {
-            console.log(data)
+            //console.log(data)
         }
     });
-    let currentMessageAuthor = message.authorId === session.user.id;
+    let currentMessageAuthor = message.authorId === session?.user.id;
     return (
         <Sheet key={message.id}>
             <SheetTrigger key={message.id}>

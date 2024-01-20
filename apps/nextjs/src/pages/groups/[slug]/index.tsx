@@ -50,7 +50,7 @@ const GroupSlug = (props: any) => {
         slug: props.slug
     }, {
         onSuccess: (data) => {
-            // console.log(data)
+            console.log(data)
         },
         onError: (error) => {
             toast({

@@ -4,18 +4,22 @@ import {Message, ThreadComment} from "~/utils/types";
 import {convertToNestedArray} from "~/utils";
 import {compareDesc} from 'date-fns';
 import {trpc} from "~/utils/trpc";
-import {useAuth, useSession } from '@clerk/nextjs';
+import {useAuth, useSession} from '@clerk/nextjs';
+import {cn} from "@genus/ui";
 
 interface Props {
-    message: { type: "message" } & Message | { type: "comment" } & ThreadComment
+    message: { type: "message" } & Message | { type: "comment" } & ThreadComment;
+    isCurrentUser: boolean;
 }
-const Reactions : FC<Props> = (props: Props) => {
-    const { userId } = useAuth();
+
+const Reactions: FC<Props> = (props: Props) => {
+    const {userId} = useAuth();
     const utils = trpc.useUtils();
-    const  { mutate: deleteReaction } = trpc.reaction.deleteReaction.useMutation({
+    const {mutate: deleteReaction} = trpc.reaction.deleteReaction.useMutation({
         onSuccess(data) {
             console.log(data)
             utils.group.invalidate()
+            utils.thread.invalidate()
         }
     })
 
@@ -29,13 +33,22 @@ const Reactions : FC<Props> = (props: Props) => {
 
 
     return (
-        <div className="flex float-right relative bottom-2 left-1">
+        <div className={cn("flex float-right relative bottom-2", {
+            'order-first right-1': props.isCurrentUser,
+            'order-last left-1': !props.isCurrentUser
+        })}>
             {reactions.slice(0, 3).map((emojis, index) => (
                 <>
                     <div
                         role="button"
                         key={index}
                         className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gray-200 text-gray-900 text-xs sm:text-sm"
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                            deleteReaction({
+                                id: emojis.find((e) => e.authorId === userId)?.id ?? -1
+                            })
+                        }}
                     >
                         {emojis[0]?.emoji}
                     </div>

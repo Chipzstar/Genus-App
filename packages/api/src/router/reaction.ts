@@ -25,7 +25,6 @@ export const reactionRouter = createTRPCRouter({
                     }
                 });
             }
-            console.log(reaction);
             return reaction;
         } catch (err) {
             console.error(err);

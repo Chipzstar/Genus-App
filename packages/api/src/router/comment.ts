@@ -34,13 +34,13 @@ export const commentRouter = createTRPCRouter({
                                 create: {
                                     commentId,
                                     authorId: ctx.auth.userId,
-                                    content: input.messageContent,
+                                    content: input.content,
                                 }
                             },
                             threadId: `thread_${nanoid(18)}`,
                             messageId: input.messageId,
                             authorId: input.authorId,
-                            content: input.content
+                            content: input.messageContent
                         }
                     });
                     console.log(result)

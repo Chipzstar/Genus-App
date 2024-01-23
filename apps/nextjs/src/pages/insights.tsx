@@ -16,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@genus/ui/select";
+import { ScrollArea } from "@genus/ui/scroll-area";
 import {career_interests} from "~/schemas";
 import {
     Listbox,
@@ -28,7 +29,7 @@ const Insights = () => {
     const router = useRouter()
     const {signOut} = useAuth();
     return (
-        <div className='page-container-scrollable bg-white overflow-y-auto'>
+        <div className='page-container bg-white overflow-y-hidden'>
             <Navbar classNames={{
                 brand: 'w-full flex justify-center items-center',
             }}>
@@ -42,7 +43,7 @@ const Insights = () => {
                 </NavbarBrand>
             </Navbar>
             <div className='h-full p-6 sm:px-12 sm:pt-12'>
-                <header className='text-black text-2xl sm:text-5xl font-bold'>Industry Insights</header>
+                <header className='text-black text-2xl sm:text-4xl font-bold'>Industry Insights</header>
                 <div className="flex py-6 items-center justify-between space-x-10">
                     <div className="flex sm:w-64">
                         <Input className="rounded-3xl text-black placeholder:text-neutral-400 bg-neutral-100 font-semibold w-full"
@@ -64,7 +65,7 @@ const Insights = () => {
                         </Select>
                     </div>
                 </div>
-                <section className="w-full">
+                <ScrollArea className={"h-[calc(100%-12rem)]"}>
                     <Listbox
                         aria-label="Actions"
                     >
@@ -78,7 +79,7 @@ const Insights = () => {
                             </ListboxItem>
                         ))}
                     </Listbox>
-                </section>
+                </ScrollArea>
             </div>
         </div>
     );

@@ -92,9 +92,6 @@
     .page-container {
         @apply min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8
     }
-    .page-container-scrollable {
-        @apply min-h-screen mx-auto max-w-3xl text-primary py-6 md:py-8
-    }
 }
 
 .test1 {

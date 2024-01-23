@@ -28,7 +28,7 @@ const Insights = () => {
     const router = useRouter()
     const {signOut} = useAuth();
     return (
-        <div className='page-container bg-white overflow-y-auto'>
+        <div className='page-container-scrollable bg-white overflow-y-auto'>
             <Navbar classNames={{
                 brand: 'w-full flex justify-center items-center',
             }}>
@@ -42,7 +42,7 @@ const Insights = () => {
                 </NavbarBrand>
             </Navbar>
             <div className='h-full p-6 sm:px-12 sm:pt-12'>
-                <header className='text-black text-3xl font-semibold'>Industry Insights</header>
+                <header className='text-black text-2xl sm:text-5xl font-bold'>Industry Insights</header>
                 <div className="flex py-6 items-center justify-between space-x-10">
                     <div className="flex sm:w-64">
                         <Input className="rounded-3xl text-black placeholder:text-neutral-400 bg-neutral-100 font-semibold w-full"
@@ -64,12 +64,12 @@ const Insights = () => {
                         </Select>
                     </div>
                 </div>
-                <section className="w-full px-1">
+                <section className="w-full">
                     <Listbox
                         aria-label="Actions"
                     >
                         {INSIGHTS.map((insight, index) => (
-                            <ListboxItem key={index}>
+                            <ListboxItem key={index} className="px-0">
                                 <InsightCard
                                     id={insight.id}
                                     title={insight.title}

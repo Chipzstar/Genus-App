@@ -62,12 +62,12 @@ export const INSIGHTS = [
     },
     {
         id: 3,
-        title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
+        title: 'Sheila - Research Analyst at Barclays',
         image: "/images/experts/Sheila.svg",
     },
     {
         id: 4,
-        title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
+        title: 'Dolly - Trader at JP Morgan',
         image: "/images/experts/Dolly.svg",
     }
 ]

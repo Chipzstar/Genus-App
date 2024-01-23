@@ -11,7 +11,7 @@ interface Props {
 const AppLayout = ({children}: Props) => {
     const router = useRouter()
     return (
-        <main className={cx('min-h-screen m-auto text-white bg-primary', fontSans.className)}>
+        <main className={cx('min-h-screen m-auto text-white bg-primary overflow-y-hidden', fontSans.className)}>
             {children}
             <BottomNav activePage={router.pathname}/>
         </main>

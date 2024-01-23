@@ -49,17 +49,28 @@ export function formatTimestamp(timestamp: Date, method: string = "default") {
     }
 }
 
-export const emojis = [
-    "😀",
-    "😃",
-    "😄",
-    "😁",
-    "😆",
-    "😅",
-    "😂",
-    "🤣",
-    "😊",
-];
+export const INSIGHTS = [
+    {
+        id: 1,
+        title: "Tobi - Markets Analyst at Goldman Sachs",
+        image: "/images/experts/Tobi.svg",
+    },
+    {
+        id: 2,
+        title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
+        image: "/images/experts/Joseph.svg",
+    },
+    {
+        id: 3,
+        title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
+        image: "/images/experts/Sheila.svg",
+    },
+    {
+        id: 4,
+        title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
+        image: "/images/experts/Dolly.svg",
+    }
+]
 
 export function convertToNestedArray(arr: Reaction[] = []) {
     // Use a Map to count the occurrences of each unique string

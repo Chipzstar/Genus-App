@@ -93,7 +93,7 @@ const Login: NextPageWithLayout = () => {
 
     return (
         <div className='flex grow flex-col items-center justify-center gap-12 px-4 py-8'>
-            <Image src='/images/white-logo.svg' alt='genus-logo' width={400} height={300}/>
+            <Image src='/images/logo-white.svg' alt='genus-white' width={400} height={250} className="mt-0.5"/>
             <header className='w-[230px] text-center font-bold tracking-wider text-2xl lg:text-4xl'>Sign in</header>
             <div className='flex flex-col space-y-12 md:w-1/2 w-full'>
                 <Form {...form}>

@@ -172,11 +172,6 @@ const Signup: NextPageWithLayout = () => {
                     description: "verification-success",
                     action: <ToastAction altText="Email Verified"> <Check size={20}/> </ToastAction>,
                 })
-                /*if (files.length && clerk) {
-                    startUpload(files).then(() => clerk.user.setProfileImage({
-                        file: files[0]
-                    }).then(() => console.log("profile image set")))
-                });*/
                 files.length && setTimeout(() => startUpload(files).then(() => console.log("profile image set", files)), 1000)
                 // router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
             } catch (err: any) {

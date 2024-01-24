@@ -51,22 +51,22 @@ export function formatTimestamp(timestamp: Date, method: string = "default") {
 
 export const INSIGHTS = [
     {
-        id: 1,
+        id: 'tobi-markets-analyst-at-goldman-sachs',
         title: "Tobi - Markets Analyst at Goldman Sachs",
         image: "/images/experts/Tobi.svg",
     },
     {
-        id: 2,
+        id: 'joseph-investment-banking-analyst-at-leading-boutique-firm',
         title: 'Joseph - Investment Banking Analyst at Leading Boutique firm',
         image: "/images/experts/Joseph.svg",
     },
     {
-        id: 3,
+        id: 'sheila-research-analyst-at-barclays',
         title: 'Sheila - Research Analyst at Barclays',
         image: "/images/experts/Sheila.svg",
     },
     {
-        id: 4,
+        id: 'dolly-trader-at-jp-morgan',
         title: 'Dolly - Trader at JP Morgan',
         image: "/images/experts/Dolly.svg",
     }

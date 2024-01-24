@@ -68,9 +68,10 @@ const Insights = () => {
                 <ScrollArea className={"h-[calc(100%-12rem)]"}>
                     <Listbox
                         aria-label="Actions"
+                        onAction={(slug) => router.push(`${PATHS.INSIGHTS}/${slug}`)}
                     >
                         {INSIGHTS.map((insight, index) => (
-                            <ListboxItem key={index} className="px-0">
+                            <ListboxItem key={insight.id} className="px-0" textValue={insight.title}>
                                 <InsightCard
                                     id={insight.id}
                                     title={insight.title}

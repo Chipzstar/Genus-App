@@ -92,6 +92,12 @@
     .page-container {
         @apply min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8
     }
+    .grid-limited {
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+        grid-template-rows: auto 0;
+        grid-auto-rows: 0;
+        @apply grid relative overflow-hidden
+    }
 }
 
 .test1 {

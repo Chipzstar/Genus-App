@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import Image from 'next/image';
 
 interface Props {
-    id: number;
+    id: string;
     title: string;
     image: string;
 }

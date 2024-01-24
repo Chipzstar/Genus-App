@@ -22,8 +22,8 @@ const BottomNav = ({activePage=PATHS.HOME} : Props) => {
                     <span className={cx(activePage.includes(PATHS.GROUPS) && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Groups</span>
                 </button>
                 <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.INSIGHTS)}>
-                    <Search color={activePage === PATHS.INSIGHTS ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage === PATHS.INSIGHTS && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Insights</span>
+                    <Search color={activePage.includes(PATHS.INSIGHTS) ? "white" : "gray"} size={25} strokeWidth={1.5}/>
+                    <span className={cx(activePage.includes(PATHS.INSIGHTS) && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Insights</span>
                 </button>
                 <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.NOTIFICATIONS)}>
                     <Bell color={activePage === PATHS.NOTIFICATIONS ? "white" : "gray"} size={25} strokeWidth={1.5}/>

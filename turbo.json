@@ -20,7 +20,7 @@
     },
     "build": {
       "dependsOn": ["^build", "^db:generate"],
-      "outputs": [".next/**", ".expo/**"]
+      "outputs": [".next/**", ".expo/**", ".sanity/**"]
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],

@@ -1,11 +1,11 @@
-import {Reaction} from '@genus/db';
-import React, {FC, Fragment, useEffect, useMemo} from 'react';
-import {Message, ThreadComment} from "~/utils/types";
-import {convertToNestedArray} from "~/utils";
-import {compareDesc} from 'date-fns';
-import {trpc} from "~/utils/trpc";
-import {useAuth, useSession} from '@clerk/nextjs';
-import {cn} from "@genus/ui";
+import type {FC} from 'react'
+import React, {Fragment, useMemo} from 'react'
+import type {Message, ThreadComment} from '~/utils/types'
+import {convertToNestedArray} from '~/utils'
+import {compareDesc} from 'date-fns'
+import {trpc} from '~/utils/trpc'
+import {useAuth} from '@clerk/nextjs'
+import {cn} from '@genus/ui'
 
 interface Props {
     message: { type: "message" } & Message | { type: "comment" } & ThreadComment;
@@ -18,13 +18,13 @@ const Reactions: FC<Props> = (props: Props) => {
     const {mutate: deleteReaction} = trpc.reaction.deleteReaction.useMutation({
         onSuccess(data) {
             console.log(data)
-            utils.group.invalidate()
-            utils.thread.invalidate()
+            void utils.group.invalidate()
+            void utils.thread.invalidate()
         }
     })
 
     const reactions = useMemo(() => {
-        let sorted = props.message.reactions as Reaction[];
+        const sorted = props.message.reactions;
         sorted.sort(
             (a, b) => compareDesc(a.createdAt, b.createdAt)
         )
@@ -40,6 +40,7 @@ const Reactions: FC<Props> = (props: Props) => {
         })}>
             {reactions.slice(0, 3).map((emojis, index) => (
                 <Fragment key={index}>
+                    {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
                     <div
                         role="button"
                         className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gray-200 text-gray-900 text-xs sm:text-sm"

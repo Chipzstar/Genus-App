@@ -20,6 +20,7 @@ const config = {
     ignoreBuildErrors: !!process.env.CI,
   },
   images: {
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -29,6 +30,10 @@ const config = {
         protocol: 'https',
         hostname: 'img.clerk.com'
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io'
+      }
     ],
   },
 };

@@ -1,18 +1,17 @@
-import React from 'react';
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@genus/ui/sheet";
-import {Separator} from "@genus/ui/separator";
-import {Message} from "~/utils/types";
-import {Listbox, ListboxItem} from '@nextui-org/react';
-import {Reply} from 'lucide-react';
-import {ChatBubble} from "~/components/ChatBubble";
-import {trpc} from "~/utils/trpc";
-import {cn} from "@genus/ui";
-import {formatTimestamp} from "~/utils";
-import ChatInput from './ChatInput';
-import {ActiveSessionResource} from "@clerk/types"
+import type {ActiveSessionResource} from '@clerk/types'
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from '@genus/ui/sheet'
+import {Separator} from '@genus/ui/separator'
+import {Message} from '~/utils/types'
+import {Listbox, ListboxItem} from '@nextui-org/react'
+import {Reply} from 'lucide-react'
+import {ChatBubble} from '~/components/ChatBubble'
+import {trpc} from '~/utils/trpc'
+import {cn} from '@genus/ui'
+import {formatTimestamp} from '~/utils'
+import ChatInput from './ChatInput'
 import Image from 'next/image'
-import pluralize from "pluralize";
-import EmojiDialog from "~/components/EmojiDialog";
+import pluralize from 'pluralize'
+import EmojiDialog from '~/components/EmojiDialog'
 
 interface Props {
     session: ActiveSessionResource;

@@ -5,7 +5,7 @@ import {Textarea} from "@genus/ui/textarea";
 import {Button} from '@genus/ui/button'
 import {trpc} from "~/utils/trpc";
 import {toast} from "@genus/ui/use-toast";
-import {Message} from "~/utils/types";
+import type {Message} from "~/utils/types";
 
 interface ChatMessageProps {
     type: 'message',

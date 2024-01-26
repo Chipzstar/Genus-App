@@ -20,7 +20,6 @@ import { ScrollArea } from "@genus/ui/scroll-area";
 import {career_interests} from "~/schemas";
 import {
     Listbox,
-    ListboxSection,
     ListboxItem
 } from "@nextui-org/listbox";
 import InsightCard from '~/components/InsightCard';

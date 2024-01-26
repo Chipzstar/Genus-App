@@ -1,6 +1,6 @@
 import {cn} from "@genus/ui";
 import React, {Fragment, useState} from "react";
-import {Message, ThreadComment} from "~/utils/types";
+import type {Message, ThreadComment} from "~/utils/types";
 
 
 export function ChatBubble(props: {

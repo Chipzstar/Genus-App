@@ -8,6 +8,8 @@ import { fileURLToPath } from "url";
 const config = {
   printWidth: 120,
   arrowParens: "avoid",
+  useTabs: true,
+  tabWidth: 4,
   plugins: [
     "@ianvs/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss",

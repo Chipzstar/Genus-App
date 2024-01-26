@@ -6,7 +6,7 @@ import EmojiPicker from 'emoji-picker-react';
 import {trpc} from "~/utils/trpc";
 import {useAuth} from "@clerk/nextjs";
 import Reactions from "~/components/Reactions";
-import {Message, ThreadComment} from "~/utils/types";
+import type {Message, ThreadComment} from "~/utils/types";
 
 interface MessagesProps {
     type: "message"

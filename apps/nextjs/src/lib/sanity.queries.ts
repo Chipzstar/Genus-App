@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 const insightFields = groq`
   _id,
@@ -9,14 +9,14 @@ const insightFields = groq`
   mainImage,
   "slug": slug.current,
   "author": author->{name, image},
-`
+`;
 
-export const settingsQuery = groq`*[_type == "settings"][0]`
+export const settingsQuery = groq`*[_type == "settings"][0]`;
 
 export const indexQuery = groq`
 *[_type == "insight"] | order(date desc, _updatedAt desc) {
   ${insightFields}
-}`
+}`;
 
 export const insightAndBodyQuery = groq`
 {
@@ -24,40 +24,47 @@ export const insightAndBodyQuery = groq`
     body,
     ${insightFields}
   }
-}`
+}`;
 
 export const insightSlugsQuery = groq`
 *[_type == "insight" && defined(slug.current)][].slug.current
-`
+`;
 
 export const insightBySlugQuery = groq`
 *[_type == "insight" && slug.current == $slug][0] {
   ${insightFields}
 }
-`
+`;
 
+interface InsightImage {
+	type: string;
+	asset: {
+		_ref: string;
+		type: string;
+	};
+}
 export interface Author {
-  name?: string
-  slug?: string
-  image?: any
+	name?: string;
+	slug?: string;
+	image?: never;
 }
 
 export interface Insight {
-  _id: string
-  title?: string
-  slug?: string
-  author?: Author
-  mainImage?: any
-  publishedAt?: string
-  _updatedAt?: string
-  categories?: string
-  body?: any
+	_id: string;
+	title?: string;
+	slug?: string;
+	author?: Author;
+	mainImage: InsightImage;
+	publishedAt?: string;
+	_updatedAt?: string;
+	categories?: string;
+	body?: never;
 }
 
 export interface Settings {
-  title?: string
-  description?: any[]
-  ogImage?: {
-    title?: string
-  }
+	title?: string;
+	description?: never[];
+	ogImage?: {
+		title?: string;
+	};
 }

@@ -32,6 +32,10 @@
         "react-native-web": "~0.18.10"
     },
     "devDependencies": {
+        "@genus/eslint-config": "workspace:^0.2.0",
+        "@genus/prettier-config": "workspace:^0.1.0",
+        "@genus/tailwind-config": "workspace:^0.1.0",
+        "@genus/tsconfig": "workspace:^0.1.0",
         "@babel/core": "^7.19.3",
         "@babel/preset-env": "^7.19.3",
         "@babel/runtime": "^7.19.0",

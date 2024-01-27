@@ -19,6 +19,9 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@genus/eslint-config": "workspace:^0.2.0",
+    "@genus/prettier-config": "workspace:^0.1.0",
+    "@genus/tsconfig": "workspace:^0.1.0",
     "eslint": "^8.28.0",
     "typescript": "^4.9.3"
   }

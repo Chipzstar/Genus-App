@@ -1,93 +1,101 @@
-import React, {ReactElement} from 'react';
-import AppLayout from "~/layout/AppLayout";
-import {formatString, INSIGHTS, PATHS} from "~/utils";
-import {Button} from "@genus/ui/button";
-import {Navbar, NavbarBrand} from '@nextui-org/react';
-import Image from 'next/image';
-import {SignedIn, useAuth} from '@clerk/nextjs';
-import {useRouter} from 'next/router';
-import {Input} from "@genus/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@genus/ui/select";
+import type { ChangeEvent, ReactElement } from "react";
+import React, { useCallback, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { SignedIn, useAuth } from "@clerk/nextjs";
+import { Listbox, ListboxItem } from "@nextui-org/listbox";
+import { Navbar, NavbarBrand } from "@nextui-org/react";
+import { useDebounce } from "usehooks-ts";
+
+import { Button } from "@genus/ui/button";
+import { Input } from "@genus/ui/input";
 import { ScrollArea } from "@genus/ui/scroll-area";
-import {career_interests} from "~/schemas";
-import {
-    Listbox,
-    ListboxItem
-} from "@nextui-org/listbox";
-import InsightCard from '~/components/InsightCard';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
+
+import InsightCard from "~/components/InsightCard";
+import AppLayout from "~/layout/AppLayout";
+import { career_interests } from "~/schemas";
+import { formatString, INSIGHTS, PATHS } from "~/utils";
+import type { InsightPanel } from "~/utils/types";
 
 const Insights = () => {
-    const router = useRouter()
-    const {signOut} = useAuth();
-    return (
-        <div className='page-container bg-white overflow-y-hidden'>
-            <Navbar classNames={{
-                brand: 'w-full flex justify-center items-center',
-            }}>
-                <NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-                    <Image src='/images/green-logo.svg' alt='genus-white' width={100} height={75}/>
-                    <div className='absolute right-4'>
-                        <SignedIn>
-                            <Button size="sm" onClick={(e) => signOut()}>Logout</Button>
-                        </SignedIn>
-                    </div>
-                </NavbarBrand>
-            </Navbar>
-            <div className='h-full p-6 sm:px-12 sm:pt-12'>
-                <header className='text-black text-2xl sm:text-4xl font-bold'>Industry Insights</header>
-                <div className="flex py-6 items-center justify-between space-x-10">
-                    <div className="flex sm:w-64">
-                        <Input className="rounded-3xl text-black placeholder:text-neutral-400 bg-neutral-100 font-semibold w-full"
-                               placeholder="Search"/>
-                    </div>
-                    <div className="flex sm:w-64">
-                        <Select>
-                            <SelectTrigger className="rounded-3xl bg-neutral-100 text-black font-semibold">
-                                <SelectValue defaultValue="all" placeholder="All types"/>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="all">All types</SelectItem>
-                                    {career_interests.map((item, index) => (
-                                        <SelectItem key={index} value={item}>{formatString(item)}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                <ScrollArea className={"h-[calc(100%-12rem)]"}>
-                    <Listbox
-                        aria-label="Actions"
-                        onAction={(slug) => router.push(`${PATHS.INSIGHTS}/${slug}`)}
-                    >
-                        {INSIGHTS.map((insight, index) => (
-                            <ListboxItem key={insight.id} className="px-0" textValue={insight.title}>
-                                <InsightCard
-                                    id={insight.id}
-                                    title={insight.title}
-                                    image={insight.image}
-                                />
-                            </ListboxItem>
-                        ))}
-                    </Listbox>
-                </ScrollArea>
-            </div>
-        </div>
-    );
+	const router = useRouter();
+	const { signOut } = useAuth();
+	const [search, setSearch] = useState("");
+	const [insights, setInsights] = useState<InsightPanel[]>(INSIGHTS);
+	const debouncedInsights = useDebounce<InsightPanel[]>(insights, 500);
+
+	const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+		setSearch(event.target.value);
+		setInsights(() =>
+			INSIGHTS.filter(insight => {
+				return insight.title.toLowerCase().includes(event.target.value.toLowerCase());
+			})
+		);
+	}, []);
+
+	return (
+		<div className="page-container overflow-y-hidden bg-white">
+			<Navbar
+				classNames={{
+					brand: "w-full flex justify-center items-center"
+				}}
+			>
+				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
+					<Image src="/images/green-logo.svg" alt="genus-white" width={100} height={75} />
+					<div className="absolute right-4">
+						<SignedIn>
+							<Button size="sm" onClick={e => signOut()}>
+								Logout
+							</Button>
+						</SignedIn>
+					</div>
+				</NavbarBrand>
+			</Navbar>
+			<div className="h-full p-6 sm:px-12 sm:pt-12">
+				<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
+				<div className="flex items-center justify-between space-x-10 py-6">
+					<div className="flex sm:w-64">
+						<Input
+							value={search}
+							onChange={handleChange}
+							className="w-full rounded-3xl bg-neutral-100 font-semibold text-black placeholder:text-neutral-400"
+							placeholder="Search"
+						/>
+					</div>
+					<div className="flex sm:w-64">
+						<Select>
+							<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
+								<SelectValue defaultValue="all" placeholder="All types" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectItem value="all">All types</SelectItem>
+									{career_interests.map((item, index) => (
+										<SelectItem key={index} value={item}>
+											{formatString(item)}
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</div>
+				</div>
+				<ScrollArea className={"h-[calc(100%-12rem)]"}>
+					<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
+						{debouncedInsights.map((insight, index) => (
+							<ListboxItem key={insight.id} className="px-0" textValue={insight.title}>
+								<InsightCard id={insight.id} title={insight.title} image={insight.image} />
+							</ListboxItem>
+						))}
+					</Listbox>
+				</ScrollArea>
+			</div>
+		</div>
+	);
 };
 
 Insights.getLayout = function getLayout(page: ReactElement) {
-    return (
-        <AppLayout>{page}</AppLayout>
-    )
-}
+	return <AppLayout>{page}</AppLayout>;
+};
 export default Insights;

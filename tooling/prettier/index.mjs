@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 const config = {
   printWidth: 120,
   arrowParens: "avoid",
+	trailingComma: "none",
   useTabs: true,
   tabWidth: 4,
   plugins: [

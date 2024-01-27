@@ -25,6 +25,7 @@
     "react-is": "^18.2.0",
     "sanity": "^3.26.0",
     "sanity-plugin-asset-source-unsplash": "^1.1.2",
+    "sanity-plugin-vercel-deploy": "^3.3.4",
     "styled-components": "^6.0.7"
   },
   "devDependencies": {
@@ -38,12 +39,7 @@
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   },
-  "prettier": {
-    "semi": false,
-    "printWidth": 100,
-    "bracketSpacing": false,
-    "singleQuote": true
-  },
+  "prettier": "@genus/prettier-config",
   "eslintConfig": {
     "root": true,
     "extends": [

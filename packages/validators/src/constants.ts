@@ -1,3 +1,17 @@
+export const completion_years = [
+	"2020",
+	"2021",
+	"2022",
+	"2023",
+	"2024",
+	"2025",
+	"2026",
+	"2027",
+	"2028",
+	"2029",
+	"2030"
+] as const;
+
 export const genders = ["male", "female", "non_binary", "other"] as const;
 export const career_interests = ["banking_finance", "consulting", "law", "tech"] as const;
 export const broad_course_categories = [

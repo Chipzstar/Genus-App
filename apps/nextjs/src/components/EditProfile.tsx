@@ -9,14 +9,14 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { toast } from "@genus/ui/use-toast";
+import { broadCourseCategorySchema, completionYearSchema, profileSchema, universitiesSchema } from "@genus/validators";
 import {
-	broadCourseCategorySchema,
+	broad_course_categories,
+	career_interests,
 	completion_years,
-	completionYearSchema,
-	profileSchema,
-	universitiesSchema
-} from "@genus/validators";
-import { broad_course_categories, career_interests, genders, universities } from "@genus/validators/constants";
+	genders,
+	universities
+} from "@genus/validators/constants";
 
 import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";

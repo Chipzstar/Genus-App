@@ -114,6 +114,12 @@ model Thread {
   @@index([authorId, messageId])
 }
 
+enum ProfileType {
+  STUDENT
+  ADMIN
+  EXPERT
+}
+
 model User {
   id                Int              @id @default(autoincrement())
   createdAt         DateTime         @default(now())
@@ -122,6 +128,7 @@ model User {
   email             String           @unique
   firstname         String
   lastname          String
+  profileType       ProfileType      @default(STUDENT)
   gender            String
   completionYear    Int
   broadDegreeCourse String

@@ -97,7 +97,13 @@ export interface ThreadCommentsProps {
 }
 
 export interface InsightPanel {
-	id: string;
+	slug: string;
+	title: string;
+	image: string;
+}
+
+export interface GroupPanel {
+	slug: string;
 	title: string;
 	image: string;
 }

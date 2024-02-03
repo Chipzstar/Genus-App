@@ -54,9 +54,7 @@ const components: PortableTextComponents = {
 	},
 	marks: {
 		color: res => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const { value, text } = res;
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
 			return <span style={{ color: value.hex }}>{text}</span>;
 		}
 	}
@@ -81,7 +79,6 @@ const InsightSlug = (props: PageProps) => {
 				}}
 			>
 				<NavbarBrand>
-					{/* eslint-disable-next-line jsx-a11y/interactive-supports-focus,jsx-a11y/click-events-have-key-events */}
 					<div className="absolute left-0 top-0" role="button" onClick={router.back}>
 						<ChevronLeft size={40} color="#2AA6B7" />
 					</div>

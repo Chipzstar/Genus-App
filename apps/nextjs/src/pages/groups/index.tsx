@@ -1,11 +1,12 @@
-import type { ChangeEvent, ReactElement } from "react";
+"use client";
+
 import React, { useCallback, useState } from "react";
+import type { ChangeEvent, ReactElement } from "react";
 import type { GetStaticProps } from "next";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SignedIn, useAuth } from "@clerk/nextjs";
-import { Listbox, ListboxItem } from "@nextui-org/listbox";
-import { Navbar, NavbarBrand } from "@nextui-org/react";
+import { Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDebounce } from "usehooks-ts";
 
 import { Button } from "@genus/ui/button";
@@ -15,55 +16,55 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 import InsightCard from "~/components/InsightCard";
 import AppLayout from "~/layout/AppLayout";
-import { getAllInsights, getClient } from "~/lib/sanity.client";
+import { getAllGroups, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { career_interests } from "~/schemas";
 import { formatString, PATHS } from "~/utils";
-import type { InsightPanel } from "~/utils/types";
+import type { GroupPanel } from "~/utils/types";
 
 interface PageProps {
-	insights: InsightPanel[];
+	groups: GroupPanel[];
 }
 
 type Query = Record<string, string>;
 
 export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 	const client = getClient();
-	const insights = await getAllInsights(client);
-	if (!insights) {
+	const groups = await getAllGroups(client);
+	if (!groups) {
 		return {
 			notFound: true
 		};
 	}
-	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
-		slug: slug!,
-		title: title!,
+	const formattedGroups: GroupPanel[] = groups.map(({ slug, title, mainImage }) => ({
+		slug,
+		title,
 		image: urlForImage(mainImage).height(100).width(150).url()
 	}));
 	return {
 		props: {
-			insights: formattedInsights
+			groups: formattedGroups
 		}
 	};
 };
 
-const Insights = (props: PageProps) => {
-	const router = useRouter();
+const Groups = (props: PageProps) => {
 	const { signOut } = useAuth();
+	const router = useRouter();
 	const [search, setSearch] = useState("");
-	const [insights, setInsights] = useState<InsightPanel[]>(props.insights);
-	const debouncedInsights = useDebounce<InsightPanel[]>(insights, 500);
+	const [groups, setGroups] = useState<GroupPanel[]>(props.groups);
+	const debouncedGroups = useDebounce<GroupPanel[]>(groups, 500);
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			setSearch(event.target.value);
-			setInsights(() =>
-				props.insights.filter(insight => {
-					return insight.title.toLowerCase().includes(event.target.value.toLowerCase());
+			setGroups(() =>
+				props.groups.filter(g => {
+					return g.title.toLowerCase().includes(event.target.value.toLowerCase());
 				})
 			);
 		},
-		[props.insights]
+		[props.groups]
 	);
 
 	return (
@@ -85,7 +86,7 @@ const Insights = (props: PageProps) => {
 				</NavbarBrand>
 			</Navbar>
 			<div className="h-full p-6 sm:px-12 sm:pt-12">
-				<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
+				<header className="text-2xl font-bold text-black sm:text-4xl">Groups</header>
 				<div className="flex items-center justify-between space-x-10 py-6">
 					<div className="flex sm:w-64">
 						<Input
@@ -102,7 +103,7 @@ const Insights = (props: PageProps) => {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectGroup>
-									<SelectItem value="all">All types</SelectItem>
+									<SelectItem value="all">All group types</SelectItem>
 									{career_interests.map((item, index) => (
 										<SelectItem key={index} value={item}>
 											{formatString(item)}
@@ -114,10 +115,10 @@ const Insights = (props: PageProps) => {
 					</div>
 				</div>
 				<ScrollArea className={"h-[calc(100%-12rem)]"}>
-					<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
-						{debouncedInsights.map(insight => (
-							<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
-								<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
+					<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.GROUPS}/${slug}`)}>
+						{debouncedGroups.map(group => (
+							<ListboxItem key={group.slug} className="px-0" textValue={group.title}>
+								<InsightCard id={group.slug} title={group.title} image={group.image} />
 							</ListboxItem>
 						))}
 					</Listbox>
@@ -127,7 +128,8 @@ const Insights = (props: PageProps) => {
 	);
 };
 
-Insights.getLayout = function getLayout(page: ReactElement) {
+Groups.getLayout = function getLayout(page: ReactElement) {
 	return <AppLayout>{page}</AppLayout>;
 };
-export default Insights;
+
+export default Groups;

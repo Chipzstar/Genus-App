@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { SignedIn, useClerk } from "@clerk/nextjs";
@@ -54,7 +54,7 @@ const Home = () => {
 					<div
 						className="flex flex-col justify-center space-y-4"
 						role="button"
-						onClick={() => router.push(PATHS.GROUPS)}
+						onClick={() => router.push(`${PATHS.GROUPS}/pre-spring-week-chat`)}
 					>
 						<header className="text-xl font-semibold">JOIN the group!</header>
 						<Image
@@ -80,12 +80,12 @@ const Home = () => {
 							</span>
 						</div>
 						<div className="grid-limited auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4 lg:gap-x-8">
-							{INSIGHTS.map(({ image, id, title }, index) => (
+							{INSIGHTS.map(({ image, slug, title }, index) => (
 								<div
 									key={index}
 									className="inline-flex flex-col space-y-4"
 									role="button"
-									onClick={() => router.push(`${PATHS.INSIGHTS}/${id}`)}
+									onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 								>
 									<img src={image} alt={title} />
 									<span className="overflow-hidden text-ellipsis whitespace-nowrap text-lg font-semibold">

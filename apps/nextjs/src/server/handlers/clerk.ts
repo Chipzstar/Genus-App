@@ -6,7 +6,7 @@ import shortHash from "shorthash2";
 import type * as z from "zod";
 
 import type { CareerInterestSlug } from "@genus/db";
-import type { careerInterestsSchema, gendersSchema } from "@genus/validators";
+import type { gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
 

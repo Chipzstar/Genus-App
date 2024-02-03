@@ -78,15 +78,15 @@ export const INSIGHTS: InsightPanel[] = [
 
 export function convertToNestedArray(arr: Reaction[] = []) {
 	// Use a Map to count the occurrences of each unique string
-	let countMap = new Map<String, Reaction[]>();
+	const countMap = new Map<string, Reaction[]>();
 	// Count occurrences
 	for (let [i, r] of arr.entries()) {
-		let reactions = countMap.get(r.emoji) || [];
+		const reactions = countMap.get(r.emoji) || [];
 		reactions.push(r);
 		countMap.set(r.emoji, reactions);
 	}
 	// Initialize the nested array
-	let nestedArray: Reaction[][] = [];
+	const nestedArray: Reaction[][] = [];
 	// Create the nested array with unique items and their counts
 	countMap.forEach((reactions, value) => {
 		nestedArray.push(reactions);

@@ -2,8 +2,15 @@ import { createClient } from "next-sanity";
 import type { SanityClient } from "next-sanity";
 
 import { apiVersion, dataset, projectId, readToken, studioUrl, useCdn } from "~/lib/sanity.api";
-import type { Insight } from "~/lib/sanity.queries";
-import { indexQuery, insightAndBodyQuery, insightBySlugQuery, insightSlugsQuery } from "~/lib/sanity.queries";
+import {
+	allGroupsQuery,
+	allInsightsQuery,
+	Group,
+	Insight,
+	insightAndBodyQuery,
+	insightBySlugQuery,
+	insightSlugsQuery
+} from "~/lib/sanity.queries";
 
 export function getClient(preview?: { token: string }): SanityClient {
 	const client = createClient({
@@ -31,9 +38,12 @@ export function getClient(preview?: { token: string }): SanityClient {
 }
 
 export async function getAllInsights(client: SanityClient): Promise<Insight[]> {
-	return (await client.fetch(indexQuery)) || [];
+	return (await client.fetch(allInsightsQuery)) || [];
 }
 
+export async function getAllGroups(client: SanityClient): Promise<Group[]> {
+	return (await client.fetch(allGroupsQuery)) || [];
+}
 export async function getAllInsightsSlugs(): Promise<Pick<Insight, "slug">[]> {
 	const client = getClient();
 	const slugs = (await client.fetch<string[]>(insightSlugsQuery)) || [];

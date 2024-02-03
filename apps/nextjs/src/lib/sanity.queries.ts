@@ -13,8 +13,13 @@ const insightFields = groq`
 
 export const settingsQuery = groq`*[_type == "settings"][0]`;
 
-export const indexQuery = groq`
+export const allInsightsQuery = groq`
 *[_type == "insight"] | order(date desc, _updatedAt desc) {
+  ${insightFields}
+}`;
+
+export const allGroupsQuery = groq`
+*[_type == "group"] | order(date desc, _updatedAt desc) {
   ${insightFields}
 }`;
 
@@ -51,15 +56,17 @@ export interface Author {
 
 export interface Insight {
 	_id: string;
-	title?: string;
-	slug?: string;
-	author?: Author;
+	title: string;
+	slug: string;
 	mainImage: InsightImage;
+	author?: Author;
 	publishedAt?: string;
 	_updatedAt?: string;
 	categories?: string;
 	body?: never;
 }
+
+export type Group = Omit<Insight, "body">;
 
 export interface Settings {
 	title?: string;

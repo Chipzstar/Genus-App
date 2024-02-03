@@ -1,8 +1,8 @@
 import { format, formatDistance } from "date-fns";
 
-import { Reaction } from "@genus/db";
+import type { Reaction } from "@genus/db";
 
-import { InsightPanel } from "~/utils/types";
+import type { InsightPanel } from "~/utils/types";
 
 export const PATHS = {
 	HOME: "/",
@@ -16,7 +16,8 @@ export const PATHS = {
 	GROUPS: "/groups"
 };
 
-export function formatString(str: string): string {
+export function formatString(str: string | undefined): string {
+	if (!str) return "";
 	return str
 		.replace(/[-_]/g, " ")
 		.replace(/\b\w/g, l => l.toUpperCase())
@@ -54,22 +55,22 @@ export function formatTimestamp(timestamp: Date, method: string = "default") {
 
 export const INSIGHTS: InsightPanel[] = [
 	{
-		id: "tobi-markets-analyst-at-goldman-sachs",
+		slug: "tobi-markets-analyst-at-goldman-sachs",
 		title: "Tobi - Markets Analyst at Goldman Sachs",
 		image: "/images/experts/Tobi.svg"
 	},
 	{
-		id: "joseph-investment-banking-analyst-at-leading-boutique-firm",
+		slug: "joseph-investment-banking-analyst-at-leading-boutique-firm",
 		title: "Joseph - Investment Banking Analyst at Leading Boutique firm",
 		image: "/images/experts/Joseph.svg"
 	},
 	{
-		id: "sheila-research-analyst-at-barclays",
+		slug: "sheila-research-analyst-at-barclays",
 		title: "Sheila - Research Analyst at Barclays",
 		image: "/images/experts/Sheila.svg"
 	},
 	{
-		id: "dolly-trader-at-jp-morgan",
+		slug: "dolly-trader-at-jp-morgan",
 		title: "Dolly - Trader at JP Morgan",
 		image: "/images/experts/Dolly.svg"
 	}
@@ -91,4 +92,8 @@ export function convertToNestedArray(arr: Reaction[] = []) {
 		nestedArray.push(reactions);
 	});
 	return nestedArray;
+}
+
+export function capitalize(str: string | undefined) {
+	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
 }

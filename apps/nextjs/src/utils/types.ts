@@ -86,6 +86,8 @@ export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
 
 export type Message = Pick<GetGroupBySlugOutput, "messages">["messages"][0];
 
+export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
+
 export interface MessagesProps {
 	type: "message";
 	message: Message;

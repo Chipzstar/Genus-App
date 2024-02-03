@@ -4,6 +4,13 @@ enum ProfileType {
   EXPERT
 }
 
+enum Gender {
+  male
+  female
+  non_binary
+  other
+}
+
 model User {
   id                Int              @id @default(autoincrement())
   createdAt         DateTime         @default(now())
@@ -13,7 +20,7 @@ model User {
   firstname         String
   lastname          String
   profileType       ProfileType      @default(STUDENT)
-  gender            String
+  gender            Gender           @default(female)
   completionYear    Int
   broadDegreeCourse String
   university        String

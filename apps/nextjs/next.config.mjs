@@ -11,7 +11,7 @@ import {withAxiom} from "next-axiom";
 const config = {
   reactStrictMode: true,
   swcMinify: true,
-  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui", "@genus/redis"],
+  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui", "@genus/redis", "genus/validators"],
   // We already do linting on GH actions
   eslint: {
     ignoreDuringBuilds: !!process.env.CI,

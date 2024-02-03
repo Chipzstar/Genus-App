@@ -12,6 +12,7 @@
   "dependencies": {
     "@genus/db": "*",
     "@genus/redis": "*",
+    "@genus/validators": "*",
     "@trpc/client": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "dayjs": "^1.11.10",
@@ -23,6 +24,6 @@
     "@genus/prettier-config": "workspace:^0.1.0",
     "@genus/tsconfig": "workspace:^0.1.0",
     "eslint": "^8.28.0",
-    "typescript": "^4.9.3"
+    "typescript": "^5.2.2"
   }
 }

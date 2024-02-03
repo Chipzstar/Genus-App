@@ -1,5 +1,12 @@
+enum CareerInterestSlug {
+  law
+  tech
+  consulting
+  banking_finance
+}
+
 model CareerInterest {
-  id    Int    @id @default(autoincrement())
-  slug  String @unique
+  id    Int                @id @default(autoincrement())
+  slug  CareerInterestSlug @unique
   users User[]
 }

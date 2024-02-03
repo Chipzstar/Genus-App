@@ -14,9 +14,16 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum CareerInterestSlug {
+  law
+  tech
+  consulting
+  banking_finance
+}
+
 model CareerInterest {
-  id    Int    @id @default(autoincrement())
-  slug  String @unique
+  id    Int                @id @default(autoincrement())
+  slug  CareerInterestSlug @unique
   users User[]
 }
 
@@ -120,6 +127,13 @@ enum ProfileType {
   EXPERT
 }
 
+enum Gender {
+  male
+  female
+  non_binary
+  other
+}
+
 model User {
   id                Int              @id @default(autoincrement())
   createdAt         DateTime         @default(now())
@@ -129,7 +143,7 @@ model User {
   firstname         String
   lastname          String
   profileType       ProfileType      @default(STUDENT)
-  gender            String
+  gender            Gender           @default(female)
   completionYear    Int
   broadDegreeCourse String
   university        String

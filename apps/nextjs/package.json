@@ -21,6 +21,7 @@
     "@genus/db": "*",
     "@genus/redis": "*",
     "@genus/ui": "*",
+    "@genus/validators": "*",
     "@hookform/resolvers": "^3.3.2",
     "@nextui-org/react": "^2.2.9",
     "@portabletext/react": "^3.0.11",

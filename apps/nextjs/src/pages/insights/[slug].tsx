@@ -61,15 +61,11 @@ const components: PortableTextComponents = {
 };
 
 const InsightSlug = (props: PageProps) => {
+	const router = useRouter();
+
 	const {
 		insight: { body, mainImage, title }
 	} = props;
-
-	useEffect(() => {
-		console.log(urlForImage(mainImage).height(100).width(150).url());
-	}, [mainImage]);
-
-	const router = useRouter();
 	return (
 		<div className="insights-container overflow-y-hidden">
 			<Navbar

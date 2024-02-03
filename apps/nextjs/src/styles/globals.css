@@ -96,7 +96,7 @@
         @apply min-h-screen sm:h-screen mx-auto max-w-3xl bg-white text-primary py-0
     }
     .profile-container {
-        @apply min-h-screen sm:h-screen mx-auto max-w-3xl bg-white text-primary py-0
+        @apply min-h-screen mx-auto max-w-3xl text-primary py-0
     }
     .grid-limited {
         grid-template-columns: repeat(2, minmax(150px, 1fr));

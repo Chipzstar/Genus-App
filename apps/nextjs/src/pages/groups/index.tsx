@@ -13,12 +13,12 @@ import { Button } from "@genus/ui/button";
 import { Input } from "@genus/ui/input";
 import { ScrollArea } from "@genus/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
+import { career_interests } from "@genus/validators/constants";
 
 import InsightCard from "~/components/InsightCard";
 import AppLayout from "~/layout/AppLayout";
 import { getAllGroups, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
-import { career_interests } from "~/schemas";
 import { formatString, PATHS } from "~/utils";
 import type { GroupPanel } from "~/utils/types";
 

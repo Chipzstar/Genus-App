@@ -1,20 +1,6 @@
 import * as z from "zod";
 
-import { broad_course_categories, career_interests, genders, universities } from "./constants";
-
-export const completion_years = [
-	"2020",
-	"2021",
-	"2022",
-	"2023",
-	"2024",
-	"2025",
-	"2026",
-	"2027",
-	"2028",
-	"2029",
-	"2030"
-] as const;
+import { broad_course_categories, career_interests, completion_years, genders, universities } from "./constants";
 
 export const gendersSchema = z.enum(genders);
 

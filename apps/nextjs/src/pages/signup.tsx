@@ -19,8 +19,14 @@ import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { ToastAction } from "@genus/ui/toast";
 import { useToast } from "@genus/ui/use-toast";
-import { completion_years, signupSchema } from "@genus/validators";
-import { broad_course_categories, career_interests, genders, universities } from "@genus/validators/constants";
+import { signupSchema } from "@genus/validators";
+import {
+	broad_course_categories,
+	career_interests,
+	completion_years,
+	genders,
+	universities
+} from "@genus/validators/constants";
 
 import type { CodeFormValues } from "~/components/CodeInput";
 import CodeInput from "~/components/CodeInput";

@@ -81,7 +81,7 @@ export function convertToNestedArray(arr: Reaction[] = []) {
 	const countMap = new Map<string, Reaction[]>();
 	// Count occurrences
 	for (let [i, r] of arr.entries()) {
-		const reactions = countMap.get(r.emoji) || [];
+		const reactions = countMap.get(r.emoji) ?? [];
 		reactions.push(r);
 		countMap.set(r.emoji, reactions);
 	}

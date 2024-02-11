@@ -70,14 +70,18 @@ export const updateUser = async ({ event, prisma }: { event: UserWebhookEvent; p
 				clerkId: event.data.id
 			}
 		});
+
 		// check if the user has an "imageUrl" field. If they do continue
 		const newImage = !user.imageUrl && payload.has_image;
 		const changedImage = user.imageUrl && user.clerkImageHash !== shortHash(payload.image_url);
-		// console.table({newImage, changedImage, currHash: user.clerkImageHash, newHash: shortHash(payload.image_url)})
+
+		console.table({ newImage, changedImage, currHash: user.clerkImageHash, newHash: shortHash(payload.image_url) });
+
 		if (newImage || changedImage) {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
+
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {
 			if (user.imageKey) await utapi.deleteFiles([user.imageKey]);
@@ -94,11 +98,13 @@ export const updateUser = async ({ event, prisma }: { event: UserWebhookEvent; p
 			log.debug("Updated clerk user!!", clerkUser);
 			log.info("-----------------------------------------------");
 		}
+
 		const shouldUpdate =
 			uploadedFile ??
 			user.email !== payload.email_addresses[0]?.email_address ??
 			user.firstname !== payload.first_name ??
 			user.lastname !== payload.last_name;
+
 		// update the user in the db
 		if (shouldUpdate)
 			user = await prisma.user.update({

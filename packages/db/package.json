@@ -18,7 +18,8 @@
     "@genus/prettier-config": "workspace:^0.1.0",
     "@genus/tsconfig": "workspace:^0.1.0",
     "@prisma-utils/prismerge": "^1.7.0",
-    "@prisma/client": "^5.9.1"
+    "@prisma/client": "^5.9.1",
+    "@prisma/extension-accelerate": "^0.6.3"
   },
   "devDependencies": {
     "dotenv-cli": "^6.0.0",

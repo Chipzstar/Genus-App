@@ -13,7 +13,7 @@ export default authMiddleware({
 	],
 	afterAuth(auth, req, evt) {
 		// MANUAL check for this endpoint to ensure that it bypasses any redirects handled by the below cases
-		if (req.url.includes("/api/uploadthing?slug=imageUploader")) {
+		if (req.url.includes("/api/uploadthing?slug=")) {
 			return NextResponse.next();
 		}
 		// handle users who aren't authenticated navigating to a protected route

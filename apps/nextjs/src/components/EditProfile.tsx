@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -18,8 +19,11 @@ import {
 	universities
 } from "@genus/validators/constants";
 
+import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
+// import clerk from "~/utils/clerk";
 import type { UserProfile } from "~/utils/types";
+import { useUploadThing } from "~/utils/uploadthing";
 
 type FormValues = z.infer<typeof profileSchema>;
 export const EditProfile = ({
@@ -31,30 +35,62 @@ export const EditProfile = ({
 	updateUserProfile: any;
 	resetMode: () => void;
 }) => {
+	const { files } = useFileContext();
+	const clerk = useClerk();
 	const [loading, setLoading] = useState(false);
-	const onSubmit = useCallback(async (data: FormValues) => {
-		setLoading(true);
-		try {
-			console.log("-----------------------------------------------");
-			console.log(data);
-			const result = await updateUserProfile(data);
-			toast({
-				title: "Success!",
-				description: "Your profile has been updated.",
-				duration: 5000
-			});
-			resetMode();
-		} catch (err) {
-			console.error(err);
-			toast({
-				title: "Error!",
-				description: "There was an error updating your profile.",
-				duration: 5000
-			});
-		} finally {
-			setLoading(false);
+
+	const { startUpload } = useUploadThing("profileUploader", {
+		onClientUploadComplete: res => {
+			console.log(res);
+			console.log("uploaded successfully!");
+		},
+		onUploadError: err => {
+			console.log(err);
+			console.log("error occurred while uploading");
+		},
+		onUploadBegin: filename => {
+			console.log("UPLOAD HAS BEGUN", filename);
 		}
-	}, []);
+	});
+
+	const onSubmit = useCallback(
+		async (data: FormValues) => {
+			setLoading(true);
+			try {
+				console.log(data);
+				await updateUserProfile(data);
+				toast({
+					title: "Success!",
+					description: "Your profile has been updated.",
+					duration: 5000
+				});
+				void (
+					files.length &&
+					startUpload(files).then(res => {
+						if (clerk?.user && res?.[0]) {
+							void clerk.user
+								.setProfileImage({
+									file: files[0]!
+								})
+								.then(() => console.log("profile image set in Clerk"))
+								.catch(err => console.error(err));
+						}
+					})
+				);
+				resetMode();
+			} catch (err) {
+				console.error(err);
+				toast({
+					title: "Error!",
+					description: "There was an error updating your profile.",
+					duration: 5000
+				});
+			} finally {
+				setLoading(false);
+			}
+		},
+		[updateUserProfile, files, startUpload, resetMode, clerk.user]
+	);
 
 	const form = useForm<FormValues>({
 		defaultValues: {
@@ -69,6 +105,10 @@ export const EditProfile = ({
 		},
 		resolver: zodResolver(profileSchema)
 	});
+
+	const isDisabled = useMemo(() => {
+		return !form.formState.isDirty && !files.length;
+	}, [form.formState]);
 
 	return (
 		<Form {...form}>
@@ -270,7 +310,7 @@ export const EditProfile = ({
 					<Button
 						type="submit"
 						loading={loading}
-						disabled={!form.formState.isDirty}
+						disabled={isDisabled}
 						form="profile-form"
 						size="lg"
 						className="h-12 w-full font-semibold"

@@ -28,10 +28,7 @@ const ReplyDialog = ({ message, isMember }: Props) => {
 			id: message?.thread?.id ?? -1
 		},
 		{
-			enabled: Boolean(message?.thread),
-			onSuccess(data) {
-				console.log(data);
-			}
+			enabled: Boolean(message?.thread)
 		}
 	);
 	const currentMessageAuthor = message.authorId === session?.user.id;

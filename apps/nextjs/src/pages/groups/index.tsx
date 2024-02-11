@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 
 import { Button } from "@genus/ui/button";
 import { Input } from "@genus/ui/input";
@@ -53,16 +53,12 @@ const Groups = (props: PageProps) => {
 	const router = useRouter();
 	const [search, setSearch] = useState("");
 	const [groups, setGroups] = useState<GroupPanel[]>(props.groups);
-	const debouncedGroups = useDebounce<GroupPanel[]>(groups, 500);
+	const [debouncedGroups] = useDebounceValue<GroupPanel[]>(groups, 500);
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			setSearch(event.target.value);
-			setGroups(() =>
-				props.groups.filter(g => {
-					return g.title.toLowerCase().includes(event.target.value.toLowerCase());
-				})
-			);
+			setGroups(() => props.groups.filter(g => g.title.toLowerCase().includes(event.target.value.toLowerCase())));
 		},
 		[props.groups]
 	);

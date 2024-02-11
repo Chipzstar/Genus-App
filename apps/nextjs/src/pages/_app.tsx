@@ -6,10 +6,11 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ClerkProvider } from "@clerk/nextjs";
 import { NextUIProvider } from "@nextui-org/react";
-import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 
 import { ToastProvider } from "@genus/ui/toast";
 
+import { FileProvider } from "~/context/FileContext";
 import Layout from "~/layout/Layout";
 import { trpc } from "~/utils/trpc";
 
@@ -29,10 +30,12 @@ const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: Ap
 		<ClerkProvider {...pageProps} publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
 			<NextUIProvider>
 				<ToastProvider swipeDirection="right" duration={3000}>
-					<Layout>
-						<Component {...pageProps} />
-						<ProgressBar height="4px" color="#fff" options={{ showSpinner: false }} shallowRouting />
-					</Layout>
+					<FileProvider>
+						<Layout>
+							<ProgressBar height="4px" color="#fff" options={{ showSpinner: false }} shallowRouting />
+							<Component {...pageProps} />
+						</Layout>
+					</FileProvider>
 				</ToastProvider>
 			</NextUIProvider>
 		</ClerkProvider>

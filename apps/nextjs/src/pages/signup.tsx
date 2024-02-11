@@ -66,7 +66,7 @@ const Signup: NextPageWithLayout = () => {
 		resolver: zodResolver(signupSchema)
 	});
 
-	const { startUpload, permittedFileInfo } = useUploadThing("imageUploader", {
+	const { startUpload, permittedFileInfo } = useUploadThing("signupUploader", {
 		onClientUploadComplete: res => {
 			console.log(res);
 			console.log("uploaded successfully!");
@@ -182,7 +182,7 @@ const Signup: NextPageWithLayout = () => {
 					)
 				});
 				files.length &&
-					setTimeout(() => startUpload(files).then(() => console.log("profile image set", files)), 1000);
+					setTimeout(() => void startUpload(files).then(() => console.log("profile image set", files)), 1000);
 				// router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
 			} catch (err: any) {
 				setLoading(false);

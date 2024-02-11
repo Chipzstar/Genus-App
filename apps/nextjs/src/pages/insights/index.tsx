@@ -84,44 +84,46 @@ const Insights = (props: PageProps) => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<div className="h-full p-6 sm:px-12 sm:pt-12">
-				<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
-				<div className="flex items-center justify-between space-x-10 py-6">
-					<div className="flex sm:w-64">
-						<Input
-							value={search}
-							onChange={handleChange}
-							className="w-full rounded-3xl bg-neutral-100 font-semibold text-black placeholder:text-neutral-400"
-							placeholder="Search"
-						/>
+			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
+				<div className="mx-auto max-w-3xl">
+					<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
+					<div className="flex items-center justify-between space-x-10 py-6">
+						<div className="flex sm:w-64">
+							<Input
+								value={search}
+								onChange={handleChange}
+								className="w-full rounded-3xl bg-neutral-100 font-semibold text-black placeholder:text-neutral-400"
+								placeholder="Search"
+							/>
+						</div>
+						<div className="flex sm:w-64">
+							<Select>
+								<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
+									<SelectValue defaultValue="all" placeholder="All types" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem value="all">All types</SelectItem>
+										{career_interests.map((item, index) => (
+											<SelectItem key={index} value={item}>
+												{formatString(item)}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</div>
 					</div>
-					<div className="flex sm:w-64">
-						<Select>
-							<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
-								<SelectValue defaultValue="all" placeholder="All types" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									<SelectItem value="all">All types</SelectItem>
-									{career_interests.map((item, index) => (
-										<SelectItem key={index} value={item}>
-											{formatString(item)}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-					</div>
+					<ScrollArea className={"h-[calc(100%-10rem)]"}>
+						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
+							{debouncedInsights.map(insight => (
+								<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
+									<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
+								</ListboxItem>
+							))}
+						</Listbox>
+					</ScrollArea>
 				</div>
-				<ScrollArea className={"h-[calc(100%-12rem)]"}>
-					<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
-						{debouncedInsights.map(insight => (
-							<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
-								<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
-							</ListboxItem>
-						))}
-					</Listbox>
-				</ScrollArea>
 			</div>
 		</div>
 	);

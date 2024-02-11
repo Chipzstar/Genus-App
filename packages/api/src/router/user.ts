@@ -1,3 +1,4 @@
+import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -17,7 +18,7 @@ export const userRouter = createTRPCRouter({
 		return ctx.prisma.user.findFirst({ where: { id: input } });
 	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
-		return await ctx.prisma.user.findUniqueOrThrow({
+		return ctx.accelerateDB.user.findUniqueOrThrow({
 			where: { clerkId: ctx.auth.userId },
 			select: {
 				firstname: true,
@@ -48,9 +49,8 @@ export const userRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			console.log(input);
 			try {
-				const user = await ctx.prisma.user.update({
+				const user = await ctx.accelerateDB.user.update({
 					where: { clerkId: ctx.auth.userId },
 					data: {
 						firstname: input.firstname,
@@ -60,14 +60,16 @@ export const userRouter = createTRPCRouter({
 						broadDegreeCourse: input.broad_degree_course,
 						degreeName: input.degree_name,
 						completionYear: Number(input.completion_year)
+					},
+					include: {
+						careerInterests: true
 					}
 				});
-				console.log(user);
-				return user;
+				const activeSlugs = user.careerInterests.map(i => i.slug);
 				// add the user to the relevant career interest record
-				/*await Promise.all(
+				await Promise.all(
 					career_interests.map(slug => {
-						if (input.careerInterests.includes(slug)) {
+						if (!activeSlugs.includes(slug) && input.career_interests.includes(slug)) {
 							ctx.prisma.careerInterest
 								.update({
 									where: {
@@ -82,12 +84,8 @@ export const userRouter = createTRPCRouter({
 										users: true
 									}
 								})
-								.then(result =>
-									console.log(
-										`${slug} assigned to user ${user.clerkId}\n${JSON.stringify(result, null, 2)}`
-									)
-								);
-						} else {
+								.then(result => console.log(`${slug} assigned to user ${user.clerkId}`));
+						} else if (activeSlugs.includes(slug) && !input.career_interests.includes(slug)) {
 							ctx.prisma.careerInterest
 								.update({
 									where: { slug },
@@ -102,12 +100,13 @@ export const userRouter = createTRPCRouter({
 								})
 								.then(result =>
 									console.log(
-										`${slug} unassigned to user ${user.clerkId}\n${JSON.stringify(result, null, 2)}`
+										`${slug} unassigned from user ${user.clerkId}\n${JSON.stringify(result, null, 2)}`
 									)
 								);
 						}
 					})
-				);*/
+				);
+				return user;
 			} catch (e: any) {
 				console.log(e);
 				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });

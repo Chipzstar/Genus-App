@@ -51,7 +51,6 @@ export async function getAllInsightsSlugs(): Promise<Pick<Insight, "slug">[]> {
 }
 
 export async function getInsightBySlug(client: SanityClient, slug: string): Promise<Insight> {
-	// @ts-expect-error Can't use any type here
 	return (await client.fetch(insightBySlugQuery, { slug })) || ({} as never);
 }
 
@@ -59,6 +58,5 @@ export async function getInsightAndBody(
 	client: SanityClient,
 	slug: string
 ): Promise<{ insight: Insight; body: Pick<Insight, "body">[] }> {
-	// @ts-expect-error Needs to be ignored
 	return await client.fetch(insightAndBodyQuery, { slug });
 }

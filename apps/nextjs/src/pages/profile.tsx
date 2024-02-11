@@ -1,7 +1,6 @@
 "use client";
 
 import React, { ReactElement, useCallback } from "react";
-import { useRouter } from "next/router";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
@@ -119,15 +118,17 @@ const UserProfilePage = () => {
 				</NavbarBrand>
 			</Navbar>
 			<div className="mb-4 flex h-full flex-col bg-white">
-				{mode === "edit" ? (
-					<EditProfile
-						profile={profile!}
-						updateUserProfile={updateUserProfile}
-						resetMode={() => setValue("view")}
-					/>
-				) : (
-					<ViewProfile profile={profile} />
-				)}
+				<div className="mx-auto max-w-3xl">
+					{mode === "edit" ? (
+						<EditProfile
+							profile={profile!}
+							updateUserProfile={updateUserProfile}
+							resetMode={() => setValue("view")}
+						/>
+					) : (
+						<ViewProfile profile={profile} />
+					)}
+				</div>
 			</div>
 		</div>
 	);

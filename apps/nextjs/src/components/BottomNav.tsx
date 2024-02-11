@@ -1,41 +1,99 @@
-import { cx } from 'class-variance-authority';
-import {Bell, Home, Search, Users, User2 } from 'lucide-react';
-import { useRouter } from 'next/router';
-import React from 'react';
-import {PATHS} from "~/utils";
+import React from "react";
+import { useRouter } from "next/router";
+import { cx } from "class-variance-authority";
+import { User2 } from "lucide-react";
+
+import { BellIcon, GroupIcon, HomeIcon, SearchIcon } from "@genus/ui/icons";
+
+import { PATHS } from "~/utils";
 
 interface Props {
-    activePage: string;
+	activePage: string;
 }
 
-const BottomNav = ({activePage=PATHS.HOME} : Props) => {
-    const router = useRouter()
-    return (
-        <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-primary border-t border-gray-2000">
-            <div className="grid h-full max-w-2xl grid-cols-5 mx-auto font-medium text-gray-500">
-                <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.HOME)}>
-                    <Home color={activePage === PATHS.HOME ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage === PATHS.HOME && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Home</span>
-                </button>
-                <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.GROUPS)}>
-                    <Users color={activePage.includes(PATHS.GROUPS) ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage.includes(PATHS.GROUPS) && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Groups</span>
-                </button>
-                <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.INSIGHTS)}>
-                    <Search color={activePage.includes(PATHS.INSIGHTS) ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage.includes(PATHS.INSIGHTS) && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Insights</span>
-                </button>
-                <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.NOTIFICATIONS)}>
-                    <Bell color={activePage === PATHS.NOTIFICATIONS ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage === PATHS.NOTIFICATIONS && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Notifications</span>
-                </button>
-                <button type="button" className="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-50 dark:hover:bg-gray-800 group" onClick={() => router.push(PATHS.PROFILE)}>
-                    <User2 color={activePage === PATHS.PROFILE ? "white" : "gray"} size={25} strokeWidth={1.5}/>
-                    <span className={cx(activePage === PATHS.PROFILE && 'text-white group-hover:text-white', "text-xs sm:text-sm group-hover:text-blue-600")}>Profile</span>
-                </button>
-            </div>
-        </div>
-    );
+const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
+	const router = useRouter();
+	return (
+		<div className="border-gray-2000 fixed bottom-0 left-0 z-50 h-16 w-full border-t bg-white">
+			<div className="mx-auto grid h-full max-w-2xl grid-cols-5 font-medium text-gray-500">
+				<button
+					type="button"
+					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
+					onClick={() => router.push(PATHS.HOME)}
+				>
+					<HomeIcon active={activePage === PATHS.HOME} size={25} />
+					<span
+						className={cx(
+							activePage === PATHS.HOME && "text-primary group-hover:text-primary",
+							"text-xs sm:text-sm"
+						)}
+					>
+						Home
+					</span>
+				</button>
+				<button
+					type="button"
+					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
+					onClick={() => router.push(PATHS.GROUPS)}
+				>
+					<GroupIcon active={activePage.includes(PATHS.GROUPS)} size={25} />
+					<span
+						className={cx(
+							activePage.includes(PATHS.GROUPS) && "text-primary group-hover:text-primary",
+							"text-xs sm:text-sm"
+						)}
+					>
+						Groups
+					</span>
+				</button>
+				<button
+					type="button"
+					className="group mr-2 inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
+					onClick={() => router.push(PATHS.INSIGHTS)}
+				>
+					<SearchIcon active={activePage.includes(PATHS.INSIGHTS)} size={25} />
+					<span
+						className={cx(
+							activePage.includes(PATHS.INSIGHTS) && "text-primary group-hover:text-primary",
+							"text-xs sm:text-sm"
+						)}
+					>
+						Insights
+					</span>
+				</button>
+				<button
+					type="button"
+					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
+					onClick={() => router.push(PATHS.NOTIFICATIONS)}
+				>
+					<BellIcon active={activePage === PATHS.NOTIFICATIONS} size={25} />
+					<span
+						className={cx(
+							activePage === PATHS.NOTIFICATIONS && "text-primary group-hover:text-primary",
+							"text-xs sm:text-sm"
+						)}
+					>
+						Notifications
+					</span>
+				</button>
+				<button
+					type="button"
+					className="group ml-1 inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
+					onClick={() => router.push(PATHS.PROFILE)}
+				>
+					<User2 color={activePage === PATHS.PROFILE ? "#2AA6B7" : "#757882"} size={25} strokeWidth={1.5} />
+					<span
+						className={cx(
+							activePage === PATHS.PROFILE && "text-primary group-hover:text-primary",
+							"text-xs sm:text-sm"
+						)}
+					>
+						Profile
+					</span>
+				</button>
+			</div>
+		</div>
+	);
 };
 
 export default BottomNav;

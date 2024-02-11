@@ -90,19 +90,19 @@
         @apply flex grow flex-col bg-white p-6 sm:px-12
     }
     .page-container {
-        @apply min-h-screen sm:h-screen mx-auto max-w-3xl text-primary py-6 md:py-8
+        @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
     }
     .insights-container {
-        @apply min-h-screen sm:h-screen mx-auto max-w-3xl bg-white text-primary py-0
+        @apply min-h-screen sm:h-screen mx-auto text-primary py-0
     }
     .profile-container {
-        @apply min-h-screen mx-auto max-w-3xl text-primary py-0
+        @apply min-h-screen mx-auto text-primary py-0
     }
     .grid-limited {
         grid-template-columns: repeat(2, minmax(150px, 1fr));
         grid-template-rows: auto 0;
         grid-auto-rows: 0;
-        @apply grid relative overflow-hidden
+        @apply sm:grid relative overflow-hidden hidden
     }
 }
 

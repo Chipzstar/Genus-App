@@ -28,7 +28,7 @@ export default authMiddleware({
 		}
 		// redirect to the default group page
 		// if (req.nextUrl.pathname === '/groups') {
-		//     return NextResponse.redirect(new URL("/groups/pre-spring-week-chat", req.url));
+		//     return NextResponse.redirect(new URL("/groups/interngen-spring-into-banking-event", req.url));
 		// }
 		/*// If the user is logged in and trying to access a protected route, allow them to access route
         if (auth.userId && !auth.isPublicRoute) {

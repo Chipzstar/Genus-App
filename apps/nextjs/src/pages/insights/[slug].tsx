@@ -70,13 +70,14 @@ const InsightSlug = (props: PageProps) => {
 		<div className="insights-container overflow-y-hidden">
 			<Navbar
 				classNames={{
-					base: "p-3 text-white bg-[#757882]/50",
+					base: "p-3 text-white flex justify-center",
+					wrapper: "mx-auto max-w-3xl",
 					brand: "w-full flex flex-col justify-center items-center space-y-1"
 				}}
 			>
 				<NavbarBrand>
 					<div className="absolute left-0 top-0" role="button" onClick={router.back}>
-						<ChevronLeft size={40} color="#2AA6B7" />
+						<ChevronLeft size={40} color="white" />
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
 						<Image
@@ -94,8 +95,8 @@ const InsightSlug = (props: PageProps) => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<section className="flex flex-col items-center px-4">
-				<div className="py-10 text-lg sm:px-6">
+			<section className="flex h-full flex-col items-center bg-white px-4">
+				<div className="mx-auto max-w-3xl py-10 text-lg sm:px-6">
 					<PortableText value={body!} components={components} />
 				</div>
 			</section>

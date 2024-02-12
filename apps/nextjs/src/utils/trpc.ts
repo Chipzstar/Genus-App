@@ -10,8 +10,7 @@ import { transformer } from "@genus/api/transformer";
 const getBaseUrl = () => {
 	console.log(process.env);
 	if (typeof window !== "undefined") return ""; // browser should use relative url
-	if (process.env.TRPC_BASE_URL) {return `https://${process.env.TRPC_BASE_URL}`; // SSR should use the appropriate
-		// domain URL based on deploy environment
+	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
 	return `http://localhost:${process.env.PORT ?? 3001}`; // dev SSR should use localhost
 };
 

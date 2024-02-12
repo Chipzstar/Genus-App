@@ -38,9 +38,6 @@ const EmojiDialog: FC<Props> = props => {
         }
     })*/
 	const { mutate: upsertReaction } = trpc.reaction.upsertReaction.useMutation({
-		onMutate(data) {
-			console.log(data);
-		},
 		onSuccess(data) {
 			console.log(data);
 			void utils.group.invalidate();

@@ -57,7 +57,6 @@ export const EditProfile = ({
 		async (data: FormValues) => {
 			setLoading(true);
 			try {
-				console.log(data);
 				await updateUserProfile(data);
 				toast({
 					title: "Success!",

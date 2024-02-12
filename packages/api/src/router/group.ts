@@ -90,8 +90,6 @@ export const groupRouter = createTRPCRouter({
 						clerkId: ctx.auth.userId
 					}
 				});
-				console.log(user);
-				console.log("-----------------------------------------------");
 				return await ctx.prisma.group.update({
 					where: {
 						slug: input.slug

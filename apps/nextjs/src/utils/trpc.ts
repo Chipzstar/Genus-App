@@ -8,7 +8,6 @@ import type { AppRouter } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 
 const getBaseUrl = () => {
-	console.log(process.env);
 	if (typeof window !== "undefined") return ""; // browser should use relative url
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
 	return `http://localhost:${process.env.PORT ?? 3001}`; // dev SSR should use localhost

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { ReactElement, useCallback } from "react";
+import type { ReactElement } from "react";
+import React, { useCallback } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
@@ -117,8 +118,8 @@ const UserProfilePage = () => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<div className="mb-4 flex h-full flex-col bg-white">
-				<div className="mx-auto max-w-3xl">
+			<div className="mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
+				<div className="mx-auto w-full max-w-3xl">
 					{mode === "edit" ? (
 						<EditProfile
 							profile={profile!}

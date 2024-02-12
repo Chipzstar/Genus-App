@@ -51,7 +51,8 @@ const Members = (props: any) => {
 	);
 
 	const members = useMemo(() => {
-		return group?.members.map(member => ({
+		if (!group) return [];
+		return group.members.map(member => ({
 			key: member.userId,
 			label: `${member.user.firstname} ${member.user.lastname}`,
 			image: member.user.imageUrl
@@ -78,24 +79,26 @@ const Members = (props: any) => {
 				</NavbarBrand>
 			</Navbar>
 			<div className="chat-wrapper">
-				<header className="text-lg font-semibold sm:text-2xl">Members</header>
-				<ListBoxWrapper>
-					<Listbox items={members} aria-label="Dynamic Actions" onAction={key => alert(key)}>
-						{m => (
-							<ListboxItem key={m.key}>
-								<div className="flex items-center space-x-2">
-									<Avatar className="h-10 w-10 lg:h-10 lg:w-10">
-										<AvatarImage src={String(m.image)} alt="Avatar Thumbnail"></AvatarImage>
-										<AvatarFallback className="bg-neutral-100">
-											<User size={20} color="gray" />
-										</AvatarFallback>
-									</Avatar>
-									<span className="font-medium text-black">{m.label}</span>
-								</div>
-							</ListboxItem>
-						)}
-					</Listbox>
-				</ListBoxWrapper>
+				<div className="mx-auto max-w-3xl">
+					<header className="text-lg font-semibold sm:text-2xl">Members</header>
+					<ListBoxWrapper>
+						<Listbox items={members} aria-label="Dynamic Actions" onAction={key => alert(key)}>
+							{m => (
+								<ListboxItem key={m.key}>
+									<div className="flex items-center space-x-2">
+										<Avatar className="h-10 w-10 lg:h-10 lg:w-10">
+											<AvatarImage src={String(m.image)} alt="Avatar Thumbnail"></AvatarImage>
+											<AvatarFallback className="bg-neutral-100">
+												<User size={20} color="gray" />
+											</AvatarFallback>
+										</Avatar>
+										<span className="font-medium text-black">{m.label}</span>
+									</div>
+								</ListboxItem>
+							)}
+						</Listbox>
+					</ListBoxWrapper>
+				</div>
 			</div>
 		</div>
 	);

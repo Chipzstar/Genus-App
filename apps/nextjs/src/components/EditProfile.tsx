@@ -107,12 +107,12 @@ export const EditProfile = ({
 
 	const isDisabled = useMemo(() => {
 		return !form.formState.isDirty && !files.length;
-	}, [form.formState]);
+	}, [files.length, form.formState.isDirty]);
 
 	return (
 		<Form {...form}>
-			<form id="profile-form" className="flex flex-col p-8" onSubmit={form.handleSubmit(onSubmit)}>
-				<section className="grid gap-x-12 gap-y-4 lg:grid-cols-2">
+			<form id="profile-form" className="flex flex-col px-6 py-8 lg:p-8" onSubmit={form.handleSubmit(onSubmit)}>
+				<section className="grid gap-x-12 gap-y-4 md:grid-cols-2">
 					<FormField
 						control={form.control}
 						name="firstname"

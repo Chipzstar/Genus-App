@@ -1,7 +1,8 @@
-import React, { ReactElement, useEffect, useMemo } from "react";
+import type { ReactElement } from "react";
+import React, { useMemo } from "react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useSession } from "@clerk/nextjs";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
@@ -22,10 +23,15 @@ import type { GroupMember } from "~/utils/types";
 
 export const getServerSideProps = (async ctx => {
 	const params = ctx.params;
+
 	const helpers = createServerSideHelpers({
 		router: appRouter,
 		transformer,
-		ctx: await createContextInner({ auth: null })
+		ctx: await createContextInner({
+			auth: {
+				userId: ""
+			}
+		})
 	});
 	/*
 	 * Prefetching the `post.byId` query.
@@ -52,7 +58,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	const { mutate: joinGroup } = trpc.group.joinGroup.useMutation({
 		onSuccess(data) {
 			console.log(data);
-			void utils.group.invalidate();
+			void utils.group.getGroupBySlug.invalidate();
 			toast({
 				title: "Yayy! You're now in the group! 🎉",
 				description: "You can now post to the chat and ask questions"

@@ -1,12 +1,11 @@
-import type { ChangeEvent, ReactElement } from "react";
-import React, { useCallback, useState } from "react";
+import React, { ChangeEvent, ReactElement, useCallback, useEffect, useState } from "react";
 import type { GetStaticProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 
 import { Button } from "@genus/ui/button";
 import { Input } from "@genus/ui/input";
@@ -30,14 +29,15 @@ type Query = Record<string, string>;
 export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 	const client = getClient();
 	const insights = await getAllInsights(client);
+
 	if (!insights) {
 		return {
 			notFound: true
 		};
 	}
 	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
-		slug: slug!,
-		title: title!,
+		slug: slug,
+		title: title,
 		image: urlForImage(mainImage).height(100).width(150).url()
 	}));
 	return {
@@ -52,7 +52,7 @@ const Insights = (props: PageProps) => {
 	const { signOut } = useAuth();
 	const [search, setSearch] = useState("");
 	const [insights, setInsights] = useState<InsightPanel[]>(props.insights);
-	const debouncedInsights = useDebounce<InsightPanel[]>(insights, 500);
+	const [debouncedInsights] = useDebounceValue<InsightPanel[]>(insights, 500);
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
@@ -116,11 +116,13 @@ const Insights = (props: PageProps) => {
 					</div>
 					<ScrollArea className={"h-[calc(100%-10rem)]"}>
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
-							{debouncedInsights.map(insight => (
-								<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
-									<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
-								</ListboxItem>
-							))}
+							{debouncedInsights?.map(insight => {
+								return (
+									<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
+										<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
+									</ListboxItem>
+								);
+							})}
 						</Listbox>
 					</ScrollArea>
 				</div>

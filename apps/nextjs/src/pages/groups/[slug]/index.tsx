@@ -1,12 +1,15 @@
-import type { ReactElement } from "react";
-import React, { useMemo } from "react";
+import React, { ReactElement, useEffect, useMemo } from "react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-import router from "next/router";
-import { useClerk, useSession } from "@clerk/nextjs";
+import router, { useRouter } from "next/router";
+import { useSession } from "@clerk/nextjs";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 import { ThreeDots } from "react-loader-spinner";
 
+import { appRouter } from "@genus/api";
+import { createContextInner } from "@genus/api/src/context";
+import { transformer } from "@genus/api/transformer";
 import { Alert, AlertDescription, AlertTitle } from "@genus/ui/alert";
 import { useToast } from "@genus/ui/use-toast";
 
@@ -19,15 +22,29 @@ import type { GroupMember } from "~/utils/types";
 
 export const getServerSideProps = (async ctx => {
 	const params = ctx.params;
+	const helpers = createServerSideHelpers({
+		router: appRouter,
+		transformer,
+		ctx: await createContextInner({ auth: null })
+	});
+	/*
+	 * Prefetching the `post.byId` query.
+	 * `prefetch` does not return the result and never throws - if you need that behavior, use `fetch` instead.
+	 */
+	params && (await helpers.group.getGroupBySlug.prefetch({ slug: params.slug as string }));
+
 	return {
 		props: {
-			...params
+			...params,
+			trpcState: helpers.dehydrate()
 		} // will be passed to the page component as props
 	};
 }) satisfies GetServerSideProps;
 
 const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-	const slug = props.slug as string;
+	const router = useRouter();
+	const slug = router.query.slug as string;
+
 	const { toast } = useToast();
 	const utils = trpc.useUtils();
 	const { session } = useSession();
@@ -52,7 +69,6 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	});
 	const {
 		isLoading,
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		data: group,
 		failureReason,
 		error
@@ -92,7 +108,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	}, [group?.members, session?.user.id, joinGroup, slug]);
 
 	return (
-		<div className="sm:h-container mx-auto flex max-w-3xl flex-col overflow-y-hidden pt-4 text-primary">
+		<div className="sm:h-container mx-auto flex max-w-3xl flex-col overflow-y-hidden pb-0 pt-4 text-primary">
 			<Navbar
 				classNames={{
 					base: "px-3 sm:px-0 py-3",

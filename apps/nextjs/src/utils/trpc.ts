@@ -14,22 +14,49 @@ const getBaseUrl = () => {
 };
 
 export const trpc = createTRPCNext<AppRouter>({
-	config() {
+	config(opts) {
+		const { ctx } = opts;
+		if (typeof window !== "undefined") {
+			// during client requests
+			return {
+				transformer,
+				links: [
+					loggerLink({
+						enabled: opts =>
+							process.env.NODE_ENV === "development" ||
+							(opts.direction === "down" && opts.result instanceof Error)
+					}),
+					httpBatchLink({
+						url: `/api/trpc`
+					})
+				]
+			};
+		}
 		return {
-			transformer,
+			transformer, // optional - adds superjson serialization
 			links: [
-				loggerLink({
-					enabled: opts =>
-						process.env.NODE_ENV === "development" ||
-						(opts.direction === "down" && opts.result instanceof Error)
-				}),
 				httpBatchLink({
-					url: `${getBaseUrl()}/api/trpc`
+					// The server needs to know your app's full url
+					url: `${getBaseUrl()}/api/trpc`,
+					/**
+					 * Set custom request headers on every request from tRPC
+					 * @link https://trpc.io/docs/v10/header
+					 */
+					headers() {
+						if (!ctx?.req?.headers) {
+							return {};
+						}
+						// To use SSR properly, you need to forward client headers to the server
+						// This is, so you can pass through things like cookies when we're server-side rendering
+						return {
+							cookie: ctx.req.headers.cookie
+						};
+					}
 				})
 			]
 		};
 	},
-	ssr: false
+	ssr: true
 });
 
 /**

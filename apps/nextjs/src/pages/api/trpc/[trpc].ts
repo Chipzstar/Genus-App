@@ -1,16 +1,17 @@
-import {appRouter, createContext} from "@genus/api";
-import {createNextApiHandler} from "@trpc/server/adapters/next";
-import {NextApiRequest, NextApiResponse} from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { createNextApiHandler } from "@trpc/server/adapters/next";
+
+import { appRouter, createContext } from "@genus/api";
 
 /**
  * Configure basic CORS headers
  * You should extend this to match your needs
  */
 function setCorsHeaders(res: NextApiResponse) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Request-Method", "*");
-    res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST");
-    res.setHeader("Access-Control-Allow-Headers", "*");
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Request-Method", "*");
+	res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST");
+	res.setHeader("Access-Control-Allow-Headers", "*");
 }
 
 /*export function OPTIONS() {
@@ -22,12 +23,12 @@ function setCorsHeaders(res: NextApiResponse) {
 }*/
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    setCorsHeaders(res);
-    // Let the tRPC handler do its magic
-    return createNextApiHandler({
-        router: appRouter,
-        createContext,
-    })(req, res);
+	setCorsHeaders(res);
+	// Let the tRPC handler do its magic
+	return createNextApiHandler({
+		router: appRouter,
+		createContext
+	})(req, res);
 };
 
 export default handler;

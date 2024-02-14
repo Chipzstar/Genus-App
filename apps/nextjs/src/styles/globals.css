@@ -83,7 +83,7 @@
 
 @layer utilities {
     .h-container {
-        height: calc(100vh - 67px)
+        height: calc(100vh - 64px)
     }
     .chat-wrapper {
         height: calc(100vh - 187px);

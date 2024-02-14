@@ -63,7 +63,7 @@ export const groupRouter = createTRPCRouter({
 						}
 					},
 					cacheStrategy: {
-						ttl: 60 * 60 * 24,
+						ttl: 60,
 						swr: 60
 					}
 				});

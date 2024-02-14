@@ -1,3 +1,4 @@
+import type { SignedInAuthObject } from "@clerk/nextjs/api";
 import { initTRPC, TRPCError } from "@trpc/server";
 
 import { transformer } from "../transformer";
@@ -16,7 +17,7 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 	}
 	return next({
 		ctx: {
-			auth: ctx.auth
+			auth: ctx.auth as SignedInAuthObject
 		}
 	});
 });

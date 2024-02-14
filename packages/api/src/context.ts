@@ -10,7 +10,7 @@ import { redis } from "@genus/redis";
  * Replace this with an object if you want to pass things to createContextInner
  */
 type AuthContextProps = {
-	auth: SignedInAuthObject | SignedOutAuthObject | null;
+	auth: SignedInAuthObject | SignedOutAuthObject | { userId: string };
 };
 
 /** Use this helper for:

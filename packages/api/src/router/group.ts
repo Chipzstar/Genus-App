@@ -85,6 +85,9 @@ export const groupRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			try {
 				// lookup up the user using the clerk userId
+				console.log(ctx.auth);
+				console.log("-----------------------------------------------");
+				console.log(input);
 				const user = await ctx.prisma.user.findUniqueOrThrow({
 					where: {
 						clerkId: ctx.auth.userId

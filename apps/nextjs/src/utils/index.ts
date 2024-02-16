@@ -16,7 +16,7 @@ export const PATHS = {
 	GROUPS: "/groups"
 };
 
-export function formatString(str: string | undefined): string {
+export function formatString(str: string | undefined) {
 	if (!str) return "";
 	return str
 		.replace(/[-_]/g, " ")
@@ -42,7 +42,7 @@ export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function formatTimestamp(timestamp: Date, method: string = "default") {
+export function formatTimestamp(timestamp: Date, method = "default") {
 	switch (method) {
 		case "distance":
 			return formatDistance(timestamp, Date.now(), {
@@ -80,7 +80,7 @@ export function convertToNestedArray(arr: Reaction[] = []) {
 	// Use a Map to count the occurrences of each unique string
 	const countMap = new Map<string, Reaction[]>();
 	// Count occurrences
-	for (let [i, r] of arr.entries()) {
+	for (const [i, r] of arr.entries()) {
 		const reactions = countMap.get(r.emoji) ?? [];
 		reactions.push(r);
 		countMap.set(r.emoji, reactions);

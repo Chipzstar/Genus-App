@@ -96,7 +96,7 @@
         @apply min-h-screen sm:h-screen mx-auto text-primary py-0
     }
     .profile-container {
-        @apply min-h-screen mx-auto text-primary py-0
+        @apply min-h-screen md:h-screen mx-auto text-primary py-0
     }
     .grid-limited {
         grid-template-columns: repeat(2, minmax(150px, 1fr));
@@ -157,5 +157,9 @@
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
     border-radius: 0.25rem;
+}
+
+object {
+    pointer-events: none;
 }
 

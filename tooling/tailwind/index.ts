@@ -22,6 +22,7 @@ export default {
 				sans: ["var(--font-sans)", ...fontFamily.sans]
 			},
 			width: {
+				76: "19rem",
 				128: "32rem",
 				144: "36rem",
 				160: "40rem",

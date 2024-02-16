@@ -2,10 +2,10 @@ import { TRPCError } from "@trpc/server";
 import { log } from "next-axiom";
 import * as z from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const groupRouter = createTRPCRouter({
-	getGroups: protectedProcedure.query(async ({ ctx }) => await ctx.prisma.group.findMany()),
+	getGroups: publicProcedure.query(async ({ ctx }) => await ctx.prisma.group.findMany()),
 	getGroupById: protectedProcedure
 		.input(
 			z.object({

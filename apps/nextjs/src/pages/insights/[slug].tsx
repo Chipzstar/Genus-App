@@ -80,15 +80,22 @@ const InsightSlug = (props: PageProps) => {
 						<ChevronLeft size={40} color="white" />
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
-						<Image
-							className="h-auto"
-							height={100 * 1.5}
-							width={150 * 1.5}
-							alt=""
-							src={urlForImage(mainImage).height(300).width(450).url()}
-							sizes="100vw"
-							priority
+						<object
+							className="w-76 mx-auto h-52"
+							type="image/svg+xml"
+							data={urlForImage(mainImage).height(300).width(450).url()}
+							/*width={300}
+							height={200}*/
 						/>
+						{/*<Image
+						  className="h-auto"
+						  height={100 * 1.5}
+						  width={150 * 1.5}
+						  alt=""
+						  src={urlForImage(mainImage).height(300).width(450).url()}
+						  sizes="100vw"
+						  priority
+						/>*/}
 						<header className="whitespace-pre-wrap text-center text-xl font-bold text-black sm:w-144 sm:text-3xl">
 							{title}
 						</header>

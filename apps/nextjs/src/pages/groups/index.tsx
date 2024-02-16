@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import type { ChangeEvent, ReactElement } from "react";
 import type { GetStaticProps } from "next";
 import Image from "next/image";
@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 	const helpers = createServerSideHelpers({
 		router: appRouter,
 		transformer,
-		ctx: await createContextInner({ auth: null })
+		ctx: await createContextInner({ auth: { userId: "" } })
 	});
 	await helpers.group.getGroups.prefetch();
 
@@ -97,7 +97,7 @@ const Groups = (props: PageProps) => {
 				}}
 			>
 				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<Image src="/images/green-logo.svg" alt="genus-white" width={100} height={75} />
+					<object className="mx-auto" type="image/svg+xml" data="/images/green-logo.svg" width={100} />
 					<div className="absolute right-4">
 						<SignedIn>
 							<Button size="sm" onClick={e => signOut()}>

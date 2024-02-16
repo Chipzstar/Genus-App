@@ -33,7 +33,8 @@ const Home = () => {
 				}}
 			>
 				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<Image src={whiteLogo} quality={100} priority alt="genus-white" width={100} height={75} />
+					{/*<Image src={whiteLogo} quality={100} priority alt="genus-white" width={100} height={75} />*/}
+					<object className="mx-auto" type="image/svg+xml" data="/images/logo-white.svg" width={100} />
 					<div className="absolute right-4">
 						<SignedIn>
 							<Button size="sm" onClick={e => signOut()}>
@@ -57,13 +58,20 @@ const Home = () => {
 							<header className="text-xl font-semibold">
 								<span className="underline">JOIN</span> the group!
 							</header>
-							<Image
-								src="/images/spring-weeks-ldn.svg"
-								alt="Spring Weeks London"
+							<object
+								className="mx-auto"
+								type="image/svg+xml"
+								data="/images/spring-weeks-ldn.svg"
 								width={200}
 								height={150}
-								objectFit=""
 							/>
+							{/*<Image
+							  src="/images/spring-weeks-ldn.svg"
+							  alt="Spring Weeks London"
+							  width={200}
+							  height={150}
+							  objectFit=""
+							/>*/}
 							<span className="text-ellipsis text-center text-base font-semibold md:text-lg">
 								InternGen: Spring into Banking
 							</span>
@@ -89,7 +97,8 @@ const Home = () => {
 										role="button"
 										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 									>
-										<img src={image} alt={title} className="" />
+										<object className="mx-auto" type="image/svg+xml" data={image} width={175} />
+										{/*<img src={image} alt={title} className="" />*/}
 										<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
 											{title}
 										</span>

@@ -30,7 +30,7 @@ export const ourFileRouter = {
 	signupUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
 		// Set permissions and file types for this FileRoute
 		.middleware(defineMiddleware("This user has not yet been authenticated"))
-		.onUploadError(async ({ error }) => {
+		.onUploadError(({ error }) => {
 			console.log(error);
 			throw error;
 		})

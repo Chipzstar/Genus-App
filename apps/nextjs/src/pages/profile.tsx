@@ -118,7 +118,7 @@ const UserProfilePage = () => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<div className="mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
+			<div className="h-fill mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
 				<div className="mx-auto w-full max-w-3xl">
 					{mode === "edit" ? (
 						<EditProfile

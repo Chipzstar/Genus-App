@@ -74,7 +74,7 @@ const Insights = (props: PageProps) => {
 				}}
 			>
 				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<Image src="/images/green-logo.svg" alt="genus-white" width={100} height={75} />
+					<object className="mx-auto" type="image/svg+xml" data="/images/green-logo.svg" width={100} />
 					<div className="absolute right-4">
 						<SignedIn>
 							<Button size="sm" onClick={e => signOut()}>

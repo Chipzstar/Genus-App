@@ -6,7 +6,7 @@ export default authMiddleware({
 	publicRoutes: [
 		"/login",
 		"/signup",
-		"/forgot-password",
+		"/reset-password",
 		"/api/clerk/webhook",
 		"/api/trpc/auth(.*)",
 		"/_axiom/web-vitals"

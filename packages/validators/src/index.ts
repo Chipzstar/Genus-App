@@ -69,4 +69,29 @@ export const signupSchema = signupBaseSchema.refine(
 	}
 );
 
+export const forgotPasswordSchema = z.object({
+	email: z
+		.string({
+			required_error: "Please enter your email address."
+		})
+		.email({ message: "Invalid email address." })
+});
+
+export const resetPasswordSchema = z
+	.object({
+		password: z.string().min(2, {
+			message: "Password must be at least 2 characters."
+		}),
+		confirmPassword: z.string()
+	})
+	.refine(
+		values => {
+			return values.password === values.confirmPassword;
+		},
+		{
+			message: "Passwords must match!",
+			path: ["confirmPassword"]
+		}
+	);
+
 export const profileSchema = signupBaseSchema.omit({ email: true, password: true, confirmPassword: true });

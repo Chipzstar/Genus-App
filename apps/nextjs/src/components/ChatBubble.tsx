@@ -14,10 +14,10 @@ export function ChatBubble(props: {
 		<Fragment>
 			<div
 				className={cn("flex flex-col rounded-lg px-4 py-2 text-xs text-gray-900 sm:text-sm", {
-					"bg-chat-bubble-internal/50 text-gray-300": props.currentUser && !props.member,
-					"bg-chat-bubble-external/50 text-gray-300": !props.currentUser && !props.member,
-					"bg-chat-bubble-internal": props.currentUser && props.member,
-					"bg-chat-bubble-external": !props.currentUser && props.member,
+					"bg-chat-bubble-internal-300/50 text-gray-400": props.currentUser && !props.member,
+					"bg-chat-bubble-external-300/50 text-gray-400": !props.currentUser && !props.member,
+					"bg-chat-bubble-internal-300": props.currentUser && props.member,
+					"bg-chat-bubble-external-200": !props.currentUser && props.member,
 					"rounded-br-none": !props.hasNextMessageFromSameUser && props.currentUser,
 					"rounded-bl-none": !props.hasNextMessageFromSameUser && !props.currentUser
 				})}

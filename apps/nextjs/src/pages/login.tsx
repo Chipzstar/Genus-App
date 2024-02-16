@@ -92,7 +92,7 @@ const Login: NextPageWithLayout = () => {
 	return (
 		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8">
 			<div className="relative h-[250px] w-2/3 sm:w-1/2 lg:w-2/3">
-				{/*<Image
+				<Image
 					src="/images/logo-white.svg"
 					alt="genus-white"
 					fill
@@ -103,8 +103,7 @@ const Login: NextPageWithLayout = () => {
 					style={{
 						objectFit: "contain"
 					}}
-				/>*/}
-				<object className="safari mx-auto" type="image/svg+xml" data="/images/logo-white.svg"></object>
+				/>
 			</div>
 			<header className="w-[230px] text-center text-2xl font-bold tracking-wider lg:text-4xl">Sign in</header>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">

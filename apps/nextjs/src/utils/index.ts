@@ -8,7 +8,7 @@ export const PATHS = {
 	HOME: "/",
 	LOGIN: "/login",
 	SIGNUP: "/signup",
-	FORGOT_PASSWORD: "/forgot-password",
+	FORGOT_PASSWORD: "/reset-password",
 	RESET_PASSWORD: "/reset-password",
 	INSIGHTS: "/insights",
 	PROFILE: "/profile",

@@ -8,7 +8,6 @@ import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
-import whiteLogo from "~/assets/genus-white.svg";
 import AppLayout from "~/layout/AppLayout";
 import { INSIGHTS, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";

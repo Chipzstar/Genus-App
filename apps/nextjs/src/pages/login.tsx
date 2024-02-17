@@ -1,13 +1,13 @@
 "use client";
 
-import type { ReactElement } from "react";
-import React, { useCallback } from "react";
+import React, { ReactElement, useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useWindowSize } from "usehooks-ts";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -24,6 +24,7 @@ const Login: NextPageWithLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
 	const { toast } = useToast();
 	const [loading, setLoading] = React.useState(false);
+	const { width = 0, height = 0 } = useWindowSize();
 
 	const router = useRouter();
 	// 1. Define your form.
@@ -91,7 +92,7 @@ const Login: NextPageWithLayout = () => {
 
 	return (
 		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8">
-			<div className="relative h-[250px] w-2/3 sm:w-1/2 lg:w-2/3">
+			<div className="relative flex w-2/3 justify-center sm:h-[250px] sm:w-1/2 lg:w-2/3">
 				{/*<Image
 					src="/images/logo-white.svg"
 					alt="genus-white"
@@ -104,7 +105,12 @@ const Login: NextPageWithLayout = () => {
 						objectFit: "contain"
 					}}
 				/>*/}
-				<object className=" mx-auto" type="image/svg+xml" data="/images/logo-white.svg"></object>
+				<object
+					className=""
+					type="image/svg+xml"
+					data="/images/logo-white.svg"
+					width={width <= 480 ? 300 : 450}
+				/>
 			</div>
 			<header className="w-[230px] text-center text-2xl font-bold tracking-wider lg:text-4xl">Sign in</header>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">

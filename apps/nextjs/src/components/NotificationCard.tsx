@@ -6,6 +6,8 @@ import { formatDistanceToNow, fromUnixTime } from "date-fns";
 import { cn } from "@genus/ui";
 import { toast } from "@genus/ui/use-toast";
 
+import { formatString } from "~/utils";
+
 interface Props {
 	item: IRemoteNotification;
 	onClick: (item: IRemoteNotification) => void;
@@ -44,7 +46,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 						})}
 					</div>
 				</div>
-				<div className="text-xs font-medium">{item.topic}</div>
+				<div className="text-xs font-medium">{formatString(item.topic!)}</div>
 			</div>
 			<div className="line-clamp-2 text-xs text-muted-foreground">{item.content?.substring(0, 300)}</div>
 			{/*{item.customAttributes?.length ? (

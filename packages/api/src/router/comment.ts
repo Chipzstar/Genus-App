@@ -83,7 +83,7 @@ export const commentRouter = createTRPCRouter({
 						title: `Comment from ${author}`,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
-						topic: formatString(thread.group.slug),
+						topic: thread.group.slug,
 						category: "comment",
 						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
@@ -135,7 +135,7 @@ export const commentRouter = createTRPCRouter({
 				content: input.content,
 				recipients: recipients.map(c => ({ external_id: c.authorId })),
 				category: "comment",
-				topic: formatString(comment.group.slug),
+				topic: comment.group.slug,
 				action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
 			});
 			console.log(notification);

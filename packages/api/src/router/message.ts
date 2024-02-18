@@ -60,7 +60,7 @@ export const messageRouter = createTRPCRouter({
 					title: `Message from ${message.author.firstname} ${message.author.lastname}`,
 					content: input.content,
 					recipients: recipients.map(r => ({ email: r.user.email, external_id: r.userId })),
-					topic: formatString(message.group.slug),
+					topic: message.group.slug,
 					category: "message",
 					action_url: `/${message.group.slug}?messageId=${message.messageId}`
 				});

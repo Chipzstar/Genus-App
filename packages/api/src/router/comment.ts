@@ -62,7 +62,13 @@ export const commentRouter = createTRPCRouter({
 						groupId: input.groupId
 					},
 					select: {
+						messageId: true,
 						threadId: true,
+						group: {
+							select: {
+								slug: true
+							}
+						},
 						author: {
 							select: {
 								email: true
@@ -75,7 +81,8 @@ export const commentRouter = createTRPCRouter({
 						title: `Comment from ${author}`,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
-						topic: thread.threadId
+						topic: thread.threadId,
+						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
 				}
 				return thread;
@@ -121,8 +128,8 @@ export const commentRouter = createTRPCRouter({
 					title: `Comment from ${author}`,
 					content: input.content,
 					recipients: recipients.map(c => ({ external_id: c.authorId })),
-					topic: comment.commentId,
-					action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${comment.commentId}`
+					topic: input.threadId,
+					action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
 				})
 				.then(notification => console.log(notification))
 				.catch(err => console.error(err));

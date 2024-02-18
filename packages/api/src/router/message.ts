@@ -57,22 +57,23 @@ export const messageRouter = createTRPCRouter({
 						}
 					}
 				});
-				ctx.magicbell.store
-					.create({
-						title: `Message from ${message.author.firstname} ${message.author.lastname}`,
-						content: input.content,
-						recipients: recipients.map(r => ({ email: r.user.email, external_id: r.userId })),
-						topic: message.messageId,
-						category: formatString(message.group.slug),
-						action_url: `/${message.group.slug}?messageId=${message.messageId}`
-					})
-					.then(notification => console.log(notification))
-					.catch(err => console.error(err));
+				const notification = await ctx.magicbell.store.create({
+					title: `Message from ${message.author.firstname} ${message.author.lastname}`,
+					content: input.content,
+					recipients: recipients.map(r => ({ email: r.user.email, external_id: r.userId })),
+					topic: message.messageId,
+					category: formatString(message.group.slug),
+					action_url: `/${message.group.slug}?messageId=${message.messageId}`
+				});
+				console.log(notification);
+				log.info("-----------------------------------------------");
+				log.debug("New user!!", notification);
+				log.info("-----------------------------------------------");
 
 				/*await ctx.redis.zadd(`${input.groupId}--${message.messageId}`, {
-				  score: dayjs(message.createdAt).valueOf(),
-				  member: JSON.stringify(message)
-			  });*/
+				score: dayjs(message.createdAt).valueOf(),
+				member: JSON.stringify(message)
+			});*/
 				return message;
 			} catch (err) {
 				throw new TRPCError({

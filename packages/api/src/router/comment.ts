@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
+import { log } from "next-axiom";
 import * as z from "zod";
 
 import { formatString } from "@genus/validators/helpers";
@@ -87,6 +88,10 @@ export const commentRouter = createTRPCRouter({
 						topic: thread.threadId,
 						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
+					console.log(notification);
+					log.info("-----------------------------------------------");
+					log.debug("New notification!!", notification);
+					log.info("-----------------------------------------------");
 				}
 				return thread;
 			}
@@ -126,17 +131,18 @@ export const commentRouter = createTRPCRouter({
 					authorId: true
 				}
 			});
-			ctx.magicbell.store
-				.create({
-					title: `Comment from ${author}`,
-					content: input.content,
-					recipients: recipients.map(c => ({ external_id: c.authorId })),
-					topic: input.threadId,
-					category: formatString(comment.group.slug),
-					action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
-				})
-				.then(notification => console.log(notification))
-				.catch(err => console.error(err));
+			const notification = await ctx.magicbell.store.create({
+				title: `Comment from ${author}`,
+				content: input.content,
+				recipients: recipients.map(c => ({ external_id: c.authorId })),
+				topic: input.threadId,
+				category: formatString(comment.group.slug),
+				action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
+			});
+			console.log(notification);
+			log.info("-----------------------------------------------");
+			log.debug("New notification!!", notification);
+			log.info("------------------------------------------------");
 
 			return comment;
 		} catch (err) {

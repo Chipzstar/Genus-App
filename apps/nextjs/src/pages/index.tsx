@@ -1,27 +1,60 @@
 import React, { ReactElement } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { GetServerSideProps } from "next/types";
+import { GetServerSideProps, GetStaticProps } from "next/types";
 import { SignedIn, useClerk } from "@clerk/nextjs";
+import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 
 import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
 import AppLayout from "~/layout/AppLayout";
+import { getAllGroups, getAllInsights, getClient, getInsightAndBody } from "~/lib/sanity.client";
+import { urlForImage } from "~/lib/sanity.image";
+import type { Insight } from "~/lib/sanity.queries";
 import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
 import { INSIGHTS, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
+import type { GroupPanel, InsightPanel } from "~/utils/types";
 
-export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
+interface PageProps {
+	insights: InsightPanel[];
+}
 
-const Home = () => {
-	const {
-		isLoading,
-		data: group,
-		failureReason,
-		error
-	} = trpc.group.getGroupBySlug.useQuery({
+type Query = Record<string, string>;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+	const { req } = ctx;
+	const { userId } = getAuth(req);
+	const client = getClient();
+	const insights = await getAllInsights(client);
+
+	if (!insights || !userId) {
+		return {
+			props: {
+				insights: []
+			}
+		};
+	}
+
+	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
+		slug,
+		title,
+		image: urlForImage(mainImage).height(100).width(150).url()
+	}));
+
+	return {
+		props: {
+			insights: formattedInsights,
+			userId,
+			...buildClerkProps(req)
+		}
+	};
+};
+
+const Home = (props: PageProps) => {
+	const result = trpc.group.getGroupBySlug.useQuery({
 		slug: "interngen-spring-into-banking-event"
 	});
 	const router = useRouter();
@@ -85,14 +118,19 @@ const Home = () => {
 								</span>
 							</div>
 							<div className="grid-limited auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4">
-								{INSIGHTS.map(({ image, slug, title }, index) => (
+								{props.insights.map(({ image, slug, title }, index) => (
 									<div
 										key={index}
 										className="inline-flex flex-col space-y-4"
 										role="button"
 										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 									>
-										<object className="mx-auto" type="image/svg+xml" data={image} width={175} />
+										<object
+											className="mx-auto h-auto"
+											type="image/svg+xml"
+											data={image}
+											width={175}
+										/>
 										{/*<img src={image} alt={title} className="" />*/}
 										<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
 											{title}
@@ -110,13 +148,18 @@ const Home = () => {
 								>
 									<CarouselPrevious />
 									<CarouselContent className="md:-ml-4">
-										{INSIGHTS.map(({ image, slug, title }, index) => (
+										{props.insights.map(({ image, slug, title }, index) => (
 											<CarouselItem
 												key={index}
 												onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 												className="flex flex-col items-center space-y-3 pl-2 md:pl-4"
 											>
-												<object type="image/svg+xml" data={image} width={175} />
+												<object
+													className="h-auto"
+													type="image/svg+xml"
+													data={image}
+													width={175}
+												/>
 												{/*<Image src={image} alt={title} className="" width={175} height={50} />*/}
 												<span className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
 													{title}

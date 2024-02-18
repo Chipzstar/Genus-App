@@ -148,6 +148,28 @@ enum Gender {
   other
 }
 
+enum Ethnicity {
+  english__welsh__scottish__northern_irish_or_british
+  irish
+  gypsy_or_irish_traveller
+  roma
+  any_other_white_background
+  caribbean
+  african
+  any_other_black__black_british__or_caribbean_background
+  indian
+  pakistani
+  bangladeshi
+  chinese
+  any_other_asian_background
+  white_and_black_caribbean
+  white_and_black_african
+  white_and_asian
+  any_other_mixed_or_multiple_ethnic_background
+  arab
+  any_other_ethnic_group
+}
+
 model User {
   id                Int              @id @default(autoincrement())
   createdAt         DateTime         @default(now())
@@ -158,6 +180,7 @@ model User {
   lastname          String
   profileType       ProfileType      @default(STUDENT)
   gender            Gender           @default(female)
+  ethnicity         Ethnicity        @default(african)
   completionYear    Int
   broadDegreeCourse String
   university        String

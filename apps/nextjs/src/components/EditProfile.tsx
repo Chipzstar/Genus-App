@@ -8,13 +8,22 @@ import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue
+} from "@genus/ui/select";
 import { toast } from "@genus/ui/use-toast";
 import { broadCourseCategorySchema, completionYearSchema, profileSchema, universitiesSchema } from "@genus/validators";
 import {
 	broad_course_categories,
 	career_interests,
 	completion_years,
+	ethnicity_dictionary,
 	genders,
 	universities
 } from "@genus/validators/constants";
@@ -26,6 +35,7 @@ import type { UserProfile } from "~/utils/types";
 import { useUploadThing } from "~/utils/uploadthing";
 
 type FormValues = z.infer<typeof profileSchema>;
+
 export const EditProfile = ({
 	profile,
 	updateUserProfile,
@@ -103,6 +113,7 @@ export const EditProfile = ({
 			firstname: profile.firstname,
 			lastname: profile.lastname,
 			gender: profile.gender,
+			ethnicity: profile.ethnicity,
 			university: profile.university as z.infer<typeof universitiesSchema>,
 			broad_degree_course: profile.broadDegreeCourse as z.infer<typeof broadCourseCategorySchema>,
 			degree_name: profile.degreeName,
@@ -163,6 +174,37 @@ export const EditProfile = ({
 											<SelectItem key={gender} value={gender}>
 												{formatString(gender)}
 											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="ethnicity"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Ethnicity</FormLabel>
+								<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<FormControl>
+										<SelectTrigger className="rounded-xl bg-background text-black">
+											<SelectValue />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{ethnicity_dictionary.map((e, index) => (
+											<SelectGroup>
+												<SelectLabel>{e.label}</SelectLabel>
+												{e.values.map(ethnicity => (
+													<SelectItem key={ethnicity} value={ethnicity}>
+														<span className="whitespace-pre-wrap">
+															{formatString(ethnicity)}
+														</span>
+													</SelectItem>
+												))}
+											</SelectGroup>
 										))}
 									</SelectContent>
 								</Select>
@@ -237,6 +279,57 @@ export const EditProfile = ({
 							</FormItem>
 						)}
 					/>
+					<div className="row-span-2">
+						<FormField
+							control={form.control}
+							name="career_interests"
+							render={() => (
+								<FormItem>
+									<FormLabel>Career interests</FormLabel>
+									<FormDescription className="text-neutral-600">
+										Select all that apply
+									</FormDescription>
+									<div className="flex flex-col space-y-2 sm:space-y-2">
+										{career_interests.map((item, index) => (
+											<FormField
+												key={index}
+												control={form.control}
+												name="career_interests"
+												render={({ field }) => {
+													return (
+														<FormItem
+															key={index}
+															className="flex flex-row items-start space-x-3 space-y-0"
+														>
+															<FormControl>
+																<Checkbox
+																	className="bg-background"
+																	checked={field.value?.includes(item)}
+																	onCheckedChange={(checked: boolean) => {
+																		return checked
+																			? field.onChange([...field.value, item])
+																			: field.onChange(
+																					field.value?.filter(
+																						value => value !== item
+																					)
+																				);
+																	}}
+																/>
+															</FormControl>
+															<FormLabel className="whitespace-nowrap font-normal">
+																{formatString(item)}
+															</FormLabel>
+														</FormItem>
+													);
+												}}
+											/>
+										))}
+									</div>
+									<FormMessage className="text-red-500/75" />
+								</FormItem>
+							)}
+						/>
+					</div>
 					<FormField
 						control={form.control}
 						name="completion_year"
@@ -261,53 +354,6 @@ export const EditProfile = ({
 									</SelectContent>
 								</Select>
 								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="career_interests"
-						render={() => (
-							<FormItem>
-								<FormLabel>Career interests</FormLabel>
-								<FormDescription className="text-neutral-600">Select all that apply</FormDescription>
-								<div className="flex flex-col space-y-2 sm:space-y-2">
-									{career_interests.map((item, index) => (
-										<FormField
-											key={index}
-											control={form.control}
-											name="career_interests"
-											render={({ field }) => {
-												return (
-													<FormItem
-														key={index}
-														className="flex flex-row items-start space-x-3 space-y-0"
-													>
-														<FormControl>
-															<Checkbox
-																className="bg-background"
-																checked={field.value?.includes(item)}
-																onCheckedChange={(checked: boolean) => {
-																	return checked
-																		? field.onChange([...field.value, item])
-																		: field.onChange(
-																				field.value?.filter(
-																					value => value !== item
-																				)
-																			);
-																}}
-															/>
-														</FormControl>
-														<FormLabel className="whitespace-nowrap font-normal">
-															{formatString(item)}
-														</FormLabel>
-													</FormItem>
-												);
-											}}
-										/>
-									))}
-								</div>
-								<FormMessage className="text-red-500/75" />
 							</FormItem>
 						)}
 					/>

@@ -16,12 +16,18 @@ export const PATHS = {
 	GROUPS: "/groups"
 };
 
+/**
+ * Replaces underscores, two underscores, and converts the first character of each word to uppercase, handling commas
+ * correctly.
+ * @param str the string to format
+ */
 export function formatString(str: string | undefined) {
 	if (!str) return "";
 	return str
-		.replace(/[-_]/g, " ")
-		.replace(/\b\w/g, l => l.toUpperCase())
-		.replace(/'(\w)/g, (_, letter) => "'" + letter.toLowerCase());
+		.replace(/__/g, ", ") // replace two underscores with comma followed by a space
+		.replace(/[_-]/g, " ") // replace underscore with a space
+		.replace(/\b\w/g, l => l.toUpperCase()) // convert the first character of each word to uppercase
+		.replace(/'(\w)/g, (_, letter) => "'" + letter.toLowerCase()); // handle special case for apostrophe
 }
 
 /**

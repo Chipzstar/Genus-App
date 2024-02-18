@@ -1,11 +1,12 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import * as z from "zod";
 
 import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
 	completionYearSchema,
+	ethnicitiesSchema,
 	gendersSchema,
 	universitiesSchema
 } from "@genus/validators";
@@ -14,8 +15,8 @@ import { career_interests } from "@genus/validators/constants";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-	getById: publicProcedure.input(z.number()).query(({ ctx, input }) => {
-		return ctx.prisma.user.findFirst({ where: { id: input } });
+	getById: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
+		return ctx.accelerateDB.user.findFirst({ where: { id: input } });
 	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
 		return ctx.accelerateDB.user.findUniqueOrThrow({
@@ -25,6 +26,7 @@ export const userRouter = createTRPCRouter({
 				lastname: true,
 				profileType: true,
 				gender: true,
+				ethnicity: true,
 				university: true,
 				broadDegreeCourse: true,
 				degreeName: true,
@@ -39,6 +41,7 @@ export const userRouter = createTRPCRouter({
 				firstname: z.string(),
 				lastname: z.string(),
 				gender: gendersSchema,
+				ethnicity: ethnicitiesSchema,
 				university: universitiesSchema,
 				broad_degree_course: broadCourseCategorySchema,
 				degree_name: z.string(),
@@ -56,6 +59,7 @@ export const userRouter = createTRPCRouter({
 						firstname: input.firstname,
 						lastname: input.lastname,
 						gender: input.gender,
+						ethnicity: input.ethnicity,
 						university: input.university,
 						broadDegreeCourse: input.broad_degree_course,
 						degreeName: input.degree_name,
@@ -70,7 +74,7 @@ export const userRouter = createTRPCRouter({
 				await Promise.all(
 					career_interests.map(slug => {
 						if (!activeSlugs.includes(slug) && input.career_interests.includes(slug)) {
-							ctx.prisma.careerInterest
+							ctx.accelerateDB.careerInterest
 								.update({
 									where: {
 										slug
@@ -86,7 +90,7 @@ export const userRouter = createTRPCRouter({
 								})
 								.then(result => console.log(`${slug} assigned to user ${user.clerkId}`));
 						} else if (activeSlugs.includes(slug) && !input.career_interests.includes(slug)) {
-							ctx.prisma.careerInterest
+							ctx.accelerateDB.careerInterest
 								.update({
 									where: { slug },
 									data: {

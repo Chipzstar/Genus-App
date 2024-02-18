@@ -1,8 +1,17 @@
 import * as z from "zod";
 
-import { broad_course_categories, career_interests, completion_years, genders, universities } from "./constants";
+import {
+	broad_course_categories,
+	career_interests,
+	completion_years,
+	ethnicities,
+	genders,
+	universities
+} from "./constants";
 
 export const gendersSchema = z.enum(genders);
+
+export const ethnicitiesSchema = z.enum(ethnicities);
 
 export const careerInterestsSchema = z.enum(career_interests);
 
@@ -50,6 +59,7 @@ export const signupBaseSchema = z.object({
 	}),
 	confirmPassword: z.string(),
 	gender: gendersSchema,
+	ethnicity: ethnicitiesSchema,
 	university: universitiesSchema,
 	broad_degree_course: broadCourseCategorySchema,
 	degree_name: z

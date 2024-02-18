@@ -20,6 +20,7 @@ import { useFileContext } from "~/context/FileContext";
 import { useViewEditToggle } from "~/hooks/useViewEditToggle";
 import AppLayout from "~/layout/AppLayout";
 import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
+import { capitalize } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import { useUploadThing } from "~/utils/uploadthing";
 
@@ -97,7 +98,7 @@ const UserProfilePage = () => {
 							className={cn("relative inline-block rounded-full", { "cursor-pointer": mode === "edit" })}
 						>
 							<input {...getInputProps()} />
-							<Avatar className="h-28 w-28 lg:h-36 lg:w-36">
+							<Avatar className="h-28 w-28">
 								<AvatarImage
 									className="relative"
 									src={files[0] ? URL.createObjectURL(files[0]) : user?.imageUrl}
@@ -119,16 +120,19 @@ const UserProfilePage = () => {
 								<Pencil color="black" size={14} />
 							</div>
 						</div>
-						<header className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
-							{`${user?.firstName} ${user?.lastName}`}
-						</header>
+						<div className="flex flex-col items-center space-y-1">
+							<header className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
+								{`${user?.firstName} ${user?.lastName}`}
+							</header>
+							<span className="sm:text-xl">{capitalize(profile?.profileType)}</span>
+						</div>
 					</div>
 				</NavbarBrand>
 			</Navbar>
 			{isLoading ? (
 				<Loader />
 			) : (
-				<div className="h-fill mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
+				<div className="h-fill mb-4 flex flex-col bg-white pb-8 lg:pb-0">
 					<div className="mx-auto w-full max-w-3xl">
 						{mode === "edit" ? (
 							<EditProfile

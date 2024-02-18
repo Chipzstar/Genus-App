@@ -23,10 +23,6 @@ const Notifications = () => {
 	const router = useRouter();
 	const { signOut } = useAuth();
 
-	useEffect(() => {
-		console.log(unreadStore?.notifications);
-	}, [unreadStore]);
-
 	return (
 		<div className="page-container">
 			<Navbar

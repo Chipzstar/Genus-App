@@ -47,8 +47,7 @@ export const groupRouter = createTRPCRouter({
 						}
 					},
 					cacheStrategy: {
-						ttl: 60,
-						swr: 60
+						ttl: 3
 					}
 				});
 				const messages = await ctx.accelerateDB.message.findMany({

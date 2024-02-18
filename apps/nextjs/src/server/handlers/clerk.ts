@@ -9,7 +9,7 @@ import type * as z from "zod";
 
 import type { CareerInterestSlug } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
-import type { gendersSchema } from "@genus/validators";
+import { ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
 
@@ -27,6 +27,7 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
 				firstname: payload.first_name,
 				lastname: payload.last_name,
 				gender: payload.unsafe_metadata.gender as z.infer<typeof gendersSchema>,
+				ethnicity: payload.unsafe_metadata.ethnicity as z.infer<typeof ethnicitiesSchema>,
 				university: payload.unsafe_metadata.university as string,
 				degreeName: payload.unsafe_metadata.degree_name as string,
 				completionYear: Number(payload.unsafe_metadata.completion_year),
@@ -77,8 +78,9 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
 			dbUser: user,
 			magicBellUser
 		};
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err);
+		log.error(err.message, err);
 		throw err;
 	}
 };
@@ -147,8 +149,9 @@ export const updateUser = async ({ event, prisma }: { event: UserWebhookEvent; p
 		log.debug("Updated user!!", user);
 		log.info("-----------------------------------------------");
 		return user;
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err);
+		log.error(err.message, err);
 		throw err;
 	}
 };
@@ -180,7 +183,7 @@ export const deleteUser = async ({ event, prisma }: { event: UserWebhookEvent; p
 		return;
 	} catch (err: any) {
 		console.error(err.meta);
-		// console.error(err.meta.cause);
+		log.error(err.message, err);
 		return err.meta.cause;
 	}
 };

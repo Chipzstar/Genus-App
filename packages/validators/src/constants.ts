@@ -13,6 +13,68 @@ export const completion_years = [
 ] as const;
 
 export const genders = ["male", "female", "non_binary", "other"] as const;
+
+export const ethnicity_dictionary = [
+	{
+		key: "white",
+		label: "White",
+		values: [
+			"english__welsh__scottish__northern_irish_or_british",
+			"irish",
+			"gypsy_or_irish_traveller",
+			"roma",
+			"any_other_white_background"
+		]
+	},
+	{
+		key: "black",
+		label: "Black, Black British, Caribbean or African",
+		values: ["caribbean", "african", "any_other_black__black_british__or_caribbean_background"]
+	},
+	{
+		key: "asian",
+		label: "Asian or Asian British",
+		values: ["indian", "pakistani", "bangladeshi", "chinese", "any_other_asian_background"]
+	},
+	{
+		key: "mixed",
+		label: "Mixed or multiple ethnic groups",
+		values: [
+			"white_and_black_caribbean",
+			"white_and_black_african",
+			"white_and_asian",
+			"any_other_mixed_or_multiple_ethnic_background"
+		]
+	},
+	{
+		key: "other",
+		label: "Other ethnic group",
+		values: ["arab", "any_other_ethnic_group"]
+	}
+];
+
+export const ethnicities = [
+	"english__welsh__scottish__northern_irish_or_british",
+	"irish",
+	"gypsy_or_irish_traveller",
+	"roma",
+	"any_other_white_background",
+	"caribbean",
+	"african",
+	"any_other_black__black_british__or_caribbean_background",
+	"indian",
+	"pakistani",
+	"bangladeshi",
+	"chinese",
+	"any_other_asian_background",
+	"white_and_black_caribbean",
+	"white_and_black_african",
+	"white_and_asian",
+	"any_other_mixed_or_multiple_ethnic_background",
+	"arab",
+	"any_other_ethnic_group"
+] as const;
+
 export const career_interests = ["banking_finance", "consulting", "law", "tech"] as const;
 export const broad_course_categories = [
 	"accounting-and-finance",

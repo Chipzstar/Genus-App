@@ -16,7 +16,15 @@ import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue
+} from "@genus/ui/select";
 import { ToastAction } from "@genus/ui/toast";
 import { useToast } from "@genus/ui/use-toast";
 import { signupSchema } from "@genus/validators";
@@ -24,6 +32,8 @@ import {
 	broad_course_categories,
 	career_interests,
 	completion_years,
+	ethnicities,
+	ethnicity_dictionary,
 	genders,
 	universities
 } from "@genus/validators/constants";
@@ -56,7 +66,6 @@ const Signup: NextPageWithAuthLayout = () => {
 			email: "",
 			password: "",
 			confirmPassword: "",
-			gender: "male",
 			completion_year: "2024",
 			broad_degree_course: "economics",
 			university: "king's-college-london",
@@ -202,9 +211,9 @@ const Signup: NextPageWithAuthLayout = () => {
 	);
 
 	return (
-		<div className="flex min-h-screen grow flex-col items-center justify-center gap-y-12 md:gap-12">
+		<div className="flex min-h-screen grow flex-col items-center justify-center sm:gap-y-12 md:gap-12">
 			<CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
-			<div {...getRootProps()} role="button" className="flex flex-col items-center justify-center space-y-4">
+			<div {...getRootProps()} role="button" className="mb-4 flex flex-col items-center justify-center space-y-4">
 				<input {...getInputProps()} />
 				<Avatar className="lg:h-30 lg:w-30 h-20 w-20">
 					<AvatarImage
@@ -304,6 +313,37 @@ const Signup: NextPageWithAuthLayout = () => {
 													<SelectItem key={gender} value={gender}>
 														{formatString(gender)}
 													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="ethnicity"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Ethnicity</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="[&>span]: rounded-xl">
+													<SelectValue />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{ethnicity_dictionary.map((e, index) => (
+													<SelectGroup>
+														<SelectLabel>{e.label}</SelectLabel>
+														{e.values.map(ethnicity => (
+															<SelectItem key={ethnicity} value={ethnicity}>
+																<span className="whitespace-pre-wrap">
+																	{formatString(ethnicity)}
+																</span>
+															</SelectItem>
+														))}
+													</SelectGroup>
 												))}
 											</SelectContent>
 										</Select>

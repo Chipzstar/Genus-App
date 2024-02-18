@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import type { FC } from "react";
+import { FC, useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
 import EmojiPicker from "emoji-picker-react";
 import { SmilePlus } from "lucide-react";
@@ -7,18 +6,18 @@ import { SmilePlus } from "lucide-react";
 import { cn } from "@genus/ui";
 import { Popover, PopoverContent, PopoverTrigger } from "@genus/ui/popover";
 
-import Reactions from "~/components/Reactions";
 import { trpc } from "~/utils/trpc";
-import type { Message, ThreadComment } from "~/utils/types";
+import { Message, ThreadComment } from "~/utils/types";
+import Reactions from "./Reactions";
 
 interface MessagesProps {
-	type: "message";
+	status: "message";
 	isCurrentUser: boolean;
 	message: Message;
 }
 
 interface ThreadCommentsProps {
-	type: "comment";
+	status: "comment";
 	isCurrentUser: boolean;
 	message: ThreadComment;
 }
@@ -28,15 +27,7 @@ type Props = MessagesProps | ThreadCommentsProps;
 const EmojiDialog: FC<Props> = props => {
 	const { userId } = useAuth();
 	const utils = trpc.useUtils();
-	/*const {data: reaction} = trpc.reaction.getReaction.useQuery({
-        type: props.type,
-        id: props.message.id,
-    }, {
-        enabled: !!props.message.id,
-        onSuccess(data) {
-            if (data?.messageId === 17) console.log(data)
-        }
-    })*/
+
 	const { mutate: upsertReaction } = trpc.reaction.upsertReaction.useMutation({
 		onSuccess(data) {
 			console.log(data);
@@ -54,21 +45,21 @@ const EmojiDialog: FC<Props> = props => {
 			<PopoverTrigger asChild>
 				<div
 					className={cn("flex grow items-center pl-1", {
-						"justify-end": reaction && props.type === "comment",
-						"order-first pr-1": props.isCurrentUser && props.type === "message",
+						"justify-end": reaction && props.status === "comment",
+						"order-first pr-1": props.isCurrentUser && props.status === "message",
 						"order-last": !props.isCurrentUser
 					})}
 					role="button"
 				>
 					{!reaction && <SmilePlus size={15} />}
-					{props.type === "message" ? (
+					{props.status === "message" ? (
 						<Reactions
-							message={{ ...props.message, type: "message" }}
+							message={{ ...props.message, status: "message" }}
 							isCurrentUser={props.isCurrentUser}
 						/>
 					) : (
 						<Reactions
-							message={{ ...props.message, type: "comment" }}
+							message={{ ...props.message, status: "comment" }}
 							isCurrentUser={props.isCurrentUser}
 						/>
 					)}
@@ -81,8 +72,8 @@ const EmojiDialog: FC<Props> = props => {
 							id: reaction?.id ?? -1,
 							emoji: emoji.emoji,
 							code: emoji.unified,
-							...(props.type === "message" && { messageId: props.message.id }),
-							...(props.type === "comment" && { commentId: props.message.id })
+							...(props.status === "message" && { messageId: props.message.id }),
+							...(props.status === "comment" && { commentId: props.message.id })
 						});
 					}}
 				/>

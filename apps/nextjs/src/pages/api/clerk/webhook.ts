@@ -1,9 +1,10 @@
-import { IncomingHttpHeaders } from "http";
+import type { IncomingHttpHeaders } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
 import { buffer } from "micro";
 import { log } from "next-axiom";
-import { Webhook, WebhookRequiredHeaders } from "svix";
+import type { WebhookRequiredHeaders } from "svix";
+import { Webhook } from "svix";
 
 import { db } from "@genus/db";
 

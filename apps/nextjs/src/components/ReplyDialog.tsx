@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import { useSession } from "@clerk/nextjs";
 import { Listbox, ListboxItem } from "@nextui-org/react";
@@ -13,15 +12,15 @@ import { ChatBubble } from "~/components/ChatBubble";
 import EmojiDialog from "~/components/EmojiDialog";
 import { formatTimestamp } from "~/utils";
 import { trpc } from "~/utils/trpc";
-import type { Message } from "~/utils/types";
+import { Message } from "~/utils/types";
 import ChatInput from "./ChatInput";
 
-interface Props {
+interface DialogProps {
 	message: Message;
 	isMember: boolean;
 }
 
-const ReplyDialog = ({ message, isMember }: Props) => {
+const ReplyDialog = ({ message, isMember }: DialogProps) => {
 	const { session } = useSession();
 	const { data: thread } = trpc.thread.getThreadById.useQuery(
 		{
@@ -57,7 +56,7 @@ const ReplyDialog = ({ message, isMember }: Props) => {
 								currentUser={currentMessageAuthor}
 								member={isMember}
 								hasNextMessageFromSameUser={false}
-								message={{ ...message, type: "message" }}
+								message={{ ...message, status: "message" }}
 							/>
 							<div
 								className={cn("flex items-center", {
@@ -112,7 +111,7 @@ const ReplyDialog = ({ message, isMember }: Props) => {
 													currentUser={isCurrentUser}
 													member={isMember}
 													hasNextMessageFromSameUser={false}
-													message={{ ...c, type: "comment" }}
+													message={{ ...c, status: "comment" }}
 												/>
 												<div className="mt-1.5 flex grow items-center">
 													<div className={cn("relative h-6 w-6")}>
@@ -138,7 +137,7 @@ const ReplyDialog = ({ message, isMember }: Props) => {
 														{formatTimestamp(c.createdAt, "distance")}
 													</span>
 													<EmojiDialog
-														type="comment"
+														status="comment"
 														isCurrentUser={isCurrentUser}
 														message={c}
 													/>

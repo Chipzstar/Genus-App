@@ -36,11 +36,13 @@ model Comment {
   content   String
   author    User       @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
   authorId  String
+  group     Group      @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId   String
   thread    Thread     @relation(fields: [threadId], references: [threadId], onDelete: Cascade)
   threadId  String
   reactions Reaction[]
 
-  @@index([authorId, threadId])
+  @@index([authorId, threadId, groupId])
 }
 
 model Group {
@@ -52,6 +54,8 @@ model Group {
   name      String
   members   GroupUser[]
   messages  Message[]
+  Comment   Comment[]
+  Thread    Thread[]
 }
 
 enum GroupRole {
@@ -74,15 +78,22 @@ model GroupUser {
   @@index([userId, groupId])
 }
 
+enum MessageType {
+  NORMAL
+  EVENT
+  ANNOUNCEMENT
+}
+
 model Message {
-  id        Int        @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   content   String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  messageId String     @unique
-  author    User       @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  messageId String      @unique
+  type      MessageType @default(NORMAL)
+  author    User        @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
   authorId  String
-  group     Group      @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  group     Group       @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
   groupId   String
   thread    Thread?
   reactions Reaction[]
@@ -117,9 +128,11 @@ model Thread {
   authorId  String
   message   Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
   messageId Int       @unique
+  group     Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId   String
   comments  Comment[]
 
-  @@index([authorId, messageId])
+  @@index([authorId, messageId, groupId])
 }
 
 enum ProfileType {

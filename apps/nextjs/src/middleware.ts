@@ -21,6 +21,10 @@ export default authMiddleware({
 			const signInUrl = new URL("/login", req.url);
 			return redirectToSignIn({ returnBackUrl: req.url });
 		}
+		// handle users who aren't authenticated navigating to a public route
+		if (!auth.userId && auth.isPublicRoute) {
+			return NextResponse.next();
+		}
 		// handle users who are authenticated navigating to a public route
 		if (auth.userId && auth.isPublicRoute) {
 			const authUrl = new URL("/", req.url);

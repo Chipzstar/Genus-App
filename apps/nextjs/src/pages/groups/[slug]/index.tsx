@@ -99,7 +99,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	}, [router.query]);
 
 	const { isMember, btnText, onClick, textSize } = useMemo(() => {
-		if (data.group?.members.find((m: GroupMember) => m.userId === userId)) {
+		if (data?.group?.members.find((m: GroupMember) => m.userId === userId)) {
 			return {
 				isMember: true,
 				btnText: "Members",
@@ -113,7 +113,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 			onClick: () => joinGroup({ slug }),
 			textSize: "text-xl sm:text-2xl"
 		};
-	}, [data.group?.members, userId, joinGroup, slug]);
+	}, [data?.group.members, userId, joinGroup, slug]);
 
 	return (
 		<div className="sm:h-container mx-auto flex max-w-3xl flex-col overflow-y-hidden pb-0 pt-4 text-primary">

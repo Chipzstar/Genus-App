@@ -87,7 +87,7 @@ export const messageRouter = createTRPCRouter({
 		)
 		.query(async ({ ctx, input }) => {
 			try {
-				const messages = await ctx.prisma.message.findMany({
+				const messages = await ctx.accelerateDB.message.findMany({
 					where: {
 						groupId: input.groupId
 					},

@@ -53,7 +53,7 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 												currentUser={isCurrentUser}
 												member={isMember}
 												hasNextMessageFromSameUser={hasNextMessageFromSameUser}
-												message={{ ...message, type: "message" }}
+												message={{ ...message, status: "message" }}
 											/>
 										</ContextMenuTrigger>
 										<ContextMenuContent updatePositionStrategy="optimized" alignOffset={5}>
@@ -79,7 +79,7 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 										<div className="flex items-center">
 											<ReplyDialog message={message} isMember={isMember} />
 											<EmojiDialog
-												type="message"
+												status="message"
 												isCurrentUser={isCurrentUser}
 												message={message}
 											/>

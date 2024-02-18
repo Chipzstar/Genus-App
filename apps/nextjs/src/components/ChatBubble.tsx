@@ -8,7 +8,7 @@ export function ChatBubble(props: {
 	currentUser: boolean;
 	member: boolean;
 	hasNextMessageFromSameUser: boolean;
-	message: ({ type: "message" } & Message) | ({ type: "comment" } & ThreadComment);
+	message: ({ status: "message" } & Message) | ({ status: "comment" } & ThreadComment);
 }) {
 	return (
 		<Fragment>

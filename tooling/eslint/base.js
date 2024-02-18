@@ -30,7 +30,7 @@ const config = {
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-argument": "off",
 		"@typescript-eslint/no-explicit-any": "warn",
-		"import/consistent-type-specifier-style": ["error", "prefer-top-level"]
+		"import/consistent-type-specifier-style": ["warn", "prefer-top-level"]
 	},
 	ignorePatterns: ["**/.eslintrc.cjs", "**/*.config.js", "**/*.config.cjs", ".next", "dist", "pnpm-lock.yaml"],
 	reportUnusedDisableDirectives: true

@@ -14,18 +14,22 @@ import { FileProvider } from "~/context/FileContext";
 import Layout from "~/layout/Layout";
 import { trpc } from "~/utils/trpc";
 
-export type NextPageWithLayout<P extends (args: unknown) => NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
+export type NextPageWithAppLayout<P extends (args: unknown) => NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
 	getLayout?: (page: ReactElement, props: InferGetServerSidePropsType<P>) => ReactNode;
 };
 
+export type NextPageWithAuthLayout<P = NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
+	getLayout?: (page: ReactElement) => ReactNode;
+};
+
 type AppPropsWithLayout = AppProps & {
-	Component: NextPageWithLayout<any>;
+	Component: NextPageWithAuthLayout<any> | NextPageWithAppLayout<any>;
 };
 
 type AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) => any;
 
 const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) => {
-	const getLayout = Component.getLayout ?? (page => page);
+	const getLayout = Component.getLayout ?? ((page: any) => page);
 	return getLayout(
 		<ClerkProvider {...pageProps} publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
 			<NextUIProvider>

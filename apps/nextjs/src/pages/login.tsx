@@ -17,9 +17,9 @@ import { loginSchema } from "@genus/validators";
 
 import { PATHS } from "~/utils";
 import AuthLayout from "../layout/AuthLayout";
-import type { NextPageWithLayout } from "./_app";
+import { NextPageWithAuthLayout } from "./_app";
 
-const Login: NextPageWithLayout = () => {
+const Login: NextPageWithAuthLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
 	const { toast } = useToast();
 	const [loading, setLoading] = React.useState(false);

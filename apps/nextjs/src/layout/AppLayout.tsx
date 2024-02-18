@@ -19,6 +19,7 @@ const AppLayout = ({ children, userId }: PropsWithChildren<Props>) => {
 		<MagicBellProvider
 			apiKey={MAGICBELL_API_KEY}
 			userExternalId={userId}
+			userEmail={undefined!}
 			// userKey={user?.externalId ?? "H+paQwTZOCGQVumXJ4bnQj5wY9O0bnEfJoqSNP69zKM="}
 			stores={[
 				{ id: "default", defaultQueryParams: {} },

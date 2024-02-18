@@ -56,7 +56,7 @@ const ReplyDialog = ({ message, isMember }: DialogProps) => {
 								currentUser={currentMessageAuthor}
 								member={isMember}
 								hasNextMessageFromSameUser={false}
-								message={{ ...message, type: "message" }}
+								message={{ ...message, status: "message" }}
 							/>
 							<div
 								className={cn("flex items-center", {
@@ -111,7 +111,7 @@ const ReplyDialog = ({ message, isMember }: DialogProps) => {
 													currentUser={isCurrentUser}
 													member={isMember}
 													hasNextMessageFromSameUser={false}
-													message={{ ...c, type: "comment" }}
+													message={{ ...c, status: "comment" }}
 												/>
 												<div className="mt-1.5 flex grow items-center">
 													<div className={cn("relative h-6 w-6")}>
@@ -137,7 +137,7 @@ const ReplyDialog = ({ message, isMember }: DialogProps) => {
 														{formatTimestamp(c.createdAt, "distance")}
 													</span>
 													<EmojiDialog
-														type="comment"
+														status="comment"
 														isCurrentUser={isCurrentUser}
 														message={c}
 													/>

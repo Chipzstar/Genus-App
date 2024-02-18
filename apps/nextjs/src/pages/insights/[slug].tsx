@@ -80,11 +80,9 @@ const InsightSlug = (props: PageProps) => {
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
 						<object
-							className="mx-auto h-52 w-76"
+							className="mx-auto h-36 w-44 sm:h-52 sm:w-76"
 							type="image/svg+xml"
 							data={urlForImage(mainImage).height(300).width(450).url()}
-							/*width={300}
-							height={200}*/
 						/>
 						{/*<Image
 						  className="h-auto"

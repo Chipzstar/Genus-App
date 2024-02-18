@@ -62,12 +62,12 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 		<div className="page-container">
 			<Navbar
 				classNames={{
-					base: "px-3 sm:px-0 pb-3 text-white",
+					base: "px-3 pb-3 text-white",
 					brand: "w-full flex flex-col justify-center items-center space-y-1"
 				}}
 			>
 				<NavbarBrand>
-					<div className="absolute left-0" role="button" onClick={() => router.back()}>
+					<div className="absolute left-0 top-0" role="button" onClick={() => router.back()}>
 						<ChevronLeft size={40} color="white" />
 					</div>
 					<Image src="/images/spring-weeks-ldn.svg" alt="genus-white" width={100} height={75} />

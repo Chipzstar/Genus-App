@@ -132,8 +132,8 @@ const UserProfilePage = () => {
 			{isLoading ? (
 				<Loader />
 			) : (
-				<div className="h-fill mb-4 flex flex-col bg-white pb-8 lg:pb-0">
-					<div className="mx-auto w-full max-w-3xl">
+				<div className="profile-form mb-4 flex flex-col bg-white pb-8 lg:pb-0">
+					<div className="mx-auto h-full w-full max-w-3xl">
 						{mode === "edit" ? (
 							<EditProfile
 								profile={profile!}

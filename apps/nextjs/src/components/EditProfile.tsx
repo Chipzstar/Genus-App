@@ -279,7 +279,7 @@ export const EditProfile = ({
 							</FormItem>
 						)}
 					/>
-					<div className="row-span-2">
+					<div className="order-last row-span-2 md:order-none">
 						<FormField
 							control={form.control}
 							name="career_interests"

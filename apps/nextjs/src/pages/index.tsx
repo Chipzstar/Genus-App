@@ -67,13 +67,6 @@ const Home = () => {
 								width={200}
 								height={150}
 							/>
-							{/*<Image
-							  src="/images/spring-weeks-ldn.svg"
-							  alt="Spring Weeks London"
-							  width={200}
-							  height={150}
-							  objectFit=""
-							/>*/}
 							<span className="text-ellipsis text-center text-base font-semibold md:text-lg">
 								InternGen: Spring into Banking
 							</span>
@@ -123,15 +116,9 @@ const Home = () => {
 												onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 												className="flex flex-col items-center space-y-3 pl-2 md:pl-4"
 											>
-												<object
-													className="mx-auto"
-													type="image/svg+xml"
-													data={image}
-													width={175}
-													height={50}
-												/>
+												<object type="image/svg+xml" data={image} height={100} />
 												{/*<Image src={image} alt={title} className="" width={175} height={50} />*/}
-												<span className="overflow-hidden text-ellipsis text-center text-xs font-semibold">
+												<span className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
 													{title}
 												</span>
 											</CarouselItem>

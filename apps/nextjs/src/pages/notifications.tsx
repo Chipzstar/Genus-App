@@ -45,7 +45,7 @@ const Notifications = () => {
 				<div className="mx-auto max-w-3xl">
 					<Tabs defaultValue="unread">
 						<div className="flex items-center px-4 py-2">
-							<h1 className="text-xl font-bold">Messages</h1>
+							<h1 className="text-xl font-bold">Notifications</h1>
 							<TabsList className="ml-auto">
 								<TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">
 									Unread

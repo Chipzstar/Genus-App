@@ -63,9 +63,8 @@ export const EditProfile = ({
 					description: "Your profile has been updated.",
 					duration: 5000
 				});
-				void (
-					files.length &&
-					startUpload(files).then(res => {
+				if (files.length) {
+					void startUpload(files).then(res => {
 						if (clerk?.user && res?.[0]) {
 							void clerk.user
 								.setProfileImage({
@@ -74,8 +73,16 @@ export const EditProfile = ({
 								.then(() => console.log("profile image set in Clerk"))
 								.catch(err => console.error(err));
 						}
-					})
-				);
+					});
+				} else {
+					clerk?.user &&
+						clerk.user
+							.update({
+								firstName: data.firstname,
+								lastName: data.lastname
+							})
+							.then(() => console.log("profile updated in Clerk"));
+				}
 				resetMode();
 			} catch (err) {
 				console.error(err);

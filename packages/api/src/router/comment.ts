@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
-import { log } from "next-axiom";
 import * as z from "zod";
 
 import { formatString } from "@genus/validators/helpers";
@@ -84,14 +83,14 @@ export const commentRouter = createTRPCRouter({
 						title: `Comment from ${author}`,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
-						category: formatString(thread.group.slug),
-						topic: thread.threadId,
+						topic: formatString(thread.group.slug),
+						category: "comment",
 						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
 					console.log(notification);
-					log.info("-----------------------------------------------");
-					log.debug("New notification!!", notification);
-					log.info("-----------------------------------------------");
+					ctx.logger.info("-----------------------------------------------");
+					ctx.logger.debug("New notification!!", notification);
+					ctx.logger.info("-----------------------------------------------");
 				}
 				return thread;
 			}
@@ -135,17 +134,18 @@ export const commentRouter = createTRPCRouter({
 				title: `Comment from ${author}`,
 				content: input.content,
 				recipients: recipients.map(c => ({ external_id: c.authorId })),
-				topic: input.threadId,
-				category: formatString(comment.group.slug),
+				category: "comment",
+				topic: formatString(comment.group.slug),
 				action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
 			});
 			console.log(notification);
-			log.info("-----------------------------------------------");
-			log.debug("New notification!!", notification);
-			log.info("------------------------------------------------");
+			ctx.logger.info("-----------------------------------------------");
+			ctx.logger.debug("New notification!!", notification);
+			ctx.logger.info("------------------------------------------------");
 
 			return comment;
 		} catch (err) {
+			ctx.logger.error("Something went wrong!", err);
 			throw new TRPCError({
 				code: "BAD_REQUEST",
 				message: "Something went wrong!",

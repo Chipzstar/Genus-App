@@ -3,6 +3,8 @@ import { nanoid } from "nanoid";
 import { log } from "next-axiom";
 import { z } from "zod";
 
+import { formatString } from "@genus/validators/helpers";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const messageRouter = createTRPCRouter({
@@ -61,6 +63,7 @@ export const messageRouter = createTRPCRouter({
 						content: input.content,
 						recipients: recipients.map(r => ({ email: r.user.email, external_id: r.userId })),
 						topic: message.messageId,
+						category: formatString(message.group.slug),
 						action_url: `/${message.group.slug}?messageId=${message.messageId}`
 					})
 					.then(notification => console.log(notification))

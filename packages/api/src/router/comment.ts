@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import * as z from "zod";
 
+import { formatString } from "@genus/validators/helpers";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 function timeout(ms: number) {
@@ -81,6 +83,7 @@ export const commentRouter = createTRPCRouter({
 						title: `Comment from ${author}`,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
+						category: formatString(thread.group.slug),
 						topic: thread.threadId,
 						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
@@ -129,6 +132,7 @@ export const commentRouter = createTRPCRouter({
 					content: input.content,
 					recipients: recipients.map(c => ({ external_id: c.authorId })),
 					topic: input.threadId,
+					category: formatString(comment.group.slug),
 					action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
 				})
 				.then(notification => console.log(notification))

@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import { useSession } from "@clerk/nextjs";
-import { cn } from "@genus/ui";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@genus/ui/context-menu";
-import { ChatBubble } from "~/components/ChatBubble";
-import EmojiDialog from "~/components/EmojiDialog";
-import ReplyDialog from "~/components/ReplyDialog";
-import { formatTimestamp } from "~/utils";
-import { Messages } from "~/utils/types";
-import type { Message } from "~/utils/types";
+import React, {useRef} from 'react'
+import Image from 'next/image'
+import {useSession} from '@clerk/nextjs'
+import {cn} from '@genus/ui'
+import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from '@genus/ui/context-menu'
+import {ChatBubble} from '~/components/ChatBubble'
+import EmojiDialog from '~/components/EmojiDialog'
+import ReplyDialog from '~/components/ReplyDialog'
+import {formatTimestamp} from '~/utils'
+import type {Message} from '~/utils/types'
+import {Messages} from '~/utils/types'
 
 interface MessagesProps {
 	messages: Messages;

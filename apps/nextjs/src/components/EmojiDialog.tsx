@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
 import type { FC } from "react";
+import React, { useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
 import EmojiPicker from "emoji-picker-react";
 import { SmilePlus } from "lucide-react";

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
 import type { ChangeEvent, ReactElement } from "react";
+import React, { useCallback, useState } from "react";
 import type { GetStaticProps } from "next";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";

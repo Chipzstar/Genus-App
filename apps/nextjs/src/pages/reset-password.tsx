@@ -8,7 +8,7 @@ import * as z from "zod";
 
 import { ToastAction } from "@genus/ui/toast";
 import { toast } from "@genus/ui/use-toast";
-import { forgotPasswordSchema, resetPasswordSchema } from "@genus/validators";
+import { forgotPasswordSchema } from "@genus/validators";
 
 import type { EmailFormValues } from "~/components/CheckEmailForm";
 import { CheckEmailForm } from "~/components/CheckEmailForm";

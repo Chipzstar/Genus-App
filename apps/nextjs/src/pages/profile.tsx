@@ -1,27 +1,34 @@
 "use client";
 
-import type { ReactElement } from "react";
-import React, { useCallback } from "react";
+import React, { ReactElement, useCallback, useRef } from "react";
+import { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useToggle } from "usehooks-ts";
 
 import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { toast } from "@genus/ui/use-toast";
 
 import { EditProfile } from "~/components/EditProfile";
+import Loader from "~/components/Loader";
 import ViewProfile from "~/components/ViewProfile";
 import { useFileContext } from "~/context/FileContext";
 import { useViewEditToggle } from "~/hooks/useViewEditToggle";
 import AppLayout from "~/layout/AppLayout";
+import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
 import { trpc } from "~/utils/trpc";
 import { useUploadThing } from "~/utils/uploadthing";
 
+export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
+
 const UserProfilePage = () => {
 	const [mode, toggle, setValue] = useViewEditToggle();
+	const [opened, toggleBell, setBell] = useToggle(false);
+	const launcherRef = useRef<HTMLButtonElement>(null);
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
 	const onDrop = useCallback(
@@ -34,7 +41,7 @@ const UserProfilePage = () => {
 	const { signOut, user } = useClerk();
 
 	// TRPC queries
-	const { data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
+	const { isLoading, data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
 		onError(err) {
 			toast({
 				title: "Error",
@@ -118,24 +125,28 @@ const UserProfilePage = () => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<div className="h-fill mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
-				<div className="mx-auto w-full max-w-3xl">
-					{mode === "edit" ? (
-						<EditProfile
-							profile={profile!}
-							updateUserProfile={updateUserProfile}
-							resetMode={() => setValue("view")}
-						/>
-					) : (
-						<ViewProfile profile={profile} />
-					)}
+			{isLoading ? (
+				<Loader />
+			) : (
+				<div className="h-fill mb-4 flex h-full flex-col bg-white pb-8 lg:pb-0">
+					<div className="mx-auto w-full max-w-3xl">
+						{mode === "edit" ? (
+							<EditProfile
+								profile={profile!}
+								updateUserProfile={updateUserProfile}
+								resetMode={() => setValue("view")}
+							/>
+						) : (
+							<ViewProfile profile={profile} />
+						)}
+					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };
 
-UserProfilePage.getLayout = function getLayout(page: ReactElement) {
-	return <AppLayout>{page}</AppLayout>;
+UserProfilePage.getLayout = function getLayout(page: ReactElement, props: { userId: string }) {
+	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 export default UserProfilePage;

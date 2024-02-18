@@ -82,7 +82,7 @@ const Members = (props: any) => {
 				<div className="mx-auto max-w-3xl">
 					<header className="text-lg font-semibold sm:text-2xl">Members</header>
 					<ListBoxWrapper>
-						<Listbox items={members} aria-label="Dynamic Actions" onAction={key => alert(key)}>
+						<Listbox items={members} aria-label="Dynamic Actions">
 							{m => (
 								<ListboxItem key={m.key}>
 									<div className="flex items-center space-x-2">

@@ -1,14 +1,19 @@
 import { clerkClient } from "@clerk/nextjs";
 import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/dist/types/api";
 import type { PrismaClient } from "@prisma/client";
+import Base64 from "crypto-js/enc-base64";
+import hmacSHA256 from "crypto-js/hmac-sha256";
 import { log } from "next-axiom";
 import shortHash from "shorthash2";
 import type * as z from "zod";
 
 import type { CareerInterestSlug } from "@genus/db";
+import { magicbell } from "@genus/magicbell";
 import type { gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
+
+const MAGICBELL_API_SECRET = process.env.MAGICBELL_API_SECRET!;
 
 export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent; prisma: PrismaClient }) => {
 	try {
@@ -17,7 +22,7 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
 		// create the user
 		const user = await prisma.user.create({
 			data: {
-				clerkId: String(event.data.id),
+				clerkId: String(payload.id),
 				email: String(payload.email_addresses[0]?.email_address),
 				firstname: payload.first_name,
 				lastname: payload.last_name,
@@ -28,6 +33,16 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
 				broadDegreeCourse: payload.unsafe_metadata.broad_degree_course as string
 			}
 		});
+		const magicBellUser = await magicbell.users.create({
+			external_id: payload.id,
+			email: payload.email_addresses[0]?.email_address,
+			first_name: payload.first_name,
+			last_name: payload.last_name,
+			custom_attributes: {
+				profileType: user.profileType
+			}
+		});
+		console.log(magicBellUser);
 		// add the user to the relevant career interest record
 		await Promise.all(
 			careerInterests.map(slug => {
@@ -50,10 +65,18 @@ export const createNewUser = async ({ event, prisma }: { event: UserWebhookEvent
 					);
 			})
 		);
+		const userEmailHMAC = Base64.stringify(hmacSHA256(user.email, MAGICBELL_API_SECRET));
+		// attach the HMAC record to the clerk user external_id
+		await clerkClient.users.updateUser(payload.id, {
+			externalId: userEmailHMAC
+		});
 		log.info("-----------------------------------------------");
 		log.debug("New user!!", user);
 		log.info("-----------------------------------------------");
-		return user;
+		return {
+			dbUser: user,
+			magicBellUser
+		};
 	} catch (err) {
 		console.error(err);
 		throw err;

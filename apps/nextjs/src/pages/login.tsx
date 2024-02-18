@@ -1,7 +1,6 @@
 "use client";
 
-import React, { ReactElement, useCallback, useState } from "react";
-import Image from "next/image";
+import React, { ReactElement, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";

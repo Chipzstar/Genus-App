@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
-    children: React.ReactNode
+	children: React.ReactNode;
 }
 
-const AuthLayout = ({children}: Props) => {
-    return (
-        <main className='min-h-screen m-auto text-white via-primary bg-gradient-to-r from-teal-500 to-purple-300 md:px-4 p-6 md:py-8'>
-            {children}
-        </main>
-    );
+const AuthLayout = ({ children }: Props) => {
+	return (
+		<main className="m-auto min-h-screen bg-gradient-to-r from-teal-500 via-primary to-purple-300 p-6 text-white md:px-4 md:py-8">
+			{children}
+		</main>
+	);
 };
 
 export default AuthLayout;

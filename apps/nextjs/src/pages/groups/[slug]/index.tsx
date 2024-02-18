@@ -1,12 +1,12 @@
 import type { ReactElement } from "react";
-import React, { useMemo } from "react";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useSession } from "@clerk/nextjs";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next/types";
+import { useAuth } from "@clerk/nextjs";
+import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
-import { ThreeDots } from "react-loader-spinner";
 
 import { appRouter } from "@genus/api";
 import { createContextInner } from "@genus/api/src/context";
@@ -16,25 +16,26 @@ import { useToast } from "@genus/ui/use-toast";
 
 import ChatInput from "~/components/ChatInput";
 import { GroupStatusButton } from "~/components/GroupStatusButton";
+import Loader from "~/components/Loader";
 import Messages from "~/components/Messages";
 import AppLayout from "~/layout/AppLayout";
 import { trpc } from "~/utils/trpc";
 import type { GroupMember } from "~/utils/types";
 
-export const getServerSideProps = (async ctx => {
-	const params = ctx.params;
-
+export const getServerSideProps = (async ({ req, params }) => {
+	const { userId } = getAuth(req);
+	if (!userId) return { props: {} };
 	const helpers = createServerSideHelpers({
 		router: appRouter,
 		transformer,
 		ctx: await createContextInner({
 			auth: {
-				userId: ""
+				userId
 			}
 		})
 	});
 	/*
-	 * Prefetching the `post.byId` query.
+	 * Prefetching the `group.getGroupBySlug` query.
 	 * `prefetch` does not return the result and never throws - if you need that behavior, use `fetch` instead.
 	 */
 	params && (await helpers.group.getGroupBySlug.prefetch({ slug: params.slug as string }));
@@ -42,6 +43,8 @@ export const getServerSideProps = (async ctx => {
 	return {
 		props: {
 			...params,
+			...buildClerkProps(req),
+			userId,
 			trpcState: helpers.dehydrate()
 		} // will be passed to the page component as props
 	};
@@ -50,10 +53,10 @@ export const getServerSideProps = (async ctx => {
 const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	const router = useRouter();
 	const slug = router.query.slug as string;
-
 	const { toast } = useToast();
+
 	const utils = trpc.useUtils();
-	const { session } = useSession();
+	const { userId } = useAuth();
 
 	const { mutate: joinGroup } = trpc.group.joinGroup.useMutation({
 		onSuccess(data) {
@@ -73,12 +76,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 			});
 		}
 	});
-	const {
-		isLoading,
-		data: group,
-		failureReason,
-		error
-	} = trpc.group.getGroupBySlug.useQuery(
+	const { isLoading, data, failureReason, error } = trpc.group.getGroupBySlug.useQuery(
 		{
 			slug
 		},
@@ -96,8 +94,12 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 		}
 	);
 
+	useEffect(() => {
+		console.log(router.query);
+	}, [router.query]);
+
 	const { isMember, btnText, onClick, textSize } = useMemo(() => {
-		if (group?.members.find((m: GroupMember) => m.userId === session?.user.id)) {
+		if (data.group?.members.find((m: GroupMember) => m.userId === userId)) {
 			return {
 				isMember: true,
 				btnText: "Members",
@@ -111,7 +113,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 			onClick: () => joinGroup({ slug }),
 			textSize: "text-xl sm:text-2xl"
 		};
-	}, [group?.members, session?.user.id, joinGroup, slug]);
+	}, [data.group?.members, userId, joinGroup, slug]);
 
 	return (
 		<div className="sm:h-container mx-auto flex max-w-3xl flex-col overflow-y-hidden pb-0 pt-4 text-primary">
@@ -130,24 +132,11 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 				{!isLoading && <GroupStatusButton title={btnText} onClick={onClick} textSize={textSize} />}
 			</Navbar>
 			{isLoading ? (
-				<div className="flex grow items-center justify-center p-6 sm:px-12">
-					<div className="text-white">
-						<ThreeDots
-							visible={true}
-							height="80"
-							width="80"
-							color="white"
-							radius="9"
-							ariaLabel="three-dots-loading"
-							wrapperStyle={{}}
-							wrapperClass=""
-						/>
-					</div>
-				</div>
-			) : group ? (
+				<Loader />
+			) : data?.group ? (
 				<div className="chat-wrapper">
-					<Messages chatId={group.groupId} messages={group.messages} isMember={isMember} />
-					<ChatInput type="message" chatId={group.groupId} isMember={isMember} />
+					<Messages chatId={data.group.groupId} messages={data.messages} isMember={isMember} />
+					<ChatInput type="message" chatId={data.group.groupId} isMember={isMember} />
 				</div>
 			) : (
 				<div className="flex h-full flex-col justify-center p-6 sm:px-12">
@@ -167,8 +156,8 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	);
 };
 
-GroupSlug.getLayout = function getLayout(page: ReactElement) {
-	return <AppLayout>{page}</AppLayout>;
+GroupSlug.getLayout = function getLayout(page: ReactElement, props: { userId: string }) {
+	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
 export default GroupSlug;

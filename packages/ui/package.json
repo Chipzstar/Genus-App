@@ -2,42 +2,43 @@
   "name": "@genus/ui",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./icons": "./src/icons.ts",
-    "./alert": "./src/ui/alert.tsx",
-    "./avatar": "./src/ui/avatar.tsx",
-    "./button": "./src/ui/button.tsx",
+    "./alert": "./src/components/alert.tsx",
+    "./avatar": "./src/components/avatar.tsx",
+    "./button": "./src/components/button.tsx",
     "./calendar": "./src/calendar.tsx",
-    "./card": "./src/ui/card.tsx",
-    "./carousel": "./src/ui/carousel.tsx",
-    "./checkbox": "./src/ui/checkbox.tsx",
-    "./context-menu": "./src/ui/context-menu.tsx",
+    "./card": "./src/components/card.tsx",
+    "./carousel": "./src/components/carousel.tsx",
+    "./checkbox": "./src/components/checkbox.tsx",
+    "./context-menu": "./src/components/context-menu.tsx",
     "./command": "./src/command.tsx",
     "./data-table": "./src/data-table.tsx",
-    "./dialog": "./src/ui/dialog.tsx",
+    "./dialog": "./src/components/dialog.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
-    "./form": "./src/ui/form.tsx",
-    "./input": "./src/ui/input.tsx",
-    "./label": "./src/ui/label.tsx",
-    "./popover": "./src/ui/popover.tsx",
-    "./scroll-area": "./src/ui/scroll-area.tsx",
-    "./separator": "./src/ui/separator.tsx",
-    "./select": "./src/ui/select.tsx",
-    "./switch": "./src/ui/switch.tsx",
-    "./sheet": "./src/ui/sheet.tsx",
+    "./form": "./src/components/form.tsx",
+    "./input": "./src/components/input.tsx",
+    "./label": "./src/components/label.tsx",
+    "./popover": "./src/components/popover.tsx",
+    "./scroll-area": "./src/components/scroll-area.tsx",
+    "./separator": "./src/components/separator.tsx",
+    "./select": "./src/components/select.tsx",
+    "./switch": "./src/components/switch.tsx",
+    "./sheet": "./src/components/sheet.tsx",
     "./table": "./src/table.tsx",
-    "./tabs": "./src/tabs.tsx",
-    "./toast": "./src/ui/toast.tsx",
-    "./toaster": "./src/ui/toaster.tsx",
-    "./textarea": "./src/ui/textarea.tsx",
-    "./use-toast": "./src/ui/use-toast.ts"
+    "./tabs": "./src/components/tabs.tsx",
+    "./toast": "./src/components/toast.tsx",
+    "./toaster": "./src/components/toaster.tsx",
+    "./textarea": "./src/components/textarea.tsx",
+    "./use-toast": "./src/components/use-toast.ts"
   },
   "typesVersions": {
     "*": {
       "*": [
         "src/*",
-        "src/ui/*"
+        "src/components/*"
       ]
     }
   },
@@ -61,6 +62,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -82,7 +84,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "@genus/eslint-config/base"
+      "@genus/eslint-config/base",
+      "@genus/eslint-config/react"
     ]
   },
   "prettier": "@genus/prettier-config"

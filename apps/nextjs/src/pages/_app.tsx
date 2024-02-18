@@ -2,7 +2,7 @@
 import "../styles/globals.css";
 
 import type { ReactElement, ReactNode } from "react";
-import type { NextPage } from "next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ClerkProvider } from "@clerk/nextjs";
 import { NextUIProvider } from "@nextui-org/react";
@@ -14,12 +14,12 @@ import { FileProvider } from "~/context/FileContext";
 import Layout from "~/layout/Layout";
 import { trpc } from "~/utils/trpc";
 
-export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
-	getLayout?: (page: ReactElement) => ReactNode;
+export type NextPageWithLayout<P extends (args: unknown) => NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
+	getLayout?: (page: ReactElement, props: InferGetServerSidePropsType<P>) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-	Component: NextPageWithLayout;
+	Component: NextPageWithLayout<any>;
 };
 
 type AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: AppPropsWithLayout) => any;
@@ -32,13 +32,14 @@ const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: Ap
 				<ToastProvider swipeDirection="right" duration={3000}>
 					<FileProvider>
 						<Layout>
-							<ProgressBar height="4px" color="#fff" options={{ showSpinner: false }} shallowRouting />
+							<ProgressBar height="4px" color="#fff" options={{ showSpinner: true }} shallowRouting />
 							<Component {...pageProps} />
 						</Layout>
 					</FileProvider>
 				</ToastProvider>
 			</NextUIProvider>
-		</ClerkProvider>
+		</ClerkProvider>,
+		pageProps
 	);
 };
 

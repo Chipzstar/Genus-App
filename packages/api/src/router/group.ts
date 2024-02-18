@@ -27,7 +27,7 @@ export const groupRouter = createTRPCRouter({
 		)
 		.query(async ({ ctx, input }) => {
 			try {
-				return await ctx.accelerateDB.group.findUniqueOrThrow({
+				const group = await ctx.accelerateDB.group.findUniqueOrThrow({
 					where: {
 						slug: input.slug
 					},
@@ -44,22 +44,6 @@ export const groupRouter = createTRPCRouter({
 								},
 								role: true
 							}
-						},
-						messages: {
-							include: {
-								author: {
-									select: {
-										firstname: true,
-										lastname: true,
-										imageUrl: true
-									}
-								},
-								reactions: true,
-								thread: true
-							},
-							orderBy: {
-								createdAt: "desc"
-							}
 						}
 					},
 					cacheStrategy: {
@@ -67,6 +51,29 @@ export const groupRouter = createTRPCRouter({
 						swr: 60
 					}
 				});
+				const messages = await ctx.accelerateDB.message.findMany({
+					where: {
+						groupId: group.groupId
+					},
+					orderBy: {
+						createdAt: "desc"
+					},
+					include: {
+						author: {
+							select: {
+								firstname: true,
+								lastname: true,
+								imageUrl: true
+							}
+						},
+						reactions: true,
+						thread: true
+					}
+				});
+				return {
+					group,
+					messages
+				};
 			} catch (err: any) {
 				log.error("Something went wrong!", err);
 				throw new TRPCError({
@@ -85,15 +92,16 @@ export const groupRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			try {
 				// lookup up the user using the clerk userId
-				console.log(ctx.auth);
-				console.log("-----------------------------------------------");
-				console.log(input);
-				const user = await ctx.prisma.user.findUniqueOrThrow({
+				const user = await ctx.accelerateDB.user.findUniqueOrThrow({
 					where: {
 						clerkId: ctx.auth.userId
+					},
+					cacheStrategy: {
+						ttl: 60,
+						swr: 60
 					}
 				});
-				return await ctx.prisma.group.update({
+				return await ctx.accelerateDB.group.update({
 					where: {
 						slug: input.slug
 					},

@@ -116,7 +116,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 	}, [data?.group.members, userId, joinGroup, slug]);
 
 	return (
-		<div className="sm:h-container mx-auto flex max-w-3xl flex-col overflow-y-hidden pb-0 pt-4 text-primary">
+		<div className="h-container mx-auto flex h-full max-w-3xl flex-col overflow-y-hidden pb-0 pt-4 text-primary">
 			<Navbar
 				classNames={{
 					base: "px-3 sm:px-0 py-3",
@@ -125,7 +125,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 			>
 				<NavbarBrand>
 					<Image src="/images/spring-weeks-ldn.svg" alt="genus-white" width={100} height={75} />
-					<span className="whitespace-pre-wrap text-lg font-semibold text-white sm:text-2xl">
+					<span className="whitespace-pre-wrap text-base font-semibold text-white sm:text-2xl">
 						InternGen: Spring into Banking
 					</span>
 				</NavbarBrand>

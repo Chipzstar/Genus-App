@@ -96,7 +96,10 @@
         @apply min-h-screen sm:h-screen mx-auto text-primary py-0
     }
     .profile-container {
-        @apply min-h-screen md:h-screen mx-auto text-primary py-0
+        @apply min-h-screen sm:h-screen mx-auto text-primary py-0
+    }
+    .profile-form {
+        min-height: calc(100vh - 270px);
     }
     .grid-limited {
         grid-template-columns: repeat(2, minmax(150px, 1fr));

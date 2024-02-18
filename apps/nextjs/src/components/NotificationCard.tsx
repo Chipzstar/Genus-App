@@ -44,7 +44,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 						})}
 					</div>
 				</div>
-				<div className="text-xs font-medium">{item.category}</div>
+				<div className="text-xs font-medium">{item.topic}</div>
 			</div>
 			<div className="line-clamp-2 text-xs text-muted-foreground">{item.content?.substring(0, 300)}</div>
 			{/*{item.customAttributes?.length ? (

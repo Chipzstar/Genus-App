@@ -116,7 +116,7 @@ const Home = () => {
 												onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 												className="flex flex-col items-center space-y-3 pl-2 md:pl-4"
 											>
-												<object type="image/svg+xml" data={image} height={100} />
+												<object type="image/svg+xml" data={image} width={175} />
 												{/*<Image src={image} alt={title} className="" width={175} height={50} />*/}
 												<span className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
 													{title}

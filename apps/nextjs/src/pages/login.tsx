@@ -1,7 +1,6 @@
 "use client";
 
-import React, { ReactElement, useCallback, useState } from "react";
-import Image from "next/image";
+import React, { ReactElement, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";
@@ -18,9 +17,9 @@ import { loginSchema } from "@genus/validators";
 
 import { PATHS } from "~/utils";
 import AuthLayout from "../layout/AuthLayout";
-import type { NextPageWithLayout } from "./_app";
+import { NextPageWithAuthLayout } from "./_app";
 
-const Login: NextPageWithLayout = () => {
+const Login: NextPageWithAuthLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
 	const { toast } = useToast();
 	const [loading, setLoading] = React.useState(false);

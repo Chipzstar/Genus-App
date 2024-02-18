@@ -1,5 +1,5 @@
 {
-  "name": "@genus/redis",
+  "name": "@genus/magicbell",
   "private": true,
   "version": "0.1.0",
   "exports": {
@@ -33,6 +33,7 @@
   },
   "prettier": "@genus/prettier-config",
   "dependencies": {
-    "@upstash/redis": "^1.25.2"
+    "@magicbell/core": "^5.0.13",
+    "magicbell": "^3.1.1"
   }
 }

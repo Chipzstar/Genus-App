@@ -2,16 +2,7 @@ import React from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 
 import { Button } from "@genus/ui/button";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger
-} from "@genus/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@genus/ui/dialog";
 import { Form, FormField } from "@genus/ui/form";
 
 const focusNextInput = (el: React.KeyboardEvent<HTMLInputElement>, prevId: string, nextId: string) => {

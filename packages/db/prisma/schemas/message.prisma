@@ -1,12 +1,19 @@
+enum MessageType {
+  NORMAL
+  EVENT
+  ANNOUNCEMENT
+}
+
 model Message {
-  id        Int        @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   content   String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  messageId String     @unique
-  author    User       @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  messageId String      @unique
+  type      MessageType @default(NORMAL)
+  author    User        @relation(fields: [authorId], references: [clerkId], onDelete: Cascade)
   authorId  String
-  group     Group      @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  group     Group       @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
   groupId   String
   thread    Thread?
   reactions Reaction[]

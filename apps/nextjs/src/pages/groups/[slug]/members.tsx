@@ -1,8 +1,8 @@
-import type { ReactElement } from "react";
-import React, { useMemo } from "react";
+import { ReactElement, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import type { GetServerSideProps } from "next/types";
+import { GetServerSideProps } from "next/types";
+import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
 import { ChevronLeft, User } from "lucide-react";
 
@@ -11,34 +11,33 @@ import { useToast } from "@genus/ui/use-toast";
 
 import ListBoxWrapper from "~/components/ListBoxWrapper";
 import AppLayout from "~/layout/AppLayout";
+import { NextPageWithAppLayout } from "~/pages/_app";
 import { trpc } from "~/utils/trpc";
 
-export const getServerSideProps = (async ctx => {
-	const params = ctx.params;
+export const getServerSideProps = (async ({ params, req }) => {
+	const { userId } = getAuth(req);
+	if (!userId) return { props: {} };
 	return {
 		props: {
-			...params
-		} // will be passed to the page component as props
+			...params,
+			userId,
+			...buildClerkProps(req)
+		}
 	};
 }) satisfies GetServerSideProps;
 
-const Members = (props: any) => {
+const Members: NextPageWithAppLayout<any> = (props: any) => {
 	const router = useRouter();
 	const utils = trpc.useUtils();
 	const { toast } = useToast();
 
-	const {
-		isLoading,
-		data: group,
-		failureReason,
-		error
-	} = trpc.group.getGroupBySlug.useQuery(
+	const { isLoading, data, failureReason, error } = trpc.group.getGroupBySlug.useQuery(
 		{
 			slug: props.slug
 		},
 		{
 			onSuccess: data => {
-				console.log(data.members);
+				console.log(data.group.members);
 			},
 			onError: error => {
 				toast({
@@ -51,13 +50,13 @@ const Members = (props: any) => {
 	);
 
 	const members = useMemo(() => {
-		if (!group) return [];
-		return group.members.map(member => ({
+		if (!data) return [];
+		return data.group.members.map(member => ({
 			key: member.userId,
 			label: `${member.user.firstname} ${member.user.lastname}`,
 			image: member.user.imageUrl
 		}));
-	}, [group?.members]);
+	}, [data?.group.members]);
 
 	return (
 		<div className="page-container">
@@ -82,7 +81,7 @@ const Members = (props: any) => {
 				<div className="mx-auto max-w-3xl">
 					<header className="text-lg font-semibold sm:text-2xl">Members</header>
 					<ListBoxWrapper>
-						<Listbox items={members} aria-label="Dynamic Actions" onAction={key => alert(key)}>
+						<Listbox items={members} aria-label="Dynamic Actions">
 							{m => (
 								<ListboxItem key={m.key}>
 									<div className="flex items-center space-x-2">
@@ -104,8 +103,8 @@ const Members = (props: any) => {
 	);
 };
 
-Members.getLayout = function getLayout(page: ReactElement) {
-	return <AppLayout>{page}</AppLayout>;
+Members.getLayout = function getLayout(page: ReactElement, props: { userId: string }) {
+	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
 export default Members;

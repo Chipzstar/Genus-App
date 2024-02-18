@@ -1,6 +1,5 @@
-import React, { ChangeEvent, ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, ReactElement, useCallback, useState } from "react";
 import type { GetStaticProps } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { SignedIn, useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";

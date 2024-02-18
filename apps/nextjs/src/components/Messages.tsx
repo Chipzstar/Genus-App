@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import { useSession } from "@clerk/nextjs";
-import { cn } from "@genus/ui";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@genus/ui/context-menu";
-import { ChatBubble } from "~/components/ChatBubble";
-import EmojiDialog from "~/components/EmojiDialog";
-import ReplyDialog from "~/components/ReplyDialog";
-import { formatTimestamp } from "~/utils";
-import { Messages } from "~/utils/types";
-import type { Message } from "~/utils/types";
+import React, {useRef} from 'react'
+import Image from 'next/image'
+import {useSession} from '@clerk/nextjs'
+import {cn} from '@genus/ui'
+import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from '@genus/ui/context-menu'
+import {ChatBubble} from '~/components/ChatBubble'
+import EmojiDialog from '~/components/EmojiDialog'
+import ReplyDialog from '~/components/ReplyDialog'
+import {formatTimestamp} from '~/utils'
+import type {Message} from '~/utils/types'
+import {Messages} from '~/utils/types'
 
 interface MessagesProps {
 	messages: Messages;
@@ -53,7 +53,7 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 												currentUser={isCurrentUser}
 												member={isMember}
 												hasNextMessageFromSameUser={hasNextMessageFromSameUser}
-												message={{ ...message, type: "message" }}
+												message={{ ...message, status: "message" }}
 											/>
 										</ContextMenuTrigger>
 										<ContextMenuContent updatePositionStrategy="optimized" alignOffset={5}>
@@ -79,7 +79,7 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 										<div className="flex items-center">
 											<ReplyDialog message={message} isMember={isMember} />
 											<EmojiDialog
-												type="message"
+												status="message"
 												isCurrentUser={isCurrentUser}
 												message={message}
 											/>

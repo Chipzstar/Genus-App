@@ -8,7 +8,9 @@ model Thread {
   authorId  String
   message   Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
   messageId Int       @unique
+  group     Group     @relation(fields: [groupId], references: [groupId], onDelete: Cascade)
+  groupId   String
   comments  Comment[]
 
-  @@index([authorId, messageId])
+  @@index([authorId, messageId, groupId])
 }

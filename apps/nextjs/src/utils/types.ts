@@ -74,9 +74,9 @@ export interface GeneratePaperPayload {
 
 type GetGroupBySlugOutput = inferRouterOutputs<AppRouter>["group"]["getGroupBySlug"];
 
-export type GroupMembers = Pick<GetGroupBySlugOutput, "members">["members"];
+export type GroupMembers = Pick<GetGroupBySlugOutput, "group">["group"]["members"];
 
-export type GroupMember = Pick<GetGroupBySlugOutput, "members">["members"][0];
+export type GroupMember = GroupMembers[0];
 
 export type GetThreadByIdOutput = inferRouterOutputs<AppRouter>["thread"]["getThreadById"];
 
@@ -84,7 +84,7 @@ export type ThreadComment = Pick<GetThreadByIdOutput, "comments">["comments"][0]
 
 export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
 
-export type Message = Pick<GetGroupBySlugOutput, "messages">["messages"][0];
+export type Message = Messages[0];
 
 export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
 

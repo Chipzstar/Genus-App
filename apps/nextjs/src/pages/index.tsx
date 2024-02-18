@@ -1,7 +1,7 @@
-import type { ReactElement } from "react";
-import React from "react";
+import React, { ReactElement } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next/types";
 import { SignedIn, useClerk } from "@clerk/nextjs";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 
@@ -9,8 +9,11 @@ import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
 import AppLayout from "~/layout/AppLayout";
+import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
 import { INSIGHTS, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
+
+export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const Home = () => {
 	const {
@@ -138,8 +141,8 @@ const Home = () => {
 	);
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
-	return <AppLayout>{page}</AppLayout>;
+Home.getLayout = function getLayout(page: ReactElement, props: { userId: string }) {
+	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
 export default Home;

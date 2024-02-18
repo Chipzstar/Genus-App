@@ -4,7 +4,6 @@ import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 import { accelerateDB, db } from "@genus/db";
-import { redis } from "@genus/redis";
 
 /**
  * Replace this with an object if you want to pass things to createContextInner
@@ -22,8 +21,7 @@ export const createContextInner = async ({ auth }: AuthContextProps) => {
 	return {
 		auth,
 		prisma: db,
-		accelerateDB,
-		redis
+		accelerateDB
 	};
 };
 

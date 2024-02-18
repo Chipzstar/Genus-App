@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
 import type { ReactElement } from "react";
+import React from "react";
 import type { GetStaticProps } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 import type { PortableTextComponents } from "@portabletext/react";
@@ -81,7 +80,7 @@ const InsightSlug = (props: PageProps) => {
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
 						<object
-							className="w-76 mx-auto h-52"
+							className="mx-auto h-52 w-76"
 							type="image/svg+xml"
 							data={urlForImage(mainImage).height(300).width(450).url()}
 							/*width={300}

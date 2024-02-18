@@ -10,11 +10,11 @@ import { trpc } from "~/utils/trpc";
 import type { Message, ThreadComment } from "~/utils/types";
 
 interface Props {
-	message: ({ type: "message" } & Message) | ({ type: "comment" } & ThreadComment);
+	message: ({ status: "message" } & Message) | ({ status: "comment" } & ThreadComment);
 	isCurrentUser: boolean;
 }
 
-const Reactions: FC<Props> = (props: Props) => {
+const Reactions: FC<Props> = props => {
 	const { userId } = useAuth();
 	const utils = trpc.useUtils();
 	const { mutate: deleteReaction } = trpc.reaction.deleteReaction.useMutation({
@@ -34,9 +34,9 @@ const Reactions: FC<Props> = (props: Props) => {
 	return (
 		<div
 			className={cn("relative bottom-2 float-right flex grow", {
-				"right-1 order-first": props.isCurrentUser && props.message.type === "message",
-				"left-1 order-last": !props.isCurrentUser && props.message.type === "message",
-				"justify-end": props.message.type === "comment"
+				"right-1 order-first": props.isCurrentUser && props.message.status === "message",
+				"left-1 order-last": !props.isCurrentUser && props.message.status === "message",
+				"justify-end": props.message.status === "comment"
 			})}
 		>
 			{reactions.slice(0, 3).map((emojis, index) => (

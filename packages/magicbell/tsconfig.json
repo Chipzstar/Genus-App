@@ -1,7 +1,6 @@
 {
   "extends": "@genus/tsconfig/base.json",
   "compilerOptions": {
-    "target": "es2017",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["*.ts", "src"],

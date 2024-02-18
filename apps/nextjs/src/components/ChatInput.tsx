@@ -61,7 +61,8 @@ const ChatInput: FC<ChatMessageProps | ChatReplyProps> = props => {
 						content: input,
 						messageContent: props.message.content,
 						messageId: props.message.id,
-						authorId: props.message.authorId
+						authorId: props.message.authorId,
+						groupId: props.message.groupId
 					});
 				} else {
 					await createComment({
@@ -69,7 +70,8 @@ const ChatInput: FC<ChatMessageProps | ChatReplyProps> = props => {
 						content: input,
 						threadId: props.chatId,
 						messageId: props.message.id,
-						authorId: props.message.authorId
+						authorId: props.message.authorId,
+						groupId: props.message.groupId
 					});
 				}
 			} else {

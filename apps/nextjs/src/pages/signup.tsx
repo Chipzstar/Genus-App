@@ -33,9 +33,9 @@ import CodeInput from "~/components/CodeInput";
 import { formatString } from "~/utils";
 import { useUploadThing } from "~/utils/uploadthing";
 import AuthLayout from "../layout/AuthLayout";
-import type { NextPageWithLayout } from "./_app";
+import { NextPageWithAuthLayout } from "./_app";
 
-const Signup: NextPageWithLayout = () => {
+const Signup: NextPageWithAuthLayout = () => {
 	// STATE
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setCodeVerification] = useState(false);

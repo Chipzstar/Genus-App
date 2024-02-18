@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
-import { createUploadthing } from "uploadthing/next-legacy";
 import type { FileRouter } from "uploadthing/next-legacy";
+import { createUploadthing } from "uploadthing/next-legacy";
 import { UTApi } from "uploadthing/server";
 
 import { db } from "@genus/db";

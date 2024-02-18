@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/components": [
-        "./src"
+        "./src/components"
       ]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",

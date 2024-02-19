@@ -93,7 +93,7 @@
         @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
     }
     .insights-container {
-        @apply min-h-screen sm:h-screen mx-auto text-primary py-0
+        @apply min-h-screen mx-auto text-black py-0
     }
     .profile-container {
         @apply min-h-screen sm:h-screen mx-auto text-primary py-0

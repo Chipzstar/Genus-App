@@ -93,7 +93,7 @@ const InsightSlug = (props: PageProps) => {
 						  sizes="100vw"
 						  priority
 						/>*/}
-						<header className="whitespace-pre-wrap text-center text-xl font-bold text-black sm:w-144 sm:text-3xl">
+						<header className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
 							{title}
 						</header>
 					</div>

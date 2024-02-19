@@ -95,6 +95,9 @@
     .insights-container {
         @apply min-h-screen mx-auto text-black py-0
     }
+    .notification-container {
+        height: calc(100vh - 290px)
+    }
     .profile-container {
         @apply min-h-screen sm:h-screen mx-auto text-primary py-0
     }

@@ -21,7 +21,7 @@ const NotificationList: FC<Props> = ({ items }: Props) => {
 	};
 
 	return (
-		<ScrollArea className="h-screen">
+		<ScrollArea className="notification-container">
 			{items.length ? (
 				<div className="flex flex-col gap-2 p-4 pt-0">
 					{items.map(item => (

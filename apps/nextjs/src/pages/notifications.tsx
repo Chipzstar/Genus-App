@@ -41,7 +41,7 @@ const Notifications = () => {
 					</div>
 				</NavbarBrand>
 			</Navbar>
-			<div className="h-full bg-white p-6 sm:px-12 sm:pt-12">
+			<div className="h-container bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<Tabs defaultValue="unread">
 						<div className="flex items-center px-4 py-2">

@@ -118,6 +118,8 @@ const InsightSlug = (props: PageProps) => {
 				<div className="mx-auto max-w-3xl py-10 text-lg sm:px-6">
 					<PortableText value={body!} components={components} />
 				</div>
+				<br />
+				<br />
 			</section>
 		</div>
 	);

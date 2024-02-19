@@ -51,6 +51,14 @@ const components: PortableTextComponents = {
 		// Any other custom types you have in your content
 		// Examples: mapLocation, contactForm, code, featuredProjects, latestNews, etc.
 	},
+	list: {
+		bullet: ({ children }) => <ul className="mt-unit-xl list-inside">{children}</ul>,
+		number: ({ children }) => <ol className="mt-unit-xl list-inside">{children}</ol>
+	},
+	listItem: {
+		bullet: ({ children }) => <li className="list-disc">{children}</li>,
+		number: ({ children }) => <li className="list-decimal">{children}</li>
+	},
 	marks: {
 		color: res => {
 			const { value, text } = res;

@@ -51,6 +51,13 @@ const components: PortableTextComponents = {
 		// Any other custom types you have in your content
 		// Examples: mapLocation, contactForm, code, featuredProjects, latestNews, etc.
 	},
+	block: {
+		h1: ({ children }) => <h1 className="text-h1 mt-5">{children}</h1>,
+		h2: ({ children }) => <h2 className="text-h2 mt-5">{children}</h2>,
+		h3: ({ children }) => <h3 className="text-h3 mt-4">{children}</h3>,
+		h4: ({ children }) => <h4 className="text-h4 mt-4">{children}</h4>,
+		blockquote: ({ children }) => <blockquote>{children}</blockquote>
+	},
 	list: {
 		bullet: ({ children }) => <ul className="mt-unit-xl list-inside">{children}</ul>,
 		number: ({ children }) => <ol className="mt-unit-xl list-inside">{children}</ol>

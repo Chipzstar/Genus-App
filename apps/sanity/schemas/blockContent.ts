@@ -46,8 +46,8 @@ export default defineType({
 				decorators: [
 					{ title: "Strong", value: "strong" },
 					{ title: "Emphasis", value: "em" },
-					{ title: "Strikethrough", value: "strike" },
 					{ title: "Underline", value: "underline" },
+					{ title: "Strikethrough", value: "strike" },
 					{ title: "Code", value: "code" }
 				],
 				// Annotations can be any object structure – e.g. a link or a footnote.

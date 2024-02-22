@@ -61,8 +61,8 @@ const components: PortableTextComponents = {
 
 	},
 	list: {
-		bullet: ({ children }) => <ul className="mt-unit-xl list-inside">{children}</ul>,
-		number: ({ children }) => <ol className="mt-unit-xl list-inside">{children}</ol>
+		bullet: ({ children }) => <ul className="mt-unit-md list-inside">{children}</ul>,
+		number: ({ children }) => <ol className="mt-unit-md list-inside">{children}</ol>
 	},
 	listItem: {
 		bullet: ({ children }) => <li className="list-disc">{children}</li>,

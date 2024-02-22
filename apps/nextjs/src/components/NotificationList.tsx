@@ -16,7 +16,6 @@ const NotificationList: FC<Props> = ({ items }: Props) => {
 	const router = useRouter();
 
 	const handleClick = (item: IRemoteNotification) => {
-		console.log(item);
 		void router.push(`${PATHS.GROUPS}${item.actionUrl}`);
 	};
 

@@ -113,7 +113,7 @@ const Insights = (props: PageProps) => {
 							</Select>
 						</div>
 					</div>
-					<ScrollArea className={"h-[calc(100%-10rem)]"}>
+					<ScrollArea className={"h-[calc(100%-22rem)]"}>
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
 							{debouncedInsights?.map(insight => {
 								return (

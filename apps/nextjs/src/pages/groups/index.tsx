@@ -136,7 +136,7 @@ const Groups = (props: PageProps) => {
 							</Select>
 						</div>
 					</div>
-					<ScrollArea className={"h-[calc(100%-2rem)]"}>
+					<ScrollArea className={"h-[calc(100%)]"}>
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.GROUPS}/${slug}`)}>
 							{debouncedGroups?.map(group => (
 								<ListboxItem key={group.slug} className="px-0" textValue={group.title}>

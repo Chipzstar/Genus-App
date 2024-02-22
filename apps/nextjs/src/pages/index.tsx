@@ -117,7 +117,7 @@ const Home = (props: PageProps) => {
 									See all
 								</span>
 							</div>
-							<div className="grid-limited auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4">
+							<div className="insights-scrollable-container auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4">
 								{props.insights.map(({ image, slug, title }, index) => (
 									<div
 										key={index}

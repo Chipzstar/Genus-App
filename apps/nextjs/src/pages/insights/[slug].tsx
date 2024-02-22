@@ -52,13 +52,12 @@ const components: PortableTextComponents = {
 		// Examples: mapLocation, contactForm, code, featuredProjects, latestNews, etc.
 	},
 	block: {
-		h1: ({ children }) => <h1 className="text-h1 mb-3">{children}</h1>,
-		h2: ({ children }) => <h2 className="text-h2 mb-3">{children}</h2>,
-		h3: ({ children }) => <h3 className="text-h3 mb-2.5">{children}</h3>,
-		h4: ({ children }) => <h4 className="text-h4 mb-2">{children}</h4>,
+		h1: ({ children }) => <h1 className="my-3 text-h1">{children}</h1>,
+		h2: ({ children }) => <h2 className="my-3 text-h2">{children}</h2>,
+		h3: ({ children }) => <h3 className="my-2.5 text-h3">{children}</h3>,
+		h4: ({ children }) => <h4 className="my-2 text-h4">{children}</h4>,
 		normal: ({ children }) => <p className="text-normal mt-4">{children}</p>,
-		blockquote: ({ children }) => <blockquote>{children}</blockquote>,
-
+		blockquote: ({ children }) => <blockquote>{children}</blockquote>
 	},
 	list: {
 		bullet: ({ children }) => <ul className="mt-unit-md list-inside">{children}</ul>,

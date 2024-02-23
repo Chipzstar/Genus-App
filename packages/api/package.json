@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@axiomhq/winston": "1.0.0-rc.2",
-    "@genus/db": "*",
-    "@genus/magicbell": "*",
-    "@genus/validators": "*",
+    "@genus/db": "workspace:^0.1.0",
+    "@genus/magicbell": "workspace:^0.1.0",
+    "@genus/validators": "workspace:^0.1.0",
     "@trpc/client": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "dayjs": "^1.11.10",

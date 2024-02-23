@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import { GetServerSideProps, GetStaticProps } from "next/types";
+import { GetServerSideProps } from "next/types";
 import { SignedIn, useClerk } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
@@ -10,13 +9,11 @@ import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
 import AppLayout from "~/layout/AppLayout";
-import { getAllGroups, getAllInsights, getClient, getInsightAndBody } from "~/lib/sanity.client";
+import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
-import type { Insight } from "~/lib/sanity.queries";
-import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
-import { INSIGHTS, PATHS } from "~/utils";
+import { PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
-import type { GroupPanel, InsightPanel } from "~/utils/types";
+import type { InsightPanel } from "~/utils/types";
 
 interface PageProps {
 	insights: InsightPanel[];

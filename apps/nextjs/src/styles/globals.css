@@ -113,13 +113,13 @@
   }
 
   .insights-scrollable-container {
-    @apply flex items-center whitespace-nowrap overflow-x-auto
+    @apply items-center whitespace-nowrap overflow-x-auto sm:flex hidden overflow-y-hidden
   }
 
   .insights-scrollable-container > div {
     width: 175px;
     margin-right: 10px;
-    @apply flex-none
+    @apply flex-none relative
   }
 
   .grid-limited {

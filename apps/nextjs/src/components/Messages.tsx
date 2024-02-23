@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useRef} from 'react'
+import React, {forwardRef, useRef} from 'react'
 import Image from 'next/image'
 import {useSession} from '@clerk/nextjs'
 import {cn} from '@genus/ui'
@@ -18,15 +18,16 @@ interface MessagesProps {
 	isMember: boolean;
 }
 
-const Messages = ({ messages, isMember }: MessagesProps) => {
+const Messages = forwardRef<HTMLDivElement | null, MessagesProps>(({ messages, isMember }, ref) => {
 	const { session } = useSession();
-	const scrollDownRef = useRef<HTMLDivElement | null>(null);
+
 	return (
 		<div
+		  	ref={ref}
 			id="messages"
 			className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex h-full flex-1 flex-col-reverse gap-4 overflow-y-auto py-3"
 		>
-			<div ref={scrollDownRef} />
+			<div/>
 			{messages.map((message: Message, index: number) => {
 				const isCurrentUser = !!session && message.authorId === session.user.id;
 				const prevMessage = messages[index - 1];
@@ -34,7 +35,7 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 				// eslint-disable-next-line prefer-const
 				hasNextMessageFromSameUser = prevMessage?.authorId === message.authorId;
 				return (
-					<div className="chat-message" key={`${message.id}`}>
+					<div key={`${message.id}`}>
 						<div
 							className={cn("flex items-end", {
 								"justify-end": isCurrentUser
@@ -114,6 +115,6 @@ const Messages = ({ messages, isMember }: MessagesProps) => {
 			})}
 		</div>
 	);
-};
+});
 
 export default Messages;

@@ -1,26 +1,23 @@
-import type { ReactElement } from "react";
-import React, { useEffect, useMemo } from "react";
+import React, { ReactElement, useEffect, useMemo, useRef } from "react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next/types";
 import { useAuth } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 
-import { appRouter } from "@genus/api";
-import { createContextInner } from "@genus/api/src/context";
+import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { Alert, AlertDescription, AlertTitle } from "@genus/ui/alert";
 import { useToast } from "@genus/ui/use-toast";
 
 import ChatInput from "~/components/ChatInput";
-import { GroupStatusButton } from "~/components/GroupStatusButton";
 import Loader from "~/components/Loader";
 import Messages from "~/components/Messages";
 import AppLayout from "~/layout/AppLayout";
 import { trpc } from "~/utils/trpc";
-import type { GroupMember } from "~/utils/types";
+import { GroupMember } from "~/utils/types";
 
 export const getServerSideProps = (async ({ req, params }) => {
 	const { userId } = getAuth(req);
@@ -50,7 +47,12 @@ export const getServerSideProps = (async ({ req, params }) => {
 	};
 }) satisfies GetServerSideProps;
 
+function GroupStatusButton(props: { onClick: (() => any) | (() => any); textSize: string; title: string }) {
+	return null;
+}
+
 const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+	const scrollDownRef = useRef<HTMLDivElement | null>(null);
 	const router = useRouter();
 	const slug = router.query.slug as string;
 	const { toast } = useToast();
@@ -94,10 +96,6 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 		}
 	);
 
-	useEffect(() => {
-		console.log(router.query);
-	}, [router.query]);
-
 	const { isMember, btnText, onClick, textSize } = useMemo(() => {
 		if (data?.group?.members.find((m: GroupMember) => m.userId === userId)) {
 			return {
@@ -135,8 +133,13 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 				<Loader />
 			) : data?.group ? (
 				<div className="chat-wrapper">
-					<Messages chatId={data.group.groupId} messages={data.messages} isMember={isMember} />
-					<ChatInput type="message" chatId={data.group.groupId} isMember={isMember} />
+					<Messages
+						ref={scrollDownRef}
+						chatId={data.group.groupId}
+						messages={data.messages}
+						isMember={isMember}
+					/>
+					<ChatInput ref={scrollDownRef!} type="message" chatId={data.group.groupId} isMember={isMember} />
 				</div>
 			) : (
 				<div className="flex h-full flex-col justify-center p-6 sm:px-12">

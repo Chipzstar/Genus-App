@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 
 import { Button } from "@genus/ui/button";
 import { Textarea } from "@genus/ui/textarea";
@@ -31,13 +31,21 @@ interface NewCommentProps {
 
 type ChatReplyProps = { type: "reply" } & (NewThreadProps | NewCommentProps);
 
-const ChatInput: FC<ChatMessageProps | ChatReplyProps> = props => {
+type Props = ChatMessageProps | ChatReplyProps;
+
+const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+	const chatWrapperRef = useRef<HTMLInputElement>(null);
+
+	// @ts-ignore
+	useImperativeHandle(ref, () => ref?.current as HTMLInputElement);
+
 	const utils = trpc.useUtils();
 	const { mutateAsync: createMessage } = trpc.message.createMessage.useMutation({
 		onSuccess(data) {
 			console.log(data);
 			void utils.group.invalidate();
+			if (chatWrapperRef?.current) chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
 		}
 	});
 	const { mutateAsync: createComment } = trpc.comment.createComment.useMutation({
@@ -125,6 +133,6 @@ const ChatInput: FC<ChatMessageProps | ChatReplyProps> = props => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default ChatInput;

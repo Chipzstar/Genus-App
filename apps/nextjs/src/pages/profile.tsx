@@ -90,7 +90,11 @@ const UserProfilePage = () => {
 			>
 				<NavbarBrand>
 					<div className="absolute right-3 top-3" role="button" onClick={toggle}>
-						<img src="/images/cog-white.svg" alt="cog-wheel-white" className="h-6 w-6 lg:h-10 lg:w-10" />
+						<img
+							src="/images/cog-white.svg"
+							alt="cog-wheel-white"
+							className="h-6 w-6 hover:animate-spin lg:h-10 lg:w-10"
+						/>
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
 						<div

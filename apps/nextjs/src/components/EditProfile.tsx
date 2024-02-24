@@ -81,7 +81,7 @@ export const EditProfile = ({
 					});
 				} else {
 					clerk?.user &&
-						clerk.user
+						void clerk.user
 							.update({
 								firstName: data.firstname,
 								lastName: data.lastname
@@ -189,7 +189,7 @@ export const EditProfile = ({
 									</FormControl>
 									<SelectContent>
 										{ethnicity_dictionary.map((e, index) => (
-											<SelectGroup>
+											<SelectGroup key={index}>
 												<SelectLabel>{e.label}</SelectLabel>
 												{e.values.map(ethnicity => (
 													<SelectItem key={ethnicity} value={ethnicity}>

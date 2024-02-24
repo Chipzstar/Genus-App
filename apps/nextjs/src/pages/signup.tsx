@@ -107,7 +107,7 @@ const Signup: NextPageWithAuthLayout = () => {
 					description: "There was a problem signing you up.",
 					action: {
 						label: "Try again",
-						onClick: () => onSubmit(values)
+						onClick: () => void onSubmit(values)
 					}
 				});
 				return null;
@@ -312,7 +312,7 @@ const Signup: NextPageWithAuthLayout = () => {
 											</FormControl>
 											<SelectContent>
 												{ethnicity_dictionary.map((e, index) => (
-													<SelectGroup>
+													<SelectGroup key={index}>
 														<SelectLabel>{e.label}</SelectLabel>
 														{e.values.map(ethnicity => (
 															<SelectItem key={ethnicity} value={ethnicity}>

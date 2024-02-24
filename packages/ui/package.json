@@ -29,7 +29,7 @@
     "./sheet": "./src/components/sheet.tsx",
     "./table": "./src/table.tsx",
     "./tabs": "./src/components/tabs.tsx",
-    "./toaster": "./src/components/sonner.tsx",
+    "./sonner": "./src/components/sonner.tsx",
     "./textarea": "./src/components/textarea.tsx"
   },
   "typesVersions": {

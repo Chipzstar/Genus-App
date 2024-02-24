@@ -76,7 +76,7 @@ const ResetPassword = () => {
 						action: {
 							label: "Resend",
 							onClick: () =>
-								onPasswordSubmit(values).then(() => console.log("New verification code sent!"))
+								void onPasswordSubmit(values).then(() => console.log("New verification code sent!"))
 						}
 					});
 					setNewPassword(values.password);

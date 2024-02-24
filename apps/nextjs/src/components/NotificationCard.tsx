@@ -2,9 +2,9 @@ import type { FC } from "react";
 import React from "react";
 import { useNotification, type IRemoteNotification } from "@magicbell/magicbell-react";
 import { formatDistanceToNow, fromUnixTime } from "date-fns";
+import { toast } from "sonner";
 
 import { cn } from "@genus/ui";
-import { toast } from "@genus/ui/use-toast";
 
 import { formatString } from "~/utils";
 
@@ -27,8 +27,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 					.then(() => onClick(item))
 					.catch(err => {
 						console.error(err);
-						toast({
-							title: "Failed to mark as read",
+						toast.error("Failed to mark as read", {
 							description: err.message
 						});
 					});

@@ -1,18 +1,18 @@
-import React, { ReactElement, useEffect, useMemo, useRef } from "react";
+import React, { ReactElement, useMemo, useRef } from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useAuth } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
-import { Navbar, NavbarBrand } from "@nextui-org/react";
+import { Image, Navbar, NavbarBrand } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
+import { toast } from "sonner";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { Alert, AlertDescription, AlertTitle } from "@genus/ui/alert";
-import { useToast } from "@genus/ui/use-toast";
 
 import ChatInput from "~/components/ChatInput";
+import { GroupStatusButton } from "~/components/GroupStatusButton";
 import Loader from "~/components/Loader";
 import Messages from "~/components/Messages";
 import AppLayout from "~/layout/AppLayout";
@@ -47,15 +47,10 @@ export const getServerSideProps = (async ({ req, params }) => {
 	};
 }) satisfies GetServerSideProps;
 
-function GroupStatusButton(props: { onClick: (() => any) | (() => any); textSize: string; title: string }) {
-	return null;
-}
-
 const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	const scrollDownRef = useRef<HTMLDivElement | null>(null);
 	const router = useRouter();
 	const slug = router.query.slug as string;
-	const { toast } = useToast();
 
 	const utils = trpc.useUtils();
 	const { userId } = useAuth();
@@ -64,15 +59,13 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 		onSuccess(data) {
 			console.log(data);
 			void utils.group.getGroupBySlug.invalidate();
-			toast({
-				title: "Yayy! You're now in the group! 🎉",
+			toast.success("Yayy! You're now in the group! 🎉", {
 				description: "You can now post to the chat and ask questions"
 			});
 		},
 		onError(error) {
 			console.log(error);
-			toast({
-				title: error.message,
+			toast.error(error.message, {
 				description: error.message,
 				duration: 5000
 			});
@@ -87,8 +80,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 				console.log(data);
 			},
 			onError: error => {
-				toast({
-					title: error?.data?.code ?? "Oops!",
+				toast.error(error?.data?.code ?? "Oops!", {
 					description: error.message,
 					duration: 3000
 				});
@@ -122,7 +114,13 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 				}}
 			>
 				<NavbarBrand>
-					<Image src="/images/spring-weeks-ldn.svg" alt="genus-white" width={100} height={75} />
+					<Image
+						src="/images/spring-weeks-ldn.svg"
+						alt="group-chat-logo"
+						width={100}
+						height={75}
+						className="opacity-1"
+					/>
 					<span className="whitespace-pre-wrap text-base font-semibold text-white sm:text-2xl">
 						InternGen: Spring into Banking
 					</span>

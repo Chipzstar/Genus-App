@@ -1,13 +1,12 @@
-import type { ReactElement } from "react";
-import React, { useCallback, useState } from "react";
-import Image from "next/image";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Image } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { useWindowSize } from "usehooks-ts";
 import * as z from "zod";
 
-import { ToastAction } from "@genus/ui/toast";
-import { toast } from "@genus/ui/use-toast";
 import { forgotPasswordSchema } from "@genus/validators";
 
 import type { EmailFormValues } from "~/components/CheckEmailForm";
@@ -23,6 +22,7 @@ const ResetPassword = () => {
 	const [email, setEmail] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const { isLoaded, signIn, setActive } = useSignIn();
+	const { width = 0, height = 0 } = useWindowSize();
 	const [resetMode, setPasswordResetMode] = useState<"email" | "password" | "code">("email");
 	const form = useForm<z.infer<typeof forgotPasswordSchema>>({
 		defaultValues: {
@@ -39,8 +39,7 @@ const ResetPassword = () => {
 				if (!isLoaded) return null;
 				const exists = await checkEmail({ email: values.email });
 				if (!exists) {
-					toast({
-						title: "Email does not exist",
+					toast.error("Email does not exist", {
 						description: "Please enter a valid email address"
 					});
 				} else {
@@ -49,8 +48,7 @@ const ResetPassword = () => {
 				}
 			} catch (err) {
 				console.error(err);
-				toast({
-					title: "Uh oh! Something went wrong.",
+				toast.error("Uh oh! Something went wrong.", {
 					description: "There was a problem with your request."
 				});
 			} finally {
@@ -71,20 +69,15 @@ const ResetPassword = () => {
 					identifier: email
 				});
 				if (result.status === "needs_first_factor") {
-					toast({
-						title: "Email sent!",
+					toast.info("Email sent!", {
 						description: "Please check your email for a verification code to reset your password.",
-						action: (
-							<ToastAction
-								altText="Try again"
-								onSubmit={() =>
-									onPasswordSubmit(values).then(() => console.log("New verification code sent!"))
-								}
-							>
-								Resend reset email
-							</ToastAction>
-						),
-						duration: 1000 * 60
+						closeButton: true,
+						duration: 1000 * 60,
+						action: {
+							label: "Resend",
+							onClick: () =>
+								onPasswordSubmit(values).then(() => console.log("New verification code sent!"))
+						}
 					});
 					setNewPassword(values.password);
 					setPasswordResetMode("code");
@@ -94,8 +87,7 @@ const ResetPassword = () => {
 						form.setError("email", { message: "Invalid email address" });
 					} else {
 						console.log(result);
-						toast({
-							title: "Email does not exist",
+						toast.error("Email does not exist", {
 							description: "There was a problem with your request."
 						});
 					}
@@ -103,18 +95,14 @@ const ResetPassword = () => {
 			} catch (error: any) {
 				if (error.errors.length) {
 					if (error.errors[0].message === error.errors[0].longMessage) {
-						toast({
-							title: error.errors[0].message
-						});
+						toast.error(error.errors[0].message);
 					} else {
-						toast({
-							title: error.errors[0].message,
+						toast.error(error.errors[0].message, {
 							description: error.errors[0].longMessage
 						});
 					}
 				} else {
-					toast({
-						title: "Uh oh! Something went wrong.",
+					toast.error("Uh oh! Something went wrong.", {
 						description: "There was a problem with your request."
 					});
 				}
@@ -142,21 +130,18 @@ const ResetPassword = () => {
 					console.log("************************************************");
 				} else if (result.status === "complete") {
 					await setActive({ session: result.createdSessionId });
-					toast({
-						title: "Password reset successful!",
+					toast.success("Password reset successful!", {
 						description: "We're logging you in..."
 					});
 				} else {
 					console.log(result);
-					toast({
-						title: "Uh oh! Something went wrong.",
+					toast.error("Uh oh! Something went wrong.", {
 						description: "There was a problem with your request."
 					});
 				}
 			} catch (err: any) {
 				console.error("error", err.errors[0].longMessage);
-				toast({
-					title: err.errors[0].message,
+				toast.error(err.errors[0].message, {
 					description: err.errors[0].longMessage
 				});
 			} finally {
@@ -174,18 +159,12 @@ const ResetPassword = () => {
 				onSubmit={onReset}
 				loading={codeInputLoading}
 			/>
-			<div className="relative h-[250px] w-2/3 sm:w-1/2 lg:w-2/3">
-				<Image
-					src="/images/logo-white.svg"
-					alt="genus-white"
-					fill
-					sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					className="mt-0.5"
-					quality={100}
-					priority
-					style={{
-						objectFit: "contain"
-					}}
+			<div className="relative flex h-[250px] w-2/3 justify-center sm:w-1/2 lg:w-2/3">
+				<object
+					className=""
+					type="image/svg+xml"
+					data="/images/logo-white.svg"
+					width={width <= 480 ? 300 : 450}
 				/>
 			</div>
 			{resetMode !== "email" ? (

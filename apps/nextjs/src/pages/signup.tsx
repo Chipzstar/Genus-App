@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Check, Mail, User, X } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import type { z } from "zod";
 
@@ -55,7 +56,6 @@ const Signup: NextPageWithAuthLayout = () => {
 	}, []);
 
 	// HOOKS
-	const { toast } = useToast();
 	const router = useRouter();
 	const { isLoaded, signUp, setActive } = useSignUp();
 
@@ -103,10 +103,12 @@ const Signup: NextPageWithAuthLayout = () => {
 			setLoading(true);
 			if (!isLoaded) {
 				// handle loading state
-				toast({
-					title: "Uh oh! Something went wrong.",
+				toast.error("Uh oh! Something went wrong.", {
 					description: "There was a problem signing you up.",
-					action: <ToastAction altText="Try again">Try again</ToastAction>
+					action: {
+						label: "Try again",
+						onClick: () => onSubmit(values)
+					}
 				});
 				return null;
 			}
@@ -126,30 +128,21 @@ const Signup: NextPageWithAuthLayout = () => {
 				// This method will send a one-time code to the email address supplied to the current sign-up.
 				await signUp.prepareEmailAddressVerification();
 				setCodeVerification(true);
-				toast({
-					title: "Email Verification Sent",
+				toast.info("Email Verification Sent", {
 					description: "We have sent you an email with a verification code. Please check your inbox.",
-					action: (
-						<ToastAction altText="Verifiation email sent">
-							<Mail size={20} />
-						</ToastAction>
-					)
+					icon: <Mail size={20} />
 				});
 			} catch (error: any) {
 				if (error.errors.length) {
 					if (error.errors[0].message === error.errors[0].longMessage) {
-						toast({
-							title: error.errors[0].message
-						});
+						toast.error(error.errors[0].message);
 					} else {
-						toast({
-							title: error.errors[0].message,
+						toast.error(error.errors[0].message, {
 							description: error.errors[0].longMessage
 						});
 					}
 				} else {
-					toast({
-						title: "Uh oh! Something went wrong.",
+					toast.error("Uh oh! Something went wrong.", {
 						description: "There was a problem with your request."
 					});
 				}
@@ -165,10 +158,8 @@ const Signup: NextPageWithAuthLayout = () => {
 			setLoading(true);
 			if (!isLoaded) {
 				// handle loading state
-				toast({
-					title: "Uh oh! Something went wrong.",
-					description: "There was a problem signing you up.",
-					action: <ToastAction altText="Try again">Try again</ToastAction>
+				toast.error("Uh oh! Something went wrong.", {
+					description: "There was a problem signing you up."
 				});
 				return null;
 			}
@@ -180,30 +171,17 @@ const Signup: NextPageWithAuthLayout = () => {
 				await setActive({ session: result.createdSessionId });
 				setCodeVerification(false);
 				setLoading(false);
-				toast({
-					title: "Verification successful!",
-					description: "verification-success",
-					action: (
-						<ToastAction altText="Email Verified">
-							{" "}
-							<Check size={20} />{" "}
-						</ToastAction>
-					)
+				toast.success("Welcome to Genus!", {
+					description: "Your account has been verified",
+					icon: <Check size={20} />
 				});
 				files.length &&
 					setTimeout(() => void startUpload(files).then(() => console.log("profile image set", files)), 1000);
 				// router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
 			} catch (err: any) {
 				setLoading(false);
-				toast({
-					title: "Signup failed. Please try again",
-					description: err.message,
-					action: (
-						<ToastAction altText="Signup Failed">
-							{" "}
-							<X size={20} />{" "}
-						</ToastAction>
-					)
+				toast.error("Signup failed. Please try again", {
+					description: err.message
 				});
 			}
 		},

@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -17,7 +18,6 @@ import {
 	SelectTrigger,
 	SelectValue
 } from "@genus/ui/select";
-import { toast } from "@genus/ui/use-toast";
 import { broadCourseCategorySchema, completionYearSchema, profileSchema, universitiesSchema } from "@genus/validators";
 import {
 	broad_course_categories,
@@ -68,11 +68,6 @@ export const EditProfile = ({
 			setLoading(true);
 			try {
 				await updateUserProfile(data);
-				toast({
-					title: "Success!",
-					description: "Your profile has been updated.",
-					duration: 5000
-				});
 				if (files.length) {
 					void startUpload(files).then(res => {
 						if (clerk?.user && res?.[0]) {
@@ -96,8 +91,7 @@ export const EditProfile = ({
 				resetMode();
 			} catch (err) {
 				console.error(err);
-				toast({
-					title: "Error!",
+				toast.error("Error!", {
 					description: "There was an error updating your profile.",
 					duration: 5000
 				});

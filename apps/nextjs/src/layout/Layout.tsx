@@ -19,7 +19,7 @@ const Layout = ({ children }: Props) => {
 			<AxiomWebVitals />
 			<main className={fontSans.className}>
 				{children}
-				<Toaster />
+				<Toaster richColors />
 			</main>
 		</>
 	);

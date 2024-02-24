@@ -3,7 +3,7 @@ import { Montserrat as FontSans } from "next/font/google";
 import Head from "next/head";
 import { AxiomWebVitals } from "next-axiom";
 
-import { Toaster } from "@genus/ui/toaster";
+import { Toaster } from "@genus/ui/sonner";
 
 interface Props {
 	children: React.ReactNode;

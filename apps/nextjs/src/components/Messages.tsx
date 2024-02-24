@@ -117,4 +117,6 @@ const Messages = forwardRef<HTMLDivElement | null, MessagesProps>(({ messages, i
 	);
 });
 
+Messages.displayName = "Messages";
+
 export default Messages;

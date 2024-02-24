@@ -137,7 +137,7 @@ const GroupSlug = (props: InferGetServerSidePropsType<typeof getServerSideProps>
 						messages={data.messages}
 						isMember={isMember}
 					/>
-					<ChatInput ref={scrollDownRef!} type="message" chatId={data.group.groupId} isMember={isMember} />
+					<ChatInput ref={scrollDownRef} type="message" chatId={data.group.groupId} isMember={isMember} />
 				</div>
 			) : (
 				<div className="flex h-full flex-col justify-center p-6 sm:px-12">

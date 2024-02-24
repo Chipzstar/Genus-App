@@ -37,7 +37,7 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const chatWrapperRef = useRef<HTMLInputElement>(null);
 
-	// @ts-ignore
+	// @ts-expect-error ref.current will be defined
 	useImperativeHandle(ref, () => ref?.current as HTMLInputElement);
 
 	const utils = trpc.useUtils();
@@ -133,5 +133,7 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 		</div>
 	);
 });
+
+ChatInput.displayName = "ChatInput";
 
 export default ChatInput;

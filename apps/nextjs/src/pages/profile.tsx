@@ -6,12 +6,13 @@ import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
+// import { toast } from "@genus/ui/use-toast";
+import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useToggle } from "usehooks-ts";
 
 import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
-import { toast } from "@genus/ui/use-toast";
 
 import { EditProfile } from "~/components/EditProfile";
 import Loader from "~/components/Loader";
@@ -44,8 +45,7 @@ const UserProfilePage = () => {
 	// TRPC queries
 	const { isLoading, data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
 		onError(err) {
-			toast({
-				title: "Error",
+			toast.error("Error", {
 				description: err.message,
 				duration: 5000
 			});
@@ -53,6 +53,10 @@ const UserProfilePage = () => {
 	});
 	const { mutateAsync: updateUserProfile } = trpc.user.updateProfile.useMutation({
 		onSuccess() {
+			toast.success("Success!", {
+				description: "Your profile has been updated.",
+				duration: 3000
+			});
 			void utils.user.getByClerkId.invalidate();
 		}
 	});

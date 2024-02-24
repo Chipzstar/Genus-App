@@ -1,10 +1,10 @@
 "use client";
 
 import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@genus/ui/button";
 import { Textarea } from "@genus/ui/textarea";
-import { toast } from "@genus/ui/use-toast";
 
 import { trpc } from "~/utils/trpc";
 import type { Message } from "~/utils/types";
@@ -89,8 +89,7 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 			textareaRef.current?.focus();
 		} catch (err) {
 			const { message } = err as never;
-			toast({
-				title: "Oops!",
+			toast.error("Oops!", {
 				description: message,
 				duration: 5000
 			});

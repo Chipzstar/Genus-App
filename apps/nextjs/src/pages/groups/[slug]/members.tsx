@@ -1,13 +1,12 @@
 import { ReactElement, useMemo } from "react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
-import { Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
+import { Image, Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
 import { ChevronLeft, User } from "lucide-react";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
-import { useToast } from "@genus/ui/use-toast";
 
 import ListBoxWrapper from "~/components/ListBoxWrapper";
 import AppLayout from "~/layout/AppLayout";
@@ -29,7 +28,6 @@ export const getServerSideProps = (async ({ params, req }) => {
 const Members: NextPageWithAppLayout<any> = (props: any) => {
 	const router = useRouter();
 	const utils = trpc.useUtils();
-	const { toast } = useToast();
 
 	const { isLoading, data, failureReason, error } = trpc.group.getGroupBySlug.useQuery(
 		{
@@ -40,8 +38,7 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 				console.log(data.group.members);
 			},
 			onError: error => {
-				toast({
-					title: error?.data?.code ?? "Oops!",
+				toast.error(error?.data?.code ?? "Oops!", {
 					description: error.message,
 					duration: 3000
 				});
@@ -70,7 +67,13 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 					<div className="absolute left-0 top-0" role="button" onClick={() => router.back()}>
 						<ChevronLeft size={40} color="white" />
 					</div>
-					<Image src="/images/spring-weeks-ldn.svg" alt="genus-white" width={100} height={75} />
+					<Image
+						src="/images/spring-weeks-ldn.svg"
+						alt="genus-white"
+						width={100}
+						height={75}
+						className="opacity-1"
+					/>
 					<span className="whitespace-pre-wrap text-lg font-semibold sm:text-2xl">
 						InternGen: Spring into Banking
 					</span>

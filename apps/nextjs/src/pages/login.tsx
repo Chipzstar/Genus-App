@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { useWindowSize } from "usehooks-ts";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
-import { useToast } from "@genus/ui/use-toast";
 import { loginSchema } from "@genus/validators";
 
 import { PATHS } from "~/utils";
@@ -21,7 +21,6 @@ import { NextPageWithAuthLayout } from "./_app";
 
 const Login: NextPageWithAuthLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
-	const { toast } = useToast();
 	const [loading, setLoading] = React.useState(false);
 	const { width = 0, height = 0 } = useWindowSize();
 
@@ -58,8 +57,7 @@ const Login: NextPageWithAuthLayout = () => {
 					} else if (result.status === "needs_first_factor") {
 						form.setError("password", { message: "Password is incorrect" });
 					} else {
-						toast({
-							title: "Password is incorrect",
+						toast.error("Password is incorrect", {
 							description: "There was a problem with your request."
 						});
 					}
@@ -69,18 +67,14 @@ const Login: NextPageWithAuthLayout = () => {
 				setLoading(false);
 				if (error.errors.length) {
 					if (error.errors[0].message === error.errors[0].longMessage) {
-						toast({
-							title: error.errors[0].message
-						});
+						toast.error(error.errors[0].message);
 					} else {
-						toast({
-							title: error.errors[0].message,
+						toast(error.errors[0].message, {
 							description: error.errors[0].longMessage
 						});
 					}
 				} else {
-					toast({
-						title: "Uh oh! Something went wrong.",
+					toast.error("Uh oh! Something went wrong.", {
 						description: "There was a problem with your request."
 					});
 				}

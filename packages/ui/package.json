@@ -29,10 +29,8 @@
     "./sheet": "./src/components/sheet.tsx",
     "./table": "./src/table.tsx",
     "./tabs": "./src/components/tabs.tsx",
-    "./toast": "./src/components/toast.tsx",
-    "./toaster": "./src/components/toaster.tsx",
-    "./textarea": "./src/components/textarea.tsx",
-    "./use-toast": "./src/components/use-toast.ts"
+    "./toaster": "./src/components/sonner.tsx",
+    "./textarea": "./src/components/textarea.tsx"
   },
   "typesVersions": {
     "*": {
@@ -68,8 +66,10 @@
     "clsx": "^2.0.0",
     "embla-carousel-react": "8.0.0-rc22",
     "lucide-react": "^0.292.0",
+    "next-themes": "^0.2.1",
     "react-hook-form": "^7.48.2",
     "react-loader-spinner": "^6.1.6",
+    "sonner": "^1.4.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.18.0"

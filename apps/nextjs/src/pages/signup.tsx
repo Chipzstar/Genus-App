@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react/hooks";
-import { Check, Mail, User, X } from "lucide-react";
+import { Check, Mail, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -26,14 +26,11 @@ import {
 	SelectTrigger,
 	SelectValue
 } from "@genus/ui/select";
-import { ToastAction } from "@genus/ui/toast";
-import { useToast } from "@genus/ui/use-toast";
 import { signupSchema } from "@genus/validators";
 import {
 	broad_course_categories,
 	career_interests,
 	completion_years,
-	ethnicities,
 	ethnicity_dictionary,
 	genders,
 	universities

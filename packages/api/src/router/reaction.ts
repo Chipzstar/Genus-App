@@ -1,7 +1,7 @@
 import * as z from "zod";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {TRPCError} from "@trpc/server";
-import {nanoid} from 'nanoid';
+import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { nanoid } from 'nanoid';
 
 export const reactionRouter = createTRPCRouter({
     getReaction: protectedProcedure.input(z.object({
@@ -11,14 +11,14 @@ export const reactionRouter = createTRPCRouter({
         try {
             let reaction = null;
             if (input.type === 'message') {
-                reaction = await ctx.prisma.reaction.findFirst({
+                reaction = await ctx.accelerateDB.reaction.findFirst({
                     where: {
                         authorId: ctx.auth.userId,
                         messageId: input.id
                     }
                 });
             } else {
-                reaction = await ctx.prisma.reaction.findFirst({
+                reaction = await ctx.accelerateDB.reaction.findFirst({
                     where: {
                         authorId: ctx.auth.userId,
                         commentId: input.id
@@ -43,7 +43,7 @@ export const reactionRouter = createTRPCRouter({
     })).mutation(async ({ctx, input}) => {
         try {
             let reactionId = `reaction_${nanoid(18)}` //=> "V1StGXR8_Z5jdHi6B-myT"
-            return await ctx.prisma.reaction.create({
+            return await ctx.accelerateDB.reaction.create({
                 data: {
                     reactionId,
                     ...(input?.commentId && {commentId: input.commentId}),
@@ -71,7 +71,7 @@ export const reactionRouter = createTRPCRouter({
     })).mutation(async ({ctx, input}) => {
         try {
             let reactionId = `reaction_${nanoid(18)}` //=> "V1StGXR8_Z5jdHi6B-myT"
-            return await ctx.prisma.reaction.upsert({
+            return await ctx.accelerateDB.reaction.upsert({
                 where: {
                     id: input.id,
                     authorId: ctx.auth.userId
@@ -102,7 +102,7 @@ export const reactionRouter = createTRPCRouter({
         id: z.number(),
     })).mutation(async ({ctx, input}) => {
         try {
-            return await ctx.prisma.reaction.delete({
+            return await ctx.accelerateDB.reaction.delete({
                 where: {
                     id: input.id,
                     authorId: ctx.auth.userId

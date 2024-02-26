@@ -1,51 +1,24 @@
 import type { ReactElement } from "react";
 import React from "react";
-import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
-import { SignedIn, useAuth } from "@clerk/nextjs";
 import { useNotifications } from "@magicbell/magicbell-react";
-import { Navbar, NavbarBrand } from "@nextui-org/react";
-
-import { Button } from "@genus/ui/button";
 import { Separator } from "@genus/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 
 import NotificationList from "~/components/NotificationList";
 import AppLayout from "~/layout/AppLayout";
 import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
-import { PATHS } from "~/utils";
+import TopNav from "~/components/TopNav";
 
 export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const Notifications = () => {
 	const allStore = useNotifications("default");
 	const unreadStore = useNotifications("unread");
-	const router = useRouter();
-	const { signOut } = useAuth();
 
 	return (
 		<div className="page-container">
-			<Navbar
-				classNames={{
-					brand: "w-full flex justify-center items-center"
-				}}
-			>
-				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<object
-						className="mx-auto overflow-visible"
-						type="image/svg+xml"
-						data="/images/logo-white.svg"
-						width={100}
-					/>
-					<div className="absolute right-4">
-						<SignedIn>
-							<Button size="sm" onClick={e => signOut()}>
-								Logout
-							</Button>
-						</SignedIn>
-					</div>
-				</NavbarBrand>
-			</Navbar>
+			<TopNav />
 			<div className="h-container bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<Tabs defaultValue="unread">

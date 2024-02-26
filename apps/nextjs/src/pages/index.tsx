@@ -1,11 +1,8 @@
 import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
-import { SignedIn, useClerk } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
-import { Navbar, NavbarBrand } from "@nextui-org/react";
-
-import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
 import AppLayout from "~/layout/AppLayout";
@@ -14,6 +11,7 @@ import { urlForImage } from "~/lib/sanity.image";
 import { PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { InsightPanel } from "~/utils/types";
+import TopNav from "~/components/TopNav";
 
 interface PageProps {
 	insights: InsightPanel[];
@@ -59,28 +57,7 @@ const Home = (props: PageProps) => {
 
 	return (
 		<div className="page-container h-screen">
-			<Navbar
-				classNames={{
-					brand: "w-full flex justify-center items-center"
-				}}
-			>
-				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					{/*<Image src={whiteLogo} quality={100} priority alt="genus-white" width={100} height={75} />*/}
-					<object
-						className="mx-auto overflow-visible"
-						type="image/svg+xml"
-						data="/images/logo-white.svg"
-						width={100}
-					/>
-					<div className="absolute right-4">
-						<SignedIn>
-							<Button size="sm" onClick={e => signOut()}>
-								Logout
-							</Button>
-						</SignedIn>
-					</div>
-				</NavbarBrand>
-			</Navbar>
+			<TopNav />
 			<div className="h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-center text-xl font-semibold text-black md:text-3xl">

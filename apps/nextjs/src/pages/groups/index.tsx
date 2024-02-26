@@ -96,7 +96,12 @@ const Groups = (props: PageProps) => {
 				}}
 			>
 				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<object className="mx-auto" type="image/svg+xml" data="/images/green-logo.svg" width={100} />
+					<object
+						className="mx-auto overflow-visible"
+						type="image/svg+xml"
+						data="/images/green-logo.svg"
+						width={100}
+					/>
 					<div className="absolute right-4">
 						<SignedIn>
 							<Button size="sm" onClick={e => signOut()}>

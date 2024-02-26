@@ -66,7 +66,12 @@ const Home = (props: PageProps) => {
 			>
 				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
 					{/*<Image src={whiteLogo} quality={100} priority alt="genus-white" width={100} height={75} />*/}
-					<object className="mx-auto" type="image/svg+xml" data="/images/logo-white.svg" width={100} />
+					<object
+						className="mx-auto overflow-visible"
+						type="image/svg+xml"
+						data="/images/logo-white.svg"
+						width={100}
+					/>
 					<div className="absolute right-4">
 						<SignedIn>
 							<Button size="sm" onClick={e => signOut()}>
@@ -91,7 +96,7 @@ const Home = (props: PageProps) => {
 								<span className="underline">JOIN</span> the group!
 							</header>
 							<object
-								className="mx-auto"
+								className="mx-auto overflow-visible"
 								type="image/svg+xml"
 								data="/images/spring-weeks-ldn.svg"
 								width={200}
@@ -123,10 +128,11 @@ const Home = (props: PageProps) => {
 										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 									>
 										<object
-											className="mx-auto h-auto"
+											className="mx-auto overflow-visible"
 											type="image/svg+xml"
 											data={image}
 											width={175}
+											height={126}
 										/>
 										{/*<img src={image} alt={title} className="" />*/}
 										<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
@@ -152,7 +158,7 @@ const Home = (props: PageProps) => {
 												className="flex flex-col items-center space-y-3 pl-2 md:pl-4"
 											>
 												<object
-													className="h-auto"
+													className="h-auto overflow-visible"
 													type="image/svg+xml"
 													data={image}
 													width={175}

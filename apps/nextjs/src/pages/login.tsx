@@ -99,7 +99,7 @@ const Login: NextPageWithAuthLayout = () => {
 					}}
 				/>*/}
 				<object
-					className=""
+					className="overflow-visible"
 					type="image/svg+xml"
 					data="/images/logo-white.svg"
 					width={width <= 480 ? 300 : 450}

@@ -25,7 +25,7 @@ const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/logo-white.sv
 			}}
 		>
 			<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-				<object className="mx-auto" type="image/svg+xml" data={imagePath} width={100} />
+				<object className="mx-auto" type="image/svg+xml" data={imagePath} width={100} height={61} />
 				<div className="absolute right-4">
 					<SignedIn>
 						<Button

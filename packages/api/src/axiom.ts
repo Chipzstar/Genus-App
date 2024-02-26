@@ -10,7 +10,14 @@ const axiomTransport = new AxiomTransport({
 });
 
 export const logger = winston.createLogger({
-	level: "info",
+	level: process.env.AXIOM_LOG_LEVEL ?? "info",
+	levels: {
+		verbose: 0,
+		debug: 1,
+		info: 2,
+		warn: 2,
+		error: 4
+	},
 	format: combine(errors({ stack: true }), winston.format.json()),
 	defaultMeta: { service: "user-service" },
 	transports: [

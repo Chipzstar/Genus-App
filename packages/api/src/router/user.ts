@@ -18,7 +18,7 @@ export const userRouter = createTRPCRouter({
 		return ctx.accelerateDB.user.findFirst({ where: { id: input } });
 	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
-		const user = await ctx.prisma.user.findUniqueOrThrow({
+		const user = await ctx.accelerateDB.user.findUniqueOrThrow({
 			where: { clerkId: ctx.auth.userId },
 			select: {
 				firstname: true,

@@ -68,6 +68,9 @@ export const groupRouter = createTRPCRouter({
 						thread: true
 					}
 				});
+				ctx.logger.info("********************************************");
+				ctx.logger.debug("Group messages!!", messages);
+				ctx.logger.info("********************************************");
 				return {
 					group,
 					messages

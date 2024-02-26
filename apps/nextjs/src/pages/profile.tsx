@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 const UserProfilePage = () => {
 	const [mode, toggle, setValue] = useViewEditToggle();
 	const [opened, toggleBell, setBell] = useToggle(false);
-	const launcherRef = useRef<HTMLButtonElement>(null);
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
 	const onDrop = useCallback(

@@ -23,7 +23,6 @@ type AuthContextProps = {
 export const createContextInner = async ({ auth }: AuthContextProps) => {
 	return {
 		auth,
-		prisma: db,
 		accelerateDB,
 		logger,
 		posthog

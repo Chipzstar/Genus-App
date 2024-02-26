@@ -18,13 +18,13 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { career_interests } from "@genus/validators/constants";
 
 import InsightCard from "~/components/InsightCard";
+import TopNav from "~/components/TopNav";
 import AppLayout from "~/layout/AppLayout";
 import { getAllGroups, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { GroupPanel } from "~/utils/types";
-import TopNav from "~/components/TopNav";
 
 interface PageProps {
 	groups: GroupPanel[];
@@ -90,7 +90,7 @@ const Groups = (props: PageProps) => {
 
 	return (
 		<div className="page-container overflow-y-hidden bg-white">
-			<TopNav/>
+			<TopNav imagePath="/images/green-logo.svg" />
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-2xl font-bold text-black sm:text-4xl">Groups</header>

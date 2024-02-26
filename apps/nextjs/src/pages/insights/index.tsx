@@ -1,21 +1,20 @@
 import React, { ChangeEvent, ReactElement, useCallback, useState } from "react";
 import type { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 import { useDebounceValue } from "usehooks-ts";
+
 import { Input } from "@genus/ui/input";
-import { ScrollArea } from "@genus/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { career_interests } from "@genus/validators/constants";
 
 import InsightCard from "~/components/InsightCard";
+import TopNav from "~/components/TopNav";
 import AppLayout from "~/layout/AppLayout";
 import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
 import type { InsightPanel } from "~/utils/types";
-import TopNav from "~/components/TopNav";
 
 interface PageProps {
 	insights: InsightPanel[];
@@ -64,7 +63,7 @@ const Insights = (props: PageProps) => {
 
 	return (
 		<div className="page-container overflow-y-hidden bg-white">
-			<TopNav/>
+			<TopNav imagePath="/images/green-logo.svg" />
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
@@ -95,17 +94,21 @@ const Insights = (props: PageProps) => {
 							</Select>
 						</div>
 					</div>
-					<ScrollArea className={"h-[calc(100%-535px)]"}>
+					<div className="genus-scrollbar max-h-120 flex flex-col overflow-y-scroll">
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
 							{debouncedInsights?.map(insight => {
 								return (
-									<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
+									<ListboxItem
+										key={insight.slug}
+										className="mb-3 px-0 sm:mb-0"
+										textValue={insight.title}
+									>
 										<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
 									</ListboxItem>
 								);
 							})}
 						</Listbox>
-					</ScrollArea>
+					</div>
 				</div>
 			</div>
 		</div>

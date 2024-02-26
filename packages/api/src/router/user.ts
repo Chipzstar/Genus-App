@@ -1,4 +1,3 @@
-import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
@@ -12,7 +11,7 @@ import {
 } from "@genus/validators";
 import { career_interests } from "@genus/validators/constants";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
 	getById: protectedProcedure.input(z.number()).query(({ ctx, input }) => {

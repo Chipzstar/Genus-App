@@ -161,7 +161,7 @@ const ResetPassword = () => {
 			/>
 			<div className="relative flex h-[250px] w-2/3 justify-center sm:w-1/2 lg:w-2/3">
 				<object
-					className=""
+					className="overflow-visible"
 					type="image/svg+xml"
 					data="/images/logo-white.svg"
 					width={width <= 480 ? 300 : 450}

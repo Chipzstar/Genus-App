@@ -1,7 +1,7 @@
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Image } from "@nextui-org/react";
+
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useWindowSize } from "usehooks-ts";

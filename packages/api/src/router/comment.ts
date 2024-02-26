@@ -2,8 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import * as z from "zod";
 
-import { formatString } from "@genus/validators/helpers";
-
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 function timeout(ms: number) {
@@ -78,6 +76,16 @@ export const commentRouter = createTRPCRouter({
 						}
 					}
 				});
+				ctx.posthog.capture({
+					distinctId: ctx.auth.userId,
+					event: 'group_thread_created',
+					properties: {
+						threadId: thread.threadId,
+						groupId: input.groupId,
+						messageId: input.messageId,
+						content: input.content
+					}
+				})
 				if (ctx.auth.userId !== input.authorId) {
 					const notification = await ctx.magicbell.store.create({
 						title: `Comment from ${author}`,
@@ -87,7 +95,6 @@ export const commentRouter = createTRPCRouter({
 						category: "comment",
 						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
 					});
-					console.log(notification);
 					ctx.logger.info("-----------------------------------------------");
 					ctx.logger.debug("New notification!!", notification);
 					ctx.logger.info("-----------------------------------------------");
@@ -116,6 +123,16 @@ export const commentRouter = createTRPCRouter({
 					}
 				}
 			});
+			ctx.posthog.capture({
+				distinctId: ctx.auth.userId,
+                event: 'group_comment_created',
+                properties: {
+                    commentId,
+                    groupId: input.groupId,
+                    messageId: input.messageId,
+                    content: input.content
+                }
+			})
 			const recipients = await ctx.accelerateDB.comment.findMany({
 				where: {
 					threadId: input.threadId,
@@ -138,7 +155,6 @@ export const commentRouter = createTRPCRouter({
 				topic: comment.group.slug,
 				action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
 			});
-			console.log(notification);
 			ctx.logger.info("-----------------------------------------------");
 			ctx.logger.debug("New notification!!", notification);
 			ctx.logger.info("------------------------------------------------");

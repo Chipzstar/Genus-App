@@ -1,12 +1,9 @@
 import React, { ChangeEvent, ReactElement, useCallback, useState } from "react";
 import type { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { SignedIn, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
-import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDebounceValue } from "usehooks-ts";
-
-import { Button } from "@genus/ui/button";
 import { Input } from "@genus/ui/input";
 import { ScrollArea } from "@genus/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
@@ -18,6 +15,7 @@ import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
 import type { InsightPanel } from "~/utils/types";
+import TopNav from "~/components/TopNav";
 
 interface PageProps {
 	insights: InsightPanel[];
@@ -48,7 +46,6 @@ export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 
 const Insights = (props: PageProps) => {
 	const router = useRouter();
-	const { signOut } = useAuth();
 	const [search, setSearch] = useState("");
 	const [insights, setInsights] = useState<InsightPanel[]>(props.insights);
 	const [debouncedInsights] = useDebounceValue<InsightPanel[]>(insights, 500);
@@ -67,27 +64,7 @@ const Insights = (props: PageProps) => {
 
 	return (
 		<div className="page-container overflow-y-hidden bg-white">
-			<Navbar
-				classNames={{
-					brand: "w-full flex justify-center items-center"
-				}}
-			>
-				<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-					<object
-						className="mx-auto overflow-visible"
-						type="image/svg+xml"
-						data="/images/green-logo.svg"
-						width={100}
-					/>
-					<div className="absolute right-4">
-						<SignedIn>
-							<Button size="sm" onClick={e => signOut()}>
-								Logout
-							</Button>
-						</SignedIn>
-					</div>
-				</NavbarBrand>
-			</Navbar>
+			<TopNav/>
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>

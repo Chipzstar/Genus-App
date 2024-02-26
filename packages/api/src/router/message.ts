@@ -2,8 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 
-import { formatString } from "@genus/validators/helpers";
-
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const messageRouter = createTRPCRouter({
@@ -39,6 +37,15 @@ export const messageRouter = createTRPCRouter({
 						}
 					}
 				});
+				ctx.posthog.capture({
+					distinctId: ctx.auth.userId,
+					event: 'group_message_sent',
+					properties: {
+						messageId,
+						groupId: input.groupId,
+						content: input.content
+					}
+				})
 
 				const recipients = await ctx.accelerateDB.groupUser.findMany({
 					where: {
@@ -64,15 +71,18 @@ export const messageRouter = createTRPCRouter({
 					category: "message",
 					action_url: `/${message.group.slug}?messageId=${message.messageId}`
 				});
-				console.log(notification);
+				/*ctx.posthog.capture({
+					distinctId: ctx.auth.userId,
+					event: 'magicbell_notification_sent',
+					properties: {
+						notificationId: notification.id,
+						recipients: recipients.map(r => ({ email: r.user.email })),
+						action_url: `/${message.group.slug}?messageId=${message.messageId}`
+					}
+				})*/
 				ctx.logger.info("-----------------------------------------------");
-				ctx.logger.debug("New notifications!!", notification);
+				ctx.logger.debug("New notification!!", notification);
 				ctx.logger.info("-----------------------------------------------");
-
-				/*await ctx.redis.zadd(`${input.groupId}--${message.messageId}`, {
-				score: dayjs(message.createdAt).valueOf(),
-				member: JSON.stringify(message)
-			});*/
 				return message;
 			} catch (err) {
 				ctx.logger.error("Something went wrong!", err);
@@ -109,7 +119,9 @@ export const messageRouter = createTRPCRouter({
 					}
 				});
 			} catch (err: any) {
+				ctx.logger.info("********************************************");
 				ctx.logger.error("Something went wrong!", err);
+				ctx.logger.info("********************************************");
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: "Something went wrong!",

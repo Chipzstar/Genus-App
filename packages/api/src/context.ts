@@ -6,6 +6,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { accelerateDB, db } from "@genus/db";
 
 import { logger } from "./axiom";
+import { posthog } from "./posthog";
 
 /**
  * Replace this with an object if you want to pass things to createContextInner
@@ -24,7 +25,8 @@ export const createContextInner = async ({ auth }: AuthContextProps) => {
 		auth,
 		prisma: db,
 		accelerateDB,
-		logger
+		logger,
+		posthog
 	};
 };
 

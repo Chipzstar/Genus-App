@@ -98,7 +98,7 @@ const Insights = (props: PageProps) => {
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
 							{debouncedInsights?.map(insight => {
 								return (
-									<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
+									<ListboxItem key={insight.slug} className="px-0 py-0" textValue={insight.title}>
 										<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
 									</ListboxItem>
 								);

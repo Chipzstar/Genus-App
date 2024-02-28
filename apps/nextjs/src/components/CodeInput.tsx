@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 
 import { Button } from "@genus/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@genus/ui/dialog";
 import { Form, FormField } from "@genus/ui/form";
+import { FakeDash, OTPInput, Slot } from "@genus/ui/otp-input";
 
 const focusNextInput = (el: React.KeyboardEvent<HTMLInputElement>, prevId: string, nextId: string) => {
 	const targetInput = el.target as HTMLInputElement;
@@ -41,33 +42,14 @@ const formValueKeys = Object.keys({
 interface Props {
 	opened: boolean;
 	setOpen: (val: boolean) => void;
-	onSubmit: (code: CodeFormValues) => void;
+	onSubmit: (val: { code: string }) => void;
 	loading: boolean;
 }
 
 const CodeInput = ({ onSubmit, opened, setOpen, loading }: Props) => {
-	const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>, form: UseFormReturn<CodeFormValues>) => {
-		event.preventDefault();
-		let copyValue = event.clipboardData.getData("Text").trim();
-		if (copyValue.length !== 6) {
-			copyValue = copyValue.slice(0, 6);
-		}
-		form.setValue("code1", copyValue.charAt(0));
-		form.setValue("code2", copyValue.charAt(1));
-		form.setValue("code3", copyValue.charAt(2));
-		form.setValue("code4", copyValue.charAt(3));
-		form.setValue("code5", copyValue.charAt(4));
-		form.setValue("code6", copyValue.charAt(5));
-	};
-
-	const form = useForm<CodeFormValues>({
+	const form = useForm<{ code: string }>({
 		defaultValues: {
-			code1: undefined,
-			code2: undefined,
-			code3: undefined,
-			code4: undefined,
-			code5: undefined,
-			code6: undefined
+			code: ""
 		}
 	});
 
@@ -81,40 +63,40 @@ const CodeInput = ({ onSubmit, opened, setOpen, loading }: Props) => {
 							<DialogDescription>Enter Verification Code</DialogDescription>
 						</DialogHeader>
 						<div className="mb-2 flex space-x-2 rtl:space-x-reverse">
-							{formValueKeys.map((name, index) => {
-								const current = index + 1;
-								const currentId = `code-${current}`;
-								const prevId = `code-${current - 1}`;
-								const nextId = `code-${current + 1}`;
-								return (
-									<FormField
-										key={index}
-										control={form.control}
-										name={name as KeyUnion}
-										render={({ field }) => (
-											<div key={currentId}>
-												<label htmlFor={currentId} className="sr-only">
-													Code {index + 1}
-												</label>
-												<input
-													{...field}
-													type="number"
-													max={9}
-													min={0}
-													maxLength={1}
-													onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) =>
-														focusNextInput(event, prevId, nextId)
-													}
-													id={currentId}
-													className="number-input block h-9 w-9 rounded-lg border border-gray-300 bg-white py-3 text-center text-sm font-extrabold text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-													onPaste={event => handlePaste(event, form)}
-													required
-												/>
-											</div>
+							<FormField
+								control={form.control}
+								name="code"
+								render={({ field }) => (
+									<OTPInput
+										maxLength={6}
+										value={field.value}
+										onChange={field.onChange}
+										onError={e =>
+											form.setError("code", {
+												message: "Invalid Code",
+												type: "pattern"
+											})
+										}
+										render={({ slots }) => (
+											<>
+												<div className="flex">
+													{slots.slice(0, 3).map((slot, idx) => (
+														<Slot key={idx} {...slot} />
+													))}
+												</div>
+
+												<FakeDash />
+
+												<div className="flex">
+													{slots.slice(3).map((slot, idx) => (
+														<Slot key={idx} {...slot} />
+													))}
+												</div>
+											</>
 										)}
 									/>
-								);
-							})}
+								)}
+							/>
 						</div>
 						<p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">
 							Please enter the 6 digit code we sent via email.

@@ -151,7 +151,7 @@ const Signup: NextPageWithAuthLayout = () => {
 	);
 
 	const confirmSignUp = useCallback(
-		async (digits: CodeFormValues) => {
+		async (values: { code: string }) => {
 			setLoading(true);
 			if (!isLoaded) {
 				// handle loading state
@@ -161,9 +161,8 @@ const Signup: NextPageWithAuthLayout = () => {
 				return null;
 			}
 			try {
-				const code = Object.values(digits).join("");
 				const result = await signUp.attemptEmailAddressVerification({
-					code
+					code: values.code
 				});
 				await setActive({ session: result.createdSessionId });
 				setCodeVerification(false);

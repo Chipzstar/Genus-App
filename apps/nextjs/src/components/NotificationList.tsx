@@ -22,7 +22,7 @@ const NotificationList: FC<Props> = ({ items }: Props) => {
 	return (
 		<ScrollArea className="notification-container">
 			{items.length ? (
-				<div className="flex flex-col gap-2 p-4 pt-0">
+				<div className="flex flex-col gap-2 pb-4 pt-0 md:p-4">
 					{items.map(item => (
 						<NotificationCard key={item.id} item={item} onClick={handleClick} />
 					))}

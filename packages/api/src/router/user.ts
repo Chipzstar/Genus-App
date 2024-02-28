@@ -43,8 +43,6 @@ export const userRouter = createTRPCRouter({
 			z.object({
 				firstname: z.string(),
 				lastname: z.string(),
-				gender: gendersSchema,
-				ethnicity: ethnicitiesSchema,
 				university: universitiesSchema,
 				broad_degree_course: broadCourseCategorySchema,
 				degree_name: z.string(),
@@ -61,8 +59,6 @@ export const userRouter = createTRPCRouter({
 					data: {
 						firstname: input.firstname,
 						lastname: input.lastname,
-						gender: input.gender,
-						ethnicity: input.ethnicity,
 						university: input.university,
 						broadDegreeCourse: input.broad_degree_course,
 						degreeName: input.degree_name,

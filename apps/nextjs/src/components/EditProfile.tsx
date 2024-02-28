@@ -9,28 +9,12 @@ import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue
-} from "@genus/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { broadCourseCategorySchema, completionYearSchema, profileSchema, universitiesSchema } from "@genus/validators";
-import {
-	broad_course_categories,
-	career_interests,
-	completion_years,
-	ethnicity_dictionary,
-	genders,
-	universities
-} from "@genus/validators/constants";
+import { broad_course_categories, career_interests, completion_years, universities } from "@genus/validators/constants";
 
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
-// import clerk from "~/utils/clerk";
 import type { UserProfile } from "~/utils/types";
 import { useUploadThing } from "~/utils/uploadthing";
 
@@ -106,8 +90,6 @@ export const EditProfile = ({
 		defaultValues: {
 			firstname: profile.firstname,
 			lastname: profile.lastname,
-			gender: profile.gender,
-			ethnicity: profile.ethnicity,
 			university: profile.university as z.infer<typeof universitiesSchema>,
 			broad_degree_course: profile.broadDegreeCourse as z.infer<typeof broadCourseCategorySchema>,
 			degree_name: profile.degreeName,
@@ -147,61 +129,6 @@ export const EditProfile = ({
 								<FormControl>
 									<Input className="bg-background text-black" {...field} />
 								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="gender"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Gender</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
-									<FormControl>
-										<SelectTrigger className="rounded-xl bg-background text-black">
-											<SelectValue placeholder="Select a verified email to display" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{genders.map(gender => (
-											<SelectItem key={gender} value={gender}>
-												{formatString(gender)}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="ethnicity"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Ethnicity</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
-									<FormControl>
-										<SelectTrigger className="rounded-xl bg-background text-black">
-											<SelectValue />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{ethnicity_dictionary.map((e, index) => (
-											<SelectGroup key={index}>
-												<SelectLabel>{e.label}</SelectLabel>
-												{e.values.map(ethnicity => (
-													<SelectItem key={ethnicity} value={ethnicity}>
-														<span className="whitespace-pre-wrap">
-															{formatString(ethnicity)}
-														</span>
-													</SelectItem>
-												))}
-											</SelectGroup>
-										))}
-									</SelectContent>
-								</Select>
 								<FormMessage />
 							</FormItem>
 						)}

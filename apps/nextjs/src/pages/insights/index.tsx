@@ -94,15 +94,11 @@ const Insights = (props: PageProps) => {
 							</Select>
 						</div>
 					</div>
-					<div className="genus-scrollbar max-h-120 flex flex-col overflow-y-scroll">
+					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll">
 						<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.INSIGHTS}/${slug}`)}>
 							{debouncedInsights?.map(insight => {
 								return (
-									<ListboxItem
-										key={insight.slug}
-										className="mb-3 px-0 sm:mb-0"
-										textValue={insight.title}
-									>
+									<ListboxItem key={insight.slug} className="px-0" textValue={insight.title}>
 										<InsightCard id={insight.slug} title={insight.title} image={insight.image} />
 									</ListboxItem>
 								);

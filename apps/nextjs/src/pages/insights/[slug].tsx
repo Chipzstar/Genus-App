@@ -102,15 +102,6 @@ const InsightSlug = (props: PageProps) => {
 							width={450}
 							height={300}
 						/>
-						{/*<Image
-						  className="h-auto"
-						  height={100 * 1.5}
-						  width={150 * 1.5}
-						  alt=""
-						  src={urlForImage(mainImage).height(300).width(450).url()}
-						  sizes="100vw"
-						  priority
-						/>*/}
 						<header className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
 							{title}
 						</header>

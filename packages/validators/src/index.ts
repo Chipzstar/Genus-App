@@ -104,4 +104,10 @@ export const resetPasswordSchema = z
 		}
 	);
 
-export const profileSchema = signupBaseSchema.omit({ email: true, password: true, confirmPassword: true });
+export const profileSchema = signupBaseSchema.omit({
+	email: true,
+	password: true,
+	confirmPassword: true,
+	gender: true,
+	ethnicity: true
+});

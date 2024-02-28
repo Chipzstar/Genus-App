@@ -49,15 +49,6 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 				<div className="text-xs font-medium">{formatString(item.topic!)}</div>
 			</div>
 			<div className="line-clamp-2 text-xs text-muted-foreground">{item.content?.substring(0, 300)}</div>
-			{/*{item.customAttributes?.length ? (
-							<div className="flex items-center gap-2">
-								{item.customAttributes.map(label => (
-									<Badge key={label} variant={getBadgeVariantFromLabel(label)}>
-										{label}
-									</Badge>
-								))}
-							</div>
-						) : null}*/}
 		</button>
 	);
 };

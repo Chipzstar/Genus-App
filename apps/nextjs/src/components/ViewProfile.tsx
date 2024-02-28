@@ -7,14 +7,6 @@ const ViewProfile = ({ profile }: { profile: UserProfile | undefined }) => {
 	return (
 		<section className="flex grow flex-col bg-white p-6">
 			<div className="mb-4 flex flex-col">
-				<span className="text-xl font-bold text-primary">Gender</span>
-				<span className="text-base text-black md:text-lg">{capitalize(profile?.gender)}</span>
-			</div>
-			<div className="mb-4 flex flex-col">
-				<span className="text-xl font-bold text-primary">Ethnicity</span>
-				<span className="text-base text-black md:text-lg">{capitalize(profile?.ethnicity)}</span>
-			</div>
-			<div className="mb-4 flex flex-col">
 				<span className="text-xl font-bold text-primary">University</span>
 				<span className="text-base text-black md:text-lg">{formatString(profile?.university)}</span>
 			</div>

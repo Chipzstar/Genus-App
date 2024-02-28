@@ -126,6 +126,7 @@ const ResetPassword = () => {
 					console.log("************************************************");
 					console.log("2FA required!!!!");
 					console.log("************************************************");
+					toast.warning("2FA required!", {});
 				} else if (result.status === "complete") {
 					await setActive({ session: result.createdSessionId });
 					toast.success("Password reset successful!", {

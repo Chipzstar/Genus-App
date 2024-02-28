@@ -99,6 +99,8 @@ const InsightSlug = (props: PageProps) => {
 							className="mx-auto h-36 w-44 overflow-visible sm:h-52 sm:w-76"
 							type="image/svg+xml"
 							data={urlForImage(mainImage).height(300).width(450).url()}
+							width={450}
+							height={300}
 						/>
 						{/*<Image
 						  className="h-auto"

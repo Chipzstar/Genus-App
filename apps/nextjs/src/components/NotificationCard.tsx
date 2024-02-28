@@ -19,7 +19,8 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 		<button
 			key={item.id}
 			className={cn(
-				"flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
+				"flex flex-col items-start gap-2 rounded-lg border px-0 py-3 text-left text-sm transition-all sm:px-3" +
+					" hover:bg-accent"
 			)}
 			onClick={() => {
 				void notification
@@ -35,7 +36,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 		>
 			<div className="flex w-full flex-col gap-1">
 				<div className="flex items-center">
-					<div className="flex items-center gap-2">
+					<div className="sm:text:base flex items-center gap-2 text-sm">
 						<div className="font-semibold">{item.title}</div>
 						{!item.readAt && <span className="flex h-2 w-2 rounded-full bg-blue-600" />}
 					</div>

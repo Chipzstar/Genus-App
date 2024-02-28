@@ -1,7 +1,6 @@
 import React, { ReactElement, useCallback, useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useWindowSize } from "usehooks-ts";
@@ -114,14 +113,13 @@ const ResetPassword = () => {
 	);
 
 	const onReset = useCallback(
-		async (digits: CodeFormValues) => {
+		async (value: { code: string }) => {
 			setCodeInputLoading(true);
-			const code = Object.values(digits).join("");
 			if (!isLoaded || !signIn) return null;
 			try {
 				const result = await signIn.attemptFirstFactor({
 					strategy: "reset_password_email_code",
-					code,
+					code: value.code,
 					password: newPassword
 				});
 				if (result.status === "needs_second_factor") {

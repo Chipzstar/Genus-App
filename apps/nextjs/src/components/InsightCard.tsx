@@ -16,7 +16,7 @@ const InsightCard: FC<Props> = (props: Props) => {
 				type="image/svg+xml"
 				data={image}
 				width={175}
-				height={126}
+				height={100}
 			/>
 			{/*<img src={image} alt={title} className="object-fit w-32 sm:w-40" />*/}
 			<header className="w-32 grow sm:w-96">

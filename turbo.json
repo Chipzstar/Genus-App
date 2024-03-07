@@ -41,6 +41,10 @@
     }
   },
   "globalEnv": [
+    "DB_USERNAME",
+    "DB_PASSWORD",
+    "DB_HOST",
+    "DB_NAME",
     "DATABASE_URL",
     "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
     "CLERK_SECRET_KEY",

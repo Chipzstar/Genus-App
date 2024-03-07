@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
+import { eq, user } from "@genus/db";
 import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
@@ -14,8 +15,9 @@ import { career_interests } from "@genus/validators/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-	getById: protectedProcedure.input(z.number()).query(({ ctx, input }) => {
-		return ctx.accelerateDB.user.findFirst({ where: { id: input } });
+	getById: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+		// return ctx.accelerateDB.user.findFirst({ where: { id: input } });
+		return ctx.db.query.user.findFirst({ where: eq(user.id, input) });
 	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
 		const user = await ctx.accelerateDB.user.findUniqueOrThrow({

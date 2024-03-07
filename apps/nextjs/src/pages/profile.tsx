@@ -6,7 +6,6 @@ import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
-// import { toast } from "@genus/ui/use-toast";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useToggle } from "usehooks-ts";

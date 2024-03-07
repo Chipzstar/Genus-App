@@ -3,15 +3,16 @@ import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
+
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
+import TopNav from "~/components/TopNav";
 import AppLayout from "~/layout/AppLayout";
 import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { InsightPanel } from "~/utils/types";
-import TopNav from "~/components/TopNav";
 
 interface PageProps {
 	insights: InsightPanel[];
@@ -49,9 +50,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 
 const Home = (props: PageProps) => {
-	const result = trpc.group.getGroupBySlug.useQuery({
-		slug: "interngen-spring-into-banking-event"
+	const { data } = trpc.user.getById.useQuery(8, {
+		onSuccess(data) {
+			console.log(data);
+		}
 	});
+	/*const result = trpc.group.getGroupBySlug.useQuery({
+		slug: "interngen-spring-into-banking-event"
+	});*/
 	const router = useRouter();
 	const { signOut, user } = useClerk();
 

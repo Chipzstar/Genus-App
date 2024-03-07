@@ -23,6 +23,7 @@ type AuthContextProps = {
 export const createContextInner = async ({ auth }: AuthContextProps) => {
 	return {
 		auth,
+		db,
 		accelerateDB,
 		logger,
 		posthog

@@ -6,7 +6,7 @@
     "with-env": "dotenv -e ../../.env --",
     "dev": "pnpm with-env next dev --port 3001",
     "doppler:dev": "doppler run -- next dev --port 3001",
-    "ngrok": "ngrok http --domain=present-shepherd-shining.ngrok-free.app 3001",
+    "ngrok": "ngrok http --domain=present-shepherd-shining.ngrok-free.app 3001 --config=../../bin/ngrok.yml",
     "build": "pnpm with-env next build",
     "clean": "rm -rf .next .turbo node_modules",
     "start": "pnpm with-env next start -p 3001",

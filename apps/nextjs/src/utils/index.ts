@@ -4,6 +4,13 @@ import type { Reaction } from "@genus/db";
 
 import type { InsightPanel } from "~/utils/types";
 
+export const CAREER_INTERESTS = {
+	banking_finance: 1,
+	law: 2,
+	consulting: 3,
+	tech: 4
+};
+
 export const PATHS = {
 	HOME: "/",
 	LOGIN: "/login",

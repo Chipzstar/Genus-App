@@ -1,5 +1,23 @@
+import { Client } from "@planetscale/database";
 import { PrismaClient } from "@prisma/client/edge"; // Import from '@prisma/client/edge'
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { drizzle } from "drizzle-orm/planetscale-serverless";
+
+import { schema } from "./schema";
+
+export { mySqlTable as tableCreator } from "./schema/_table";
+
+export * from "drizzle-orm";
+
+const psClient = new Client({
+	host: process.env.DB_HOST!,
+	username: process.env.DB_USERNAME!,
+	password: process.env.DB_PASSWORD!
+});
+
+const db = drizzle(psClient, { schema });
+
+export type DrizzleClient = typeof db;
 
 const createStandardPrismaClient = () => {
 	return new PrismaClient({
@@ -22,34 +40,15 @@ const globalForPrisma = globalThis as unknown as {
 	acceleratedPrisma: PrismaClientAccelerated | undefined;
 };
 
-const db = globalForPrisma.standardPrisma ?? createStandardPrismaClient();
 const accelerateDB = globalForPrisma.acceleratedPrisma ?? createAcceleratedPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
-	globalForPrisma.standardPrisma = db;
 	globalForPrisma.acceleratedPrisma = accelerateDB;
 }
 
 export * from "@prisma/client";
 
-export { db, accelerateDB };
+export const { user, groupUser, group, message, comment, reaction, thread, careerInterest, careerInterestToUser } =
+	schema;
 
-/*import { Group, Message, PrismaClient } from "@prisma/client";
-import { withAccelerate } from "@prisma/extension-accelerate";
-
-declare global {
-	// allow global `var` declarations
-	// eslint-disable-next-line no-var
-	var prisma: PrismaClient | undefined;
-}
-
-export const prisma =
-	global.prisma ||
-	new PrismaClient({
-		log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"]
-	}).$extends(withAccelerate());
-
-
-if (process.env.NODE_ENV !== "production") {
-	global.prisma = prisma;
-}*/
+export { psClient, db, accelerateDB };

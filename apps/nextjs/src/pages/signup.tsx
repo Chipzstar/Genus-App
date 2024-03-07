@@ -3,7 +3,7 @@
 import type { ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import { useRouter } from "next/router";
-import { useSignUp } from "@clerk/nextjs";
+import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Check, Mail, User } from "lucide-react";
@@ -36,7 +36,6 @@ import {
 	universities
 } from "@genus/validators/constants";
 
-import type { CodeFormValues } from "~/components/CodeInput";
 import CodeInput from "~/components/CodeInput";
 import { formatString } from "~/utils";
 import { useUploadThing } from "~/utils/uploadthing";
@@ -47,6 +46,7 @@ const Signup: NextPageWithAuthLayout = () => {
 	// STATE
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setCodeVerification] = useState(false);
+	const clerk = useClerk();
 	const [files, setFiles] = useState<File[]>([]);
 	const onDrop = useCallback((acceptedFile: File[]) => {
 		setFiles(acceptedFile);
@@ -72,7 +72,7 @@ const Signup: NextPageWithAuthLayout = () => {
 		resolver: zodResolver(signupSchema)
 	});
 
-	const { startUpload, permittedFileInfo } = useUploadThing("signupUploader", {
+	const { permittedFileInfo } = useUploadThing("signupUploader", {
 		onClientUploadComplete: res => {
 			console.log(res);
 			console.log("uploaded successfully!");
@@ -86,7 +86,7 @@ const Signup: NextPageWithAuthLayout = () => {
 		}
 	});
 
-	const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo?.config) : [];
+	const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo.config) : [];
 
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop,
@@ -164,15 +164,31 @@ const Signup: NextPageWithAuthLayout = () => {
 				const result = await signUp.attemptEmailAddressVerification({
 					code: values.code
 				});
-				await setActive({ session: result.createdSessionId });
-				setCodeVerification(false);
-				setLoading(false);
-				toast.success("Welcome to Genus!", {
-					description: "Your account has been verified",
-					icon: <Check size={20} />
-				});
-				files.length &&
-					setTimeout(() => void startUpload(files).then(() => console.log("profile image set", files)), 1000);
+				setTimeout(() => {
+					setActive({ session: result.createdSessionId }).then(() => {
+						setCodeVerification(false);
+						setLoading(false);
+						toast.success("Welcome to Genus!", {
+							description: "Your account has been verified",
+							icon: <Check size={20} />
+						});
+						if (files.length) {
+							setTimeout(
+								_clerk => {
+									_clerk?.user &&
+										void _clerk.user
+											.setProfileImage({
+												file: files[0]!
+											})
+											.then(() => console.log("profile image set in Clerk"))
+											.catch(err => console.error(err));
+								},
+								1000,
+								clerk
+							);
+						}
+					});
+				}, 500);
 				// router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
 			} catch (err: any) {
 				setLoading(false);
@@ -181,12 +197,18 @@ const Signup: NextPageWithAuthLayout = () => {
 				});
 			}
 		},
-		[isLoaded, router, signUp, files]
+		[isLoaded, router, signUp, files, clerk]
 	);
 
 	return (
 		<div className="flex min-h-screen grow flex-col items-center justify-center sm:gap-y-12 md:gap-12">
-			<CodeInput onSubmit={confirmSignUp} opened={isOpen} setOpen={setCodeVerification} loading={loading} />
+			<CodeInput
+				onSubmit={confirmSignUp}
+				opened={isOpen}
+				setOpen={setCodeVerification}
+				loading={loading}
+				onResend={isLoaded ? () => signUp.prepareEmailAddressVerification() : () => console.log("resending...")}
+			/>
 			<div {...getRootProps()} role="button" className="mb-4 flex flex-col items-center justify-center space-y-4">
 				<input {...getInputProps()} />
 				<Avatar className="lg:h-30 lg:w-30 h-20 w-20">
@@ -279,7 +301,7 @@ const Signup: NextPageWithAuthLayout = () => {
 										<Select onValueChange={field.onChange} defaultValue={field.value}>
 											<FormControl>
 												<SelectTrigger className="rounded-xl">
-													<SelectValue placeholder="Select a verified email to display" />
+													<SelectValue placeholder="Select your gender" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
@@ -303,7 +325,7 @@ const Signup: NextPageWithAuthLayout = () => {
 										<Select onValueChange={field.onChange} defaultValue={field.value}>
 											<FormControl>
 												<SelectTrigger className="[&>span]: rounded-xl">
-													<SelectValue />
+													<SelectValue placeholder="Select your ethnicity" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
@@ -334,7 +356,7 @@ const Signup: NextPageWithAuthLayout = () => {
 										<Select onValueChange={field.onChange} defaultValue={field.value}>
 											<FormControl>
 												<SelectTrigger className="rounded-xl">
-													<SelectValue placeholder="Select a verified email to display" />
+													<SelectValue placeholder="Select your university" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>

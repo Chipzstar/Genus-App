@@ -3,15 +3,15 @@
   "globalDependencies": ["**/.env"],
   "pipeline": {
     "db:generate": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": ["drizzle/schema.ts"],
       "cache": false
     },
     "db:push": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": ["drizzle/schema.ts"],
       "cache": false
     },
     "db:studio": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": ["drizzle/schema.ts"],
       "cache": false
     },
     "dev": {

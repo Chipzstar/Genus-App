@@ -1,9 +1,0 @@
-{
-  "app": {
-    "inputs": [
-      "./prisma/schemas/*.prisma"
-    ],
-    "fragments": {},
-    "output": "./prisma/schema.prisma"
-  }
-}

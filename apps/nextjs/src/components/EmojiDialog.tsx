@@ -6,9 +6,9 @@ import { SmilePlus } from "lucide-react";
 import { cn } from "@genus/ui";
 import { Popover, PopoverContent, PopoverTrigger } from "@genus/ui/popover";
 
+import Reactions from "~/components/Reactions";
 import { trpc } from "~/utils/trpc";
 import { Message, ThreadComment } from "~/utils/types";
-import Reactions from "./Reactions";
 
 interface MessagesProps {
 	status: "message";
@@ -37,7 +37,10 @@ const EmojiDialog: FC<Props> = props => {
 	});
 
 	const reaction = useMemo(() => {
-		return props.message.reactions.find(reaction => reaction.authorId === userId);
+		console.log(props.message);
+		return props.message.reactions.find(
+			(reaction: { authorId: string | null | undefined }) => reaction.authorId === userId
+		);
 	}, [props.message, userId]);
 
 	return (

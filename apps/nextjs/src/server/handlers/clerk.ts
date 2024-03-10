@@ -82,11 +82,9 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 		let uploadedFile;
 		const payload = event.data as UserJSON;
 		// check if the user already exists in the db
-		let dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
+		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
 
 		if (!dbUser) throw new Error("Could not find user");
-
-		console.log(dbUser);
 
 		// check if the user has an "imageUrl" field. If they do continue
 		const newImage = !dbUser.imageUrl && payload.has_image;
@@ -158,7 +156,7 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as DeletedObjectJSON;
 		// check if the user exists in the db
-		let dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id!)))[0];
+		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id!)))[0];
 		if (!dbUser) throw new Error("Could not find user");
 		// disconnect any career interests
 		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.userId, dbUser.id));

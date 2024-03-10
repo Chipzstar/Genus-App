@@ -165,30 +165,32 @@ const Signup: NextPageWithAuthLayout = () => {
 					code: values.code
 				});
 				setTimeout(() => {
-					setActive({ session: result.createdSessionId }).then(() => {
-						setCodeVerification(false);
-						setLoading(false);
-						toast.success("Welcome to Genus!", {
-							description: "Your account has been verified",
-							icon: <Check size={20} />
-						});
-						if (files.length) {
-							setTimeout(
-								_clerk => {
-									_clerk?.user &&
-										void _clerk.user
-											.setProfileImage({
-												file: files[0]!
-											})
-											.then(() => console.log("profile image set in Clerk"))
-											.catch(err => console.error(err));
-								},
-								1000,
-								clerk
-							);
-						}
-					});
-				}, 500);
+					setActive({ session: result.createdSessionId })
+						.then(() => {
+							setCodeVerification(false);
+							setLoading(false);
+							toast.success("Welcome to Genus!", {
+								description: "Your account has been verified",
+								icon: <Check size={20} />
+							});
+							if (files.length) {
+								setTimeout(
+									_clerk => {
+										_clerk?.user &&
+											void _clerk.user
+												.setProfileImage({
+													file: files[0]!
+												})
+												.then(() => console.log("profile image set in Clerk"))
+												.catch(err => console.error(err));
+									},
+									1500,
+									clerk
+								);
+							}
+						})
+						.catch(err => console.error(err));
+				}, 1000);
 				// router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
 			} catch (err: any) {
 				setLoading(false);

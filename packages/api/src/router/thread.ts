@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
 import { eq, thread } from "@genus/db";
@@ -13,7 +14,7 @@ export const threadRouter = createTRPCRouter({
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			return await ctx.db.query.thread.findFirst({
+			const dbThread = await ctx.db.query.thread.findFirst({
 				where: eq(thread.id, input.id),
 				with: {
 					comments: {
@@ -24,5 +25,7 @@ export const threadRouter = createTRPCRouter({
 					}
 				}
 			});
+			if (!dbThread) throw new TRPCError({ code: "NOT_FOUND", message: "Thread not found" });
+			return dbThread;
 		})
 });

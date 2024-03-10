@@ -13,14 +13,14 @@ import { user } from "./user";
 /*******************************************************************************
  *****************************  RELATIONS  **************************************/
 /*******************************************************************************/
-export const usersRelations = relations(user, ({ many }) => ({
+export const usersRelations = relations(user, ({ one, many }) => ({
 	messages: many(message),
 	comments: many(comment),
 	reactions: many(reaction),
 	threads: many(thread),
 	groups: many(group),
 	groupUsers: many(groupUser),
-	careerInterests: many(careerInterest)
+	careerInterests: many(careerInterestToUser)
 }));
 
 export const messageRelations = relations(message, ({ one, many }) => ({
@@ -91,14 +91,17 @@ export const threadRelations = relations(thread, ({ one, many }) => ({
 	})
 }));
 
-export const schema = {
-	user,
-	group,
-	message,
-	comment,
-	reaction,
-	thread,
-	groupUser,
-	careerInterest,
-	careerInterestToUser
-};
+export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
+	user: many(careerInterestToUser)
+}));
+
+export const careerInterestToUserRelations = relations(careerInterestToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [careerInterestToUser.b],
+		references: [user.id]
+	}),
+	careerInterest: one(careerInterest, {
+		fields: [careerInterestToUser.a],
+		references: [careerInterest.id]
+	})
+}));

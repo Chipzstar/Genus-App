@@ -1,23 +1,30 @@
-import { Client } from "@planetscale/database";
+import { neon } from "@neondatabase/serverless";
 import { PrismaClient } from "@prisma/client/edge"; // Import from '@prisma/client/edge'
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
-import { schema } from "./schema";
+export * from "../drizzle/schema";
+
+export const connectionString = [
+	"postgresql://",
+	process.env.DB_USERNAME,
+	":",
+	process.env.DB_PASSWORD,
+	"@",
+	process.env.DB_HOST,
+	"/",
+	process.env.DB_NAME,
+	"?sslmode=require"
+].join("");
+
+const sql = neon(connectionString);
+const db = drizzle(sql);
+
+export type DrizzleClient = typeof db;
 
 export { mySqlTable as tableCreator } from "./schema/_table";
 
 export * from "drizzle-orm";
-
-const psClient = new Client({
-	host: process.env.DB_HOST!,
-	username: process.env.DB_USERNAME!,
-	password: process.env.DB_PASSWORD!
-});
-
-const db = drizzle(psClient, { schema });
-
-export type DrizzleClient = typeof db;
 
 const createStandardPrismaClient = () => {
 	return new PrismaClient({
@@ -48,7 +55,4 @@ if (process.env.NODE_ENV !== "production") {
 
 export * from "@prisma/client";
 
-export const { user, groupUser, group, message, comment, reaction, thread, careerInterest, careerInterestToUser } =
-	schema;
-
-export { psClient, db, accelerateDB };
+export { sql, db, accelerateDB };

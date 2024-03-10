@@ -1,32 +1,12 @@
 import * as process from "process";
 import type { Config } from "drizzle-kit";
 
-const uri = [
-	"mysql://",
-	process.env.DB_USERNAME,
-	":",
-	process.env.DB_PASSWORD,
-	"@",
-	process.env.DB_HOST,
-	"/",
-	process.env.DB_NAME,
-	'?ssl={"rejectUnauthorized":true}'
-].join("");
+import { connectionString } from "./src";
 
 export default {
-	schema: [
-		"./src/schema/user.ts",
-		"./src/schema/groupUser.ts",
-		"./src/schema/group.ts",
-		"./src/schema/message.ts",
-		"./src/schema/reaction.ts",
-		"./src/schema/thread.ts",
-		"./src/schema/comment.ts",
-		"./src/schema/careerInterest.ts",
-		"./src/schema/careerInterestToUser.ts"
-	],
+	schema: "./drizzle/schema.ts",
 	out: "./drizzle",
-	driver: "mysql2",
-	dbCredentials: { uri },
+	driver: "pg",
+	dbCredentials: { connectionString },
 	verbose: process.env.NODE_ENV !== "production"
 } satisfies Config;

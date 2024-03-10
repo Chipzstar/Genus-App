@@ -1,0 +1,4 @@
+load database
+        from mysql://cth6rqfqyzzg2yv14m50:pscale_pw_EgFPByjUd3kPVkZk7KrNPMti9TzaUFWUekeUacOp2Qs@aws.connect.psdb.cloud/genus-db?sslmode=require
+        into postgresql://Chipzstar:endpoint=ep-cold-fire-a2m5zzyp;jDfemPI91Zau@ep-cold-fire-a2m5zzyp.eu-central-1.aws.neon.tech/genus-db?sslmode=require
+    alter schema 'genus-db' rename to 'public';

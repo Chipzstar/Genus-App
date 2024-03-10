@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
-import { eq, user } from "@genus/db";
+import { careerInterest, careerInterestToUser, eq, inArray, user } from "@genus/db";
 import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
@@ -20,25 +20,33 @@ export const userRouter = createTRPCRouter({
 		return ctx.db.query.user.findFirst({ where: eq(user.id, input) });
 	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
-		const user = await ctx.accelerateDB.user.findUniqueOrThrow({
-			where: { clerkId: ctx.auth.userId },
-			select: {
-				firstname: true,
-				lastname: true,
-				profileType: true,
-				gender: true,
-				ethnicity: true,
-				university: true,
-				broadDegreeCourse: true,
-				degreeName: true,
-				completionYear: true,
-				careerInterests: true
-			}
-		});
-		ctx.logger.info("-----------------------------------------");
-		ctx.logger.debug("User", user);
-		ctx.logger.info("-----------------------------------------");
-		return user;
+		try {
+			const fields = {
+				firstname: user.firstname,
+				lastname: user.lastname,
+				profileType: user.profileType,
+				gender: user.gender,
+				ethnicity: user.ethnicity,
+				university: user.university,
+				broadDegreeCourse: user.broadDegreeCourse,
+				degreeName: user.degreeName,
+				completionYear: user.completionYear
+			};
+			const dbUser = await ctx.db.query.user.findFirst({
+				where: eq(user.clerkId, ctx.auth.userId),
+				with: {
+					careerInterests: true
+				}
+			});
+			console.log(dbUser);
+			ctx.logger.info("-----------------------------------------");
+			ctx.logger.debug("User", dbUser);
+			ctx.logger.info("-----------------------------------------");
+			return dbUser;
+		} catch (err: any) {
+			console.error(err);
+			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.body.message });
+		}
 	}),
 	updateProfile: protectedProcedure
 		.input(

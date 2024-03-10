@@ -1,219 +1,268 @@
 {
-  "version": "5",
-  "dialect": "mysql",
-  "id": "681b4f77-4aff-48fa-a6c3-60010d904026",
+  "id": "4d581f0d-788f-4012-b94a-169a14f68ee4",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
   "tables": {
-    "User": {
-      "name": "User",
+    "careerInterest": {
+      "name": "careerInterest",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "careerInterest_slug",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49236_careerInterest_slug_key": {
+          "name": "idx_49236_careerInterest_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "_careerInterestToUser": {
+      "name": "_careerInterestToUser",
+      "schema": "",
+      "columns": {
+        "a": {
+          "name": "a",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "b": {
+          "name": "b",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49306__careerinteresttouser_b_index": {
+          "name": "idx_49306__careerinteresttouser_b_index",
+          "columns": [
+            "b"
+          ],
+          "isUnique": false
+        },
+        "idx_49306__careerinteresttouser_ab_unique": {
+          "name": "idx_49306__careerinteresttouser_ab_unique",
+          "columns": [
+            "a",
+            "b"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "comment": {
+      "name": "comment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "datetime(3)",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
+          "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "datetime(3)",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
+          "default": "now()"
         },
-        "clerkId": {
-          "name": "clerkId",
+        "commentId": {
+          "name": "commentId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
-        "email": {
-          "name": "email",
+        "content": {
+          "name": "content",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
-        "firstname": {
-          "name": "firstname",
+        "authorId": {
+          "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
-        "lastname": {
-          "name": "lastname",
+        "threadId": {
+          "name": "threadId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gender": {
-          "name": "gender",
-          "type": "enum('male','female','non_binary','other')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'female'"
-        },
-        "completionYear": {
-          "name": "completionYear",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "broadDegreeCourse": {
-          "name": "broadDegreeCourse",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "university": {
-          "name": "university",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "degreeName": {
-          "name": "degreeName",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "imageKey": {
-          "name": "imageKey",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "imageUrl": {
-          "name": "imageUrl",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "clerkImageHash": {
-          "name": "clerkImageHash",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "profileType": {
-          "name": "profileType",
-          "type": "enum('STUDENT','ADMIN','EXPERT')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'STUDENT'"
-        },
-        "ethnicity": {
-          "name": "ethnicity",
-          "type": "enum('english__welsh__scottish__northern_irish_or_british','irish','gypsy_or_irish_traveller','roma','any_other_white_background','caribbean','african','any_other_black__black_british__or_caribbean_background','indian','pakistani','bangladeshi','chinese','any_other_asian_background','white_and_black_caribbean','white_and_black_african','white_and_asian','any_other_mixed_or_multiple_ethnic_background','arab','any_other_ethnic_group')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'african'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "User_id": {
-          "name": "User_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "User_clerkId_key": {
-          "name": "User_clerkId_key",
-          "columns": [
-            "clerkId"
-          ]
-        },
-        "User_email_key": {
-          "name": "User_email_key",
-          "columns": [
-            "email"
-          ]
-        }
-      }
-    },
-    "GroupUser": {
-      "name": "GroupUser",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "groupId": {
           "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49241_comment_authorId_threadId_groupId_idx": {
+          "name": "idx_49241_comment_authorId_threadId_groupId_idx",
+          "columns": [
+            "authorId",
+            "threadId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49241_comment_commentId_key": {
+          "name": "idx_49241_comment_commentId_key",
+          "columns": [
+            "commentId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "group": {
+      "name": "group",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49250_group_groupId_key": {
+          "name": "idx_49250_group_groupId_key",
+          "columns": [
+            "groupId"
+          ],
+          "isUnique": true
+        },
+        "idx_49250_group_slug_key": {
+          "name": "idx_49250_group_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "groupUser": {
+      "name": "groupUser",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
         },
         "role": {
           "name": "role",
-          "type": "enum('ADMIN','EXPERT','MEMBER')",
+          "type": "groupUser_role",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'MEMBER'"
         },
         "firstname": {
           "name": "firstname",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "imageUrl": {
           "name": "imageUrl",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "lastname": {
           "name": "lastname",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         }
       },
       "indexes": {
-        "GroupUser_userId_groupId_idx": {
-          "name": "GroupUser_userId_groupId_idx",
+        "idx_49259_groupuser_userId_groupId_idx": {
+          "name": "idx_49259_groupuser_userId_groupId_idx",
           "columns": [
             "userId",
             "groupId"
@@ -222,547 +271,458 @@
         }
       },
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "GroupUser_id": {
-          "name": "GroupUser_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "Group": {
-      "name": "Group",
+    "message": {
+      "name": "message",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
-        },
-        "groupId": {
-          "name": "groupId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "Group_id": {
-          "name": "Group_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "Group_groupId_key": {
-          "name": "Group_groupId_key",
-          "columns": [
-            "groupId"
-          ]
-        },
-        "Group_slug_key": {
-          "name": "Group_slug_key",
-          "columns": [
-            "slug"
-          ]
-        }
-      }
-    },
-    "Message": {
-      "name": "Message",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "content": {
           "name": "content",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "datetime(3)",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
+          "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "datetime(3)",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
+          "default": "now()"
         },
         "messageId": {
           "name": "messageId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "authorId": {
           "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "groupId": {
           "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "type": {
           "name": "type",
-          "type": "enum('NORMAL','EVENT','ANNOUNCEMENT')",
+          "type": "message_type",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'NORMAL'"
         }
       },
       "indexes": {
-        "Message_authorId_groupId_idx": {
-          "name": "Message_authorId_groupId_idx",
-          "columns": [
-            "authorId",
-            "groupId"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "Message_id": {
-          "name": "Message_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "Message_messageId_key": {
-          "name": "Message_messageId_key",
+        "idx_49267_message_messageId_key": {
+          "name": "idx_49267_message_messageId_key",
           "columns": [
             "messageId"
-          ]
-        }
-      }
-    },
-    "Reaction": {
-      "name": "Reaction",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
-        },
-        "reactionId": {
-          "name": "reactionId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "authorId": {
-          "name": "authorId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "messageId": {
-          "name": "messageId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "commentId": {
-          "name": "commentId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "emoji": {
-          "name": "emoji",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "code": {
-          "name": "code",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "Reaction_authorId_messageId_commentId_idx": {
-          "name": "Reaction_authorId_messageId_commentId_idx",
-          "columns": [
-            "authorId",
-            "messageId",
-            "commentId"
           ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "Reaction_id": {
-          "name": "Reaction_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "Reaction_reactionId_key": {
-          "name": "Reaction_reactionId_key",
-          "columns": [
-            "reactionId"
-          ]
-        }
-      }
-    },
-    "Thread": {
-      "name": "Thread",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "isUnique": true
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
-        },
-        "threadId": {
-          "name": "threadId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "content": {
-          "name": "content",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "authorId": {
-          "name": "authorId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "messageId": {
-          "name": "messageId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "groupId": {
-          "name": "groupId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "Thread_authorId_messageId_groupId_idx": {
-          "name": "Thread_authorId_messageId_groupId_idx",
+        "idx_49267_message_authorId_groupId_idx": {
+          "name": "idx_49267_message_authorId_groupId_idx",
           "columns": [
             "authorId",
-            "messageId",
             "groupId"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "Thread_id": {
-          "name": "Thread_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "Thread_threadId_key": {
-          "name": "Thread_threadId_key",
-          "columns": [
-            "threadId"
-          ]
-        },
-        "Thread_messageId_key": {
-          "name": "Thread_messageId_key",
-          "columns": [
-            "messageId"
-          ]
-        }
-      }
-    },
-    "Comment": {
-      "name": "Comment",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)"
-        },
-        "commentId": {
-          "name": "commentId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "content": {
-          "name": "content",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "authorId": {
-          "name": "authorId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "threadId": {
-          "name": "threadId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "groupId": {
-          "name": "groupId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "Comment_authorId_threadId_groupId_idx": {
-          "name": "Comment_authorId_threadId_groupId_idx",
-          "columns": [
-            "authorId",
-            "threadId",
-            "groupId"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "Comment_id": {
-          "name": "Comment_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "Comment_commentId_key": {
-          "name": "Comment_commentId_key",
-          "columns": [
-            "commentId"
-          ]
-        }
-      }
-    },
-    "CareerInterest": {
-      "name": "CareerInterest",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "enum('law','tech','consulting','banking_finance')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "CareerInterest_id": {
-          "name": "CareerInterest_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "CareerInterest_slug_key": {
-          "name": "CareerInterest_slug_key",
-          "columns": [
-            "slug"
-          ]
-        }
-      }
-    },
-    "_CareerInterestToUser": {
-      "name": "_CareerInterestToUser",
-      "columns": {
-        "A": {
-          "name": "A",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "B": {
-          "name": "B",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "_CareerInterestToUser_B_index": {
-          "name": "_CareerInterestToUser_B_index",
-          "columns": [
-            "B"
           ],
           "isUnique": false
         }
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "_CareerInterestToUser_AB_unique": {
-          "name": "_CareerInterestToUser_AB_unique",
-          "columns": [
-            "A",
-            "B"
-          ]
+      "uniqueConstraints": {}
+    },
+    "reaction": {
+      "name": "reaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reactionId": {
+          "name": "reactionId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "commentId": {
+          "name": "commentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "emoji": {
+          "name": "emoji",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
         }
+      },
+      "indexes": {
+        "idx_49277_reaction_authorId_messageId_commentId_idx": {
+          "name": "idx_49277_reaction_authorId_messageId_commentId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "commentId"
+          ],
+          "isUnique": false
+        },
+        "idx_49277_reaction_reactionId_key": {
+          "name": "idx_49277_reaction_reactionId_key",
+          "columns": [
+            "reactionId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "thread": {
+      "name": "thread",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49286_thread_authorId_messageId_groupId_idx": {
+          "name": "idx_49286_thread_authorId_messageId_groupId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49286_thread_threadId_key": {
+          "name": "idx_49286_thread_threadId_key",
+          "columns": [
+            "threadId"
+          ],
+          "isUnique": true
+        },
+        "idx_49286_thread_messageId_key": {
+          "name": "idx_49286_thread_messageId_key",
+          "columns": [
+            "messageId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "clerkId": {
+          "name": "clerkId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gender": {
+          "name": "gender",
+          "type": "user_gender",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'female'"
+        },
+        "completionYear": {
+          "name": "completionYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "broadDegreeCourse": {
+          "name": "broadDegreeCourse",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "degreeName": {
+          "name": "degreeName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "imageKey": {
+          "name": "imageKey",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clerkImageHash": {
+          "name": "clerkImageHash",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profileType": {
+          "name": "profileType",
+          "type": "user_profileType",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'STUDENT'"
+        },
+        "ethnicity": {
+          "name": "ethnicity",
+          "type": "user_ethnicity",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'african'"
+        }
+      },
+      "indexes": {
+        "idx_49295_user_clerkId_key": {
+          "name": "idx_49295_user_clerkId_key",
+          "columns": [
+            "clerkId"
+          ],
+          "isUnique": true
+        },
+        "idx_49295_user_email_key": {
+          "name": "idx_49295_user_email_key",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "careerInterest_slug": {
+      "name": "careerInterest_slug",
+      "values": {
+        "law": "law",
+        "tech": "tech",
+        "consulting": "consulting",
+        "banking_finance": "banking_finance"
+      }
+    },
+    "groupUser_role": {
+      "name": "groupUser_role",
+      "values": {
+        "ADMIN": "ADMIN",
+        "EXPERT": "EXPERT",
+        "MEMBER": "MEMBER"
+      }
+    },
+    "message_type": {
+      "name": "message_type",
+      "values": {
+        "NORMAL": "NORMAL",
+        "EVENT": "EVENT",
+        "ANNOUNCEMENT": "ANNOUNCEMENT"
+      }
+    },
+    "user_ethnicity": {
+      "name": "user_ethnicity",
+      "values": {
+        "english__welsh__scottish__northern_irish_or_british": "english__welsh__scottish__northern_irish_or_british",
+        "irish": "irish",
+        "gypsy_or_irish_traveller": "gypsy_or_irish_traveller",
+        "roma": "roma",
+        "any_other_white_background": "any_other_white_background",
+        "caribbean": "caribbean",
+        "african": "african",
+        "any_other_black__black_british__or_caribbean_background": "any_other_black__black_british__or_caribbean_background",
+        "indian": "indian",
+        "pakistani": "pakistani",
+        "bangladeshi": "bangladeshi",
+        "chinese": "chinese",
+        "any_other_asian_background": "any_other_asian_background",
+        "white_and_black_caribbean": "white_and_black_caribbean",
+        "white_and_black_african": "white_and_black_african",
+        "white_and_asian": "white_and_asian",
+        "any_other_mixed_or_multiple_ethnic_background": "any_other_mixed_or_multiple_ethnic_background",
+        "arab": "arab",
+        "any_other_ethnic_group": "any_other_ethnic_group"
+      }
+    },
+    "user_gender": {
+      "name": "user_gender",
+      "values": {
+        "male": "male",
+        "female": "female",
+        "non_binary": "non_binary",
+        "other": "other"
+      }
+    },
+    "user_profileType": {
+      "name": "user_profileType",
+      "values": {
+        "STUDENT": "STUDENT",
+        "ADMIN": "ADMIN",
+        "EXPERT": "EXPERT"
       }
     }
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

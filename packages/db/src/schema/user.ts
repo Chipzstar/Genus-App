@@ -1,58 +1,55 @@
 import { sql } from "drizzle-orm";
-import { datetime, int, mysqlEnum, mysqlTable, primaryKey, unique, varchar } from "drizzle-orm/mysql-core";
+import { index, integer, pgEnum, pgTable, serial, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
-export const user = mysqlTable(
-	"User",
+export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
+export const userProfileType = pgEnum("user_profileType", ["STUDENT", "ADMIN", "EXPERT"]);
+export const userEthnicity = pgEnum("user_ethnicity", [
+	"english__welsh__scottish__northern_irish_or_british",
+	"irish",
+	"gypsy_or_irish_traveller",
+	"roma",
+	"any_other_white_background",
+	"caribbean",
+	"african",
+	"any_other_black__black_british__or_caribbean_background",
+	"indian",
+	"pakistani",
+	"bangladeshi",
+	"chinese",
+	"any_other_asian_background",
+	"white_and_black_caribbean",
+	"white_and_black_african",
+	"white_and_asian",
+	"any_other_mixed_or_multiple_ethnic_background",
+	"arab",
+	"any_other_ethnic_group"
+]);
+
+export const user = pgTable(
+	"user",
 	{
-		id: int("id").autoincrement().notNull(),
-		createdAt: datetime("createdAt", { mode: "date", fsp: 3 })
-			.default(sql`CURRENT_TIMESTAMP(3)`)
-			.notNull(),
-		updatedAt: datetime("updatedAt", { mode: "date", fsp: 3 })
-			.default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
-			.notNull(),
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		clerkId: varchar("clerkId", { length: 191 }).notNull(),
 		email: varchar("email", { length: 191 }).notNull(),
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
-		gender: mysqlEnum("gender", ["male", "female", "non_binary", "other"]).default("female").notNull(),
-		completionYear: int("completionYear").notNull(),
-		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }).notNull(),
+		gender: userGender("gender").default("female").notNull(),
+		completionYear: integer("completionyear").notNull(),
+		broadDegreeCourse: varchar("broaddegreecourse", { length: 191 }).notNull(),
 		university: varchar("university", { length: 191 }).notNull(),
-		degreeName: varchar("degreeName", { length: 191 }).notNull(),
-		imageKey: varchar("imageKey", { length: 191 }),
-		imageUrl: varchar("imageUrl", { length: 191 }),
-		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
-		profileType: mysqlEnum("profileType", ["STUDENT", "ADMIN", "EXPERT"]).default("STUDENT").notNull(),
-		ethnicity: mysqlEnum("ethnicity", [
-			"english__welsh__scottish__northern_irish_or_british",
-			"irish",
-			"gypsy_or_irish_traveller",
-			"roma",
-			"any_other_white_background",
-			"caribbean",
-			"african",
-			"any_other_black__black_british__or_caribbean_background",
-			"indian",
-			"pakistani",
-			"bangladeshi",
-			"chinese",
-			"any_other_asian_background",
-			"white_and_black_caribbean",
-			"white_and_black_african",
-			"white_and_asian",
-			"any_other_mixed_or_multiple_ethnic_background",
-			"arab",
-			"any_other_ethnic_group"
-		])
-			.default("african")
-			.notNull()
+		degreename: varchar("degreename", { length: 191 }).notNull(),
+		imagekey: varchar("imagekey", { length: 191 }),
+		imageurl: varchar("imageurl", { length: 191 }),
+		clerkimagehash: varchar("clerkimagehash", { length: 191 }),
+		profiletype: userProfileType("profileType").default("STUDENT").notNull(),
+		ethnicity: userEthnicity("ethnicity").default("african").notNull()
 	},
 	table => {
 		return {
-			userId: primaryKey({ columns: [table.id], name: "User_id" }),
-			userClerkIdKey: unique("User_clerkId_key").on(table.clerkId),
-			userEmailKey: unique("User_email_key").on(table.email)
+			idx49295UserClerkidKey: uniqueIndex("idx_49295_user_clerkid_key").on(table.clerkid),
+			idx49295UserEmailKey: uniqueIndex("idx_49295_user_email_key").on(table.email)
 		};
 	}
 );

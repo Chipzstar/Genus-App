@@ -1,9 +1,11 @@
 import * as z from "zod";
 
+import { eq, thread } from "@genus/db";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const threadRouter = createTRPCRouter({
-	getThreads: protectedProcedure.query(async ({ ctx }) => await ctx.accelerateDB.thread.findMany()),
+	getThreads: protectedProcedure.query(async ({ ctx }) => await ctx.db.query.thread.findMany()),
 	getThreadById: protectedProcedure
 		.input(
 			z.object({
@@ -11,13 +13,11 @@ export const threadRouter = createTRPCRouter({
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			return ctx.accelerateDB.thread.findUniqueOrThrow({
-				where: {
-					id: input.id
-				},
-				include: {
+			return await ctx.db.query.thread.findFirst({
+				where: eq(thread.id, input.id),
+				with: {
 					comments: {
-						include: {
+						with: {
 							author: true,
 							reactions: true
 						}

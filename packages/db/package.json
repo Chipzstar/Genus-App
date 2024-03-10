@@ -13,17 +13,14 @@
     "db:studio": "pnpm with-env drizzle-kit studio",
     "db:push": "pnpm with-env drizzle-kit push:pg",
     "db:pull": "pnpm with-env drizzle-kit introspect:pg",
-    "db:migrate": "pnpm with-env drizzle-kit generate:pg",
-    "db:generate": "pnpm with-env prisma generate --no-engine",
+    "db:migrate": "pnpm with-env tsx ./migrate.ts",
+    "db:generate": "pnpm with-env drizzle-kit generate:pg",
     "db:drop": "pnpm with-env drizzle-kit drop",
     "db:merge": "pnpm prismerge",
     "db:sync": "pnpm prismerge && pnpm with-env prisma generate && pnpm with-env prisma db push"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",
-    "@prisma-utils/prismerge": "^1.7.0",
-    "@prisma/client": "^5.9.1",
-    "@prisma/extension-accelerate": "^0.6.3",
     "drizzle-orm": "^0.29.4",
     "mysql2": "^3.9.2"
   },
@@ -34,8 +31,9 @@
     "dotenv-cli": "^6.0.0",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8.57.0",
+    "pg": "^8.11.3",
     "prettier": "^3.2.5",
-    "prisma": "^5.9.1",
+    "tsx": "^4.7.1",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {

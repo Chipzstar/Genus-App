@@ -1,6 +1,6 @@
 {
-  "id": "4d581f0d-788f-4012-b94a-169a14f68ee4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "564d848a-4eb2-45ac-ac7e-c7bd4dd2f83d",
+  "prevId": "6dd6ebce-e1a8-458c-9fdd-4725e524b0a2",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -34,42 +34,34 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "_careerInterestToUser": {
-      "name": "_careerInterestToUser",
+    "careerInterestToUser": {
+      "name": "careerInterestToUser",
       "schema": "",
       "columns": {
-        "a": {
-          "name": "a",
+        "careerInterestId": {
+          "name": "careerInterestId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "b": {
-          "name": "b",
+        "userId": {
+          "name": "userId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
       },
-      "indexes": {
-        "idx_49306__careerinteresttouser_b_index": {
-          "name": "idx_49306__careerinteresttouser_b_index",
-          "columns": [
-            "b"
-          ],
-          "isUnique": false
-        },
-        "idx_49306__careerinteresttouser_ab_unique": {
-          "name": "idx_49306__careerinteresttouser_ab_unique",
-          "columns": [
-            "a",
-            "b"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "careerInterestUserId": {
+          "name": "careerInterestUserId",
+          "columns": [
+            "careerInterestId",
+            "userId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "comment": {
@@ -261,8 +253,8 @@
         }
       },
       "indexes": {
-        "idx_49259_groupuser_userId_groupId_idx": {
-          "name": "idx_49259_groupuser_userId_groupId_idx",
+        "groupUser_userId_groupId_idx": {
+          "name": "groupUser_userId_groupId_idx",
           "columns": [
             "userId",
             "groupId"
@@ -631,15 +623,15 @@
         }
       },
       "indexes": {
-        "idx_49295_user_clerkId_key": {
-          "name": "idx_49295_user_clerkId_key",
+        "clerkIdIdx": {
+          "name": "clerkIdIdx",
           "columns": [
             "clerkId"
           ],
           "isUnique": true
         },
-        "idx_49295_user_email_key": {
-          "name": "idx_49295_user_email_key",
+        "emailIdx": {
+          "name": "emailIdx",
           "columns": [
             "email"
           ],

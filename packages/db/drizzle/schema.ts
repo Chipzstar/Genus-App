@@ -116,8 +116,8 @@ export const message = pgTable(
 	{
 		id: serial("id").primaryKey().notNull(),
 		content: varchar("content", { length: 191 }).notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
 		messageId: varchar("messageId", { length: 191 }).notNull(),
 		authorId: varchar("authorId", { length: 191 }).notNull(),
 		groupId: varchar("groupId", { length: 191 }).notNull(),
@@ -227,16 +227,6 @@ export const careerInterestToUser = pgTable(
 /*******************************************************************************
  *****************************  RELATIONS  **************************************/
 /*******************************************************************************/
-export const usersRelations = relations(user, ({ one, many }) => ({
-	messages: many(message),
-	comments: many(comment),
-	reactions: many(reaction),
-	threads: many(thread),
-	groups: many(group),
-	groupUsers: many(groupUser),
-	careerInterests: many(careerInterestToUser)
-}));
-
 export const messageRelations = relations(message, ({ one, many }) => ({
 	reactions: many(reaction),
 	group: one(group, {
@@ -246,7 +236,8 @@ export const messageRelations = relations(message, ({ one, many }) => ({
 	author: one(user, {
 		fields: [message.authorId],
 		references: [user.clerkId]
-	})
+	}),
+	thread: one(thread)
 }));
 
 export const commentRelations = relations(comment, ({ one, many }) => ({
@@ -266,7 +257,7 @@ export const commentRelations = relations(comment, ({ one, many }) => ({
 }));
 
 export const groupRelations = relations(group, ({ one, many }) => ({
-	groupUsers: many(groupUser),
+	members: many(groupUser),
 	messages: many(message),
 	threads: many(thread)
 }));
@@ -286,6 +277,14 @@ export const reactionRelations = relations(reaction, ({ one }) => ({
 	author: one(user, {
 		fields: [reaction.authorId],
 		references: [user.clerkId]
+	}),
+	message: one(message, {
+		fields: [reaction.messageId],
+		references: [message.id]
+	}),
+	commentId: one(comment, {
+		fields: [reaction.commentId],
+		references: [comment.id]
 	})
 }));
 
@@ -305,6 +304,15 @@ export const threadRelations = relations(thread, ({ one, many }) => ({
 	})
 }));
 
+export const usersRelations = relations(user, ({ one, many }) => ({
+	messages: many(message),
+	comments: many(comment),
+	reactions: many(reaction),
+	threads: many(thread),
+	groupUsers: many(groupUser),
+	careerInterests: many(careerInterestToUser)
+}));
+
 export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
 	user: many(careerInterestToUser)
 }));
@@ -319,3 +327,26 @@ export const careerInterestToUserRelations = relations(careerInterestToUser, ({ 
 		references: [careerInterest.id]
 	})
 }));
+
+const schema = {
+	user,
+	group,
+	message,
+	comment,
+	reaction,
+	thread,
+	groupUser,
+	careerInterest,
+	careerInterestToUser,
+	usersRelations,
+	groupRelations,
+	messageRelations,
+	commentRelations,
+	threadRelations,
+	groupUserRelations,
+	reactionRelations,
+	careerInterestToUserRelations,
+	careerInterestRelations
+};
+
+export default schema;

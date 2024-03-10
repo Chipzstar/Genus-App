@@ -72,7 +72,7 @@ export const EditProfile = ({
 							})
 							.then(() => console.log("profile updated in Clerk"));
 				}
-				resetMode();
+				setTimeout(resetMode, 300);
 			} catch (err) {
 				console.error(err);
 				toast.error("Error!", {

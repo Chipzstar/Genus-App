@@ -47,11 +47,12 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 				profileType: dbUser.profileType
 			}
 		});
+
 		// add the user to the relevant career interest record
 		const queries = careerInterestsPayload.map(slug => {
 			return {
-				a: CAREER_INTERESTS[slug],
-				b: dbUser.id
+				careerInterestId: CAREER_INTERESTS[slug],
+				userId: dbUser.id
 			};
 		});
 
@@ -160,7 +161,7 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		let dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id!)))[0];
 		if (!dbUser) throw new Error("Could not find user");
 		// disconnect any career interests
-		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.b, dbUser.id));
+		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.userId, dbUser.id));
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id as string));
 		// delete the magicbell user

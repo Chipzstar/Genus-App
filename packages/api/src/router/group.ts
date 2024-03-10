@@ -1,10 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
+import { desc, eq, group, groupUser, message, user } from "@genus/db";
+
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const groupRouter = createTRPCRouter({
-	getGroups: publicProcedure.query(async ({ ctx }) => await ctx.accelerateDB.group.findMany()),
+	getGroups: publicProcedure.query(async ({ ctx }) => await ctx.db.query.group.findMany()),
 	getGroupById: protectedProcedure
 		.input(
 			z.object({
@@ -12,10 +14,8 @@ export const groupRouter = createTRPCRouter({
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			return ctx.accelerateDB.group.findFirst({
-				where: {
-					id: input.id
-				}
+			return ctx.db.query.group.findFirst({
+				where: eq(group.id, input.id)
 			});
 		}),
 	getGroupBySlug: protectedProcedure
@@ -26,39 +26,36 @@ export const groupRouter = createTRPCRouter({
 		)
 		.query(async ({ ctx, input }) => {
 			try {
-				const group = await ctx.accelerateDB.group.findUniqueOrThrow({
-					where: {
-						slug: input.slug
-					},
-					include: {
+				const dbGroup = await ctx.db.query.group.findFirst({
+					where: eq(group.slug, input.slug),
+					with: {
 						members: {
-							select: {
+							columns: {
 								userId: true,
+								role: true
+							},
+							with: {
 								user: {
-									select: {
+									columns: {
 										firstname: true,
 										lastname: true,
 										imageUrl: true
 									}
-								},
-								role: true
+								}
 							}
 						}
-					},
-					cacheStrategy: {
-						ttl: 3
 					}
 				});
-				const messages = await ctx.accelerateDB.message.findMany({
-					where: {
-						groupId: group.groupId
-					},
-					orderBy: {
-						createdAt: "desc"
-					},
-					include: {
+
+				if (!dbGroup) throw new TRPCError({ code: "NOT_FOUND", message: "Group not found" });
+				console.log(dbGroup);
+
+				const messages = await ctx.db.query.message.findMany({
+					where: eq(message.groupId, dbGroup.groupId),
+					orderBy: [desc(message.createdAt)],
+					with: {
 						author: {
-							select: {
+							columns: {
 								firstname: true,
 								lastname: true,
 								imageUrl: true
@@ -72,10 +69,11 @@ export const groupRouter = createTRPCRouter({
 				ctx.logger.debug("Group messages!!", messages);
 				ctx.logger.info("********************************************");
 				return {
-					group,
+					group: dbGroup,
 					messages
 				};
 			} catch (err: any) {
+				console.error(err);
 				ctx.logger.error("Something went wrong!", err);
 				throw new TRPCError({
 					code: "NOT_FOUND",
@@ -93,32 +91,34 @@ export const groupRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			try {
 				// lookup up the user using the clerk userId
-				const user = await ctx.accelerateDB.user.findUniqueOrThrow({
-					where: {
-						clerkId: ctx.auth.userId
-					},
-					cacheStrategy: {
-						ttl: 60,
-						swr: 60
+				const dbUser = await ctx.db.query.user.findFirst({
+					where: eq(user.clerkId, ctx.auth.userId)
+				});
+
+				if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+				const dbGroup = await ctx.db.query.group.findFirst({
+					where: eq(group.slug, input.slug),
+					with: {
+						members: true
 					}
 				});
-				return await ctx.accelerateDB.group.update({
-					where: {
-						slug: input.slug
-					},
-					data: {
-						members: {
-							create: {
-								role: "MEMBER",
-								userId: ctx.auth.userId,
-								firstname: user.firstname,
-								lastname: user.lastname,
-								imageUrl: user.imageUrl ?? undefined
-							}
-						}
-					}
-				});
+
+				if (!dbGroup) throw new TRPCError({ code: "NOT_FOUND", message: "Group not found" });
+
+				return await ctx.db
+					.insert(groupUser)
+					.values({
+						userId: ctx.auth.userId,
+						groupId: dbGroup.groupId,
+						firstname: dbUser.firstname,
+						lastname: dbUser.lastname,
+						imageUrl: dbUser.imageUrl ?? undefined,
+						role: "MEMBER"
+					})
+					.returning();
 			} catch (err: any) {
+				console.error(err);
 				ctx.logger.error("Something went wrong!", err);
 				throw new TRPCError({
 					code: "INTERNAL_SERVER_ERROR",

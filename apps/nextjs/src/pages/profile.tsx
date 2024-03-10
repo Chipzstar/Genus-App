@@ -55,7 +55,7 @@ const UserProfilePage = () => {
 				description: "Your profile has been updated.",
 				duration: 3000
 			});
-			void utils.user.getByClerkId.invalidate();
+			setTimeout(() => void utils.user.getByClerkId.invalidate(), 300);
 		}
 	});
 

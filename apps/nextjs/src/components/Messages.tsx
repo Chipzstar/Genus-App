@@ -1,16 +1,17 @@
 "use client";
 
-import React, {forwardRef, useRef} from 'react'
-import Image from 'next/image'
-import {useSession} from '@clerk/nextjs'
-import {cn} from '@genus/ui'
-import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from '@genus/ui/context-menu'
-import {ChatBubble} from '~/components/ChatBubble'
-import EmojiDialog from '~/components/EmojiDialog'
-import ReplyDialog from '~/components/ReplyDialog'
-import {formatTimestamp} from '~/utils'
-import type {Message} from '~/utils/types'
-import {Messages} from '~/utils/types'
+import React, { forwardRef, useRef } from "react";
+import Image from "next/image";
+import { useSession } from "@clerk/nextjs";
+
+import { cn } from "@genus/ui";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@genus/ui/context-menu";
+
+import { ChatBubble } from "~/components/ChatBubble";
+import EmojiDialog from "~/components/EmojiDialog";
+import ReplyDialog from "~/components/ReplyDialog";
+import { formatTimestamp } from "~/utils";
+import type { Messages } from "~/utils/types";
 
 interface MessagesProps {
 	messages: Messages;
@@ -23,12 +24,12 @@ const Messages = forwardRef<HTMLDivElement | null, MessagesProps>(({ messages, i
 
 	return (
 		<div
-		  	ref={ref}
+			ref={ref}
 			id="messages"
 			className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex h-full flex-1 flex-col-reverse gap-4 overflow-y-auto py-3"
 		>
-			<div/>
-			{messages.map((message: Message, index: number) => {
+			<div />
+			{messages.map((message, index: number) => {
 				const isCurrentUser = !!session && message.authorId === session.user.id;
 				const prevMessage = messages[index - 1];
 				let hasNextMessageFromSameUser: boolean;

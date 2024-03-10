@@ -50,14 +50,9 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 
 const Home = (props: PageProps) => {
-	const { data } = trpc.user.getById.useQuery(8, {
-		onSuccess(data) {
-			console.log(data);
-		}
+	const result = trpc.group.getGroupBySlug.useQuery({
+		slug: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG!
 	});
-	/*const result = trpc.group.getGroupBySlug.useQuery({
-		slug: "interngen-spring-into-banking-event"
-	});*/
 	const router = useRouter();
 	const { signOut, user } = useClerk();
 

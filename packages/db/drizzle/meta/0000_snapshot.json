@@ -1,11 +1,11 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
+  "id": "6dd6ebce-e1a8-458c-9fdd-4725e524b0a2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "careerinterest": {
-      "name": "careerinterest",
+    "careerInterest": {
+      "name": "careerInterest",
       "schema": "",
       "columns": {
         "id": {
@@ -16,14 +16,14 @@
         },
         "slug": {
           "name": "slug",
-          "type": "careerinterest_slug",
+          "type": "careerInterest_slug",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "idx_49236_careerinterest_slug_key": {
-          "name": "idx_49236_careerinterest_slug_key",
+        "idx_49236_careerInterest_slug_key": {
+          "name": "idx_49236_careerInterest_slug_key",
           "columns": [
             "slug"
           ],
@@ -32,6 +32,36 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "careerInterestToUser": {
+      "name": "careerInterestToUser",
+      "schema": "",
+      "columns": {
+        "careerInterestId": {
+          "name": "careerInterestId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "careerInterestUserId": {
+          "name": "careerInterestUserId",
+          "columns": [
+            "careerInterestId",
+            "userId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "comment": {
@@ -44,22 +74,22 @@
           "primaryKey": true,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "commentid": {
-          "name": "commentid",
+        "commentId": {
+          "name": "commentId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
@@ -70,39 +100,39 @@
           "primaryKey": false,
           "notNull": true
         },
-        "authorid": {
-          "name": "authorid",
+        "authorId": {
+          "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "threadid": {
-          "name": "threadid",
+        "threadId": {
+          "name": "threadId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "groupid": {
-          "name": "groupid",
+        "groupId": {
+          "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "idx_49241_comment_authorid_threadid_groupid_idx": {
-          "name": "idx_49241_comment_authorid_threadid_groupid_idx",
+        "idx_49241_comment_authorId_threadId_groupId_idx": {
+          "name": "idx_49241_comment_authorId_threadId_groupId_idx",
           "columns": [
-            "authorid",
-            "threadid",
-            "groupid"
+            "authorId",
+            "threadId",
+            "groupId"
           ],
           "isUnique": false
         },
-        "idx_49241_comment_commentid_key": {
-          "name": "idx_49241_comment_commentid_key",
+        "idx_49241_comment_commentId_key": {
+          "name": "idx_49241_comment_commentId_key",
           "columns": [
-            "commentid"
+            "commentId"
           ],
           "isUnique": true
         }
@@ -121,22 +151,22 @@
           "primaryKey": true,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "groupid": {
-          "name": "groupid",
+        "groupId": {
+          "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
@@ -155,10 +185,10 @@
         }
       },
       "indexes": {
-        "idx_49250_group_groupid_key": {
-          "name": "idx_49250_group_groupid_key",
+        "idx_49250_group_groupId_key": {
+          "name": "idx_49250_group_groupId_key",
           "columns": [
-            "groupid"
+            "groupId"
           ],
           "isUnique": true
         },
@@ -174,8 +204,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "groupuser": {
-      "name": "groupuser",
+    "groupUser": {
+      "name": "groupUser",
       "schema": "",
       "columns": {
         "id": {
@@ -184,21 +214,21 @@
           "primaryKey": true,
           "notNull": true
         },
-        "userid": {
-          "name": "userid",
+        "userId": {
+          "name": "userId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "groupid": {
-          "name": "groupid",
+        "groupId": {
+          "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
         "role": {
           "name": "role",
-          "type": "groupuser_role",
+          "type": "groupUser_role",
           "primaryKey": false,
           "notNull": true,
           "default": "'MEMBER'"
@@ -209,8 +239,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "imageurl": {
-          "name": "imageurl",
+        "imageUrl": {
+          "name": "imageUrl",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": false
@@ -223,11 +253,11 @@
         }
       },
       "indexes": {
-        "idx_49259_groupuser_userid_groupid_idx": {
-          "name": "idx_49259_groupuser_userid_groupid_idx",
+        "groupUser_userId_groupId_idx": {
+          "name": "groupUser_userId_groupId_idx",
           "columns": [
-            "userid",
-            "groupid"
+            "userId",
+            "groupId"
           ],
           "isUnique": false
         }
@@ -252,37 +282,43 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "messageid": {
-          "name": "messageid",
+        "messageId": {
+          "name": "messageId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "authorid": {
-          "name": "authorid",
+        "authorId": {
+          "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "groupid": {
-          "name": "groupid",
+        "groupId": {
+          "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
         },
         "type": {
           "name": "type",
@@ -293,18 +329,18 @@
         }
       },
       "indexes": {
-        "idx_49267_message_messageid_key": {
-          "name": "idx_49267_message_messageid_key",
+        "idx_49267_message_messageId_key": {
+          "name": "idx_49267_message_messageId_key",
           "columns": [
-            "messageid"
+            "messageId"
           ],
           "isUnique": true
         },
-        "idx_49267_message_authorid_groupid_idx": {
-          "name": "idx_49267_message_authorid_groupid_idx",
+        "idx_49267_message_authorId_groupId_idx": {
+          "name": "idx_49267_message_authorId_groupId_idx",
           "columns": [
-            "authorid",
-            "groupid"
+            "authorId",
+            "groupId"
           ],
           "isUnique": false
         }
@@ -323,40 +359,40 @@
           "primaryKey": true,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "reactionid": {
-          "name": "reactionid",
+        "reactionId": {
+          "name": "reactionId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "authorid": {
-          "name": "authorid",
+        "authorId": {
+          "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "messageid": {
-          "name": "messageid",
+        "messageId": {
+          "name": "messageId",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "commentid": {
-          "name": "commentid",
+        "commentId": {
+          "name": "commentId",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -375,19 +411,19 @@
         }
       },
       "indexes": {
-        "idx_49277_reaction_authorid_messageid_commentid_idx": {
-          "name": "idx_49277_reaction_authorid_messageid_commentid_idx",
+        "idx_49277_reaction_authorId_messageId_commentId_idx": {
+          "name": "idx_49277_reaction_authorId_messageId_commentId_idx",
           "columns": [
-            "authorid",
-            "messageid",
-            "commentid"
+            "authorId",
+            "messageId",
+            "commentId"
           ],
           "isUnique": false
         },
-        "idx_49277_reaction_reactionid_key": {
-          "name": "idx_49277_reaction_reactionid_key",
+        "idx_49277_reaction_reactionId_key": {
+          "name": "idx_49277_reaction_reactionId_key",
           "columns": [
-            "reactionid"
+            "reactionId"
           ],
           "isUnique": true
         }
@@ -406,22 +442,22 @@
           "primaryKey": true,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "threadid": {
-          "name": "threadid",
+        "threadId": {
+          "name": "threadId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
@@ -432,46 +468,46 @@
           "primaryKey": false,
           "notNull": true
         },
-        "authorid": {
-          "name": "authorid",
+        "authorId": {
+          "name": "authorId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "messageid": {
-          "name": "messageid",
+        "messageId": {
+          "name": "messageId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "groupid": {
-          "name": "groupid",
+        "groupId": {
+          "name": "groupId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "idx_49286_thread_authorid_messageid_groupid_idx": {
-          "name": "idx_49286_thread_authorid_messageid_groupid_idx",
+        "idx_49286_thread_authorId_messageId_groupId_idx": {
+          "name": "idx_49286_thread_authorId_messageId_groupId_idx",
           "columns": [
-            "authorid",
-            "messageid",
-            "groupid"
+            "authorId",
+            "messageId",
+            "groupId"
           ],
           "isUnique": false
         },
-        "idx_49286_thread_threadid_key": {
-          "name": "idx_49286_thread_threadid_key",
+        "idx_49286_thread_threadId_key": {
+          "name": "idx_49286_thread_threadId_key",
           "columns": [
-            "threadid"
+            "threadId"
           ],
           "isUnique": true
         },
-        "idx_49286_thread_messageid_key": {
-          "name": "idx_49286_thread_messageid_key",
+        "idx_49286_thread_messageId_key": {
+          "name": "idx_49286_thread_messageId_key",
           "columns": [
-            "messageid"
+            "messageId"
           ],
           "isUnique": true
         }
@@ -490,22 +526,22 @@
           "primaryKey": true,
           "notNull": true
         },
-        "createdat": {
-          "name": "createdat",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "updatedat": {
-          "name": "updatedat",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         },
-        "clerkid": {
-          "name": "clerkid",
+        "clerkId": {
+          "name": "clerkId",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
@@ -535,14 +571,14 @@
           "notNull": true,
           "default": "'female'"
         },
-        "completionyear": {
-          "name": "completionyear",
+        "completionYear": {
+          "name": "completionYear",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "broaddegreecourse": {
-          "name": "broaddegreecourse",
+        "broadDegreeCourse": {
+          "name": "broadDegreeCourse",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
@@ -553,33 +589,33 @@
           "primaryKey": false,
           "notNull": true
         },
-        "degreename": {
-          "name": "degreename",
+        "degreeName": {
+          "name": "degreeName",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
-        "imagekey": {
-          "name": "imagekey",
+        "imageKey": {
+          "name": "imageKey",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": false
         },
-        "imageurl": {
-          "name": "imageurl",
+        "imageUrl": {
+          "name": "imageUrl",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": false
         },
-        "clerkimagehash": {
-          "name": "clerkimagehash",
+        "clerkImageHash": {
+          "name": "clerkImageHash",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": false
         },
-        "profiletype": {
-          "name": "profiletype",
-          "type": "user_profiletype",
+        "profileType": {
+          "name": "profileType",
+          "type": "user_profileType",
           "primaryKey": false,
           "notNull": true,
           "default": "'STUDENT'"
@@ -593,55 +629,17 @@
         }
       },
       "indexes": {
-        "idx_49295_user_clerkid_key": {
-          "name": "idx_49295_user_clerkid_key",
+        "clerkIdIdx": {
+          "name": "clerkIdIdx",
           "columns": [
-            "clerkid"
+            "clerkId"
           ],
           "isUnique": true
         },
-        "idx_49295_user_email_key": {
-          "name": "idx_49295_user_email_key",
+        "emailIdx": {
+          "name": "emailIdx",
           "columns": [
             "email"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "_careerinteresttouser": {
-      "name": "_careerinteresttouser",
-      "schema": "",
-      "columns": {
-        "a": {
-          "name": "a",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "b": {
-          "name": "b",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "idx_49306__careerinteresttouser_b_index": {
-          "name": "idx_49306__careerinteresttouser_b_index",
-          "columns": [
-            "b"
-          ],
-          "isUnique": false
-        },
-        "idx_49306__careerinteresttouser_ab_unique": {
-          "name": "idx_49306__careerinteresttouser_ab_unique",
-          "columns": [
-            "a",
-            "b"
           ],
           "isUnique": true
         }
@@ -652,8 +650,8 @@
     }
   },
   "enums": {
-    "careerinterest_slug": {
-      "name": "careerinterest_slug",
+    "careerInterest_slug": {
+      "name": "careerInterest_slug",
       "values": {
         "law": "law",
         "tech": "tech",
@@ -661,8 +659,8 @@
         "banking_finance": "banking_finance"
       }
     },
-    "groupuser_role": {
-      "name": "groupuser_role",
+    "groupUser_role": {
+      "name": "groupUser_role",
       "values": {
         "ADMIN": "ADMIN",
         "EXPERT": "EXPERT",
@@ -675,23 +673,6 @@
         "NORMAL": "NORMAL",
         "EVENT": "EVENT",
         "ANNOUNCEMENT": "ANNOUNCEMENT"
-      }
-    },
-    "user_gender": {
-      "name": "user_gender",
-      "values": {
-        "male": "male",
-        "female": "female",
-        "non_binary": "non_binary",
-        "other": "other"
-      }
-    },
-    "user_profiletype": {
-      "name": "user_profiletype",
-      "values": {
-        "STUDENT": "STUDENT",
-        "ADMIN": "ADMIN",
-        "EXPERT": "EXPERT"
       }
     },
     "user_ethnicity": {
@@ -717,12 +698,29 @@
         "arab": "arab",
         "any_other_ethnic_group": "any_other_ethnic_group"
       }
+    },
+    "user_gender": {
+      "name": "user_gender",
+      "values": {
+        "male": "male",
+        "female": "female",
+        "non_binary": "non_binary",
+        "other": "other"
+      }
+    },
+    "user_profileType": {
+      "name": "user_profileType",
+      "values": {
+        "STUDENT": "STUDENT",
+        "ADMIN": "ADMIN",
+        "EXPERT": "EXPERT"
+      }
     }
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

@@ -4,6 +4,12 @@
     "**/.env"
   ],
   "pipeline": {
+    "db:migrate": {
+      "inputs": [
+        "drizzle/*.sql"
+      ],
+      "cache": true
+    },
     "db:generate": {
       "inputs": [
         "drizzle/schema.ts"
@@ -29,7 +35,8 @@
     "build": {
       "dependsOn": [
         "^build",
-        "^db:generate"
+        "^db:generate",
+        "^db:migrate"
       ],
       "outputs": [
         ".next/**",

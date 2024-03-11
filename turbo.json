@@ -71,6 +71,8 @@
     }
   },
   "globalEnv": [
+    "DB_ADMIN_USERNAME",
+    "DB_ADMIN_PASSWORD",
     "DB_USERNAME",
     "DB_PASSWORD",
     "DB_HOST",

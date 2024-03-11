@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import * as z from "zod";
 
+import { and, comment, desc, eq, ne, thread, user } from "@genus/db";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 function timeout(ms: number) {
@@ -30,136 +32,147 @@ export const commentRouter = createTRPCRouter({
 	createComment: protectedProcedure.input(createCommentSchema).mutation(async ({ ctx, input }) => {
 		try {
 			let commentId = `comment_${nanoid(18)}`; //=> "V1StGXR8_Z5jdHi6B-myT"
-			const user = await ctx.accelerateDB.user.findUniqueOrThrow({
-				where: {
-					clerkId: ctx.auth.userId
-				},
-				select: {
+			const dbUser = await ctx.db.query.user.findFirst({
+				where: eq(user.clerkId, ctx.auth.userId),
+				columns: {
 					firstname: true,
 					lastname: true
-				},
-				cacheStrategy: {
-					ttl: 60 * 60 * 24,
-					swr: 60
 				}
 			});
-			const author = `${user.firstname} ${user.lastname}`;
+
+			if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+			const author = `${dbUser.firstname} ${dbUser.lastname}`;
 			if (input.type === "thread") {
-				const thread = await ctx.accelerateDB.thread.create({
-					data: {
-						comments: {
-							create: {
-								commentId,
-								authorId: ctx.auth.userId,
-								content: input.content,
-								groupId: input.groupId
-							}
-						},
-						threadId: `thread_${nanoid(18)}`,
+				const threadId = `thread_${nanoid(18)}`;
+				await ctx.db
+					.insert(thread)
+					.values({
+						threadId,
 						messageId: input.messageId,
 						authorId: input.authorId,
 						content: input.messageContent,
 						groupId: input.groupId
-					},
-					select: {
-						messageId: true,
-						threadId: true,
+					})
+					.returning();
+
+				const dbComment = (
+					await ctx.db
+						.insert(comment)
+						.values({
+							threadId,
+							commentId,
+							authorId: ctx.auth.userId,
+							content: input.content,
+							groupId: input.groupId
+						})
+						.returning()
+				)[0];
+
+				const dbThread = await ctx.db.query.thread.findFirst({
+					where: eq(thread.threadId, threadId),
+					with: {
 						group: {
-							select: {
+							columns: {
 								slug: true
 							}
 						},
 						author: {
-							select: {
+							columns: {
 								email: true
 							}
 						}
 					}
 				});
+
+				if (!dbThread) throw new TRPCError({ code: "NOT_FOUND", message: "Thread not found" });
+
 				ctx.posthog.capture({
 					distinctId: ctx.auth.userId,
-					event: 'group_thread_created',
+					event: "group_thread_created",
 					properties: {
 						threadId: thread.threadId,
 						groupId: input.groupId,
 						messageId: input.messageId,
 						content: input.content
 					}
-				})
+				});
 				if (ctx.auth.userId !== input.authorId) {
 					const notification = await ctx.magicbell.store.create({
 						title: `Comment from ${author}`,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
-						topic: thread.group.slug,
+						topic: dbThread.group.slug,
 						category: "comment",
-						action_url: `/${thread.group.slug}?messageId=${thread.messageId}&commentId=${commentId}`
+						action_url: `/${dbThread.group.slug}?messageId=${dbThread.messageId}&commentId=${commentId}`
 					});
 					ctx.logger.info("-----------------------------------------------");
 					ctx.logger.debug("New notification!!", notification);
 					ctx.logger.info("-----------------------------------------------");
 				}
-				return thread;
+				return dbThread;
 			}
 
-			const comment = await ctx.accelerateDB.comment.create({
-				data: {
-					authorId: ctx.auth.userId,
-					content: input.content,
-					threadId: input.threadId,
-					groupId: input.groupId,
-					commentId
-				},
-				include: {
+			// IF THE TYPE IS A COMMENT
+			await ctx.db.insert(comment).values({
+				authorId: ctx.auth.userId,
+				content: input.content,
+				threadId: input.threadId,
+				groupId: input.groupId,
+				commentId
+			});
+
+			const dbComment = await ctx.db.query.comment.findFirst({
+				where: eq(comment.commentId, commentId),
+				with: {
 					thread: {
-						select: {
+						columns: {
 							messageId: true
 						}
 					},
 					group: {
-						select: {
+						columns: {
 							slug: true
 						}
 					}
 				}
 			});
+
+			if (!dbComment) throw new TRPCError({ code: "NOT_FOUND", message: "Comment not found" });
+
 			ctx.posthog.capture({
 				distinctId: ctx.auth.userId,
-                event: 'group_comment_created',
-                properties: {
-                    commentId,
-                    groupId: input.groupId,
-                    messageId: input.messageId,
-                    content: input.content
-                }
-			})
-			const recipients = await ctx.accelerateDB.comment.findMany({
-				where: {
-					threadId: input.threadId,
-					authorId: {
-						not: ctx.auth.userId
-					}
-				},
-				orderBy: {
-					createdAt: "desc"
-				},
-				select: {
+				event: "group_comment_created",
+				properties: {
+					commentId,
+					groupId: input.groupId,
+					messageId: input.messageId,
+					content: input.content
+				}
+			});
+
+			const recipients = await ctx.db.query.comment.findMany({
+				where: and(eq(comment.threadId, input.threadId), ne(comment.authorId, ctx.auth.userId)),
+				orderBy: [desc(comment.createdAt)],
+				columns: {
 					authorId: true
 				}
 			});
+
 			const notification = await ctx.magicbell.store.create({
 				title: `Comment from ${author}`,
 				content: input.content,
 				recipients: recipients.map(c => ({ external_id: c.authorId })),
 				category: "comment",
-				topic: comment.group.slug,
-				action_url: `/${comment.group.slug}?messageId=${comment.thread.messageId}&commentId=${commentId}`
+				topic: dbComment.group.slug,
+				action_url: `/${dbComment.group.slug}?messageId=${dbComment.thread.messageId}&commentId=${commentId}`
 			});
+
 			ctx.logger.info("-----------------------------------------------");
 			ctx.logger.debug("New notification!!", notification);
 			ctx.logger.info("------------------------------------------------");
 
-			return comment;
+			return dbComment;
 		} catch (err) {
 			ctx.logger.error("Something went wrong!", err);
 			throw new TRPCError({

@@ -3,6 +3,8 @@ import path from "path";
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
+import { eq, user } from "@genus/db";
+
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const authRouter = createTRPCRouter({
@@ -33,15 +35,9 @@ export const authRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			try {
-				const user = await ctx.accelerateDB.user.findFirst({
-					where: { email: input.email },
-					cacheStrategy: {
-						ttl: 60,
-						swr: 60
-					}
+				return ctx.db.query.user.findFirst({
+					where: eq(user.email, input.email)
 				});
-				console.log(user);
-				return user;
 			} catch (e: any) {
 				console.log(e);
 				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });

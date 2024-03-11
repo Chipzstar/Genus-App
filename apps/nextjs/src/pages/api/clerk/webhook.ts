@@ -6,8 +6,6 @@ import { log } from "next-axiom";
 import type { WebhookRequiredHeaders } from "svix";
 import { Webhook } from "svix";
 
-import { db } from "@genus/db";
-
 import { createNewUser, deleteUser, updateUser } from "~/server/handlers/clerk";
 import { cors, runMiddleware } from "../cors";
 
@@ -39,24 +37,24 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
 			// Handle the webhook
 			switch (event.type) {
 				case "user.created":
-					data = await createNewUser({ event, prisma: db });
+					data = await createNewUser({ event });
 					break;
 				case "user.updated":
-					data = await updateUser({ event, prisma: db });
+					data = await updateUser({ event });
 					//data = { debug: true}
 					break;
 				case "user.deleted":
-					data = await deleteUser({ event, prisma: db });
+					data = await deleteUser({ event });
 					break;
 				default:
 					console.log(`Unhandled event type ${event.type}`);
 			}
 			return res.status(200).json({ received: true, message: `Webhook received!`, data: data ?? undefined });
-		} catch (error) {
+		} catch (error: any) {
 			// Catch and log errors - return a 500 with a message
 			console.error(error);
-			// Sentry.captureException(error);
-			return res.status(500).send({ message: "Server error!" });
+			log.error(error.message, error);
+			return res.status(500).send({ error: error, message: "Server error!" });
 		}
 	} else {
 		res.setHeader("Allow", "POST");

@@ -1,52 +1,43 @@
-import React, { useEffect } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import React, { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@genus/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@genus/ui/dialog";
 import { Form, FormField } from "@genus/ui/form";
 import { FakeDash, OTPInput, Slot } from "@genus/ui/otp-input";
 
-const focusNextInput = (el: React.KeyboardEvent<HTMLInputElement>, prevId: string, nextId: string) => {
-	const targetInput = el.target as HTMLInputElement;
-	if (targetInput.value.length === 0) {
-		const prevInput = document.getElementById(prevId) as HTMLInputElement | null;
-		if (prevInput) prevInput.focus();
-		else console.error(`Element with id "${prevId}" not found`);
-	} else {
-		const nextInput = document.getElementById(nextId) as HTMLInputElement | null;
-		if (nextInput) nextInput.focus();
-		else console.error(`Element with id "${nextId}" not found`);
-	}
-};
+import useCounter from "~/hooks/useCounter";
 
-export interface CodeFormValues {
-	code1: string;
-	code2: string;
-	code3: string;
-	code4: string;
-	code5: string;
-	code6: string;
-}
-
-type KeyUnion = keyof CodeFormValues;
-
-const formValueKeys = Object.keys({
-	code1: "",
-	code2: "",
-	code3: "",
-	code4: "",
-	code5: "",
-	code6: ""
-} as CodeFormValues);
+const INTERVAL = 60;
+let counter: NodeJS.Timeout;
 
 interface Props {
 	opened: boolean;
 	setOpen: (val: boolean) => void;
 	onSubmit: (val: { code: string }) => void;
+	onResend: () => void;
 	loading: boolean;
 }
 
-const CodeInput = ({ onSubmit, opened, setOpen, loading }: Props) => {
+const CodeInput = ({ onSubmit, opened, setOpen, loading, onResend }: Props) => {
+	const { count, setCount, increment, decrement } = useCounter(INTERVAL);
+	const [canResend, setResendState] = useState(false);
+
+	const show = useCallback(() => {
+		setResendState(true);
+		setCount(INTERVAL);
+		clearInterval(counter);
+	}, []);
+
+	useEffect(() => {
+		const timeout = setTimeout(show, 1000 * INTERVAL);
+		counter = setInterval(() => decrement(), 1000);
+		return () => {
+			clearTimeout(timeout);
+			clearInterval(counter);
+		};
+	}, []);
+
 	const form = useForm<{ code: string }>({
 		defaultValues: {
 			code: ""
@@ -68,6 +59,7 @@ const CodeInput = ({ onSubmit, opened, setOpen, loading }: Props) => {
 								name="code"
 								render={({ field }) => (
 									<OTPInput
+										onComplete={() => form.handleSubmit(onSubmit)()}
 										maxLength={6}
 										value={field.value}
 										onChange={field.onChange}
@@ -100,6 +92,16 @@ const CodeInput = ({ onSubmit, opened, setOpen, loading }: Props) => {
 						</div>
 						<p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">
 							Please enter the 6 digit code we sent via email.
+						</p>
+						<p className="text-sm text-gray-600">
+							Resend Code:{" "}
+							<span
+								role={canResend ? "button" : undefined}
+								className="font-semibold underline"
+								onClick={onResend}
+							>
+								{canResend ? "Re-send" : count}
+							</span>
 						</p>
 						<DialogFooter className="sm:justify-end">
 							<Button

@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import type { FileRouter } from "uploadthing/next-legacy";
 import { createUploadthing } from "uploadthing/next-legacy";
 import { UTApi } from "uploadthing/server";
 
-import { db } from "@genus/db";
+import { db, eq, user } from "@genus/db";
 
 import { timeout } from "~/utils";
 
@@ -39,15 +39,13 @@ export const ourFileRouter = {
 			console.log("Upload complete for userId:", metadata.userId);
 			console.log("file url", file.url);
 			// update the user with the new image url + image key in the database
-			const user = await db.user.update({
-				where: {
-					clerkId: metadata.userId
-				},
-				data: {
+			const dbUser = await db
+				.update(user)
+				.set({
 					imageKey: file.key,
 					imageUrl: file.url
-				}
-			});
+				})
+				.where(eq(user.clerkId, metadata.userId));
 			return {
 				uploadedBy: metadata.userId,
 				imageKey: file.key,
@@ -61,15 +59,13 @@ export const ourFileRouter = {
 			console.log("Upload complete for userId:", metadata.userId);
 			console.log("file url", file.url);
 			// update the user with the new image url + image key in the database
-			const user = await db.user.update({
-				where: {
-					clerkId: metadata.userId
-				},
-				data: {
+			const dbUser = await db
+				.update(user)
+				.set({
 					imageKey: file.key,
 					imageUrl: file.url
-				}
-			});
+				})
+				.where(eq(user.clerkId, metadata.userId));
 			return {
 				uploadedBy: metadata.userId,
 				imageKey: file.key,

@@ -1,0 +1,5 @@
+--with "data only", "quote identifiers"
+load database
+        from mysql://w6jfbieuxzawoy6syeev:pscale_pw_juNxWU4n02w9fxZq6H5hnodmhj7tCEStsP2eESxUnoN@aws.connect.psdb.cloud/genus-db?sslmode=require
+        into postgresql://Chipzstar:endpoint=ep-white-meadow-a2jdvtmc;jDfemPI91Zau@ep-white-meadow-a2jdvtmc.eu-central-1.aws.neon.tech/genus-db?sslmode=require
+    alter schema 'genus-db' rename to 'public';

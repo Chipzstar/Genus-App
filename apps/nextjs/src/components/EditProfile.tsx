@@ -72,7 +72,7 @@ export const EditProfile = ({
 							})
 							.then(() => console.log("profile updated in Clerk"));
 				}
-				resetMode();
+				setTimeout(resetMode, 300);
 			} catch (err) {
 				console.error(err);
 				toast.error("Error!", {
@@ -142,7 +142,7 @@ export const EditProfile = ({
 								<Select onValueChange={field.onChange} defaultValue={field.value}>
 									<FormControl>
 										<SelectTrigger className="rounded-xl bg-background text-black">
-											<SelectValue placeholder="Select a verified email to display" />
+											<SelectValue placeholder="Select your university" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>

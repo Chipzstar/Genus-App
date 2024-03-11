@@ -6,6 +6,10 @@ import {z} from 'zod'
  * This way you can ensure the app isn't built with invalid env vars.
  */
 export const serverSchema = z.object({
+		DB_USERNAME: z.string().optional(),
+		DB_PASSWORD: z.string().optional(),
+    DB_HOST: z.string().optional(),
+    DB_NAME: z.string().optional(),
 		DIRECT_DATABASE_URL: z.string().optional(),
     NODE_ENV: z.enum(["development", "test", "production"]),
     CLERK_SECRET_KEY: z.string().optional(),
@@ -30,6 +34,7 @@ export const clientSchema = z.object({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().optional(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().optional(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string().optional(),
+		NEXT_PUBLIC_DEFAULT_GROUP_SLUG: z.string().optional(),
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().optional(),
     NEXT_PUBLIC_SANITY_DATASET: z.string().optional()
 });
@@ -48,6 +53,7 @@ export const clientEnv = {
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
+		NEXT_PUBLIC_DEFAULT_GROUP_SLUG: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG,
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET
 };

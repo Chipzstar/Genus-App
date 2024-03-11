@@ -10,20 +10,23 @@ export function ChatBubble(props: {
 	hasNextMessageFromSameUser: boolean;
 	message: ({ status: "message" } & Message) | ({ status: "comment" } & ThreadComment);
 }) {
+	const { message, currentUser, member, hasNextMessageFromSameUser } = props;
 	return (
 		<Fragment>
 			<div
 				className={cn("flex flex-col rounded-lg px-4 py-2 text-xs text-gray-900 sm:text-sm", {
-					"bg-chat-bubble-internal-300/50 text-gray-400": props.currentUser && !props.member,
-					"bg-chat-bubble-external-300/50 text-gray-400": !props.currentUser && !props.member,
-					"bg-chat-bubble-internal-300": props.currentUser && props.member,
-					"bg-chat-bubble-external-200": !props.currentUser && props.member,
-					"rounded-br-none": !props.hasNextMessageFromSameUser && props.currentUser,
-					"rounded-bl-none": !props.hasNextMessageFromSameUser && !props.currentUser
+					"bg-chat-bubble-internal-300/50 text-gray-400": currentUser && !member,
+					"bg-chat-bubble-external-300/50 text-gray-400": !currentUser && !member,
+					"bg-chat-bubble-internal-300": currentUser && member,
+					"bg-chat-bubble-external-200": !currentUser && member,
+					"rounded-br-none": !hasNextMessageFromSameUser && currentUser,
+					"rounded-bl-none": !hasNextMessageFromSameUser && !currentUser
 				})}
 			>
-				<span className="mb-2 font-medium">{props.message.author.firstname}</span>
-				<span>{props.message.content}</span>
+				<span className="mb-2 font-medium">
+					{message.isAnonymous ? `Anonymous${message.author.clerkId.slice(-6)}` : message.author.firstname}
+				</span>
+				<span>{message.content}</span>
 			</div>
 		</Fragment>
 	);

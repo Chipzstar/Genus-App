@@ -37,7 +37,6 @@ const EmojiDialog: FC<Props> = props => {
 	});
 
 	const reaction = useMemo(() => {
-		console.log(props.message);
 		return props.message.reactions.find(
 			(reaction: { authorId: string | null | undefined }) => reaction.authorId === userId
 		);

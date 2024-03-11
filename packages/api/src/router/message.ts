@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
-import { z } from "zod";
+import * as z from "zod";
 
 import { and, db, eq, group, groupUser, message, ne, user } from "@genus/db";
 
@@ -12,7 +12,8 @@ export const messageRouter = createTRPCRouter({
 			z.object({
 				groupId: z.string(),
 				content: z.string(),
-				type: z.enum(["NORMAL", "EVENT", "ANNOUNCEMENT"]).default("NORMAL")
+				type: z.enum(["NORMAL", "EVENT", "ANNOUNCEMENT"]).default("NORMAL"),
+				isAnonymous: z.boolean().default(false)
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -25,7 +26,8 @@ export const messageRouter = createTRPCRouter({
 							authorId: ctx.auth.userId,
 							content: input.content,
 							groupId: input.groupId,
-							messageId
+							messageId,
+							isAnonymous: input.isAnonymous
 						})
 						.returning()
 				)[0];

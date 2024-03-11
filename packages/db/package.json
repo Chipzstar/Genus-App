@@ -13,8 +13,8 @@
     "db:studio": "pnpm with-env drizzle-kit studio",
     "db:push": "pnpm with-env drizzle-kit push:pg",
     "db:pull": "pnpm with-env drizzle-kit introspect:pg",
-    "db:migrate": "pnpm with-env tsx ./migrate.ts",
     "db:generate": "pnpm with-env drizzle-kit generate:pg",
+    "db:migrate": "pnpm with-env tsx ./migrate.ts",
     "db:drop": "pnpm with-env drizzle-kit drop"
   },
   "dependencies": {

@@ -1,0 +1,734 @@
+{
+  "id": "a78fb675-d70c-4ef6-a14f-2453e067456d",
+  "prevId": "564d848a-4eb2-45ac-ac7e-c7bd4dd2f83d",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "careerInterest": {
+      "name": "careerInterest",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "careerinterest_slug",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49236_careerInterest_slug_key": {
+          "name": "idx_49236_careerInterest_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "careerInterestToUser": {
+      "name": "careerInterestToUser",
+      "schema": "",
+      "columns": {
+        "careerInterestId": {
+          "name": "careerInterestId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "careerInterestUserId": {
+          "name": "careerInterestUserId",
+          "columns": [
+            "careerInterestId",
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "comment": {
+      "name": "comment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "commentId": {
+          "name": "commentId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isAnonymous": {
+          "name": "isAnonymous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_49241_comment_authorId_threadId_groupId_idx": {
+          "name": "idx_49241_comment_authorId_threadId_groupId_idx",
+          "columns": [
+            "authorId",
+            "threadId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49241_comment_commentId_key": {
+          "name": "idx_49241_comment_commentId_key",
+          "columns": [
+            "commentId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "group": {
+      "name": "group",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49250_group_groupId_key": {
+          "name": "idx_49250_group_groupId_key",
+          "columns": [
+            "groupId"
+          ],
+          "isUnique": true
+        },
+        "idx_49250_group_slug_key": {
+          "name": "idx_49250_group_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "groupUser": {
+      "name": "groupUser",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "groupuser_role",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MEMBER'"
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "groupUser_userId_groupId_idx": {
+          "name": "groupUser_userId_groupId_idx",
+          "columns": [
+            "userId",
+            "groupId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "message": {
+      "name": "message",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "message_type",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NORMAL'"
+        },
+        "isAnonymous": {
+          "name": "isAnonymous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_49267_message_messageId_key": {
+          "name": "idx_49267_message_messageId_key",
+          "columns": [
+            "messageId"
+          ],
+          "isUnique": true
+        },
+        "idx_49267_message_authorId_groupId_idx": {
+          "name": "idx_49267_message_authorId_groupId_idx",
+          "columns": [
+            "authorId",
+            "groupId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "reaction": {
+      "name": "reaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reactionId": {
+          "name": "reactionId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "commentId": {
+          "name": "commentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "emoji": {
+          "name": "emoji",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49277_reaction_authorId_messageId_commentId_idx": {
+          "name": "idx_49277_reaction_authorId_messageId_commentId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "commentId"
+          ],
+          "isUnique": false
+        },
+        "idx_49277_reaction_reactionId_key": {
+          "name": "idx_49277_reaction_reactionId_key",
+          "columns": [
+            "reactionId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "thread": {
+      "name": "thread",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49286_thread_authorId_messageId_groupId_idx": {
+          "name": "idx_49286_thread_authorId_messageId_groupId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49286_thread_threadId_key": {
+          "name": "idx_49286_thread_threadId_key",
+          "columns": [
+            "threadId"
+          ],
+          "isUnique": true
+        },
+        "idx_49286_thread_messageId_key": {
+          "name": "idx_49286_thread_messageId_key",
+          "columns": [
+            "messageId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "clerkId": {
+          "name": "clerkId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gender": {
+          "name": "gender",
+          "type": "user_gender",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'female'"
+        },
+        "completionYear": {
+          "name": "completionYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "broadDegreeCourse": {
+          "name": "broadDegreeCourse",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "degreeName": {
+          "name": "degreeName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "imageKey": {
+          "name": "imageKey",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clerkImageHash": {
+          "name": "clerkImageHash",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profileType": {
+          "name": "profileType",
+          "type": "user_profiletype",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'STUDENT'"
+        },
+        "ethnicity": {
+          "name": "ethnicity",
+          "type": "user_ethnicity",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'african'"
+        }
+      },
+      "indexes": {
+        "clerkIdIdx": {
+          "name": "clerkIdIdx",
+          "columns": [
+            "clerkId"
+          ],
+          "isUnique": true
+        },
+        "emailIdx": {
+          "name": "emailIdx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "careerinterest_slug": {
+      "name": "careerinterest_slug",
+      "values": {
+        "law": "law",
+        "tech": "tech",
+        "consulting": "consulting",
+        "banking_finance": "banking_finance"
+      }
+    },
+    "groupuser_role": {
+      "name": "groupuser_role",
+      "values": {
+        "ADMIN": "ADMIN",
+        "EXPERT": "EXPERT",
+        "MEMBER": "MEMBER"
+      }
+    },
+    "message_type": {
+      "name": "message_type",
+      "values": {
+        "NORMAL": "NORMAL",
+        "EVENT": "EVENT",
+        "ANNOUNCEMENT": "ANNOUNCEMENT"
+      }
+    },
+    "user_ethnicity": {
+      "name": "user_ethnicity",
+      "values": {
+        "english__welsh__scottish__northern_irish_or_british": "english__welsh__scottish__northern_irish_or_british",
+        "irish": "irish",
+        "gypsy_or_irish_traveller": "gypsy_or_irish_traveller",
+        "roma": "roma",
+        "any_other_white_background": "any_other_white_background",
+        "caribbean": "caribbean",
+        "african": "african",
+        "any_other_black__black_british__or_caribbean_background": "any_other_black__black_british__or_caribbean_background",
+        "indian": "indian",
+        "pakistani": "pakistani",
+        "bangladeshi": "bangladeshi",
+        "chinese": "chinese",
+        "any_other_asian_background": "any_other_asian_background",
+        "white_and_black_caribbean": "white_and_black_caribbean",
+        "white_and_black_african": "white_and_black_african",
+        "white_and_asian": "white_and_asian",
+        "any_other_mixed_or_multiple_ethnic_background": "any_other_mixed_or_multiple_ethnic_background",
+        "arab": "arab",
+        "any_other_ethnic_group": "any_other_ethnic_group"
+      }
+    },
+    "user_gender": {
+      "name": "user_gender",
+      "values": {
+        "male": "male",
+        "female": "female",
+        "non_binary": "non_binary",
+        "other": "other"
+      }
+    },
+    "user_profiletype": {
+      "name": "user_profiletype",
+      "values": {
+        "STUDENT": "STUDENT",
+        "ADMIN": "ADMIN",
+        "EXPERT": "EXPERT"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

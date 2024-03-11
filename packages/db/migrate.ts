@@ -4,11 +4,20 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { migrate } from "drizzle-orm/neon-http/migrator";
 
-import { connectionString } from "./src";
-
 // import { config } from "dotenv";
-
 // config({ path: "../../env" });
+
+export const connectionString = [
+	"postgresql://",
+	process.env.DB_ADMIN_USERNAME,
+	":",
+	process.env.DB_ADMIN_PASSWORD,
+	"@",
+	process.env.DB_HOST,
+	"/",
+	process.env.DB_NAME,
+	"?sslmode=require"
+].join("");
 
 const sql = neon(connectionString);
 

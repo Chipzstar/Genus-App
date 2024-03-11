@@ -48,7 +48,6 @@ export const groupRouter = createTRPCRouter({
 				});
 
 				if (!dbGroup) throw new TRPCError({ code: "NOT_FOUND", message: "Group not found" });
-				console.log(dbGroup);
 
 				const messages = await ctx.db.query.message.findMany({
 					where: eq(message.groupId, dbGroup.groupId),
@@ -56,6 +55,7 @@ export const groupRouter = createTRPCRouter({
 					with: {
 						author: {
 							columns: {
+								clerkId: true,
 								firstname: true,
 								lastname: true,
 								imageUrl: true
@@ -65,6 +65,7 @@ export const groupRouter = createTRPCRouter({
 						thread: true
 					}
 				});
+				console.log(messages);
 				ctx.logger.info("********************************************");
 				ctx.logger.debug("Group messages!!", messages);
 				ctx.logger.info("********************************************");

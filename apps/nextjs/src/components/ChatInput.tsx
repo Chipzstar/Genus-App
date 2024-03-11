@@ -1,9 +1,11 @@
 "use client";
 
-import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { FC, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useLocalStorage } from "usehooks-ts";
 
 import { Button } from "@genus/ui/button";
+import { Checkbox } from "@genus/ui/checkbox";
 import { Textarea } from "@genus/ui/textarea";
 
 import { trpc } from "~/utils/trpc";
@@ -57,6 +59,7 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 	});
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [input, setInput] = useState<string>("");
+	const [isAnonymous, setState] = useState<boolean>(false);
 
 	const sendMessage = useCallback(async () => {
 		if (!input) return;
@@ -83,7 +86,7 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 					});
 				}
 			} else {
-				await createMessage({ content: input, groupId: props.chatId });
+				await createMessage({ content: input, groupId: props.chatId, isAnonymous });
 			}
 			setInput("");
 			textareaRef.current?.focus();
@@ -96,10 +99,26 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [input, props, createMessage]);
+	}, [input, props, createMessage, isAnonymous]);
 
 	return (
 		<div className="mb-2 border-t border-gray-200 pt-4 sm:mb-0">
+			<div className="mb-2 flex items-center justify-end space-x-2">
+				<Checkbox
+					className="bg-background"
+					id="anonymous"
+					defaultChecked={isAnonymous}
+					onCheckedChange={val => {
+						setState(state => !state);
+					}}
+				/>
+				<label
+					htmlFor="anonymous"
+					className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+				>
+					Post anonymously
+				</label>
+			</div>
 			<div className="relative flex-1 overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
 				<Textarea
 					disabled={!props.isMember}

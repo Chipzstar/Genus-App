@@ -1,4 +1,5 @@
 import {
+	boolean,
 	index,
 	integer,
 	pgEnum,
@@ -11,11 +12,11 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm/relations";
 
-export const careerInterestSlug = pgEnum("careerInterest_slug", ["law", "tech", "consulting", "banking_finance"]);
-export const groupUserRole = pgEnum("groupUser_role", ["ADMIN", "EXPERT", "MEMBER"]);
+export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
+export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
 export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
-export const userProfileType = pgEnum("user_profileType", ["STUDENT", "ADMIN", "EXPERT"]);
+export const userProfileType = pgEnum("user_profiletype", ["STUDENT", "ADMIN", "EXPERT"]);
 export const userEthnicity = pgEnum("user_ethnicity", [
 	"english__welsh__scottish__northern_irish_or_british",
 	"irish",
@@ -61,7 +62,8 @@ export const comment = pgTable(
 		content: varchar("content", { length: 191 }).notNull(),
 		authorId: varchar("authorId", { length: 191 }).notNull(),
 		threadId: varchar("threadId", { length: 191 }).notNull(),
-		groupId: varchar("groupId", { length: 191 }).notNull()
+		groupId: varchar("groupId", { length: 191 }).notNull(),
+		isAnonymous: boolean("isAnonymous").default(false).notNull()
 	},
 	table => {
 		return {
@@ -121,7 +123,8 @@ export const message = pgTable(
 		messageId: varchar("messageId", { length: 191 }).notNull(),
 		authorId: varchar("authorId", { length: 191 }).notNull(),
 		groupId: varchar("groupId", { length: 191 }).notNull(),
-		type: messageType("type").default("NORMAL").notNull()
+		type: messageType("type").default("NORMAL").notNull(),
+		isAnonymous: boolean("isAnonymous").default(false).notNull()
 	},
 	table => {
 		return {

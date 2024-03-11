@@ -10,8 +10,6 @@ import { connectionString } from "./src";
 
 // config({ path: "../../env" });
 
-console.log(connectionString);
-
 const sql = neon(connectionString);
 
 // @ts-expect-error
@@ -29,4 +27,8 @@ const main = async () => {
 	}
 };
 
-main();
+main().catch(e => {
+	console.error("Migration failed");
+	console.error(e);
+	process.exit(1);
+});

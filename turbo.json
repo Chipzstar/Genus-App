@@ -1,29 +1,49 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["**/.env"],
+  "globalDependencies": [
+    "**/.env"
+  ],
   "pipeline": {
     "db:generate": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": [
+        "drizzle/schema.ts"
+      ],
       "cache": false
     },
     "db:push": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": [
+        "drizzle/schema.ts"
+      ],
       "cache": false
     },
     "db:studio": {
-      "inputs": ["prisma/schema.prisma"],
+      "inputs": [
+        "drizzle/schema.ts"
+      ],
       "cache": false
     },
     "dev": {
-      "dependsOn": ["^db:generate"],
+      "persistent": true,
       "cache": false
     },
     "build": {
-      "dependsOn": ["^build", "^db:generate"],
-      "outputs": [".next/**", ".expo/**", ".sanity/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        ".expo/**",
+        ".sanity/**",
+        "!.next/cache/**",
+        "next-env.d.ts",
+        ".output/**",
+        ".vercel/output/**"
+      ]
     },
     "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputs": [
+        "node_modules/.cache/.prettiercache"
+      ],
       "outputMode": "new-only"
     },
     "lint": {
@@ -36,11 +56,17 @@
       "cache": false
     },
     "type-check": {
-      "dependsOn": ["^db:generate"],
+      "dependsOn": [
+        "^db:generate"
+      ],
       "cache": false
     }
   },
   "globalEnv": [
+    "DB_USERNAME",
+    "DB_PASSWORD",
+    "DB_HOST",
+    "DB_NAME",
     "DATABASE_URL",
     "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
     "CLERK_SECRET_KEY",

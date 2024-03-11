@@ -1,0 +1,11 @@
+import type { Config } from "drizzle-kit";
+
+import { connectionString } from "./src";
+
+export default {
+	schema: "./drizzle/schema.ts",
+	out: "./drizzle",
+	driver: "pg",
+	dbCredentials: { connectionString },
+	verbose: false
+} satisfies Config;

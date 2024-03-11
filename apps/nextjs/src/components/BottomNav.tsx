@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useNotifications } from "@magicbell/magicbell-react";
 import { cx } from "class-variance-authority";
-import { User2 } from "lucide-react";
 
 import { BellIcon, GroupIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
 

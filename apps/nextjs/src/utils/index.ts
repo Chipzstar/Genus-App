@@ -4,6 +4,13 @@ import type { Reaction } from "@genus/db";
 
 import type { InsightPanel } from "~/utils/types";
 
+export const CAREER_INTERESTS = {
+	banking_finance: 1,
+	law: 2,
+	consulting: 3,
+	tech: 4
+};
+
 export const PATHS = {
 	HOME: "/",
 	LOGIN: "/login",
@@ -48,14 +55,14 @@ export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function formatTimestamp(timestamp: Date, method = "default") {
+export function formatTimestamp(timestamp: string | Date, method = "default") {
 	switch (method) {
 		case "distance":
-			return formatDistance(timestamp, Date.now(), {
+			return formatDistance(new Date(timestamp), Date.now(), {
 				addSuffix: true
 			});
 		default:
-			return format(timestamp.getTime(), "HH:mm");
+			return format(new Date(timestamp).getTime(), "HH:mm");
 	}
 }
 

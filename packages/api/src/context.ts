@@ -3,7 +3,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-import { accelerateDB, db } from "@genus/db";
+import { db } from "@genus/db";
 
 import { logger } from "./axiom";
 import { posthog } from "./posthog";
@@ -23,7 +23,7 @@ type AuthContextProps = {
 export const createContextInner = async ({ auth }: AuthContextProps) => {
 	return {
 		auth,
-		accelerateDB,
+		db,
 		logger,
 		posthog
 	};

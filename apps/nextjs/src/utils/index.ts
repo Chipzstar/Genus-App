@@ -1,7 +1,5 @@
 import { format, formatDistance } from "date-fns";
 
-import type { Reaction } from "@genus/db";
-
 import type { InsightPanel } from "~/utils/types";
 
 export const CAREER_INTERESTS = {
@@ -89,9 +87,9 @@ export const INSIGHTS: InsightPanel[] = [
 	}
 ];
 
-export function convertToNestedArray(arr: Reaction[] = []) {
+export function convertToNestedArray(arr: any[] = []) {
 	// Use a Map to count the occurrences of each unique string
-	const countMap = new Map<string, Reaction[]>();
+	const countMap = new Map<string, any[]>();
 	// Count occurrences
 	for (const [i, r] of arr.entries()) {
 		const reactions = countMap.get(r.emoji) ?? [];
@@ -99,7 +97,7 @@ export function convertToNestedArray(arr: Reaction[] = []) {
 		countMap.set(r.emoji, reactions);
 	}
 	// Initialize the nested array
-	const nestedArray: Reaction[][] = [];
+	const nestedArray: any[][] = [];
 	// Create the nested array with unique items and their counts
 	countMap.forEach((reactions, value) => {
 		nestedArray.push(reactions);

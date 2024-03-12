@@ -73,7 +73,8 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 						messageContent: props.message.content,
 						messageId: props.message.id,
 						authorId: props.message.authorId,
-						groupId: props.message.groupId
+						groupId: props.message.groupId,
+						isAnonymous
 					});
 				} else {
 					await createComment({
@@ -82,7 +83,8 @@ const ChatInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
 						threadId: props.chatId,
 						messageId: props.message.id,
 						authorId: props.message.authorId,
-						groupId: props.message.groupId
+						groupId: props.message.groupId,
+						isAnonymous
 					});
 				}
 			} else {

@@ -17,7 +17,8 @@ const createCommentSchema = z.discriminatedUnion("type", [
 		content: z.string(),
 		messageId: z.number(),
 		authorId: z.string(),
-		groupId: z.string()
+		groupId: z.string(),
+		isAnonymous: z.boolean().default(false)
 	}),
 	z.object({
 		type: z.literal("comment"),
@@ -25,7 +26,8 @@ const createCommentSchema = z.discriminatedUnion("type", [
 		content: z.string(),
 		messageId: z.number(),
 		authorId: z.string(),
-		groupId: z.string()
+		groupId: z.string(),
+		isAnonymous: z.boolean().default(false)
 	})
 ]);
 export const commentRouter = createTRPCRouter({
@@ -64,7 +66,8 @@ export const commentRouter = createTRPCRouter({
 							commentId,
 							authorId: ctx.auth.userId,
 							content: input.content,
-							groupId: input.groupId
+							groupId: input.groupId,
+							isAnonymous: input.isAnonymous
 						})
 						.returning()
 				)[0];
@@ -119,7 +122,8 @@ export const commentRouter = createTRPCRouter({
 				content: input.content,
 				threadId: input.threadId,
 				groupId: input.groupId,
-				commentId
+				commentId,
+				isAnonymous: input.isAnonymous
 			});
 
 			const dbComment = await ctx.db.query.comment.findFirst({

@@ -99,9 +99,9 @@ const Messages = forwardRef<HTMLDivElement | null, MessagesProps>(({ messages, i
 								<Image
 									fill
 									src={
-										isCurrentUser
+										isCurrentUser && !message.isAnonymous
 											? session.user.imageUrl
-											: message.author.imageUrl
+											: message.author.imageUrl && !message.isAnonymous
 												? message.author.imageUrl
 												: "/images/avatar-placeholder.png"
 									}

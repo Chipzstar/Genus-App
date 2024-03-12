@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement, useCallback, useRef } from "react";
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
@@ -13,9 +13,10 @@ import { useToggle } from "usehooks-ts";
 import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 
-import { EditProfile } from "~/components/EditProfile";
+import { ImageCropper } from "~/components/ImageCropper";
 import Loader from "~/components/Loader";
-import ViewProfile from "~/components/ViewProfile";
+import { EditProfile } from "~/containers/EditProfile";
+import ViewProfile from "~/containers/ViewProfile";
 import { useFileContext } from "~/context/FileContext";
 import { useViewEditToggle } from "~/hooks/useViewEditToggle";
 import AppLayout from "~/layout/AppLayout";
@@ -31,14 +32,29 @@ const UserProfilePage = () => {
 	const [opened, toggleBell, setBell] = useToggle(false);
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
-	const onDrop = useCallback(
+	const [temp, setTemp] = useState<{ file: File[]; src: string }>({
+		file: [],
+		src: ""
+	});
+	/*const onDrop = useCallback(
 		(acceptedFile: File[]) => {
 			updateFile(acceptedFile);
 		},
 		[updateFile]
-	);
+	);*/
 
-	const { signOut, user } = useClerk();
+	const onDrop = useCallback((acceptedFile: File[]) => {
+		const file = acceptedFile[0];
+		if (!file) return;
+		const reader = new FileReader();
+		reader.addEventListener("load", () => {
+			let src = reader.result?.toString() ?? "";
+			setTemp({ file: acceptedFile, src });
+		});
+		reader.readAsDataURL(file);
+	}, []);
+
+	const { user } = useClerk();
 
 	// TRPC queries
 	const { isLoading, data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
@@ -152,6 +168,12 @@ const UserProfilePage = () => {
 					</div>
 				</div>
 			)}
+			<ImageCropper
+				src={temp.src}
+				file={temp.file}
+				addImage={updateFile}
+				onClose={() => setTemp({ file: [], src: "" })}
+			/>
 		</div>
 	);
 };

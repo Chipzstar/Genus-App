@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 
-import ListBoxWrapper from "~/components/ListBoxWrapper";
+import ListBoxWrapper from "~/containers/ListBoxWrapper";
 import AppLayout from "~/layout/AppLayout";
 import { NextPageWithAppLayout } from "~/pages/_app";
 import { trpc } from "~/utils/trpc";

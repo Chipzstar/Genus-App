@@ -1,6 +1,6 @@
 import React from "react";
 
-import { capitalize, formatString } from "~/utils";
+import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";
 
 const ViewProfile = ({ profile }: { profile: UserProfile | undefined }) => {

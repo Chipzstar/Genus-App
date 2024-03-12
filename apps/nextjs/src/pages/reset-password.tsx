@@ -8,10 +8,10 @@ import * as z from "zod";
 
 import { forgotPasswordSchema } from "@genus/validators";
 
-import type { EmailFormValues } from "~/components/CheckEmailForm";
-import { CheckEmailForm } from "~/components/CheckEmailForm";
-import CodeInput, { CodeFormValues } from "~/components/CodeInput";
-import ResetPasswordForm, { NewPasswordFormValues } from "~/components/ResetPasswordForm";
+import CodeInput from "~/components/CodeInput";
+import type { EmailFormValues } from "~/containers/CheckEmailForm";
+import { CheckEmailForm } from "~/containers/CheckEmailForm";
+import ResetPasswordForm, { NewPasswordFormValues } from "~/containers/ResetPasswordForm";
 import AuthLayout from "~/layout/AuthLayout";
 import { trpc } from "~/utils/trpc";
 
@@ -157,6 +157,15 @@ const ResetPassword = () => {
 				setOpen={state => (state ? setPasswordResetMode("code") : setPasswordResetMode("password"))}
 				onSubmit={onReset}
 				loading={codeInputLoading}
+				onResend={
+					isLoaded
+						? () =>
+								signIn.create({
+									strategy: "reset_password_email_code",
+									identifier: email
+								})
+						: () => console.log("resending...")
+				}
 			/>
 			<div className="relative flex h-[250px] w-2/3 justify-center sm:w-1/2 lg:w-2/3">
 				<object

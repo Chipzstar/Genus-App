@@ -6,8 +6,6 @@ import { UTApi } from "uploadthing/server";
 
 import { db, eq, user } from "@genus/db";
 
-import { timeout } from "~/utils";
-
 export const utapi = new UTApi();
 const f = createUploadthing();
 

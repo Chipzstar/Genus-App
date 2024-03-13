@@ -19,8 +19,7 @@ export const connectionString = [
 
 const sql = neon(connectionString);
 
-// @ts-expect-error
-const db = drizzle(sql, { schema, logger: process.env.NODE_ENV !== "production" });
+const db = drizzle(sql, { schema });
 
 export type DrizzleClient = typeof db;
 

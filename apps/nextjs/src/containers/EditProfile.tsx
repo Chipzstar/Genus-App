@@ -1,24 +1,35 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useClerk } from "@clerk/nextjs";
+import type { UserResource } from "@clerk/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ClientUploadedFileData } from "uploadthing/types";
-import * as z from "zod";
+import type { ClientUploadedFileData } from "uploadthing/types";
+import type * as z from "zod";
+
+
 
 import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
-import { broadCourseCategorySchema, completionYearSchema, profileSchema, universitiesSchema } from "@genus/validators";
+import type { broadCourseCategorySchema, completionYearSchema, universitiesSchema } from "@genus/validators";
+import { profileSchema } from "@genus/validators";
 import { broad_course_categories, career_interests, completion_years, universities } from "@genus/validators/constants";
+
+
 
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";
 
+
 type FormValues = z.infer<typeof profileSchema>;
+
+const checkChanges = (values: FormValues, target: UserResource) => {
+	return !(values.firstname !== target.firstName || values.lastname !== target.lastName);
+}
 
 export const EditProfile = ({
 	startUpload,
@@ -41,17 +52,22 @@ export const EditProfile = ({
 			try {
 				await updateUserProfile(data);
 				if (clerk?.user) {
+					const infoChanged = checkChanges(data, clerk.user)
+
+					console.table(infoChanged)
+					if (infoChanged) {
+						void clerk.user
+							.update({
+								firstName: data.firstname,
+								lastName: data.lastname
+							})
+							.then(() => console.log("profile updated in Clerk"));
+					}
 					if (files.length) {
 						const result = await clerk.user.setProfileImage({
 							file: files[0]!,
 						})
 					}
-					void clerk.user
-						.update({
-							firstName: data.firstname,
-							lastName: data.lastname
-						})
-						.then(() => console.log("profile updated in Clerk"));
 				}
 				setTimeout(resetMode, 300);
 			} catch (err) {

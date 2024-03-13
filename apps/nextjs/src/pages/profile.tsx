@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import React, { ReactElement, useCallback, useState } from "react";
 import { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
@@ -8,7 +8,6 @@ import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { useToggle } from "usehooks-ts";
 
 import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
@@ -29,19 +28,12 @@ export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const UserProfilePage = () => {
 	const [mode, toggle, setValue] = useViewEditToggle();
-	const [opened, toggleBell, setBell] = useToggle(false);
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
 	const [temp, setTemp] = useState<{ file: File[]; src: string }>({
 		file: [],
 		src: ""
 	});
-	/*const onDrop = useCallback(
-		(acceptedFile: File[]) => {
-			updateFile(acceptedFile);
-		},
-		[updateFile]
-	);*/
 
 	const onDrop = useCallback((acceptedFile: File[]) => {
 		const file = acceptedFile[0];
@@ -55,6 +47,15 @@ const UserProfilePage = () => {
 	}, []);
 
 	const { user } = useClerk();
+
+	const params = new URLSearchParams();
+
+	params.set("height", "200");
+	params.set("width", "200");
+	params.set("quality", "100");
+	params.set("fit", "crop");
+
+	const imageSrc = `${user?.imageUrl}?${params.toString()}`;
 
 	// TRPC queries
 	const { isLoading, data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
@@ -75,7 +76,7 @@ const UserProfilePage = () => {
 		}
 	});
 
-	const { permittedFileInfo } = useUploadThing("profileUploader", {
+	const { startUpload, permittedFileInfo } = useUploadThing("profileUploader", {
 		onClientUploadComplete: res => {
 			console.log(res);
 			console.log("uploaded successfully!");
@@ -83,6 +84,10 @@ const UserProfilePage = () => {
 		onUploadError: err => {
 			console.log(err);
 			console.log("error occurred while uploading");
+			toast.error("Error!", {
+				description: "There was an error updating your profile." + err.message,
+				duration: 5000
+			});
 		},
 		onUploadBegin: filename => {
 			console.log("UPLOAD HAS BEGUN", filename);
@@ -123,7 +128,7 @@ const UserProfilePage = () => {
 							<Avatar className="h-28 w-28">
 								<AvatarImage
 									className="relative"
-									src={files[0] ? URL.createObjectURL(files[0]) : user?.imageUrl}
+									src={files[0] ? URL.createObjectURL(files[0]) : imageSrc}
 									alt="Avatar Thumbnail"
 								></AvatarImage>
 								<AvatarFallback className="bg-neutral-300">
@@ -160,6 +165,7 @@ const UserProfilePage = () => {
 							<EditProfile
 								profile={profile!}
 								updateUserProfile={updateUserProfile}
+								startUpload={startUpload}
 								resetMode={() => setValue("view")}
 							/>
 						) : (

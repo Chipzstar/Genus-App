@@ -3,19 +3,23 @@
 
 import "react-image-crop/dist/ReactCrop.css";
 
-import { useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { Modal, ModalBody, ModalContent, useDisclosure } from "@nextui-org/react";
 import type { Crop, PixelCrop } from "react-image-crop";
 import ReactCrop from "react-image-crop";
+import { toast } from "sonner";
 
 import { Button } from "@genus/ui/button";
 
-export function ImageCropper(props: {
+export type ImageCropperProps = {
 	src?: string;
 	file: File[];
 	addImage: (files: File[]) => void;
 	onClose: () => void;
-}) {
+};
+
+export const ImageCropper: FC<ImageCropperProps> = props => {
+	const [loading, setLoading] = useState(false);
 	const { isOpen, onOpen, onOpenChange } = useDisclosure({
 		isOpen: !!props.src,
 		onClose: props.onClose,
@@ -25,22 +29,25 @@ export function ImageCropper(props: {
 	const [storedCrop, setStoredCrop] = useState<PixelCrop>();
 	const imageRef = useRef<HTMLImageElement>(null);
 
-	async function uploadImage() {
-		if (!imageRef.current || !storedCrop) return;
-		const canvas = cropImage(imageRef.current, storedCrop);
-
-		const blob = await new Promise<Blob>((res, rej) => {
-			canvas.toBlob(blob => {
-				blob ? res(blob) : rej("No blob");
+	const uploadImage = async () => {
+		setLoading(true);
+		if (!imageRef.current || !storedCrop) {
+			setLoading(false);
+			toast.warning("Image not cropped", {
+				description: "Use the crop window to crop your image before uploading",
+				duration: 3000
 			});
-		});
-		const metadata = props.file[0]!;
+			return;
+		}
+		const blob = await createBlobFromImage(imageRef, storedCrop);
+		const metadata = props.file[0];
 
-		const file = new File([blob], metadata.name, { type: metadata.type });
-
+		const file = createFileFromBlob(blob, metadata!);
 		props.addImage([file]);
+		setStoredCrop(undefined);
+		setLoading(false);
 		props.onClose();
-	}
+	};
 
 	return (
 		<Modal size="lg" isOpen={isOpen} placement="center" onOpenChange={onOpenChange} backdrop="blur">
@@ -61,8 +68,14 @@ export function ImageCropper(props: {
 							<Button variant="outline" size="sm" className="w-2/5" onClick={onClose}>
 								Cancel
 							</Button>
-							<Button variant="secondary" size="sm" className="w-2/5" onClick={() => void uploadImage()}>
-								Submit
+							<Button
+								loading={loading}
+								variant="secondary"
+								size="sm"
+								className="w-2/5"
+								onClick={() => void uploadImage()}
+							>
+								Upload
 							</Button>
 						</div>
 					</div>
@@ -70,7 +83,20 @@ export function ImageCropper(props: {
 			</ModalContent>
 		</Modal>
 	);
-}
+};
+
+const createBlobFromImage = (imageRef: React.RefObject<HTMLImageElement>, storedCrop: PixelCrop): Promise<Blob> => {
+	return new Promise<Blob>((res, rej) => {
+		const canvas = cropImage(imageRef.current!, storedCrop);
+		canvas.toBlob(blob => {
+			blob ? res(blob) : rej("No blob");
+		});
+	});
+};
+
+const createFileFromBlob = (blob: Blob, metadata: File): File => {
+	return new File([blob], metadata.name, { type: metadata.type });
+};
 
 function cropImage(image: HTMLImageElement, crop: PixelCrop) {
 	const canvas = document.createElement("canvas");

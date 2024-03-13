@@ -27,7 +27,7 @@ function defineMiddleware(authMsg: string) {
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
 	// Define as many FileRoutes as you like, each with a unique routeSlug
-	signupUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+	signupUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 1 } })
 		// Set permissions and file types for this FileRoute
 		.middleware(defineMiddleware("This user has not yet been authenticated"))
 		.onUploadError(({ error }) => {
@@ -52,20 +52,23 @@ export const ourFileRouter = {
 				imageUrl: file.url
 			};
 		}),
-	profileUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+	profileUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 1 } })
 		.middleware(defineMiddleware("This user is not logged in."))
 		.onUploadComplete(async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload
 			console.log("Upload complete for userId:", metadata.userId);
 			console.log("file url", file.url);
 			// update the user with the new image url + image key in the database
-			const dbUser = await db
-				.update(user)
-				.set({
-					imageKey: file.key,
-					imageUrl: file.url
-				})
-				.where(eq(user.clerkId, metadata.userId));
+			const dbUser = (
+				await db
+					.update(user)
+					.set({
+						imageKey: file.key,
+						imageUrl: file.url
+					})
+					.where(eq(user.clerkId, metadata.userId))
+					.returning()
+			)[0];
 			return {
 				uploadedBy: metadata.userId,
 				imageKey: file.key,

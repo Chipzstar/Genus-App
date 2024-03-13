@@ -1,7 +1,5 @@
 import { format, formatDistance } from "date-fns";
 
-import type { InsightPanel } from "~/utils/types";
-
 export const CAREER_INTERESTS = {
 	banking_finance: 1,
 	law: 2,
@@ -63,29 +61,6 @@ export function formatTimestamp(timestamp: string | Date, method = "default") {
 			return format(new Date(timestamp).getTime(), "HH:mm");
 	}
 }
-
-export const INSIGHTS: InsightPanel[] = [
-	{
-		slug: "tobi-markets-analyst-at-goldman-sachs",
-		title: "Tobi - Markets Analyst at Goldman Sachs",
-		image: "/images/experts/Tobi.svg"
-	},
-	{
-		slug: "joseph-investment-banking-analyst-at-leading-boutique-firm",
-		title: "Joseph - Investment Banking Analyst at Leading Boutique firm",
-		image: "/images/experts/Joseph.svg"
-	},
-	{
-		slug: "sheila-research-analyst-at-barclays",
-		title: "Sheila - Research Analyst at Barclays",
-		image: "/images/experts/Sheila.svg"
-	},
-	{
-		slug: "dolly-trader-at-jp-morgan",
-		title: "Dolly - Trader at JP Morgan",
-		image: "/images/experts/Dolly.svg"
-	}
-];
 
 export function convertToNestedArray(arr: any[] = []) {
 	// Use a Map to count the occurrences of each unique string

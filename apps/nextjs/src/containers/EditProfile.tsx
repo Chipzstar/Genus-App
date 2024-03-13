@@ -40,25 +40,18 @@ export const EditProfile = ({
 			setLoading(true);
 			try {
 				await updateUserProfile(data);
-				if (files.length) {
-					void startUpload(files).then(res => {
-						if (clerk?.user && res?.[0]) {
-							void clerk.user
-								.setProfileImage({
-									file: files[0]!
-								})
-								.then(() => console.log("profile image set in Clerk"))
-								.catch(err => console.error(err));
-						}
-					});
-				} else {
-					clerk?.user &&
-						void clerk.user
-							.update({
-								firstName: data.firstname,
-								lastName: data.lastname
-							})
-							.then(() => console.log("profile updated in Clerk"));
+				if (clerk?.user) {
+					if (files.length) {
+						const result = await clerk.user.setProfileImage({
+							file: files[0]!,
+						})
+					}
+					void clerk.user
+						.update({
+							firstName: data.firstname,
+							lastName: data.lastname
+						})
+						.then(() => console.log("profile updated in Clerk"));
 				}
 				setTimeout(resetMode, 300);
 			} catch (err) {

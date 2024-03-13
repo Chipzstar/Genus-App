@@ -67,8 +67,9 @@ export const messageRouter = createTRPCRouter({
 				});
 
 				if (recipients.length) {
+					const title = input.isAnonymous ? `Message from anon` : `Message from ${dbUser.firstname} ${dbUser.lastname}`;
 					const notification = await ctx.magicbell.store.create({
-						title: `Message from ${dbUser.firstname} ${dbUser.lastname}`,
+						title,
 						content: input.content,
 						recipients: recipients.map(r => ({ email: r.user.email, external_id: r.userId })),
 						topic: dbGroup.slug,

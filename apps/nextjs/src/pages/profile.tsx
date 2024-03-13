@@ -1,7 +1,8 @@
 "use client";
 
-import React, { ReactElement, useCallback, useState } from "react";
-import { GetServerSideProps } from "next/types";
+import { ReactElement, useEffect } from "react";
+import React, { useCallback, useState } from "react";
+import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
@@ -40,7 +41,7 @@ const UserProfilePage = () => {
 		if (!file) return;
 		const reader = new FileReader();
 		reader.addEventListener("load", () => {
-			let src = reader.result?.toString() ?? "";
+			const src = reader.result?.toString() ?? "";
 			setTemp({ file: acceptedFile, src });
 		});
 		reader.readAsDataURL(file);
@@ -85,7 +86,8 @@ const UserProfilePage = () => {
 			console.log(err);
 			console.log("error occurred while uploading");
 			toast.error("Error!", {
-				description: "There was an error updating your profile." + err.message,
+				// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+				description: "There was an error updating your profile." + err?.cause,
 				duration: 5000
 			});
 		},
@@ -102,6 +104,10 @@ const UserProfilePage = () => {
 		accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
 		maxFiles: 1
 	});
+
+	useEffect(() => {
+		console.log(user?.imageUrl);
+	}, [user?.imageUrl])
 
 	return (
 		<div className="profile-container">

@@ -23,8 +23,8 @@ export function ChatBubble(props: {
 					"rounded-bl-none": !hasNextMessageFromSameUser && !currentUser
 				})}
 			>
-				<span className="mb-2 font-medium">{message.isAnonymous ? `Anon` : message.author.firstname}</span>
-				<span>{message.content}</span>
+				<span className={cn("mb-2 font-medium", { 'invisible': !member})}>{message.isAnonymous ? `Anon` : message.author.firstname}</span>
+				<span className={cn({'invisible': !member})}>{message.content}</span>
 			</div>
 		</Fragment>
 	);

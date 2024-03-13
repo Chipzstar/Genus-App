@@ -4,14 +4,15 @@ import { log } from "next-axiom";
 import shortHash from "shorthash2";
 import type * as z from "zod";
 
-import { careerInterest, careerInterestToUser, db, eq, user } from "@genus/db";
+import type { careerInterest} from "@genus/db";
+import { careerInterestToUser, db, eq, user } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
-import { ethnicitiesSchema, gendersSchema } from "@genus/validators";
+import type { ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
 import { CAREER_INTERESTS } from "~/utils";
 
-const MAGICBELL_API_SECRET = process.env.MAGICBELL_API_SECRET!;
+// const MAGICBELL_API_SECRET = process.env.MAGICBELL_API_SECRET!;
 
 type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
 
@@ -55,14 +56,12 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 				userId: dbUser.id
 			};
 		});
-
-		const result = await db.insert(careerInterestToUser).values(queries);
-
+		await db.insert(careerInterestToUser).values(queries);
 		/*const userEmailHMAC = Base64.stringify(hmacSHA256(dbUser.email, MAGICBELL_API_SECRET));
-		// attach the HMAC record to the clerk user external_id
-		await clerkClient.users.updateUser(payload.id, {
-			externalId: userEmailHMAC
-		});*/
+				// attach the HMAC record to the clerk user external_id
+				await clerkClient.users.updateUser(payload.id, {
+					externalId: userEmailHMAC
+				});*/
 		log.info("-----------------------------------------------");
 		log.debug("New user!!", dbUser);
 		log.info("-----------------------------------------------");
@@ -82,26 +81,36 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 		let uploadedFile;
 		const payload = event.data as UserJSON;
 		// check if the user already exists in the db
-		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
+		let dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
 
 		if (!dbUser) throw new Error("Could not find user");
 
 		// check if the user has an "imageUrl" field. If they do continue
 		const newImage = !dbUser.imageUrl && payload.has_image;
 		// check if the new image is different from the last one they uploaded
-		const changedImage = dbUser.imageUrl && dbUser.clerkImageHash !== shortHash(payload.image_url);
+		const changedImage = !!dbUser.imageUrl && dbUser.clerkImageHash !== shortHash(payload.image_url);
 
 		console.table({
+			dbImageUrl: dbUser.imageUrl,
+			payloadImageUrl: payload.image_url,
+			currHash: dbUser.clerkImageHash,
+			newHash: shortHash(payload.image_url)
+		});
+
+		/*console.table({
 			newImage,
 			changedImage,
 			currHash: dbUser.clerkImageHash,
 			newHash: shortHash(payload.image_url)
-		});
+		});*/
 
 		if (newImage || changedImage) {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
+		console.log("************************************************")
+		console.log(uploadedFile?.data)
+		console.log("************************************************")
 
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {
@@ -131,7 +140,7 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 
 		// update the user in the db
 		if (shouldUpdate)
-			await db
+			dbUser = (await db
 				.update(user)
 				.set({
 					firstname: payload.first_name,
@@ -140,7 +149,8 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					...(uploadedFile?.data && { imageUrl: uploadedFile.data.url }),
 					...(uploadedFile?.data && { clerkImageHash: shortHash(payload.image_url) })
 				})
-				.where(eq(user.clerkId, payload.id));
+				.where(eq(user.clerkId, payload.id))
+				.returning())[0];
 		log.info("-----------------------------------------------");
 		log.debug("Updated user!!", dbUser);
 		log.info("-----------------------------------------------");
@@ -161,7 +171,7 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		// disconnect any career interests
 		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.userId, dbUser.id));
 		// delete the user in db
-		await db.delete(user).where(eq(user.clerkId, payload.id as string));
+		await db.delete(user).where(eq(user.clerkId, payload.id!));
 		// delete the magicbell user
 		await magicbell.users.delete(`external_id:${payload.id}`);
 		if (user) {

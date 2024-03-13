@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { clerkClient, getAuth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import type { FileRouter } from "uploadthing/next-legacy";
 import { createUploadthing } from "uploadthing/next-legacy";
 import { UTApi } from "uploadthing/server";
@@ -11,10 +11,6 @@ import { timeout } from "~/utils";
 export const utapi = new UTApi();
 const f = createUploadthing();
 
-const mockAuth = async (req: NextApiRequest, res: NextApiResponse) => {
-	await timeout(3000);
-	return { id: 1 };
-};
 
 function defineMiddleware(authMsg: string) {
 	return async ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
@@ -57,6 +53,7 @@ export const ourFileRouter = {
 		.onUploadComplete(async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload
 			console.log("Upload complete for userId:", metadata.userId);
+			console.log("file key", file.key);
 			console.log("file url", file.url);
 			// update the user with the new image url + image key in the database
 			const dbUser = (
@@ -69,6 +66,8 @@ export const ourFileRouter = {
 					.where(eq(user.clerkId, metadata.userId))
 					.returning()
 			)[0];
+
+			console.log(dbUser)
 			return {
 				uploadedBy: metadata.userId,
 				imageKey: file.key,

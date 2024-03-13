@@ -2,11 +2,12 @@ import type { SanityClient } from "next-sanity";
 import { createClient } from "next-sanity";
 
 import { apiVersion, dataset, projectId, readToken, studioUrl, useCdn } from "~/lib/sanity.api";
+import type {
+	Group,
+	Insight} from "~/lib/sanity.queries";
 import {
 	allGroupsQuery,
 	allInsightsQuery,
-	Group,
-	Insight,
 	insightAndBodyQuery,
 	insightBySlugQuery,
 	insightSlugsQuery

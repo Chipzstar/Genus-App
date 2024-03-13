@@ -101,8 +101,9 @@ export const commentRouter = createTRPCRouter({
 					}
 				});
 				if (ctx.auth.userId !== input.authorId) {
+					const title = input.isAnonymous ?  "Comment from anon" : `Comment from ${author}`;
 					const notification = await ctx.magicbell.store.create({
-						title: `Comment from ${author}`,
+						title,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
 						topic: dbThread.group.slug,
@@ -162,9 +163,9 @@ export const commentRouter = createTRPCRouter({
 					authorId: true
 				}
 			});
-
+			const title = input.isAnonymous ?  "Comment from anon" : `Comment from ${author}`;
 			const notification = await ctx.magicbell.store.create({
-				title: `Comment from ${author}`,
+				title,
 				content: input.content,
 				recipients: recipients.map(c => ({ external_id: c.authorId })),
 				category: "comment",

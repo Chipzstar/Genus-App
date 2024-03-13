@@ -1,6 +1,7 @@
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import { useRouter } from "next/router";
-import { GetServerSideProps } from "next/types";
+import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 

@@ -35,8 +35,7 @@
     "build": {
       "dependsOn": [
         "^build",
-        "^db:generate",
-        "^db:migrate"
+        "^db:generate"
       ],
       "outputs": [
         ".next/**",

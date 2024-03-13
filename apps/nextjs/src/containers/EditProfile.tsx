@@ -3,6 +3,7 @@ import { useClerk } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { ClientUploadedFileData } from "uploadthing/types";
 import * as z from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -16,15 +17,16 @@ import { broad_course_categories, career_interests, completion_years, universiti
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";
-import { useUploadThing } from "~/utils/uploadthing";
 
 type FormValues = z.infer<typeof profileSchema>;
 
 export const EditProfile = ({
+	startUpload,
 	profile,
 	updateUserProfile,
 	resetMode
 }: {
+	startUpload: (files: File[], input?: any) => Promise<ClientUploadedFileData<any>[] | undefined>;
 	profile: UserProfile;
 	updateUserProfile: any;
 	resetMode: () => void;
@@ -32,20 +34,6 @@ export const EditProfile = ({
 	const { files } = useFileContext();
 	const clerk = useClerk();
 	const [loading, setLoading] = useState(false);
-
-	const { startUpload } = useUploadThing("profileUploader", {
-		onClientUploadComplete: res => {
-			console.log(res);
-			console.log("uploaded successfully!");
-		},
-		onUploadError: err => {
-			console.log(err);
-			console.log("error occurred while uploading");
-		},
-		onUploadBegin: filename => {
-			console.log("UPLOAD HAS BEGUN", filename);
-		}
-	});
 
 	const onSubmit = useCallback(
 		async (data: FormValues) => {

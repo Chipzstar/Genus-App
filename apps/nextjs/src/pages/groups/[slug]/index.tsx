@@ -14,7 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@genus/ui/alert";
 import ChatInput from "~/components/ChatInput";
 import { GroupStatusButton } from "~/components/GroupStatusButton";
 import Loader from "~/components/Loader";
-import Messages from "~/components/Messages";
+import Messages from "~/containers/Messages";
 import AppLayout from "~/layout/AppLayout";
 import { trpc } from "~/utils/trpc";
 import { GroupMember } from "~/utils/types";

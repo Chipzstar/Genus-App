@@ -127,11 +127,7 @@ export const userRouter = createTRPCRouter({
 						) {
 							db.delete(careerInterestToUser)
 								.where(eq(careerInterestToUser.careerInterestId, careerInterestId))
-								.then(result =>
-									console.log(
-										`${_slug} unassigned from user ${user.clerkId}\n${JSON.stringify(result, null, 2)}`
-									)
-								);
+								.then(result => console.log(`${_slug} unassigned from user ${dbUser.clerkId}}`));
 						}
 					})
 				);

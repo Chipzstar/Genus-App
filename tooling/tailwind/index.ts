@@ -5,7 +5,13 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
 	darkMode: ["class"],
-	content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./containers/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}"
+	],
 	theme: {
 		container: {
 			center: true,

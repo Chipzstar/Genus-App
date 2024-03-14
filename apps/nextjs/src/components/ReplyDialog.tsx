@@ -81,9 +81,9 @@ const ReplyDialog = ({ message, isMember }: DialogProps) => {
 									<Image
 										fill
 										src={
-											currentMessageAuthor
+											currentMessageAuthor && !message.isAnonymous
 												? session.user.imageUrl
-												: message.author.imageUrl
+												: message.author.imageUrl && !message.isAnonymous
 													? message.author.imageUrl
 													: "/images/avatar-placeholder.png"
 										}

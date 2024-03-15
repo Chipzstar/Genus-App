@@ -12,7 +12,6 @@ import AppLayout from "~/layout/AppLayout";
 import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { PATHS } from "~/utils";
-import { trpc } from "~/utils/trpc";
 import type { InsightPanel } from "~/utils/types";
 
 interface PageProps {
@@ -51,11 +50,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 
 const Home = (props: PageProps) => {
-	const result = trpc.group.getGroupBySlug.useQuery({
+	/*const result = trpc.group.getGroupBySlug.useQuery({
 		slug: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG!
-	});
+	});*/
 	const router = useRouter();
-	const { signOut, user } = useClerk();
+	const { user } = useClerk();
 
 	return (
 		<div className="page-container h-screen">

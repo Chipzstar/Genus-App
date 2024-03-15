@@ -53,8 +53,6 @@ export const EditProfile = ({
 				await updateUserProfile(data);
 				if (clerk?.user) {
 					const infoChanged = checkChanges(data, clerk.user)
-
-					console.table(infoChanged)
 					if (infoChanged) {
 						void clerk.user
 							.update({
@@ -64,9 +62,9 @@ export const EditProfile = ({
 							.then(() => console.log("profile updated in Clerk"));
 					}
 					if (files.length) {
-						const result = await clerk.user.setProfileImage({
+						await clerk.user.setProfileImage({
 							file: files[0]!,
-						})
+						});
 					}
 				}
 				setTimeout(resetMode, 300);

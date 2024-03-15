@@ -1,7 +1,8 @@
 // src/pages/_app.tsx
 import "../styles/globals.css";
 
-import { ReactElement, ReactNode, useEffect } from "react";
+import type { ReactElement, ReactNode} from "react";
+import { useEffect } from "react";
 import type { InferGetServerSidePropsType, NextPage } from "next";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -42,6 +43,10 @@ const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: Ap
 	const router = useRouter();
 
 	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const loader = document.getElementById('globalLoader');
+			if (loader) loader.style.display = 'none';
+		}
 		// Track page views
 		const handleRouteChange = () => posthog.capture("$pageview");
 		router.events.on("routeChangeComplete", handleRouteChange);

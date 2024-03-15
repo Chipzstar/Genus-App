@@ -1,5 +1,7 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
+import loader from "../loader";
+
 export default function Document() {
 	return (
 		<Html lang="en">
@@ -20,8 +22,15 @@ export default function Document() {
 					href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap"
 					rel="stylesheet"
 				/>
+				<style>{loader}</style>
 			</Head>
 			<body>
+				<div id={"globalLoader"}>
+					<div className="loader">
+						<div />
+						<div />
+					</div>
+				</div>
 				<Main />
 				<NextScript />
 			</body>

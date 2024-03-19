@@ -14,7 +14,7 @@ const insightFields = groq`
 export const settingsQuery = groq`*[_type == "settings"][0]`;
 
 export const allInsightsQuery = groq`
-*[_type == "insight"] | order(date desc, _updatedAt desc) {
+*[_type == "insight"] | order(date desc, _updatedAt asc) {
   ${insightFields}
 }`;
 

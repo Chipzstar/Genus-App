@@ -20,6 +20,11 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'priority',
+      title: 'Order',
+      type: 'number'
+    }),
+    defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
@@ -27,7 +32,15 @@ export default defineType({
     }),
     defineField({
       name: 'mainImage',
-      title: 'Main image',
+      title: 'SVG image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'iOSImage',
+      title: 'PNG image',
       type: 'image',
       options: {
         hotspot: true,
@@ -50,7 +63,9 @@ export default defineType({
       type: 'blockContent',
     }),
   ],
-
+  initialValue: {
+    priority: 0
+  },
   preview: {
     select: {
       title: 'title',

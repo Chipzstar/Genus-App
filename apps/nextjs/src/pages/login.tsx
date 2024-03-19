@@ -94,12 +94,6 @@ const Login: NextPageWithAuthLayout = () => {
 						objectFit: "contain"
 					}}
 				/>
-				{/*<object
-					className="overflow-visible"
-					type="image/svg+xml"
-					data="/images/logo-white.svg"
-					width={width <= 480 ? 300 : 450}
-				/>*/}
 			</div>
 			<header className="w-[230px] text-center text-2xl font-bold tracking-wider lg:text-4xl">Sign in</header>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">

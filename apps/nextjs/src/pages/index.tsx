@@ -85,13 +85,6 @@ const Home = (props: PageProps) => {
 								width={200}
 								height={150}
 							/>
-							{/*<object
-								className="mx-auto overflow-visible"
-								type="image/svg+xml"
-								data="/images/spring-weeks-ldn.svg"
-								width={200}
-								height={150}
-							/>*/}
 							<span className="text-ellipsis text-center text-base font-semibold md:text-lg">
 								InternGen: Spring into Banking
 							</span>

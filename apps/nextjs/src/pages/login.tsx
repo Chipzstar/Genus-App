@@ -1,5 +1,4 @@
 "use client";
-
 import React, { ReactElement, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -86,24 +85,21 @@ const Login: NextPageWithAuthLayout = () => {
 	return (
 		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8">
 			<div className="relative flex w-2/3 justify-center sm:h-[250px] sm:w-1/2 lg:w-2/3">
-				{/*<Image
-					src="/images/logo-white.svg"
+				<img
+					src="/images/white-logo.png"
 					alt="genus-white"
-					fill
-					sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					className="mt-0.5"
-					quality={100}
-					priority
+
+					className="mt-0.5 sm:w-96"
 					style={{
 						objectFit: "contain"
 					}}
-				/>*/}
-				<object
+				/>
+				{/*<object
 					className="overflow-visible"
 					type="image/svg+xml"
 					data="/images/logo-white.svg"
 					width={width <= 480 ? 300 : 450}
-				/>
+				/>*/}
 			</div>
 			<header className="w-[230px] text-center text-2xl font-bold tracking-wider lg:text-4xl">Sign in</header>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">

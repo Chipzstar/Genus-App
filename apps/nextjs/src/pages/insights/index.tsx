@@ -63,7 +63,7 @@ const Insights = (props: PageProps) => {
 
 	return (
 		<div className="page-container overflow-y-hidden bg-white">
-			<TopNav imagePath="/images/green-logo.svg" />
+			<TopNav imagePath="/images/green-logo.png" />
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>

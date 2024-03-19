@@ -14,7 +14,7 @@ export function ChatBubble(props: {
 	return (
 		<Fragment>
 			<div
-				className={cn("flex flex-col rounded-lg px-4 py-2 text-xs text-gray-900 sm:text-sm", {
+				className={cn("flex flex-col rounded-lg px-4 py-2 text-xs text-gray-900 sm:text-sm max-w-sm", {
 					"bg-chat-bubble-internal-300/50 text-gray-400": currentUser && !member,
 					"bg-chat-bubble-external-300/50 text-gray-400": !currentUser && !member,
 					"bg-chat-bubble-internal-300": currentUser && member,
@@ -24,7 +24,7 @@ export function ChatBubble(props: {
 				})}
 			>
 				<span className={cn("mb-2 font-medium", { 'invisible': !member})}>{message.isAnonymous ? `Anon` : message.author.firstname}</span>
-				<span className={cn({'invisible': !member})}>{message.content}</span>
+				<span className={cn('whitespace-normal max-w-[200px] md:max-w-full overflow-auto break-words', {'invisible': !member})}>{message.content}</span>
 			</div>
 		</Fragment>
 	);

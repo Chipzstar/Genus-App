@@ -13,7 +13,7 @@ interface Props {
 	imagePath?: string;
 }
 
-const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/logo-white.svg" }: Props) => {
+const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/white-logo.png" }: Props) => {
 	const router = useRouter();
 	const { signOut } = useAuth();
 	const posthog = usePostHog();
@@ -25,7 +25,16 @@ const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/logo-white.sv
 			}}
 		>
 			<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
-				<object className="mx-auto" type="image/svg+xml" data={imagePath} width={100} height={61} />
+				<img
+					src={imagePath}
+					alt="genus-white"
+					className="mx-auto mb-1.5"
+					style={{
+						objectFit: "contain"
+					}}
+					width={100}
+					height={61}
+				/>
 				<div className="absolute right-4">
 					<SignedIn>
 						<Button

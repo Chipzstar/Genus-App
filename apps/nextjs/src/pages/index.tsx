@@ -34,6 +34,8 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		};
 	}
 
+	insights.forEach(({mainImage}) => console.log(urlForImage(mainImage).url()))
+
 	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
 		slug,
 		title,
@@ -68,7 +70,7 @@ const Home = (props: PageProps) => {
 						<div
 							className="flex flex-col items-center justify-center space-y-4"
 							role="button"
-							onClick={() => router.push(`${PATHS.GROUPS}/interngen-spring-into-banking-event`)}
+							onClick={() => router.push(`${PATHS.GROUPS}/${process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG!}`)}
 						>
 							<header className="text-xl font-semibold">
 								<span className="underline">JOIN</span> the group!

@@ -167,16 +167,19 @@ const ResetPassword = () => {
 						: () => console.log("resending...")
 				}
 			/>
-			<div className="relative flex h-[250px] w-2/3 justify-center sm:w-1/2 lg:w-2/3">
-				<object
-					className="overflow-visible"
-					type="image/svg+xml"
-					data="/images/logo-white.svg"
-					width={width <= 480 ? 300 : 450}
+			<div className="relative flex  w-2/3 justify-center sm:w-1/2 lg:w-2/3">
+				<img
+					src="/images/white-logo.png"
+					alt="genus-white"
+
+					className="mt-0.5 sm:w-96"
+					style={{
+						objectFit: "contain"
+					}}
 				/>
 			</div>
 			{resetMode !== "email" ? (
-				<ResetPasswordForm onSubmit={onPasswordSubmit} loading={loading} />
+				<ResetPasswordForm onSubmit={onPasswordSubmit} loading={loading}/>
 			) : (
 				<CheckEmailForm onSubmit={onEmailSubmit} loading={loading} />
 			)}

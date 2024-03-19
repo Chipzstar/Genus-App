@@ -28,7 +28,7 @@ export const CheckEmailForm = ({ onSubmit, loading }: EmailForm) => {
 	return (
 		<div className="flex flex-col space-y-12">
 			<div className="space-y-3">
-				<header className="text-2xl font-bold tracking-wider lg:text-4xl">Find your Genus account</header>
+				<header className="text-2xl font-bold sm:tracking-wider lg:text-4xl">Find your Genus account</header>
 				<p className="">Enter the email associated with your account to change your password.</p>
 			</div>
 			<Form {...form}>

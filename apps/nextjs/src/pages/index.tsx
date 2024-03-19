@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		};
 	}
 
-	insights.forEach(({mainImage}) => console.log(urlForImage(mainImage).url()))
+	// insights.forEach(({mainImage}) => console.log(urlForImage(mainImage).url()))
 
 	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
 		slug,
@@ -75,13 +75,23 @@ const Home = (props: PageProps) => {
 							<header className="text-xl font-semibold">
 								<span className="underline">JOIN</span> the group!
 							</header>
-							<object
+							<img
+								src="/images/spring-weeks-ldn.svg"
+								alt="spring-weeks-ldn"
+								className="mx-auto overflow-visible"
+								style={{
+									objectFit: "contain"
+								}}
+								width={200}
+								height={150}
+							/>
+							{/*<object
 								className="mx-auto overflow-visible"
 								type="image/svg+xml"
 								data="/images/spring-weeks-ldn.svg"
 								width={200}
 								height={150}
-							/>
+							/>*/}
 							<span className="text-ellipsis text-center text-base font-semibold md:text-lg">
 								InternGen: Spring into Banking
 							</span>
@@ -107,15 +117,18 @@ const Home = (props: PageProps) => {
 										role="button"
 										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 									>
-										<object
+										<img
+											src={image}
+											alt={slug}
 											className="mx-auto overflow-visible"
-											type="image/svg+xml"
-											data={image}
+											style={{
+												objectFit: "contain"
+											}}
 											width={175}
 											height={126}
 										/>
-										{/*<img src={image} alt={title} className="" />*/}
-										<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
+										<span
+											className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
 											{title}
 										</span>
 									</div>
@@ -129,7 +142,7 @@ const Home = (props: PageProps) => {
 										loop: true
 									}}
 								>
-									<CarouselPrevious />
+								<CarouselPrevious />
 									<CarouselContent className="md:-ml-4">
 										{props.insights.map(({ image, slug, title }, index) => (
 											<CarouselItem
@@ -137,20 +150,23 @@ const Home = (props: PageProps) => {
 												onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 												className="flex flex-col items-center space-y-3 pl-2 md:pl-4"
 											>
-												<object
-													className="h-auto overflow-visible"
-													type="image/svg+xml"
-													data={image}
+												<img
+													src={image}
+													alt={title}
+													style={{
+														objectFit: "contain"
+													}}
 													width={175}
+													height={50}
 												/>
-												{/*<Image src={image} alt={title} className="" width={175} height={50} />*/}
-												<span className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
+												<span
+													className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
 													{title}
 												</span>
 											</CarouselItem>
 										))}
 									</CarouselContent>
-									<CarouselNext />
+									<CarouselNext/>
 								</Carousel>
 							</div>
 						</div>

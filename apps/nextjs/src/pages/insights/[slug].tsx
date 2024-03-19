@@ -95,14 +95,18 @@ const InsightSlug = (props: PageProps) => {
 						<ChevronLeft size={40} color="white" />
 					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
-						<object
+						<img
+							src={urlForImage(mainImage).height(300).width(450).url()}
+							alt={title}
 							className="mx-auto h-36 w-44 overflow-visible sm:h-52 sm:w-76"
-							type="image/svg+xml"
-							data={urlForImage(mainImage).height(300).width(450).url()}
+							style={{
+								objectFit: "contain"
+							}}
 							width={450}
 							height={300}
 						/>
-						<header className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
+						<header
+							className="whitespace-pre-wrap text-center text-xl font-bold text-white sm:w-144 sm:text-3xl">
 							{title}
 						</header>
 					</div>
@@ -110,7 +114,7 @@ const InsightSlug = (props: PageProps) => {
 			</Navbar>
 			<section className="flex h-full flex-col items-center bg-white px-4">
 				<div className="mx-auto max-w-3xl py-10 text-lg sm:px-6">
-					<PortableText value={body!} components={components} />
+					<PortableText value={body!} components={components}/>
 				</div>
 				<br />
 				<br />

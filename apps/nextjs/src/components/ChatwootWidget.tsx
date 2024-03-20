@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect } from "react";
+import { isMobile } from "react-device-detect";
 
 interface Props {
 	token: string;
@@ -9,7 +10,7 @@ const ChatwootWidget: React.FC<Props> = ({ token }: Props) => {
 	useEffect(() => {
 		// Add Chatwoot Settings
 		(window as any).chatwootSettings = {
-			hideMessageBubble: false,
+			hideMessageBubble: isMobile,
 			position: "right", // This can be left or right
 			locale: "en", // Language to be set
 			type: "standard", // [standard, expanded_bubble]
@@ -29,9 +30,6 @@ const ChatwootWidget: React.FC<Props> = ({ token }: Props) => {
 					websiteToken: token,
 					baseUrl: BASE_URL
 				});
-				if (window.innerWidth < 480) {
-					window.$chatwoot.toggleBubbleVisibility("hide");
-				}
 			};
 		})(document, "script");
 	}, []); // An empty array means that this effect will run once when the component mounts.

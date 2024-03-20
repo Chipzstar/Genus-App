@@ -76,7 +76,7 @@ const UserProfilePage = () => {
 			});
 			reader.readAsDataURL(file);
 		},
-		[user, updateFile, files]
+		[user, updateFile]
 	);
 
 	const params = new URLSearchParams();

@@ -67,7 +67,7 @@
     "clsx": "^2.0.0",
     "embla-carousel-react": "8.0.0-rc22",
     "input-otp": "0.3.31-beta",
-    "lucide-react": "^0.292.0",
+    "lucide-react": "^0.359.0",
     "next-themes": "^0.2.1",
     "react-hook-form": "^7.48.2",
     "react-loader-spinner": "^6.1.6",

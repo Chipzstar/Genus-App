@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Montserrat as FontSans } from "next/font/google";
 
 import { AxiomWebVitals } from "next-axiom";
@@ -18,6 +18,12 @@ const Layout = ({ children }: Props) => {
 	const { user } = useClerk()
 	if (user) {
 		const { id, emailAddresses, firstName, lastName } = user;
+		// @ts-expect-error chatwootSDK.setUser
+		window.$chatwoot.setUser(user.id, {
+			email: user.emailAddresses[0]!.emailAddress,
+			name: `${user.firstName} ${user.lastName}`,
+			avatar_url: user.imageUrl || undefined
+		});
 		posthog.identify(
 			id,  // Replace 'distinct_id' with your user's unique identifier
 			{

@@ -142,6 +142,7 @@
 
   .profile-form {
     min-height: calc(100vh - 270px);
+    /*height: calc(100vh - 270px);*/
   }
 
   .insights-scrollable-container {

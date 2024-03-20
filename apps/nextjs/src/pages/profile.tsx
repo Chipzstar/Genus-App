@@ -105,10 +105,6 @@ const UserProfilePage = () => {
 		maxFiles: 1
 	});
 
-	useEffect(() => {
-		console.log(user?.imageUrl);
-	}, [user?.imageUrl])
-
 	return (
 		<div className="profile-container">
 			<Navbar

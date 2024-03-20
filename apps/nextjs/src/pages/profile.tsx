@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactElement, useEffect } from "react";
-import React, { useCallback, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
+import { isMobile } from "react-device-detect";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
@@ -28,6 +28,7 @@ import { useUploadThing } from "~/utils/uploadthing";
 export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const UserProfilePage = () => {
+	const { user } = useClerk();
 	const [mode, toggle, setValue] = useViewEditToggle();
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
@@ -36,18 +37,47 @@ const UserProfilePage = () => {
 		src: ""
 	});
 
-	const onDrop = useCallback((acceptedFile: File[]) => {
-		const file = acceptedFile[0];
-		if (!file) return;
-		const reader = new FileReader();
-		reader.addEventListener("load", () => {
-			const src = reader.result?.toString() ?? "";
-			setTemp({ file: acceptedFile, src });
-		});
-		reader.readAsDataURL(file);
-	}, []);
-
-	const { user } = useClerk();
+	const onDrop = useCallback(
+		(acceptedFile: File[]) => {
+			if (isMobile && user) {
+				updateFile(acceptedFile);
+				void user
+					.setProfileImage({
+						file: acceptedFile[0]!
+					})
+					.then(() => {
+						toast.success("Success!", {
+							description: "Profile picture updated successfully!",
+							duration: 5000
+						});
+					})
+					.catch(error => {
+						console.error(error);
+						toast.error("Error!", {
+							description: "There was an error updating your profile.",
+							duration: 5000,
+							action: {
+								label: "Report Issue",
+								onClick: () => {
+									// @ts-expect-error chatwoot popup
+									window.$chatwoot.toggle("open");
+								}
+							}
+						});
+					});
+				return;
+			}
+			const file = acceptedFile[0];
+			if (!file) return;
+			const reader = new FileReader();
+			reader.addEventListener("load", () => {
+				const src = reader.result?.toString() ?? "";
+				setTemp({ file: acceptedFile, src });
+			});
+			reader.readAsDataURL(file);
+		},
+		[user, updateFile, files]
+	);
 
 	const params = new URLSearchParams();
 

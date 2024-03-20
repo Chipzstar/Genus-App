@@ -23,6 +23,7 @@ import { broad_course_categories, career_interests, completion_years, universiti
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";
+import { isMobile } from "react-device-detect";
 
 
 type FormValues = z.infer<typeof profileSchema>;
@@ -61,7 +62,7 @@ export const EditProfile = ({
 							})
 							.then(() => console.log("profile updated in Clerk"));
 					}
-					if (files.length) {
+					if (!isMobile && files.length) {
 						await clerk.user.setProfileImage({
 							file: files[0]!,
 						});
@@ -78,7 +79,7 @@ export const EditProfile = ({
 				setLoading(false);
 			}
 		},
-		[updateUserProfile, files, startUpload, resetMode, clerk.user]
+		[updateUserProfile, files, startUpload, resetMode, clerk.user, isMobile]
 	);
 
 	const form = useForm<FormValues>({

@@ -1,7 +1,7 @@
 // src/pages/_app.tsx
 import "../styles/globals.css";
 
-import type { ReactElement, ReactNode} from "react";
+import { ReactElement, ReactNode, useCallback, useMemo } from "react";
 import { useEffect } from "react";
 import type { InferGetServerSidePropsType, NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -15,6 +15,8 @@ import { PostHogProvider } from "posthog-js/react";
 import { FileProvider } from "~/context/FileContext";
 import Layout from "~/layout/Layout";
 import { trpc } from "~/utils/trpc";
+import { PATHS } from "~/utils";
+import * as path from "path";
 
 if (typeof window !== "undefined") {
 	// checks that we are client-side
@@ -56,6 +58,13 @@ const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: Ap
 		};
 	}, []);
 
+	const color = useMemo(() => {
+		const pathname = router.asPath;
+		const whiteNav = [PATHS.INSIGHTS, PATHS.GROUPS]
+		const isWhite = whiteNav.includes(pathname)
+		return isWhite ? "#2AA6B7" : "#fff";
+	}, [router.asPath]);
+
 	const getLayout = Component.getLayout ?? ((page: any) => page);
 	return getLayout(
 		<ClerkProvider {...pageProps} publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
@@ -63,7 +72,7 @@ const MyApp: AppTypeWithLayout = ({ Component, pageProps: { ...pageProps } }: Ap
 				<NextUIProvider>
 					<FileProvider>
 						<Layout>
-							<ProgressBar height="4px" color="#fff" options={{ showSpinner: true }} shallowRouting />
+							<ProgressBar height="4px" color={color} options={{ showSpinner: true }} shallowRouting shouldCompareComplexProps />
 							<Component {...pageProps} />
 						</Layout>
 					</FileProvider>

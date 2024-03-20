@@ -1,5 +1,6 @@
-import React, { ReactElement, useMemo, useRef } from "react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { ReactElement} from "react";
+import React, { useMemo, useRef } from "react";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useAuth } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
@@ -17,7 +18,7 @@ import Loader from "~/components/Loader";
 import Messages from "~/containers/Messages";
 import AppLayout from "~/layout/AppLayout";
 import { trpc } from "~/utils/trpc";
-import { GroupMember } from "~/utils/types";
+import type { GroupMember } from "~/utils/types";
 
 export const getServerSideProps = (async ({ req, params }) => {
 	const { userId } = getAuth(req);

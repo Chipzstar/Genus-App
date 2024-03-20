@@ -4,8 +4,8 @@ import { log } from "next-axiom";
 import shortHash from "shorthash2";
 import type * as z from "zod";
 
-import type { careerInterest} from "@genus/db";
-import { careerInterestToUser, db, eq, user } from "@genus/db";
+import { careerInterest, reaction } from "@genus/db";
+import { careerInterestToUser, db, eq, user, groupUser } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
 import type { ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
@@ -170,6 +170,9 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		if (!dbUser) throw new Error("Could not find user");
 		// disconnect any career interests
 		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.userId, dbUser.id));
+		// delete any entities in the DB that link directly to the user
+		await db.delete(groupUser).where(eq(groupUser.userId, payload.id!));
+		await db.delete(reaction).where(eq(reaction.authorId, payload.id!));
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id!));
 		// delete the magicbell user

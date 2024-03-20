@@ -57,7 +57,8 @@ export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 	return {
 		props: {
 			trpcState: helpers.dehydrate(),
-			groups: formattedGroups
+			groups: formattedGroups,
+			color: "2AA6B7"
 		}
 	};
 };

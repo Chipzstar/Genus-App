@@ -1,6 +1,7 @@
-import { ReactElement, useMemo } from "react";
+import type { ReactElement} from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/router";
-import { GetServerSideProps } from "next/types";
+import type { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Image, Listbox, ListboxItem, Navbar, NavbarBrand } from "@nextui-org/react";
 import { ChevronLeft, User } from "lucide-react";
@@ -10,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 
 import ListBoxWrapper from "~/containers/ListBoxWrapper";
 import AppLayout from "~/layout/AppLayout";
-import { NextPageWithAppLayout } from "~/pages/_app";
+import type { NextPageWithAppLayout } from "~/pages/_app";
 import { trpc } from "~/utils/trpc";
 
 export const getServerSideProps = (async ({ params, req }) => {
@@ -64,7 +65,7 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 				}}
 			>
 				<NavbarBrand>
-					<div className="absolute left-0 top-0" role="button" onClick={() => router.back()}>
+					<div className="absolute left-0 top-0" role="button" onClick={router.back}>
 						<ChevronLeft size={40} color="white" />
 					</div>
 					<Image
@@ -74,7 +75,7 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 						height={75}
 						className="opacity-1"
 					/>
-					<span className="whitespace-pre-wrap text-lg font-semibold sm:text-2xl">
+					<span className="whitespace-pre-wrap text-lg font-semibold text-center sm:text-2xl">
 						InternGen: Spring into Banking
 					</span>
 					<span className="text-sm sm:text-base">{members?.length} members</span>

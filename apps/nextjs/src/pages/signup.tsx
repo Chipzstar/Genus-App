@@ -33,14 +33,15 @@ import {
 	completion_years,
 	ethnicity_dictionary,
 	genders,
-	universities
+	universities,
+	university_years
 } from "@genus/validators/constants";
 
 import CodeInput from "~/components/CodeInput";
 import { formatString } from "~/utils";
 import { useUploadThing } from "~/utils/uploadthing";
 import AuthLayout from "../layout/AuthLayout";
-import { NextPageWithAuthLayout } from "./_app";
+import type { NextPageWithAuthLayout } from "./_app";
 
 const Signup: NextPageWithAuthLayout = () => {
 	// STATE
@@ -63,9 +64,10 @@ const Signup: NextPageWithAuthLayout = () => {
 			email: "",
 			password: "",
 			confirmPassword: "",
+			current_year: "1st_year",
 			completion_year: "2024",
 			broad_degree_course: "economics",
-			university: "king's-college-london",
+			university: "london-school-of-economics-and-political-science",
 			degree_name: "",
 			career_interests: []
 		},
@@ -111,7 +113,7 @@ const Signup: NextPageWithAuthLayout = () => {
 			}
 			try {
 				const { email, password, firstname, lastname, confirmPassword, ...rest } = values;
-				const result = await signUp.create({
+				await signUp.create({
 					externalAccountActionCompleteRedirectUrl: "/",
 					emailAddress: email,
 					password,
@@ -418,6 +420,32 @@ const Signup: NextPageWithAuthLayout = () => {
 							/>
 							<FormField
 								control={form.control}
+								name="current_year"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Current Year</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl">
+													<SelectValue placeholder="Select your completion year" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{university_years?.map((year, index) => {
+													return (
+														<SelectItem key={index} value={year}>
+															{formatString(year)}
+														</SelectItem>
+													);
+												})}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
 								name="completion_year"
 								render={({ field }) => (
 									<FormItem>
@@ -429,11 +457,11 @@ const Signup: NextPageWithAuthLayout = () => {
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												{completion_years?.map((course, index) => {
-													if (course)
+												{completion_years?.map((year, index) => {
+													if (year)
 														return (
-															<SelectItem key={index} value={course}>
-																{formatString(course)}
+															<SelectItem key={index} value={year}>
+																{formatString(year)}
 															</SelectItem>
 														);
 												})}

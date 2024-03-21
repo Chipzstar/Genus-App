@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { Montserrat as FontSans } from "next/font/google";
-
+import Head from "next/head";
+import { useClerk } from "@clerk/nextjs";
 import { AxiomWebVitals } from "next-axiom";
+import { usePostHog } from "posthog-js/react";
 
 import { Toaster } from "@genus/ui/sonner";
-import { usePostHog } from "posthog-js/react";
-import { useClerk } from "@clerk/nextjs";
-import Head from "next/head";
 
 interface Props {
 	children: React.ReactNode;
@@ -18,12 +17,6 @@ const Layout = ({ children }: Props) => {
 	const { user } = useClerk()
 	if (user) {
 		const { id, emailAddresses, firstName, lastName } = user;
-		// @ts-expect-error chatwootSDK.setUser
-		window.$chatwoot.setUser(user.id, {
-			email: user.emailAddresses[0]!.emailAddress,
-			name: `${user.firstName} ${user.lastName}`,
-			avatar_url: user.imageUrl || undefined
-		});
 		posthog.identify(
 			id,  // Replace 'distinct_id' with your user's unique identifier
 			{
@@ -32,6 +25,17 @@ const Layout = ({ children }: Props) => {
 			} // optional: set additional user properties
 		);
 	}
+
+	useEffect(() => {
+		if (user) {
+			// @ts-expect-error chatwootSDK.setUser
+			window.$chatwoot.setUser(user.id, {
+				email: user.emailAddresses[0]!.emailAddress,
+				name: `${user.firstName} ${user.lastName}`,
+				avatar_url: user.imageUrl || undefined
+			});
+		}
+	}, [user])
 	return (
 		<>
 			<Head>

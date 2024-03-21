@@ -1,6 +1,7 @@
 "use client";
 
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import type { ReactElement} from "react";
+import React, { useCallback, useState } from "react";
 import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";

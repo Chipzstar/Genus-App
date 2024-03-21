@@ -21,14 +21,14 @@ export const connectionString = [
 
 const sql = neon(connectionString);
 
-// @ts-expect-error
+// @ts-expect-error neon sql is weird
 const db = drizzle(sql);
 
 const main = async () => {
 	try {
 		await migrate(db, { migrationsFolder: "drizzle" });
 
-		console.log("Migration completed");
+		console.log("Migration completed ✅");
 	} catch (error) {
 		console.error("Error during migration:", error);
 
@@ -37,7 +37,7 @@ const main = async () => {
 };
 
 main().catch(e => {
-	console.error("Migration failed");
+	console.error("Migration failed 🛑");
 	console.error(e);
 	process.exit(1);
 });

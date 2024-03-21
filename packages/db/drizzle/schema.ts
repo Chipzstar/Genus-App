@@ -15,8 +15,10 @@ import { relations } from "drizzle-orm/relations";
 export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
+export const userCurrentYear = pgEnum("user_currentyear", ["1st_year", "2nd_year", "3rd_year", "4th_year", "Graduate", "Postgraduate", "PHD", "Other"]);
 export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
-export const userProfileType = pgEnum("user_profiletype", ["STUDENT", "ADMIN", "EXPERT"]);
+export const userProfileType = pgEnum("user_profiletype", ["STUDENT", "GRADUATE", "ADMIN", "EXPERT"]);
+
 export const userEthnicity = pgEnum("user_ethnicity", [
 	"english__welsh__scottish__northern_irish_or_british",
 	"irish",
@@ -196,6 +198,7 @@ export const user = pgTable(
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
 		gender: userGender("gender").default("female").notNull(),
+		currentYear: userCurrentYear("currentYear").default("1st_year"),
 		completionYear: integer("completionYear").notNull(),
 		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }).notNull(),
 		university: varchar("university", { length: 191 }).notNull(),

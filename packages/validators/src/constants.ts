@@ -3,10 +3,10 @@ export const university_years = [
 	"2nd_year",
     "3rd_year",
     "4th_year",
-	"Graduate",
-    "Postgraduate",
-	"PHD",
-	"Other"
+	"graduate",
+    "postgraduate",
+	"phd",
+	"other"
 ] as const;
 
 export const completion_years = [

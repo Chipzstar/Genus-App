@@ -1,3 +1,14 @@
+export const university_years = [
+	"1st_year",
+	"2nd_year",
+    "3rd_year",
+    "4th_year",
+	"Graduate",
+    "Postgraduate",
+	"PHD",
+	"Other"
+] as const;
+
 export const completion_years = [
 	"2020",
 	"2021",
@@ -11,6 +22,8 @@ export const completion_years = [
 	"2029",
 	"2030"
 ] as const;
+
+export const profile_types = ["STUDENT", "GRADUATE", "ADMIN", "EXPERT"] as const;
 
 export const genders = ["male", "female", "non_binary", "other"] as const;
 

@@ -38,8 +38,7 @@ export const getStaticProps: GetStaticProps<PageProps, Query> = async () => {
 	}));
 	return {
 		props: {
-			insights: formattedInsights,
-			color: "2AA6B7"
+			insights: formattedInsights
 		}
 	};
 };

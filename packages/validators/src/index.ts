@@ -6,7 +6,9 @@ import {
 	completion_years,
 	ethnicities,
 	genders,
-	universities
+	universities,
+	university_years,
+	profile_types
 } from "./constants";
 
 export const gendersSchema = z.enum(genders);
@@ -20,6 +22,10 @@ export const broadCourseCategorySchema = z.enum(broad_course_categories);
 export const universitiesSchema = z.enum(universities);
 
 export const completionYearSchema = z.enum(completion_years);
+
+export const currentYearSchema = z.enum(university_years);
+
+export const profileTypeSchema = z.enum(profile_types);
 
 export const loginSchema = z.object({
 	email: z
@@ -65,6 +71,7 @@ export const signupBaseSchema = z.object({
 	degree_name: z
 		.string({ required_error: "Please enter your degree." })
 		.min(2, "Degree name must be at least 2 characters"),
+	current_year: currentYearSchema,
 	completion_year: completionYearSchema,
 	career_interests: z.array(careerInterestsSchema).nonempty({ message: "Please select at least one career interest" })
 });

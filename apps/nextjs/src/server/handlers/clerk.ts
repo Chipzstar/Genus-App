@@ -4,13 +4,12 @@ import { log } from "next-axiom";
 import shortHash from "shorthash2";
 import type * as z from "zod";
 
-import { careerInterest, reaction } from "@genus/db";
-import { careerInterestToUser, db, eq, user, groupUser } from "@genus/db";
+import { careerInterestToUser, careerInterest, reaction, db, eq, user, groupUser } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
-import type { ethnicitiesSchema, gendersSchema } from "@genus/validators";
+import { currentYearSchema, ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
-import { CAREER_INTERESTS } from "~/utils";
+import { CAREER_INTERESTS, checkProfileType } from "~/utils";
 
 // const MAGICBELL_API_SECRET = process.env.MAGICBELL_API_SECRET!;
 
@@ -30,9 +29,10 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			ethnicity: payload.unsafe_metadata.ethnicity as z.infer<typeof ethnicitiesSchema>,
 			university: payload.unsafe_metadata.university as string,
 			degreeName: payload.unsafe_metadata.degree_name as string,
+			currentYear: payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>,
 			completionYear: Number(payload.unsafe_metadata.completion_year),
 			broadDegreeCourse: payload.unsafe_metadata.broad_degree_course as string,
-			profileType: "STUDENT"
+			profileType: checkProfileType(payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>),
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
@@ -97,20 +97,11 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 			newHash: shortHash(payload.image_url)
 		});
 
-		/*console.table({
-			newImage,
-			changedImage,
-			currHash: dbUser.clerkImageHash,
-			newHash: shortHash(payload.image_url)
-		});*/
-
 		if (newImage || changedImage) {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
-		console.log("************************************************")
-		console.log(uploadedFile?.data)
-		console.log("************************************************")
+		if (uploadedFile?.data) log.debug("Uploaded image data for " + payload.id, uploadedFile.data)
 
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {

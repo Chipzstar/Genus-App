@@ -22,6 +22,20 @@
       "when": 1710196451954,
       "tag": "0002_natural_king_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711032078939,
+      "tag": "0003_broad_sleepwalker",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1711033255686,
+      "tag": "0004_worthless_blade",
+      "breakpoints": true
     }
   ]
 }

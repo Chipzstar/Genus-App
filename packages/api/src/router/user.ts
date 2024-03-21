@@ -6,8 +6,6 @@ import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
 	completionYearSchema,
-	ethnicitiesSchema,
-	gendersSchema,
 	universitiesSchema
 } from "@genus/validators";
 import { career_interests } from "@genus/validators/constants";
@@ -31,6 +29,7 @@ export const userRouter = createTRPCRouter({
 				broadDegreeCourse: user.broadDegreeCourse,
 				degreeName: user.degreeName,
 				completionYear: user.completionYear,
+				currentYear: user.currentYear,
 				careerInterests: careerInterest.slug
 			};
 			const dbUser = await ctx.db.query.user.findFirst({

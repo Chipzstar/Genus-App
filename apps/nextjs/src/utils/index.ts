@@ -1,7 +1,7 @@
 import { format, formatDistance } from "date-fns";
-import type { currentYearSchema } from "@genus/validators";
-import { userCurrentYear, userProfileType } from "@genus/db";
 import * as z from "zod";
+
+import type { currentYearSchema } from "@genus/validators";
 
 export const CAREER_INTERESTS = {
 	banking_finance: 1,
@@ -90,9 +90,9 @@ export function capitalize(str: string | undefined) {
 
 export function checkProfileType(currentYear: z.infer<typeof currentYearSchema>) {
 	switch (currentYear) {
-		case "Graduate":
+		case "graduate":
             return "GRADUATE";
-        case "Postgraduate":
+        case "postgraduate":
             return "GRADUATE";
         default:
             return "STUDENT";

@@ -24,18 +24,15 @@ const Layout = ({ children }: Props) => {
 				name: `${firstName} ${lastName}`
 			} // optional: set additional user properties
 		);
-	}
-
-	useEffect(() => {
-		if (user) {
+		if (typeof window !== "undefined" && window.$chatwoot) {
 			// @ts-expect-error chatwootSDK.setUser
-			window.$chatwoot.setUser(user.id, {
+			(window as any).$chatwoot.setUser(user.id, {
 				email: user.emailAddresses[0]!.emailAddress,
 				name: `${user.firstName} ${user.lastName}`,
 				avatar_url: user.imageUrl || undefined
 			});
 		}
-	}, [user])
+	}
 	return (
 		<>
 			<Head>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Montserrat as FontSans } from "next/font/google";
 import Head from "next/head";
 import { useClerk } from "@clerk/nextjs";

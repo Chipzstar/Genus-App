@@ -8,7 +8,7 @@ export default authMiddleware({
 		"/signup",
 		"/reset-password",
 		"/api/clerk/webhook",
-		"/api/trpc/auth(.*)",
+		"/api/trpc/message(.*)",
 		"/_axiom/web-vitals"
 	],
 	afterAuth(auth, req, evt) {

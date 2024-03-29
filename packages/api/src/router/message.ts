@@ -2,11 +2,16 @@ import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import * as z from "zod";
 
-import { and, db, eq, group, groupUser, message, ne, user } from "@genus/db";
+import { and, eq, group, groupUser, message, ne, user } from "@genus/db";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const messageRouter = createTRPCRouter({
+	getMessages: publicProcedure.query(async ({ ctx }) => {
+		console.log("helloooooo");
+		const messages = await ctx.db.query.message.findMany({});
+		return await ctx.db.query.message.findMany();
+	}),
 	createMessage: protectedProcedure
 		.input(
 			z.object({
@@ -67,7 +72,9 @@ export const messageRouter = createTRPCRouter({
 				});
 
 				if (recipients.length) {
-					const title = input.isAnonymous ? `Message from anon` : `Message from ${dbUser.firstname} ${dbUser.lastname}`;
+					const title = input.isAnonymous
+						? `Message from anon`
+						: `Message from ${dbUser.firstname} ${dbUser.lastname}`;
 					const notification = await ctx.magicbell.store.create({
 						title,
 						content: input.content,

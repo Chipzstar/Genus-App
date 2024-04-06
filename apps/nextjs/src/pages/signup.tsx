@@ -10,8 +10,25 @@ import Step3 from "~/containers/signup/Step3";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
+interface StepItems extends StepItem {
+	component: React.FunctionComponent;
+}
+
 const Signup: NextPageWithAuthLayout = () => {
-	const steps = [{ label: "Step 1" }, { label: "Step 2" }] satisfies StepItem[];
+	const steps = [
+		{
+			label: "Step 1",
+			component: Step1
+		},
+		{
+			label: "Step 2",
+			component: Step2
+		},
+		{
+			label: "Step 3",
+			component: Step3
+		}
+	] satisfies StepItems[];
 
 	return (
 		<div className="flex grow flex-col items-center sm:gap-y-8">
@@ -23,15 +40,11 @@ const Signup: NextPageWithAuthLayout = () => {
 					"main-container": "max-w-3xl"
 				}}
 			>
-				<Step>
-					<Step1 />
-				</Step>
-				<Step>
-					<Step2 />
-				</Step>
-				<Step>
-					<Step3 />
-				</Step>
+				{steps.map((step, index) => (
+					<Step key={step.label}>
+						<step.component />
+					</Step>
+				))}
 			</Stepper>
 		</div>
 	);

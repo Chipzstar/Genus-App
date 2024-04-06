@@ -197,7 +197,7 @@ const Step2: FC<Props> = () => {
 								</FormItem>
 							)}
 						/>
-						<div className="grid grid-cols-2 gap-x-8 gap-y-4">
+						<div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:col-span-2">
 							<FormField
 								control={form.control}
 								name="current_year"
@@ -253,12 +253,12 @@ const Step2: FC<Props> = () => {
 					</section>
 					<div className="flex items-center justify-around space-x-6 pt-6 sm:space-x-16 sm:pt-12">
 						<Button
-							onClick={() => form.reset()}
+							onClick={prevStep}
 							loading={loading}
 							type="button"
 							radius="xl"
 							variant="back"
-							className="px-unit-xl font-semibold sm:w-full sm:text-xl"
+							className="px-unit-xl font-semibold sm:h-12 sm:w-full sm:text-xl"
 						>
 							Go back
 						</Button>
@@ -267,7 +267,7 @@ const Step2: FC<Props> = () => {
 							type="submit"
 							radius="xl"
 							form="signup-form"
-							className="px-unit-xl font-semibold sm:w-full sm:text-xl"
+							className="px-unit-xl font-semibold sm:h-12 sm:w-full sm:text-xl"
 						>
 							Continue
 						</Button>

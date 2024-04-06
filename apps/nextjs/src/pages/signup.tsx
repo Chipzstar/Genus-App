@@ -11,8 +11,6 @@ import Step2 from "~/containers/signup/Step2";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
-const MAX_STEPS = 4;
-
 const Signup: NextPageWithAuthLayout = () => {
 	const steps = [{ label: "Step 1" }, { label: "Step 2" }] satisfies StepItem[];
 
@@ -26,10 +24,10 @@ const Signup: NextPageWithAuthLayout = () => {
 				}}
 			>
 				<Step key={1}>
-					<Step1 maxSteps={MAX_STEPS} />
+					<Step1 />
 				</Step>
 				<Step key={2}>
-					<Step2 maxSteps={MAX_STEPS} />
+					<Step2 />
 				</Step>
 			</Stepper>
 		</div>

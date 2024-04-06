@@ -43,7 +43,6 @@ const Step2: FC<Props> = ({}) => {
 
 	// HOOKS
 	const router = useRouter();
-	const { isLoaded, signUp, setActive } = useSignUp();
 
 	const form = useForm<z.infer<typeof signupStep2Schema>>({
 		defaultValues: {
@@ -59,31 +58,17 @@ const Step2: FC<Props> = ({}) => {
 		resolver: zodResolver(signupStep2Schema)
 	});
 
-	const onSubmit = useCallback(
-		async (values: z.infer<typeof signupStep2Schema>) => {
-			// ✅ This will be type-safe and validated.
-			setLoading(true);
-			if (!isLoaded) {
-				// handle loading state
-				toast.error("Uh oh! Something went wrong.", {
-					description: "There was a problem signing you up.",
-					action: {
-						label: "Try again",
-						onClick: () => void onSubmit(values)
-					}
-				});
-				return null;
-			}
-			try {
-				console.log(values);
-			} catch (error: any) {
-				console.log(error);
-			} finally {
-				setLoading(false);
-			}
-		},
-		[isLoaded]
-	);
+	const onSubmit = useCallback(async (values: z.infer<typeof signupStep2Schema>) => {
+		// ✅ This will be type-safe and validated.
+		setLoading(true);
+		try {
+			console.log(values);
+		} catch (error: any) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
 
 	return (
 		<>

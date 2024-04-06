@@ -30,6 +30,7 @@ const config = {
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-argument": "off",
 		"@typescript-eslint/no-explicit-any": "warn",
+		"@typescript-eslint/no-empty-function": "warn",
 		"import/consistent-type-specifier-style": ["warn", "prefer-top-level"]
 	},
 	ignorePatterns: ["**/.eslintrc.cjs", "**/*.config.js", "**/*.config.cjs", ".next", "dist", "pnpm-lock.yaml"],

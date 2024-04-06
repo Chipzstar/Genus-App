@@ -1,12 +1,13 @@
 import { clerkClient } from "@clerk/nextjs";
-import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/dist/types/api";
+import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/server";
 import { log } from "next-axiom";
 import shortHash from "shorthash2";
 import type * as z from "zod";
 
-import { careerInterestToUser, careerInterest, reaction, db, eq, user, groupUser } from "@genus/db";
+import type { careerInterest } from "@genus/db";
+import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
-import { currentYearSchema, ethnicitiesSchema, gendersSchema } from "@genus/validators";
+import type { currentYearSchema, ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
 import { CAREER_INTERESTS, checkProfileType } from "~/utils";
@@ -32,7 +33,7 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			currentYear: payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>,
 			completionYear: Number(payload.unsafe_metadata.completion_year),
 			broadDegreeCourse: payload.unsafe_metadata.broad_degree_course as string,
-			profileType: checkProfileType(payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>),
+			profileType: checkProfileType(payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>)
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
@@ -101,7 +102,7 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
-		if (uploadedFile?.data) log.debug("Uploaded image data for " + payload.id, uploadedFile.data)
+		if (uploadedFile?.data) log.debug("Uploaded image data for " + payload.id, uploadedFile.data);
 
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {
@@ -131,17 +132,19 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 
 		// update the user in the db
 		if (shouldUpdate)
-			dbUser = (await db
-				.update(user)
-				.set({
-					firstname: payload.first_name,
-					lastname: payload.last_name,
-					...(uploadedFile?.data && { imageKey: uploadedFile.data.key }),
-					...(uploadedFile?.data && { imageUrl: uploadedFile.data.url }),
-					...(uploadedFile?.data && { clerkImageHash: shortHash(payload.image_url) })
-				})
-				.where(eq(user.clerkId, payload.id))
-				.returning())[0];
+			dbUser = (
+				await db
+					.update(user)
+					.set({
+						firstname: payload.first_name,
+						lastname: payload.last_name,
+						...(uploadedFile?.data && { imageKey: uploadedFile.data.key }),
+						...(uploadedFile?.data && { imageUrl: uploadedFile.data.url }),
+						...(uploadedFile?.data && { clerkImageHash: shortHash(payload.image_url) })
+					})
+					.where(eq(user.clerkId, payload.id))
+					.returning()
+			)[0];
 		log.info("-----------------------------------------------");
 		log.debug("Updated user!!", dbUser);
 		log.info("-----------------------------------------------");

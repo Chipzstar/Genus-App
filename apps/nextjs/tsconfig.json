@@ -2,6 +2,8 @@
   "extends": "@genus/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "jsx": "preserve",
     "paths": {
       "~/*": [
         "./src/*"
@@ -14,7 +16,7 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "module": "esnext"
   },
   "include": [
     ".",

@@ -1,11 +1,14 @@
 // @ts-check
-import {z} from 'zod'
+import { z } from 'zod'
 
 /**
  * Specify your server-side environment variables schema here.
  * This way you can ensure the app isn't built with invalid env vars.
  */
 export const serverSchema = z.object({
+    AXIOM_DATASET: z.string().optional(),
+    AXIOM_TOKEN: z.string().optional(),
+    AXIOM_ORG_ID: z.string().optional(),
     DB_ADMIN_USERNAME: z.string().optional(),
     DB_ADMIN_PASSWORD: z.string().optional(),
     DB_USERNAME: z.string().optional(),
@@ -13,6 +16,7 @@ export const serverSchema = z.object({
     DB_HOST: z.string().optional(),
     DB_NAME: z.string().optional(),
     NODE_ENV: z.enum(["development", "test", "production"]),
+    MAGICBELL_SECRET_KEY: z.string().optional(),
     CLERK_SECRET_KEY: z.string().optional(),
     CLERK_WEBHOOK_SECRET: z.string().optional(),
     UPLOADTHING_APP_ID: z.string().optional(),
@@ -35,7 +39,7 @@ export const clientSchema = z.object({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().optional(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().optional(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string().optional(),
-		NEXT_PUBLIC_DEFAULT_GROUP_SLUG: z.string().optional(),
+    NEXT_PUBLIC_DEFAULT_GROUP_SLUG: z.string().optional(),
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().optional(),
     NEXT_PUBLIC_SANITY_DATASET: z.string().optional()
 });
@@ -54,7 +58,7 @@ export const clientEnv = {
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
-		NEXT_PUBLIC_DEFAULT_GROUP_SLUG: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG,
+    NEXT_PUBLIC_DEFAULT_GROUP_SLUG: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG,
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET
 };

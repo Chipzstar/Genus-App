@@ -3,7 +3,8 @@
 
 import "react-image-crop/dist/ReactCrop.css";
 
-import { FC, useRef, useState } from "react";
+import type { FC } from "react";
+import { useRef, useState } from "react";
 import { Modal, ModalBody, ModalContent, useDisclosure } from "@nextui-org/react";
 import type { Crop, PixelCrop } from "react-image-crop";
 import ReactCrop from "react-image-crop";
@@ -11,12 +12,12 @@ import { toast } from "sonner";
 
 import { Button } from "@genus/ui/button";
 
-export type ImageCropperProps = {
+export interface ImageCropperProps {
 	src?: string;
 	file: File[];
 	addImage: (files: File[]) => void;
 	onClose: () => void;
-};
+}
 
 export const ImageCropper: FC<ImageCropperProps> = props => {
 	const [loading, setLoading] = useState(false);

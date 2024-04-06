@@ -1,7 +1,8 @@
 "use client";
 
 // Small utility to merge class names.
-import { OTPInput as Input, OTPInputProps, SlotProps } from "input-otp";
+import type { OTPInputProps, SlotProps } from "input-otp";
+import { OTPInput as Input } from "input-otp";
 
 import { cn } from "../lib/utils";
 
@@ -41,7 +42,7 @@ function Slot(props: SlotProps) {
 // You can emulate a fake textbox caret!
 function FakeCaret() {
 	return (
-		<div className="animate-caret-blink pointer-events-none absolute inset-0 flex items-center justify-center">
+		<div className="pointer-events-none absolute inset-0 flex animate-caret-blink items-center justify-center">
 			<div className="h-8 w-px bg-white" />
 		</div>
 	);

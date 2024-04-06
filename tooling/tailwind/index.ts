@@ -148,6 +148,20 @@ export default {
 					900: "#401866",
 					950: "#31124F"
 				},
+				"stepper-icon": {
+					DEFAULT: "#9EF3E9",
+					50: "#FFFFFF",
+					100: "#FFFFFF",
+					200: "#FFFFFF",
+					300: "#E7FCF9",
+					400: "#C2F7F1",
+					500: "#9EF3E9",
+					600: "#6CEDDE",
+					700: "#3AE7D2",
+					800: "#1ACFBA",
+					900: "#139D8D",
+					950: "#108477"
+				},
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",

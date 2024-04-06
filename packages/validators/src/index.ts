@@ -6,9 +6,9 @@ import {
 	completion_years,
 	ethnicities,
 	genders,
+	profile_types,
 	universities,
-	university_years,
-	profile_types
+	university_years
 } from "./constants";
 
 export const gendersSchema = z.enum(genders);
@@ -60,6 +60,11 @@ export const signupBaseSchema = z.object({
 			required_error: "Please enter your email address."
 		})
 		.email(),
+	username: z
+		.string({
+			required_error: "Please enter your username."
+		})
+		.min(2, { message: "Username must be at least 2 characters." }),
 	password: z.string().min(2, {
 		message: "Password must be at least 2 characters."
 	}),
@@ -76,15 +81,35 @@ export const signupBaseSchema = z.object({
 	career_interests: z.array(careerInterestsSchema).nonempty({ message: "Please select at least one career interest" })
 });
 
-export const signupSchema = signupBaseSchema.refine(
-	values => {
-		return values.password === values.confirmPassword;
-	},
-	{
-		message: "Passwords must match!",
-		path: ["confirmPassword"]
-	}
-);
+export const signupStep1Schema = signupBaseSchema
+	.pick({
+		firstname: true,
+		lastname: true,
+		email: true,
+		username: true,
+		password: true,
+		confirmPassword: true
+	})
+	.refine(
+		values => {
+			return values.password === values.confirmPassword;
+		},
+		{
+			message: "Passwords must match!",
+			path: ["confirmPassword"]
+		}
+	);
+
+export const signupStep2Schema = signupBaseSchema.pick({
+	gender: true,
+	ethnicity: true,
+	university: true,
+	broad_degree_course: true,
+	degree_name: true,
+	current_year: true,
+	completion_year: true,
+	career_interests: true
+});
 
 export const forgotPasswordSchema = z.object({
 	email: z

@@ -15,7 +15,16 @@ import { relations } from "drizzle-orm/relations";
 export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
-export const userCurrentYear = pgEnum("user_currentyear", ["1st_year", "2nd_year", "3rd_year", "4th_year", "graduate", "postgraduate", "phd", "other"]);
+export const userCurrentYear = pgEnum("user_currensatyear", [
+	"1st_year",
+	"2nd_year",
+	"3rd_year",
+	"4th_year",
+	"graduate",
+	"postgraduate",
+	"phd",
+	"other"
+]);
 export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
 export const userProfileType = pgEnum("user_profiletype", ["STUDENT", "GRADUATE", "ADMIN", "EXPERT"]);
 
@@ -231,7 +240,7 @@ export const careerInterestToUser = pgTable(
 );
 
 /*******************************************************************************
- *****************************  RELATIONS  **************************************/
+ *****************************  RELATIONS  *************************************
 /*******************************************************************************/
 export const messageRelations = relations(message, ({ one, many }) => ({
 	reactions: many(reaction),

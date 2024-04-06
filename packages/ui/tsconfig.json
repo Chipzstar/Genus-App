@@ -2,6 +2,7 @@
   "extends": "@genus/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "jsx": "preserve",
     "paths": {
       "@/components": [
         "./src/components"

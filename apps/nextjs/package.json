@@ -15,7 +15,6 @@
     "dopper:sync-env": "doppler secrets download --no-file --format env > .env.doppler"
   },
   "dependencies": {
-    "@clerk/clerk-js": "^4.68.1",
     "@clerk/nextjs": "^4.27.3",
     "@emoji-mart/data": "^1.1.2",
     "@genus/api": "workspace:^0.1.0",
@@ -27,8 +26,6 @@
     "@magicbell/magicbell-react": "^10.10.0",
     "@nextui-org/react": "^2.2.9",
     "@portabletext/react": "^3.0.11",
-    "@radix-ui/react-label": "^2.0.2",
-    "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^4.19.1",
     "@trpc/client": "^10.45.0",
     "@trpc/next": "^10.45.0",
@@ -50,6 +47,7 @@
     "pluralize": "^8.0.0",
     "posthog-js": "^1.114.2",
     "react": "18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
     "react-image-crop": "^11.0.5",

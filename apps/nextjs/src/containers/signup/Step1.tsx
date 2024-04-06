@@ -147,10 +147,7 @@ const Step1: FC<Props> = ({}) => {
 						.then(() => {
 							setCodeVerification(false);
 							setLoading(false);
-							toast.success("Welcome to Genus!", {
-								description: "Your account has been verified",
-								icon: <Check size={20} />
-							});
+							nextStep();
 							if (files.length) {
 								setTimeout(
 									_clerk => {
@@ -285,13 +282,14 @@ const Step1: FC<Props> = ({}) => {
 								)}
 							/>
 						</section>
-						<div className="pt-6 sm:pt-12">
+						<div className="pt-6 text-center sm:pt-12">
 							<Button
 								loading={loading}
 								type="submit"
 								form="signup-form"
 								size="lg"
-								className="h-12 w-full font-semibold"
+								radius="xl"
+								className="w-64 text-lg font-semibold sm:w-full sm:text-xl"
 							>
 								Continue
 							</Button>

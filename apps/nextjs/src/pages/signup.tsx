@@ -1,5 +1,3 @@
-"use client";
-
 import type { ReactElement } from "react";
 import React from "react";
 
@@ -18,19 +16,20 @@ const Signup: NextPageWithAuthLayout = () => {
 	return (
 		<div className="flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
+				onClickStep={(step, setStep) => setStep(step)}
 				initialStep={0}
 				steps={steps}
 				styles={{
 					"main-container": "max-w-3xl"
 				}}
 			>
-				<Step key={1}>
+				<Step>
 					<Step1 />
 				</Step>
-				<Step key={2}>
+				<Step>
 					<Step2 />
 				</Step>
-				<Step key={3}>
+				<Step>
 					<Step3 />
 				</Step>
 			</Stepper>

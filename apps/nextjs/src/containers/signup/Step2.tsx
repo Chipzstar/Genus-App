@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -34,19 +34,18 @@ interface Props {
 }
 
 const Step2: FC<Props> = () => {
-	// STATE
-	const { nextStep } = useStepper();
+	const { nextStep, prevStep } = useStepper();
 	const [loading, setLoading] = useState(false);
 
 	const form = useForm<z.infer<typeof signupStep2Schema>>({
 		defaultValues: {
-			gender: "male",
-			ethnicity: "african",
-			university: "london-school-of-economics-and-political-science",
-			completion_year: "2025",
-			broad_degree_course: "economics",
-			current_year: "3rd_year",
-			degree_name: ""
+			gender: undefined,
+			ethnicity: undefined,
+			university: undefined,
+			completion_year: undefined,
+			broad_degree_course: undefined,
+			current_year: undefined,
+			degree_name: undefined
 		},
 		resolver: zodResolver(signupStep2Schema)
 	});
@@ -67,10 +66,14 @@ const Step2: FC<Props> = () => {
 		[nextStep]
 	);
 
+	useEffect(() => {
+		form.reset();
+	}, []);
+
 	return (
 		<div className="flex w-full flex-col space-y-12 md:w-1/2">
-			<div className="gap-y-4">
-				<span className="text-2xl sm:text-4xl">Almost there...</span>
+			<div className="mt-12 text-center font-semibold sm:mt-0 sm:gap-y-4">
+				<span className="text-3xl tracking-wide sm:text-4xl">Almost there...</span>
 			</div>
 			<Form {...form}>
 				<form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -95,7 +98,6 @@ const Step2: FC<Props> = () => {
 											))}
 										</SelectContent>
 									</Select>
-									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -126,37 +128,37 @@ const Step2: FC<Props> = () => {
 											))}
 										</SelectContent>
 									</Select>
-									<FormMessage />
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="university"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>University</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className="rounded-xl">
-												<SelectValue placeholder="Select your university" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{universities?.map((university, index) => {
-												if (university)
-													return (
-														<SelectItem key={index} value={university}>
-															{formatString(university)}
-														</SelectItem>
-													);
-											})}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						<div className="lg:col-span-2">
+							<FormField
+								control={form.control}
+								name="university"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>University</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl">
+													<SelectValue placeholder="Select your university" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{universities?.map((university, index) => {
+													if (university)
+														return (
+															<SelectItem key={index} value={university}>
+																{formatString(university)}
+															</SelectItem>
+														);
+												})}
+											</SelectContent>
+										</Select>
+									</FormItem>
+								)}
+							/>
+						</div>
 						<FormField
 							control={form.control}
 							name="broad_degree_course"
@@ -180,7 +182,6 @@ const Step2: FC<Props> = () => {
 											})}
 										</SelectContent>
 									</Select>
-									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -193,71 +194,80 @@ const Step2: FC<Props> = () => {
 									<FormControl>
 										<Input {...field} className="rounded-xl" />
 									</FormControl>
-									<FormMessage />
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="current_year"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Current Year</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className="rounded-xl">
-												<SelectValue placeholder="Select your completion year" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{university_years?.map((year, index) => {
-												return (
-													<SelectItem key={index} value={year}>
-														{formatString(year)}
-													</SelectItem>
-												);
-											})}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="completion_year"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Completion Year</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className="rounded-xl">
-												<SelectValue placeholder="Select your completion year" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{completion_years?.map((year, index) => {
-												if (year)
+						<div className="grid grid-cols-2 gap-x-8 gap-y-4">
+							<FormField
+								control={form.control}
+								name="current_year"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Current Year</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl">
+													<SelectValue placeholder="Select year" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{university_years?.map((year, index) => {
 													return (
 														<SelectItem key={index} value={year}>
 															{formatString(year)}
 														</SelectItem>
 													);
-											})}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+												})}
+											</SelectContent>
+										</Select>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="completion_year"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Year end</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl">
+													<SelectValue placeholder="Select year" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{completion_years?.map((year, index) => {
+													if (year)
+														return (
+															<SelectItem key={index} value={year}>
+																{formatString(year)}
+															</SelectItem>
+														);
+												})}
+											</SelectContent>
+										</Select>
+									</FormItem>
+								)}
+							/>
+						</div>
 					</section>
-					<div className="pt-6 sm:pt-12">
+					<div className="flex items-center justify-around space-x-6 pt-6 sm:space-x-16 sm:pt-12">
+						<Button
+							onClick={() => form.reset()}
+							loading={loading}
+							type="button"
+							radius="xl"
+							variant="back"
+							className="px-unit-xl font-semibold sm:w-full sm:text-xl"
+						>
+							Go back
+						</Button>
 						<Button
 							loading={loading}
 							type="submit"
+							radius="xl"
 							form="signup-form"
-							size="lg"
-							className="h-12 w-full font-semibold"
+							className="px-unit-xl font-semibold sm:w-full sm:text-xl"
 						>
 							Continue
 						</Button>

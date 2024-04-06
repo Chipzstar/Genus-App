@@ -28,7 +28,8 @@ export default {
 				h4: ["1.5rem", { lineHeight: "1.5rem" }],
 				h5: ["1.25rem", { lineHeight: "1.25rem" }],
 				h6: ["1rem", { lineHeight: "1rem" }],
-				xxs: ["0.5rem", { lineHeight: "1rem" }]
+				xxs: ["0.5rem", { lineHeight: "1rem" }],
+				"2.5xl": ["1.688rem", { lineHeight: "2.125rem" }]
 			},
 			fontFamily: {
 				sans: ["var(--font-sans)", ...fontFamily.sans]
@@ -161,6 +162,20 @@ export default {
 					800: "#1ACFBA",
 					900: "#139D8D",
 					950: "#108477"
+				},
+				back: {
+					DEFAULT: "#95979D",
+					50: "#F4F5F5",
+					100: "#EAEAEB",
+					200: "#D5D5D8",
+					300: "#BFC1C4",
+					400: "#AAACB1",
+					500: "#95979D",
+					600: "#787B82",
+					700: "#5D5F65",
+					800: "#424448",
+					900: "#27282A",
+					950: "#1A1A1C"
 				},
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

@@ -1,13 +1,13 @@
+import type { FC } from "react";
 import React, { useCallback, useMemo, useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import type { UserResource } from "@clerk/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { isMobile } from "react-device-detect";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { ClientUploadedFileData } from "uploadthing/types";
 import type * as z from "zod";
-
-
 
 import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
@@ -18,31 +18,24 @@ import type { broadCourseCategorySchema, completionYearSchema, universitiesSchem
 import { profileSchema } from "@genus/validators";
 import { broad_course_categories, career_interests, completion_years, universities } from "@genus/validators/constants";
 
-
-
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
 import type { UserProfile } from "~/utils/types";
-import { isMobile } from "react-device-detect";
-
 
 type FormValues = z.infer<typeof profileSchema>;
 
 const checkChanges = (values: FormValues, target: UserResource) => {
 	return !(values.firstname !== target.firstName || values.lastname !== target.lastName);
-}
+};
 
-export const EditProfile = ({
-	startUpload,
-	profile,
-	updateUserProfile,
-	resetMode
-}: {
+interface Props {
 	startUpload: (files: File[], input?: any) => Promise<ClientUploadedFileData<any>[] | undefined>;
 	profile: UserProfile;
 	updateUserProfile: any;
 	resetMode: () => void;
-}) => {
+}
+
+export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile, resetMode }) => {
 	const { files } = useFileContext();
 	const clerk = useClerk();
 	const [loading, setLoading] = useState(false);
@@ -53,7 +46,7 @@ export const EditProfile = ({
 			try {
 				await updateUserProfile(data);
 				if (clerk?.user) {
-					const infoChanged = checkChanges(data, clerk.user)
+					const infoChanged = checkChanges(data, clerk.user);
 					if (infoChanged) {
 						void clerk.user
 							.update({
@@ -64,7 +57,7 @@ export const EditProfile = ({
 					}
 					if (!isMobile && files.length) {
 						await clerk.user.setProfileImage({
-							file: files[0]!,
+							file: files[0]!
 						});
 					}
 				}

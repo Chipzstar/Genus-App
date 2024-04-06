@@ -1,8 +1,9 @@
-import React, { FC } from "react";
+import type { FC } from "react";
+import React from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import type * as z from "zod";
 
 import { Button } from "@genus/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@genus/ui/form";
@@ -18,7 +19,7 @@ interface Props {
 	loading: boolean;
 }
 
-const ResetPasswordForm: FC<Props> = ({ onSubmit, loading }: Props) => {
+const ResetPasswordForm: FC<Props> = ({ onSubmit, loading }) => {
 	const form = useForm<z.infer<typeof resetPasswordSchema>>({
 		defaultValues: {
 			password: "",

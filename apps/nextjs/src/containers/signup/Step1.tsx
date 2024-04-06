@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { Button } from "@genus/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
+import { useStepper } from "@genus/ui/stepper";
 import { signupStep1Schema } from "@genus/validators";
 
 import CodeInput from "~/components/CodeInput";
@@ -25,6 +26,7 @@ interface Props {
 
 const Step1: FC<Props> = ({}) => {
 	// STATE
+	const { nextStep } = useStepper();
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setCodeVerification] = useState(false);
 	const clerk = useClerk();
@@ -202,7 +204,7 @@ const Step1: FC<Props> = ({}) => {
 			</div>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">
 				<Form {...form}>
-					<form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
+					<form id="signup-form" onSubmit={form.handleSubmit(values => nextStep())}>
 						<section className="grid gap-x-12 gap-y-4 lg:grid-cols-2">
 							<FormField
 								control={form.control}
@@ -223,6 +225,19 @@ const Step1: FC<Props> = ({}) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Last name</FormLabel>
+										<FormControl>
+											<Input {...field} className="rounded-xl" />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="username"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Username</FormLabel>
 										<FormControl>
 											<Input {...field} className="rounded-xl" />
 										</FormControl>

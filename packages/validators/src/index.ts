@@ -78,7 +78,13 @@ export const signupBaseSchema = z.object({
 		.min(2, "Degree name must be at least 2 characters"),
 	current_year: currentYearSchema,
 	completion_year: completionYearSchema,
-	career_interests: z.array(careerInterestsSchema).nonempty({ message: "Please select at least one career interest" })
+	career_interests: z
+		.array(careerInterestsSchema)
+		.nonempty({ message: "Please select at least one career interest" }),
+	company_interests: z
+		.array(careerInterestsSchema)
+		.nonempty({ message: "Please select at least one career interest" }),
+	experience_type: profileTypeSchema
 });
 
 export const signupStep1Schema = signupBaseSchema
@@ -107,8 +113,13 @@ export const signupStep2Schema = signupBaseSchema.pick({
 	broad_degree_course: true,
 	degree_name: true,
 	current_year: true,
-	completion_year: true,
-	career_interests: true
+	completion_year: true
+});
+
+export const signupStep3Schema = signupBaseSchema.pick({
+	career_interests: true,
+	company_interests: true,
+	experience_type: true
 });
 
 export const forgotPasswordSchema = z.object({

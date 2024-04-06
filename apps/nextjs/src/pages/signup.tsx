@@ -8,6 +8,7 @@ import { Step, Stepper } from "@genus/ui/stepper";
 
 import Step1 from "~/containers/signup/Step1";
 import Step2 from "~/containers/signup/Step2";
+import Step3 from "~/containers/signup/Step3";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
@@ -15,7 +16,7 @@ const Signup: NextPageWithAuthLayout = () => {
 	const steps = [{ label: "Step 1" }, { label: "Step 2" }] satisfies StepItem[];
 
 	return (
-		<div className="flex min-h-screen grow flex-col items-center sm:gap-y-12 md:gap-12">
+		<div className="flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
 				initialStep={0}
 				steps={steps}
@@ -28,6 +29,9 @@ const Signup: NextPageWithAuthLayout = () => {
 				</Step>
 				<Step key={2}>
 					<Step2 />
+				</Step>
+				<Step key={3}>
+					<Step3 />
 				</Step>
 			</Stepper>
 		</div>

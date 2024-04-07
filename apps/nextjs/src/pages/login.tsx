@@ -1,5 +1,7 @@
 "use client";
-import React, { ReactElement, useCallback } from "react";
+
+import type { ReactElement } from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";
@@ -16,7 +18,7 @@ import { loginSchema } from "@genus/validators";
 
 import { PATHS } from "~/utils";
 import AuthLayout from "../layout/AuthLayout";
-import { NextPageWithAuthLayout } from "./_app";
+import type { NextPageWithAuthLayout } from "./_app";
 
 const Login: NextPageWithAuthLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
@@ -83,22 +85,29 @@ const Login: NextPageWithAuthLayout = () => {
 	);
 
 	return (
-		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8">
-			<div className="relative flex w-2/3 justify-center sm:h-[250px] sm:w-1/2 lg:w-2/3">
+		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8 sm:py-0">
+			<header className="relative flex w-2/3 flex-col items-center space-y-3 sm:min-h-[250px] sm:w-1/2 sm:space-y-0 lg:w-2/3">
+				<span className="text-2xl font-semibold sm:text-3xl">Welcome to</span>
 				<img
 					src="/images/white-logo.png"
 					alt="genus-white"
-
-					className="mt-0.5 sm:w-96"
+					className="mt-0.5 sm:h-48 sm:w-96"
 					style={{
 						objectFit: "contain"
 					}}
 				/>
-			</div>
-			<header className="w-[230px] text-center text-2xl font-bold tracking-wider lg:text-4xl">Sign in</header>
-			<div className="flex w-full flex-col space-y-12 md:w-1/2">
+				<div className="line-clamp-2 w-screen py-5 text-center sm:w-96">
+					<span className="text-lg font-semibold sm:text-xl">
+						ONE step away from the <span className="underline">REAL</span> internship insights
+					</span>
+				</div>
+			</header>
+			<div className="flex w-full flex-col gap-y-6 md:w-1/2 md:gap-y-8">
+				<header className="text-center text-2xl font-bold tracking-wider lg:text-4xl lg:tracking-normal">
+					Sign in
+				</header>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 						<FormField
 							control={form.control}
 							name="email"
@@ -127,7 +136,13 @@ const Login: NextPageWithAuthLayout = () => {
 							<Link href={PATHS.FORGOT_PASSWORD}>Forgot Password?</Link>
 						</div>
 						<div className="flex flex-col items-center space-y-4">
-							<Button loading={loading} type="submit" size="lg" className="h-12 w-full font-semibold">
+							<Button
+								loading={loading}
+								type="submit"
+								size="lg"
+								radius="xl"
+								className="h-12 w-full text-lg font-semibold"
+							>
 								Login
 							</Button>
 							<FormDescription className="font-light text-white">

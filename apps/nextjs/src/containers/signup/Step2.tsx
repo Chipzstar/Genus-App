@@ -66,10 +66,6 @@ const Step2: FC<Props> = () => {
 		[nextStep]
 	);
 
-	useEffect(() => {
-		form.reset();
-	}, []);
-
 	return (
 		<div className="flex w-full flex-col space-y-12 md:w-1/2">
 			<div className="mt-12 text-center font-semibold sm:mt-0 sm:gap-y-4">

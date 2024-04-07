@@ -1,9 +1,7 @@
 import type { FC } from "react";
 import React, { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -33,7 +31,7 @@ const Step3: FC<Props> = () => {
 		setLoading(true);
 		try {
 			console.log(values);
-			window.location.href = "https://hodpo2py6ju.typeform.com/to/XOethBN1";
+			window.open("https://hodpo2py6ju.typeform.com/to/XOethBN1", "_blank");
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -113,7 +111,7 @@ const Step3: FC<Props> = () => {
 											<FormField
 												key={index}
 												control={form.control}
-												name="career_interests"
+												name="company_interests"
 												render={({ field }) => {
 													return (
 														<FormItem

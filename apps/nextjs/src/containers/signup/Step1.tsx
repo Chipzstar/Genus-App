@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import React, { useCallback, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,12 +13,13 @@ import type { z } from "zod";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { Button } from "@genus/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
 import { useStepper } from "@genus/ui/stepper";
 import { signupStep1Schema } from "@genus/validators";
 
 import CodeInput from "~/components/CodeInput";
+import { PATHS } from "~/utils";
 import { useUploadThing } from "~/utils/uploadthing";
 
 interface Props {
@@ -282,7 +284,7 @@ const Step1: FC<Props> = () => {
 								)}
 							/>
 						</section>
-						<div className="pt-6 text-center sm:pt-12">
+						<div className="flex flex-col items-center space-y-4 pt-6 sm:pt-12">
 							<Button
 								loading={loading}
 								type="submit"
@@ -293,6 +295,12 @@ const Step1: FC<Props> = () => {
 							>
 								Continue
 							</Button>
+							<FormDescription className="font-light text-white">
+								{"Already have an account?"}
+								<Link className="font-semibold" href={PATHS.LOGIN}>
+									&nbsp;Login here
+								</Link>
+							</FormDescription>
 						</div>
 					</form>
 				</Form>

@@ -24,7 +24,7 @@ interface Props {
 	step?: number;
 }
 
-const Step1: FC<Props> = ({}) => {
+const Step1: FC<Props> = () => {
 	// STATE
 	const { nextStep } = useStepper();
 	const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const Step1: FC<Props> = ({}) => {
 
 	// HOOKS
 	const router = useRouter();
-	const { isLoaded, signUp, setActive } = useSignUp();
+	const { isLoaded, signUp } = useSignUp();
 
 	const form = useForm<z.infer<typeof signupStep1Schema>>({
 		defaultValues: {
@@ -143,30 +143,30 @@ const Step1: FC<Props> = ({}) => {
 					code: values.code
 				});
 				setTimeout(() => {
-					setActive({ session: result.createdSessionId })
-						.then(() => {
-							setCodeVerification(false);
-							setLoading(false);
-							nextStep();
-							if (files.length) {
-								setTimeout(
-									_clerk => {
-										_clerk?.user &&
-											void _clerk.user
-												.setProfileImage({
-													file: files[0]!
-												})
-												.then(() => console.log("profile image set in Clerk"))
-												.catch(err => console.error(err));
-									},
-									1500,
-									clerk
-								);
-							}
-						})
-						.catch(err => console.error(err));
+					console.log(result);
+					setCodeVerification(false);
+					setLoading(false);
+					if (files.length) {
+						setTimeout(
+							_clerk => {
+								_clerk?.user &&
+									void _clerk.user
+										.setProfileImage({
+											file: files[0]!
+										})
+										.then(() => console.log("profile image set in Clerk"))
+										.catch(err => console.error(err));
+							},
+							1500,
+							clerk
+						);
+					}
+					toast.success("Welcome to Genus!", {
+						description: "Your account has been verified",
+						icon: <Check size={20} />
+					});
+					nextStep();
 				}, 1000);
-				// router.push(PATHS.HOME).then(() => console.log("Navigating to Home page"));
 			} catch (err: any) {
 				setLoading(false);
 				toast.error("Signup failed. Please try again", {
@@ -201,7 +201,7 @@ const Step1: FC<Props> = ({}) => {
 			</div>
 			<div className="flex w-full flex-col space-y-12 md:w-1/2">
 				<Form {...form}>
-					<form id="signup-form" onSubmit={form.handleSubmit(values => nextStep())}>
+					<form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
 						<section className="grid gap-x-12 gap-y-4 lg:grid-cols-2">
 							<FormField
 								control={form.control}

@@ -11,7 +11,7 @@ import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { signupStep3Schema } from "@genus/validators";
-import { career_interests, genders, profile_types } from "@genus/validators/constants";
+import { career_interests, profile_types } from "@genus/validators/constants";
 
 import { formatString } from "~/utils";
 
@@ -33,10 +33,7 @@ const Step3: FC<Props> = () => {
 		setLoading(true);
 		try {
 			console.log(values);
-			toast.success("Welcome to Genus!", {
-				description: "Your account has been verified",
-				icon: <Check size={20} />
-			});
+			window.location.href = "https://hodpo2py6ju.typeform.com/to/XOethBN1";
 		} catch (error: any) {
 			console.log(error);
 		} finally {
@@ -46,8 +43,8 @@ const Step3: FC<Props> = () => {
 
 	return (
 		<div className="flex w-full flex-col space-y-12 md:w-1/2">
-			<div className="mt-12 text-center font-semibold sm:mt-0 sm:gap-y-4">
-				<span className="text-2.5xl sm:text-5xl sm:leading-tight">
+			<div className="text-balance mt-12 text-center font-semibold sm:mt-0 sm:gap-y-4">
+				<span className="text-2.5xl sm:text-4xl sm:leading-tight">
 					Career experiences personalised for <span className="underline">you.</span>
 				</span>
 			</div>
@@ -174,17 +171,22 @@ const Step3: FC<Props> = () => {
 							)}
 						/>
 					</section>
-					<div className="pt-6 sm:pt-12">
-						<Button
-							loading={loading}
-							type="submit"
-							form="signup-form"
-							size="lg"
-							radius="xl"
-							className="w-full text-lg font-semibold sm:text-xl"
-						>
-							Continue
-						</Button>
+					<div className="flex flex-col items-center space-y-5 pt-6 sm:pt-12">
+						<div className="text-2.5xl font-semibold sm:text-3xl sm:leading-tight">
+							<span>Share your ANONYMOUS review</span>
+						</div>
+						<div>
+							<Button
+								loading={loading}
+								type="submit"
+								form="signup-form"
+								size="lg"
+								radius="xl"
+								className="text-lg font-semibold sm:text-xl"
+							>
+								Click here
+							</Button>
+						</div>
 					</div>
 				</form>
 			</Form>

@@ -8,6 +8,7 @@ import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 
 import TopNav from "~/components/TopNav";
+import { env } from "~/env";
 import AppLayout from "~/layout/AppLayout";
 import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
@@ -18,7 +19,7 @@ interface PageProps {
 	insights: InsightPanel[];
 }
 
-type Query = Record<string, string>;
+const { NEXT_PUBLIC_DEFAULT_GROUP_SLUG } = env;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { req } = ctx;
@@ -52,9 +53,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 
 const Home = (props: PageProps) => {
-	/*const result = trpc.group.getGroupBySlug.useQuery({
-		slug: process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG!
-	});*/
 	const router = useRouter();
 	const { user } = useClerk();
 
@@ -70,7 +68,7 @@ const Home = (props: PageProps) => {
 						<div
 							className="flex flex-col items-center justify-center space-y-4"
 							role="button"
-							onClick={() => router.push(`${PATHS.GROUPS}/${process.env.NEXT_PUBLIC_DEFAULT_GROUP_SLUG!}`)}
+							onClick={() => router.push(`${PATHS.GROUPS}/${NEXT_PUBLIC_DEFAULT_GROUP_SLUG}`)}
 						>
 							<header className="text-xl font-semibold">
 								<span className="underline">JOIN</span> the group!
@@ -120,8 +118,7 @@ const Home = (props: PageProps) => {
 											width={175}
 											height={126}
 										/>
-										<span
-											className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
+										<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
 											{title}
 										</span>
 									</div>
@@ -135,7 +132,7 @@ const Home = (props: PageProps) => {
 										loop: true
 									}}
 								>
-								<CarouselPrevious />
+									<CarouselPrevious />
 									<CarouselContent className="md:-ml-4">
 										{props.insights.map(({ image, slug, title }, index) => (
 											<CarouselItem
@@ -152,14 +149,13 @@ const Home = (props: PageProps) => {
 													width={175}
 													height={50}
 												/>
-												<span
-													className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
+												<span className="overflow-hidden text-ellipsis px-3 text-center text-xs font-semibold">
 													{title}
 												</span>
 											</CarouselItem>
 										))}
 									</CarouselContent>
-									<CarouselNext/>
+									<CarouselNext />
 								</Carousel>
 							</div>
 						</div>

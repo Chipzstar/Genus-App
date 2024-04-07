@@ -19,6 +19,7 @@ export const env = createEnv({
 		DB_PASSWORD: z.string(),
 		DB_HOST: z.string(),
 		DB_NAME: z.string(),
+		PORT: z.string().optional(),
 		NODE_ENV: z.enum(["development", "test", "production"]),
 		MAGICBELL_SECRET_KEY: z.string(),
 		CLERK_SECRET_KEY: z.string(),

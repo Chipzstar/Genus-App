@@ -6,10 +6,11 @@ import { log } from "next-axiom";
 import type { WebhookRequiredHeaders } from "svix";
 import { Webhook } from "svix";
 
+import { env } from "~/env";
 import { createNewUser, deleteUser, updateUser } from "~/server/handlers/clerk";
 import { cors, runMiddleware } from "../cors";
 
-// Disable the bodyParser so we can access the raw
+// Disable the bodyParser, so we can access the raw
 // request body for verification.
 export const config = {
 	api: {
@@ -17,7 +18,7 @@ export const config = {
 	}
 };
 
-const webhookSecret = String(process.env.CLERK_WEBHOOK_SECRET) || "";
+const { CLERK_WEBHOOK_SECRET: webhookSecret } = env;
 
 export default async function handler(req: NextApiRequestWithSvixRequiredHeaders, res: NextApiResponse) {
 	// Run the middleware

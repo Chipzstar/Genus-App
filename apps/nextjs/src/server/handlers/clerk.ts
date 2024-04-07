@@ -12,8 +12,6 @@ import type { currentYearSchema, ethnicitiesSchema, gendersSchema } from "@genus
 import { utapi } from "~/server/uploadthing";
 import { CAREER_INTERESTS, checkProfileType } from "~/utils";
 
-// const MAGICBELL_API_SECRET = process.env.MAGICBELL_API_SECRET!;
-
 type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
 
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {

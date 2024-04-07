@@ -7,10 +7,14 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 
+import { env } from "~/env";
+
+const { NODE_ENV } = env;
+
 const getBaseUrl = () => {
 	if (typeof window !== "undefined") return ""; // browser should use relative url
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-	return `http://localhost:${process.env.PORT ?? 3001}`; // dev SSR should use localhost
+	return `http://localhost:3001`; // dev SSR should use localhost
 };
 
 export const trpc = createTRPCNext<AppRouter>({
@@ -23,8 +27,7 @@ export const trpc = createTRPCNext<AppRouter>({
 				links: [
 					loggerLink({
 						enabled: opts =>
-							process.env.NODE_ENV === "development" ||
-							(opts.direction === "down" && opts.result instanceof Error)
+							NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error)
 					}),
 					httpBatchLink({
 						url: `/api/trpc`

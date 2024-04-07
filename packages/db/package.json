@@ -19,8 +19,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",
-    "drizzle-orm": "^0.29.4",
-    "mysql2": "^3.9.2"
+    "drizzle-orm": "^0.29.4"
   },
   "devDependencies": {
     "@genus/eslint-config": "workspace:^0.2.0",

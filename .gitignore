@@ -28,6 +28,7 @@ build
 *.pem
 exports
 bin/pg_dump
+bin/pgloader
 
 # debug
 npm-debug.log*

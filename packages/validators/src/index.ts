@@ -12,6 +12,7 @@ import {
 	universities,
 	university_years
 } from "./constants";
+import { formatString } from "./helpers";
 
 export const gendersSchema = z.enum(genders);
 

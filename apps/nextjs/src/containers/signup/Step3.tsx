@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import React, { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -15,10 +15,13 @@ import { career_interests, companies, experience_types, profile_types } from "@g
 
 import { formatString } from "~/utils";
 
-const companyOptions: Option[] = companies.map(c => ({
-	label: formatString(c),
-	value: c
-})) as Option[];
+const company_options: Option[] = companies.map(company => ({
+	label: company
+		.split("_")
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" "),
+	value: company
+}));
 
 const Step3: FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -26,7 +29,7 @@ const Step3: FC = () => {
 		defaultValues: {
 			career_interests: [],
 			company_interests: [],
-			experience_type: "STUDENT"
+			experience_type: undefined
 		},
 		resolver: zodResolver(signupStep3Schema)
 	});
@@ -43,6 +46,10 @@ const Step3: FC = () => {
 			setLoading(false);
 		}
 	}, []);
+
+	useEffect(() => {
+		console.log(form.formState.errors);
+	}, [form.formState.errors]);
 
 	return (
 		<div className="flex w-full flex-col space-y-12 md:w-1/2">
@@ -110,9 +117,12 @@ const Step3: FC = () => {
 									<FormLabel>Company interests</FormLabel>
 									<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
 										<MultiSelect
-											value={field.value}
-											onChange={field.onChange}
-											defaultOptions={companyOptions}
+											value={field.value.map(value => ({
+												label: formatString(value),
+												value
+											}))}
+											onChange={options => field.onChange(options.map(o => o.value))}
+											defaultOptions={company_options}
 											placeholder="Select companies you like..."
 											emptyIndicator={
 												<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
@@ -133,7 +143,7 @@ const Step3: FC = () => {
 									<Select onValueChange={field.onChange} defaultValue={field.value}>
 										<FormControl>
 											<SelectTrigger className="rounded-xl">
-												<SelectValue placeholder="Select your gender" />
+												<SelectValue placeholder="Select your experience type" />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>

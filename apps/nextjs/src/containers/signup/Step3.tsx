@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import React, { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -11,7 +11,7 @@ import type { Option } from "@genus/ui/multi-select";
 import { MultiSelect } from "@genus/ui/multi-select";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { signupStep3Schema } from "@genus/validators";
-import { career_interests, companies, experience_types, profile_types } from "@genus/validators/constants";
+import { career_interests, companies, experience_types } from "@genus/validators/constants";
 
 import { formatString } from "~/utils";
 
@@ -121,9 +121,10 @@ const Step3: FC = () => {
 												label: formatString(value),
 												value
 											}))}
+											maxSelected={5}
 											onChange={options => field.onChange(options.map(o => o.value))}
 											defaultOptions={company_options}
-											placeholder="Select companies you like..."
+											placeholder="Select up to 5 companies"
 											emptyIndicator={
 												<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
 													no results found.

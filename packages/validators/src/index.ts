@@ -3,8 +3,10 @@ import * as z from "zod";
 import {
 	broad_course_categories,
 	career_interests,
+	companies,
 	completion_years,
 	ethnicities,
+	experience_types,
 	genders,
 	profile_types,
 	universities,
@@ -21,11 +23,15 @@ export const broadCourseCategorySchema = z.enum(broad_course_categories);
 
 export const universitiesSchema = z.enum(universities);
 
+export const companiesSchema = z.enum(companies);
+
 export const completionYearSchema = z.enum(completion_years);
 
 export const currentYearSchema = z.enum(university_years);
 
 export const profileTypeSchema = z.enum(profile_types);
+
+export const experienceTypeSchema = z.enum(experience_types);
 
 export const loginSchema = z.object({
 	email: z
@@ -81,10 +87,8 @@ export const signupBaseSchema = z.object({
 	career_interests: z
 		.array(careerInterestsSchema)
 		.nonempty({ message: "Please select at least one career interest" }),
-	company_interests: z
-		.array(careerInterestsSchema)
-		.nonempty({ message: "Please select at least one career interest" }),
-	experience_type: profileTypeSchema
+	company_interests: z.array(companiesSchema).nonempty({ message: "Please select at least one company" }),
+	experience_type: experienceTypeSchema
 });
 
 export const signupStep1Schema = signupBaseSchema

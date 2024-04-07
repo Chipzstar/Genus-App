@@ -96,7 +96,7 @@ const Login: NextPageWithAuthLayout = () => {
 						objectFit: "contain"
 					}}
 				/>
-				<div className="line-clamp-2 w-screen py-5 text-center sm:w-96">
+				<div className="line-clamp-2 w-screen max-w-96 text-balance py-5 text-center">
 					<span className="text-lg font-semibold sm:text-xl">
 						ONE step away from the <span className="underline">REAL</span> internship insights
 					</span>

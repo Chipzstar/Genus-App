@@ -31,7 +31,7 @@ const ViewProfile = ({ profile }: { profile: UserProfile | undefined }) => {
 				<span className="text-lg font-bold text-primary sm:text-xl">University</span>
 				<span className="text-sm text-black sm:text-base md:text-lg">{formatString(profile?.university)}</span>
 			</div>
-			{profile?.profileType !== "ADMIN" && (
+			{profile?.profileType !== "admin" && (
 				<div className="mb-4 flex flex-col">
 					<span className="text-lg font-bold text-primary sm:text-xl">Broad Degree Category</span>
 					<span className="text-sm text-black sm:text-base md:text-lg">

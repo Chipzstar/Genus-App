@@ -15,7 +15,7 @@ import { relations } from "drizzle-orm/relations";
 export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
-export const userCurrentYear = pgEnum("user_currensatyear", [
+export const userCurrentYear = pgEnum("user_currentyear", [
 	"1st_year",
 	"2nd_year",
 	"3rd_year",
@@ -26,7 +26,14 @@ export const userCurrentYear = pgEnum("user_currensatyear", [
 	"other"
 ]);
 export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
-export const userProfileType = pgEnum("user_profiletype", ["STUDENT", "GRADUATE", "ADMIN", "EXPERT"]);
+export const userProfileType = pgEnum("user_profiletype", ["student", "graduate", "admin", "expert"]);
+export const userProfileTypeNew = pgEnum("user_profileType", ["student", "graduate", "admin", "expert"]);
+export const userOnboardingStatus = pgEnum("user_onboardingstatus", [
+	"not_started",
+	"background_info",
+	"career_info",
+	"completed"
+]);
 
 export const userEthnicity = pgEnum("user_ethnicity", [
 	"english__welsh__scottish__northern_irish_or_british",
@@ -207,16 +214,19 @@ export const user = pgTable(
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
 		gender: userGender("gender").default("female").notNull(),
+		ethnicity: userEthnicity("ethnicity").default("african").notNull(),
+		university: varchar("university", { length: 191 }).notNull(),
+		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }).notNull(),
+		degreeName: varchar("degreeName", { length: 191 }).notNull(),
 		currentYear: userCurrentYear("currentYear").default("1st_year"),
 		completionYear: integer("completionYear").notNull(),
-		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }).notNull(),
-		university: varchar("university", { length: 191 }).notNull(),
-		degreeName: varchar("degreeName", { length: 191 }).notNull(),
 		imageKey: varchar("imageKey", { length: 191 }),
 		imageUrl: varchar("imageUrl", { length: 191 }),
 		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
-		profileType: userProfileType("profileType").default("STUDENT").notNull(),
-		ethnicity: userEthnicity("ethnicity").default("african").notNull()
+		profileType: userProfileTypeNew("profileType").default("student").notNull(),
+		onboardingStatus: userOnboardingStatus("onboardingStatus").default("background_info").notNull(),
+		isActive: boolean("isActive").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull()
 	},
 	table => {
 		return {
@@ -235,6 +245,29 @@ export const careerInterestToUser = pgTable(
 	table => {
 		return {
 			pk: primaryKey({ name: "careerInterestUserId", columns: [table.careerInterestId, table.userId] })
+		};
+	}
+);
+
+export const company = pgTable(
+	"company",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		companyId: varchar("companyId", { length: 191 }).notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		slug: varchar("slug", { length: 191 }).notNull(),
+		category: careerInterestSlug("category").default("banking_finance").notNull(),
+		description: varchar("description", { length: 191 }),
+		logoUrl: varchar("logoUrl", { length: 191 }),
+		websiteUrl: varchar("websiteUrl", { length: 191 }),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			companyIdUserIdx: uniqueIndex("companyIdIdx").on(table.companyId),
+			slugUserIdx: uniqueIndex("slugIdx").on(table.slug)
 		};
 	}
 );

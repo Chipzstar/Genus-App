@@ -1,5 +1,5 @@
 {
-  "id": "76ec205c-f8e3-4997-9741-9b9cd9dd6f0e",
+  "id": "600f163c-b848-4a00-b42d-031a5659f717",
   "prevId": "95e175a4-196a-4837-94c4-60022067d2ed",
   "version": "5",
   "dialect": "pg",
@@ -140,6 +140,101 @@
           "name": "idx_49241_comment_commentId_key",
           "columns": [
             "commentId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "company": {
+      "name": "company",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "careerinterest_slug",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'banking_finance'"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logoUrl": {
+          "name": "logoUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "websiteUrl": {
+          "name": "websiteUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "companyIdIdx": {
+          "name": "companyIdIdx",
+          "columns": [
+            "companyId"
+          ],
+          "isUnique": true
+        },
+        "slugIdx": {
+          "name": "slugIdx",
+          "columns": [
+            "slug"
           ],
           "isUnique": true
         }
@@ -579,6 +674,31 @@
           "notNull": true,
           "default": "'female'"
         },
+        "ethnicity": {
+          "name": "ethnicity",
+          "type": "user_ethnicity",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'african'"
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "broadDegreeCourse": {
+          "name": "broadDegreeCourse",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "degreeName": {
+          "name": "degreeName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "currentYear": {
           "name": "currentYear",
           "type": "user_currentyear",
@@ -589,24 +709,6 @@
         "completionYear": {
           "name": "completionYear",
           "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "broadDegreeCourse": {
-          "name": "broadDegreeCourse",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "university": {
-          "name": "university",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "degreeName": {
-          "name": "degreeName",
-          "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
         },
@@ -633,14 +735,28 @@
           "type": "user_profiletype",
           "primaryKey": false,
           "notNull": true,
-          "default": "'STUDENT'"
+          "default": "'student'"
         },
-        "ethnicity": {
-          "name": "ethnicity",
-          "type": "user_ethnicity",
+        "onboardingStatus": {
+          "name": "onboardingStatus",
+          "type": "user_onboardingstatus",
           "primaryKey": false,
           "notNull": true,
-          "default": "'african'"
+          "default": "'background_info'"
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {
@@ -697,10 +813,10 @@
         "2nd_year": "2nd_year",
         "3rd_year": "3rd_year",
         "4th_year": "4th_year",
-        "Graduate": "Graduate",
-        "Postgraduate": "Postgraduate",
-        "PHD": "PHD",
-        "Other": "Other"
+        "graduate": "graduate",
+        "postgraduate": "postgraduate",
+        "phd": "phd",
+        "other": "other"
       }
     },
     "user_ethnicity": {
@@ -736,13 +852,22 @@
         "other": "other"
       }
     },
+    "user_onboardingstatus": {
+      "name": "user_onboardingstatus",
+      "values": {
+        "not_started": "not_started",
+        "background_info": "background_info",
+        "career_info": "career_info",
+        "completed": "completed"
+      }
+    },
     "user_profiletype": {
       "name": "user_profiletype",
       "values": {
-        "STUDENT": "STUDENT",
-        "GRADUATE": "GRADUATE",
-        "ADMIN": "ADMIN",
-        "EXPERT": "EXPERT"
+        "student": "student",
+        "graduate": "graduate",
+        "admin": "admin",
+        "expert": "expert"
       }
     }
   },

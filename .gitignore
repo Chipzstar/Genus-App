@@ -27,6 +27,7 @@ build
 .DS_Store
 *.pem
 exports
+bin/pg_dump
 
 # debug
 npm-debug.log*

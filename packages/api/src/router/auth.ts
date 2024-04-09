@@ -4,13 +4,17 @@ import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
 import { eq, user } from "@genus/db";
+import {
+	completionYearSchema,
+	currentYearSchema,
+	ethnicitiesSchema,
+	gendersSchema,
+	signupStep2Schema
+} from "@genus/validators";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const authRouter = createTRPCRouter({
-	getSecretMessage: protectedProcedure.query(() => {
-		return "you can see this secret message!";
-	}),
 	getUniversities: publicProcedure.query(async () => {
 		try {
 			let file = await path.join(process.cwd(), "assets", "universities.txt");
@@ -38,6 +42,52 @@ export const authRouter = createTRPCRouter({
 				return ctx.db.query.user.findFirst({
 					where: eq(user.email, input.email)
 				});
+			} catch (e: any) {
+				console.log(e);
+				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });
+			}
+		}),
+	checkOnboardingStatus: publicProcedure
+		.input(
+			z.object({
+				email: z.string()
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			try {
+				const dbUser = await ctx.db.query.user.findFirst({
+					where: eq(user.email, input.email)
+				});
+				if (dbUser) {
+					return dbUser.onboardingStatus;
+				}
+				return "completed";
+			} catch (err: any) {
+				console.error(err);
+				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
+			}
+		}),
+	updateUserStep2: publicProcedure
+		.input(
+			signupStep2Schema.extend({
+				email: z.string()
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			try {
+				return await ctx.db
+					.update(user)
+					.set({
+						gender: input.gender,
+						ethnicity: input.ethnicity,
+						university: input.university,
+						broadDegreeCourse: input.broad_degree_course,
+						degreeName: input.degree_name,
+						currentYear: input.current_year,
+						completionYear: Number(input.completion_year),
+						onboardingStatus: "career_info"
+					})
+					.where(eq(user.email, input.email));
 			} catch (e: any) {
 				console.log(e);
 				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });

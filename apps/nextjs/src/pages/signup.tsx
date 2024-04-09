@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import type { StepItem } from "@genus/ui/stepper";
 import { Step, Stepper } from "@genus/ui/stepper";
@@ -11,10 +12,12 @@ import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
 interface StepItems extends StepItem {
-	component: React.FunctionComponent;
+	component: React.FC;
 }
 
 const Signup: NextPageWithAuthLayout = () => {
+	const router = useRouter();
+	const [initialStep, _] = React.useState(Number(router.query?.step ?? 0));
 	const steps = [
 		{
 			label: "Step 1",
@@ -34,13 +37,13 @@ const Signup: NextPageWithAuthLayout = () => {
 		<div className="flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
 				onClickStep={(step, setStep) => setStep(step)}
-				initialStep={0}
+				initialStep={initialStep}
 				steps={steps}
 				styles={{
 					"main-container": "max-w-3xl"
 				}}
 			>
-				{steps.map((step, index) => (
+				{steps.map(step => (
 					<Step key={step.label}>
 						<step.component />
 					</Step>

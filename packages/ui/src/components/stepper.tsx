@@ -9,9 +9,11 @@ import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Collapsible, CollapsibleContent } from "./collapsible";
 
+type Props = Record<string, unknown>;
+
 // <---------- CONTEXT ---------->
 
-interface StepperContextValue extends StepperProps {
+interface StepperContextValue<T extends Props> extends StepperProps {
 	clickable?: boolean;
 	isError?: boolean;
 	isLoading?: boolean;
@@ -20,35 +22,41 @@ interface StepperContextValue extends StepperProps {
 	expandVerticalSteps?: boolean;
 	activeStep: number;
 	initialStep: number;
+	context: T;
+	setContext: (ctx: T) => void;
 }
 
-const StepperContext = React.createContext<
-	StepperContextValue & {
-		nextStep: () => void;
-		prevStep: () => void;
-		resetSteps: () => void;
-		setStep: (step: number) => void;
-	}
->({
+type StepperContextValueProps<T extends Props> = StepperContextValue<T> & {
+	nextStep: () => void;
+	prevStep: () => void;
+	resetSteps: () => void;
+	setStep: (step: number) => void;
+};
+
+const StepperContext = React.createContext<StepperContextValueProps<Props>>({
 	steps: [],
 	activeStep: 0,
 	initialStep: 0,
+	context: {},
+	setContext: () => {},
 	nextStep: () => {},
 	prevStep: () => {},
 	resetSteps: () => {},
 	setStep: () => {}
 });
 
-interface StepperContextProviderProps {
-	value: Omit<StepperContextValue, "activeStep">;
+interface StepperContextProviderProps<T extends Props> {
+	value: Omit<StepperContextValue<T>, "activeStep">;
 	children: React.ReactNode;
 }
 
-const StepperProvider = ({ value, children }: StepperContextProviderProps) => {
+const StepperProvider = ({ value, children }: StepperContextProviderProps<Props>) => {
 	const isError = value.state === "error";
 	const isLoading = value.state === "loading";
 
 	const [activeStep, setActiveStep] = React.useState(value.initialStep);
+	// Initialize context state with the initial context value passed to the provider
+	const [context, setContextState] = React.useState(value.context);
 
 	const nextStep = () => {
 		setActiveStep(prev => prev + 1);
@@ -66,6 +74,10 @@ const StepperProvider = ({ value, children }: StepperContextProviderProps) => {
 		setActiveStep(step);
 	};
 
+	const setContext = (ctx: Props) => {
+		setContextState(ctx);
+	};
+
 	return (
 		<StepperContext.Provider
 			value={{
@@ -76,7 +88,9 @@ const StepperProvider = ({ value, children }: StepperContextProviderProps) => {
 				nextStep,
 				prevStep,
 				resetSteps,
-				setStep
+				setStep,
+				context,
+				setContext
 			}}
 		>
 			{children}
@@ -86,8 +100,8 @@ const StepperProvider = ({ value, children }: StepperContextProviderProps) => {
 
 // <---------- HOOKS ---------->
 
-function useStepper() {
-	const context = React.useContext(StepperContext);
+function useStepper<T extends Props = Props>() {
+	const context = React.useContext(StepperContext) as unknown as StepperContextValueProps<T>;
 
 	if (context === undefined) {
 		throw new Error("useStepper must be used within a StepperProvider");
@@ -238,7 +252,9 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>((props, ref: Reac
 				variant: variant ?? "circle",
 				expandVerticalSteps,
 				steps,
-				scrollTracking
+				scrollTracking,
+				context: {},
+				setContext: () => {}
 			}}
 		>
 			<div
@@ -703,7 +719,7 @@ const StepButtonContainer = ({
 				"flex items-center justify-center rounded-full border-2 bg-border",
 				"data-[clickable=true]:pointer-events-auto",
 				"data-[active=true]:text-primary-foreground data-[active=true]:bg-blue-500 dark:data-[active=true]:text-primary",
-				"data-[current=true]:bg-stepper-icon border-none text-black",
+				"border-none text-black data-[current=true]:bg-stepper-icon",
 				"data-[invalid=true]:!text-primary-foreground data-[invalid=true]:!border-destructive data-[invalid=true]:!bg-destructive dark:data-[invalid=true]:!text-primary",
 				stepButtonVariants({ size }),
 				styles?.["step-button-container"]

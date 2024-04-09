@@ -17,20 +17,13 @@ type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
-		const careerInterestsPayload = payload.unsafe_metadata.career_interests as CareerInterestSlug[];
+		// const careerInterestsPayload = payload.unsafe_metadata.career_interests as CareerInterestSlug[];
 		// create the user
 		await db.insert(user).values({
 			clerkId: String(payload.id),
 			email: String(payload.email_addresses[0]?.email_address),
 			firstname: payload.first_name,
 			lastname: payload.last_name,
-			gender: payload.unsafe_metadata.gender as z.infer<typeof gendersSchema>,
-			ethnicity: payload.unsafe_metadata.ethnicity as z.infer<typeof ethnicitiesSchema>,
-			university: payload.unsafe_metadata.university as string,
-			degreeName: payload.unsafe_metadata.degree_name as string,
-			currentYear: payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>,
-			completionYear: Number(payload.unsafe_metadata.completion_year),
-			broadDegreeCourse: payload.unsafe_metadata.broad_degree_course as string,
 			profileType: checkProfileType(payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>)
 		});
 
@@ -48,7 +41,7 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			}
 		});
 
-		// add the user to the relevant career interest record
+		/*
 		const queries = careerInterestsPayload.map(slug => {
 			return {
 				careerInterestId: CAREER_INTERESTS[slug],
@@ -56,11 +49,11 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			};
 		});
 		await db.insert(careerInterestToUser).values(queries);
-		/*const userEmailHMAC = Base64.stringify(hmacSHA256(dbUser.email, MAGICBELL_API_SECRET));
+		/!*const userEmailHMAC = Base64.stringify(hmacSHA256(dbUser.email, MAGICBELL_API_SECRET));
 				// attach the HMAC record to the clerk user external_id
 				await clerkClient.users.updateUser(payload.id, {
 					externalId: userEmailHMAC
-				});*/
+				});*!/*/
 		log.info("-----------------------------------------------");
 		log.debug("New user!!", dbUser);
 		log.info("-----------------------------------------------");

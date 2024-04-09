@@ -1,5 +1,5 @@
 import { format, formatDistance } from "date-fns";
-import * as z from "zod";
+import type * as z from "zod";
 
 import type { currentYearSchema } from "@genus/validators";
 
@@ -29,6 +29,7 @@ export const PATHS = {
  */
 export function formatString(str: string | undefined) {
 	if (!str) return "";
+	if (str.length <= 3) return str.toUpperCase();
 	return str
 		.replace(/__/g, ", ") // replace two underscores with comma followed by a space
 		.replace(/[_-]/g, " ") // replace underscore with a space
@@ -87,14 +88,13 @@ export function capitalize(str: string | undefined) {
 	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
 }
 
-
 export function checkProfileType(currentYear: z.infer<typeof currentYearSchema>) {
 	switch (currentYear) {
 		case "graduate":
-            return "GRADUATE";
-        case "postgraduate":
-            return "GRADUATE";
-        default:
-            return "STUDENT";
+			return "graduate";
+		case "postgraduate":
+			return "graduate";
+		default:
+			return "student";
 	}
 }

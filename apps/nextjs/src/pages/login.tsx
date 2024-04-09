@@ -4,11 +4,10 @@ import type { ReactElement } from "react";
 import React, { useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSignIn } from "@clerk/nextjs";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useWindowSize } from "usehooks-ts";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -17,13 +16,15 @@ import { Input } from "@genus/ui/input";
 import { loginSchema } from "@genus/validators";
 
 import { PATHS } from "~/utils";
+import { trpc } from "~/utils/trpc";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
 const Login: NextPageWithAuthLayout = () => {
 	const { isLoaded, signIn, setActive } = useSignIn();
+	const { signOut } = useAuth();
 	const [loading, setLoading] = React.useState(false);
-	const { width = 0, height = 0 } = useWindowSize();
+	const { mutateAsync: checkOnboardingStatus } = trpc.auth.checkOnboardingStatus.useMutation();
 
 	const router = useRouter();
 	// 1. Define your form.
@@ -35,32 +36,79 @@ const Login: NextPageWithAuthLayout = () => {
 		resolver: zodResolver(loginSchema)
 	});
 
+	const handleOnboarding = useCallback(
+		async (email: string) => {
+			if (!isLoaded) return false;
+			const status = await checkOnboardingStatus({
+				email
+			});
+			switch (status) {
+				case "not_started":
+					void signOut().then(() => {
+						void router.push(`${PATHS.SIGNUP}?step=0`);
+						toast.info("Finish onboarding", {
+							description: "We still need to collect some information about you before you can log in.",
+							closeButton: true,
+							duration: 3000
+						});
+					});
+					return false;
+				case "background_info":
+					void signOut().then(() => {
+						void router.push(`${PATHS.SIGNUP}?step=1`);
+						toast.info("Finish onboarding", {
+							description: "We still need to collect some information about you before you can log in.",
+							closeButton: true,
+							duration: 3000
+						});
+					});
+					return false;
+				case "career_info":
+					void signOut().then(() => {
+						void router.push(`${PATHS.SIGNUP}?step=2`);
+						toast.info("Finish onboarding", {
+							description: "We still need to collect some information about you before you can log in.",
+							closeButton: true,
+							duration: 3000
+						});
+					});
+					return false;
+				default:
+					return true;
+			}
+		},
+		[checkOnboardingStatus, isLoaded]
+	);
+
 	const onSubmit = useCallback(
 		async (values: z.infer<typeof loginSchema>) => {
 			// Do something with the form values.
 			// ✅ This will be type-safe and validated.
+			setLoading(true);
 			try {
-				setLoading(true);
 				// handle loading state
 				if (!isLoaded) return null;
 				const result = await signIn.create({
 					identifier: values.email,
 					password: values.password
 				});
-				if (result.status === "complete" && !!result.createdSessionId) {
-					await setActive({ session: result.createdSessionId });
-					await router.replace(PATHS.HOME);
-					return;
-				} else {
-					// Something went wrong
-					if (result.status === "needs_identifier") {
-						form.setError("email", { message: "Invalid email address" });
-					} else if (result.status === "needs_first_factor") {
-						form.setError("password", { message: "Password is incorrect" });
+				console.log(result);
+				if (await handleOnboarding(values.email)) {
+					if (result.status === "complete" && !!result.createdSessionId) {
+						await setActive({ session: result.createdSessionId });
+						await router.replace(PATHS.HOME);
+						return;
 					} else {
-						toast.error("Password is incorrect", {
-							description: "There was a problem with your request."
-						});
+						// Something went wrong
+						if (result.status === "needs_identifier") {
+							form.setError("email", { message: "Invalid email address" });
+						} else if (result.status === "needs_first_factor") {
+							form.setError("password", { message: "Password is incorrect" });
+						} else {
+							toast.error("Password is incorrect", {
+								description: "There was a problem with your request."
+							});
+						}
 					}
 				}
 				setLoading(false);

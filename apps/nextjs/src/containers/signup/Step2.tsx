@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
 import {
 	Select,
@@ -28,13 +28,16 @@ import {
 } from "@genus/validators/constants";
 
 import { formatString } from "~/utils";
+import { trpc } from "~/utils/trpc";
+import type { UserState } from "~/utils/types";
 
 interface Props {
 	step?: number;
 }
 
 const Step2: FC<Props> = () => {
-	const { nextStep, prevStep } = useStepper();
+	const { nextStep, prevStep, context } = useStepper<UserState>();
+	const { mutateAsync: updateUser } = trpc.auth.updateUserStep2.useMutation();
 	const [loading, setLoading] = useState(false);
 
 	const form = useForm<z.infer<typeof signupStep2Schema>>({
@@ -56,6 +59,10 @@ const Step2: FC<Props> = () => {
 			setLoading(true);
 			try {
 				console.log(values);
+				await updateUser({
+					...values,
+					email: context.email
+				});
 				nextStep();
 			} catch (error: any) {
 				console.log(error);
@@ -63,7 +70,7 @@ const Step2: FC<Props> = () => {
 				setLoading(false);
 			}
 		},
-		[nextStep]
+		[context.email, nextStep, updateUser]
 	);
 
 	return (
@@ -247,23 +254,13 @@ const Step2: FC<Props> = () => {
 							/>
 						</div>
 					</section>
-					<div className="flex items-center justify-around space-x-6 pt-6 sm:space-x-16 sm:pt-12">
-						<Button
-							onClick={prevStep}
-							loading={loading}
-							type="button"
-							radius="xl"
-							variant="back"
-							className="px-unit-xl font-semibold sm:h-12 sm:w-full sm:text-xl"
-						>
-							Go back
-						</Button>
+					<div className="flex items-center justify-center space-x-6 pt-6 sm:space-x-16 sm:pt-12">
 						<Button
 							loading={loading}
 							type="submit"
 							radius="xl"
 							form="signup-form"
-							className="px-unit-xl font-semibold sm:h-12 sm:w-full sm:text-xl"
+							className="w-64 text-lg font-semibold sm:w-full sm:text-xl"
 						>
 							Continue
 						</Button>

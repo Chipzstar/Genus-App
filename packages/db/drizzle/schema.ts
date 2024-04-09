@@ -27,7 +27,6 @@ export const userCurrentYear = pgEnum("user_currentyear", [
 ]);
 export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
 export const userProfileType = pgEnum("user_profiletype", ["student", "graduate", "admin", "expert"]);
-export const userProfileTypeNew = pgEnum("user_profileType", ["student", "graduate", "admin", "expert"]);
 export const userOnboardingStatus = pgEnum("user_onboardingstatus", [
 	"not_started",
 	"background_info",
@@ -213,17 +212,18 @@ export const user = pgTable(
 		email: varchar("email", { length: 191 }).notNull(),
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
-		gender: userGender("gender").default("female").notNull(),
-		ethnicity: userEthnicity("ethnicity").default("african").notNull(),
-		university: varchar("university", { length: 191 }).notNull(),
-		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }).notNull(),
-		degreeName: varchar("degreeName", { length: 191 }).notNull(),
+		gender: userGender("gender").default("female"),
+		ethnicity: userEthnicity("ethnicity").default("african"),
+		university: varchar("university", { length: 191 }),
+		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }),
+		degreeName: varchar("degreeName", { length: 191 }),
 		currentYear: userCurrentYear("currentYear").default("1st_year"),
-		completionYear: integer("completionYear").notNull(),
+		completionYear: integer("completionYear"),
+		experienceType: varchar("experienceType", { length: 191 }),
 		imageKey: varchar("imageKey", { length: 191 }),
 		imageUrl: varchar("imageUrl", { length: 191 }),
 		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
-		profileType: userProfileTypeNew("profileType").default("student").notNull(),
+		profileType: userProfileType("profileType").default("student").notNull(),
 		onboardingStatus: userOnboardingStatus("onboardingStatus").default("background_info").notNull(),
 		isActive: boolean("isActive").default(true).notNull(),
 		isDeleted: boolean("isDeleted").default(false).notNull()

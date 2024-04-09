@@ -7,6 +7,12 @@ export interface LoginUser {
 	password: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type UserState = {
+	name: string;
+	email: string;
+};
+
 export interface ClerkEvent {
 	data: UserData;
 	object: "event";

@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react";
@@ -20,6 +19,7 @@ import { signupStep1Schema } from "@genus/validators";
 
 import CodeInput from "~/components/CodeInput";
 import { PATHS } from "~/utils";
+import type { UserState } from "~/utils/types";
 import { useUploadThing } from "~/utils/uploadthing";
 
 interface Props {
@@ -28,7 +28,7 @@ interface Props {
 
 const Step1: FC<Props> = () => {
 	// STATE
-	const { nextStep } = useStepper();
+	const { setContext, nextStep } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setCodeVerification] = useState(false);
 	const clerk = useClerk();
@@ -38,8 +38,7 @@ const Step1: FC<Props> = () => {
 	}, []);
 
 	// HOOKS
-	const router = useRouter();
-	const { isLoaded, signUp } = useSignUp();
+	const { isLoaded, signUp, setSession } = useSignUp();
 
 	const form = useForm<z.infer<typeof signupStep1Schema>>({
 		defaultValues: {
@@ -104,9 +103,13 @@ const Step1: FC<Props> = () => {
 				// Prepare the verification process for the email address.
 				// This method will send a one-time code to the email address supplied to the current sign-up.
 				await signUp.prepareEmailAddressVerification();
+				setContext({
+					name: `${values.firstname} ${values.lastname}`,
+					email: values.email
+				});
 				setCodeVerification(true);
 				toast.info("Email Verification Sent", {
-					description: "We have sent you an email with a verification code. Please check your inbox.",
+					description: "We have emailed you a verification code. Please check your inbox.",
 					icon: <Mail size={20} />
 				});
 			} catch (error: any) {
@@ -127,7 +130,7 @@ const Step1: FC<Props> = () => {
 				setLoading(false);
 			}
 		},
-		[isLoaded, files]
+		[isLoaded, signUp, setContext]
 	);
 
 	const confirmSignUp = useCallback(
@@ -168,6 +171,7 @@ const Step1: FC<Props> = () => {
 						icon: <Check size={20} />
 					});
 					nextStep();
+					void clerk.signOut();
 				}, 1000);
 			} catch (err: any) {
 				setLoading(false);
@@ -176,7 +180,7 @@ const Step1: FC<Props> = () => {
 				});
 			}
 		},
-		[isLoaded, router, signUp, files, clerk]
+		[isLoaded, signUp, files, nextStep, clerk]
 	);
 	return (
 		<>

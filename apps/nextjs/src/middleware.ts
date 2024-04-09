@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
+const prettyPrint = (str: any) => {
+	console.log("-".repeat(40));
+	console.log(str);
+	console.log("-".repeat(40));
+};
+
 export default authMiddleware({
 	debug: false,
 	publicRoutes: [
@@ -13,6 +19,7 @@ export default authMiddleware({
 		"/_axiom/web-vitals"
 	],
 	afterAuth(auth, req, evt) {
+		// prettyPrint(auth);
 		// MANUAL check for this endpoint to ensure that it bypasses any redirects handled by the below cases
 		if (req.url.includes("/api/uploadthing?slug=")) {
 			return NextResponse.next();

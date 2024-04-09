@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import type * as z from "zod";
 
 import { Button } from "@genus/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "@genus/ui/form";
@@ -46,7 +46,7 @@ export const CheckEmailForm = ({ onSubmit, loading }: EmailForm) => {
 						)}
 					/>
 					<div className="flex flex-col items-center space-y-4">
-						<Button loading={loading} type="submit" size="lg" className="h-12 w-full font-semibold">
+						<Button loading={loading} type="submit" size="lg" className="h-12 w-full text-lg font-semibold">
 							Next
 						</Button>
 						<FormDescription className="font-light text-white">

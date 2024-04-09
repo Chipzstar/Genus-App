@@ -66,7 +66,12 @@ const ResetPasswordForm: FC<Props> = ({ onSubmit, loading }) => {
 							)}
 						/>
 						<div className="flex flex-col items-center space-y-4">
-							<Button loading={loading} type="submit" size="lg" className="h-12 w-full font-semibold">
+							<Button
+								loading={loading}
+								type="submit"
+								size="lg"
+								className="h-12 w-full text-lg font-semibold"
+							>
 								Reset
 							</Button>
 							<FormDescription className="font-light text-white">

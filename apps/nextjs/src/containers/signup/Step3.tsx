@@ -10,10 +10,12 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import type { Option } from "@genus/ui/multi-select";
 import { MultiSelect } from "@genus/ui/multi-select";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
+import { useStepper } from "@genus/ui/stepper";
 import { signupStep3Schema } from "@genus/validators";
 import { career_interests, companies, experience_types } from "@genus/validators/constants";
 
 import { formatString } from "~/utils";
+import type { UserState } from "~/utils/types";
 
 const company_options: Option[] = companies.map(company => ({
 	label: company
@@ -24,6 +26,7 @@ const company_options: Option[] = companies.map(company => ({
 }));
 
 const Step3: FC = () => {
+	const { context } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const form = useForm<z.infer<typeof signupStep3Schema>>({
 		defaultValues: {
@@ -34,22 +37,24 @@ const Step3: FC = () => {
 		resolver: zodResolver(signupStep3Schema)
 	});
 
-	const onSubmit = useCallback(async (values: z.infer<typeof signupStep3Schema>) => {
-		// ✅ This will be type-safe and validated.
-		setLoading(true);
-		try {
-			console.log(values);
-			window.open("https://hodpo2py6ju.typeform.com/to/XOethBN1", "_blank");
-		} catch (error: any) {
-			console.log(error);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
-
-	useEffect(() => {
-		console.log(form.formState.errors);
-	}, [form.formState.errors]);
+	const onSubmit = useCallback(
+		async (values: z.infer<typeof signupStep3Schema>) => {
+			// ✅ This will be type-safe and validated.
+			setLoading(true);
+			try {
+				console.log(values);
+				window.open(
+					`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${context.email}&name=${context.name}`,
+					"_blank"
+				);
+			} catch (error: any) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		},
+		[context]
+	);
 
 	return (
 		<div className="flex w-full flex-col space-y-12 md:w-1/2">

@@ -16,7 +16,9 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			clerkId: String(payload.id),
 			email: String(payload.email_addresses[0]?.email_address),
 			firstname: payload.first_name,
-			lastname: payload.last_name
+			lastname: payload.last_name,
+			username: payload.unsafe_metadata.username as string,
+			tempPassword: payload.unsafe_metadata.tempPassword as string
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];

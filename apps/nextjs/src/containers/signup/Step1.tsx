@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react";
-import { Check, Mail, User } from "lucide-react";
+import { Mail, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -16,8 +16,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@genus/ui/input";
 import { useStepper } from "@genus/ui/stepper";
 import { signupStep1Schema } from "@genus/validators";
+import { encryptString } from "@genus/validators/helpers";
 
 import CodeInput from "~/components/CodeInput";
+import { env } from "~/env";
 import { PATHS } from "~/utils";
 import type { UserState } from "~/utils/types";
 import { useUploadThing } from "~/utils/uploadthing";
@@ -25,6 +27,8 @@ import { useUploadThing } from "~/utils/uploadthing";
 interface Props {
 	step?: number;
 }
+
+const { NEXT_PUBLIC_AXIOM_TOKEN } = env;
 
 const Step1: FC<Props> = () => {
 	// STATE
@@ -89,7 +93,7 @@ const Step1: FC<Props> = () => {
 				return null;
 			}
 			try {
-				const { email, password, firstname, lastname, confirmPassword: _, ...rest } = values;
+				const { email, username, password, firstname, lastname, confirmPassword: _ } = values;
 				await signUp.create({
 					externalAccountActionCompleteRedirectUrl: "/",
 					emailAddress: email,
@@ -97,15 +101,16 @@ const Step1: FC<Props> = () => {
 					firstName: firstname,
 					lastName: lastname,
 					unsafeMetadata: {
-						...rest
+						username,
+						tempPassword: encryptString(password, NEXT_PUBLIC_AXIOM_TOKEN)
 					}
 				});
 				// Prepare the verification process for the email address.
 				// This method will send a one-time code to the email address supplied to the current sign-up.
 				await signUp.prepareEmailAddressVerification();
 				setContext({
-					name: `${values.firstname} ${values.lastname}`,
-					email: values.email
+					email: values.email,
+					name: `${values.firstname} ${values.lastname}`
 				});
 				setCodeVerification(true);
 				toast.info("Email Verification Sent", {
@@ -166,10 +171,6 @@ const Step1: FC<Props> = () => {
 							clerk
 						);
 					}
-					toast.success("Welcome to Genus!", {
-						description: "Your account has been verified",
-						icon: <Check size={20} />
-					});
 					nextStep();
 					void clerk.signOut();
 				}, 1000);

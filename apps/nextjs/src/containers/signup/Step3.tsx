@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Check } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -69,6 +70,10 @@ const Step3: FC = () => {
 			if (result.status === "complete" && !!result.createdSessionId) {
 				await setActive({ session: result.createdSessionId });
 				await replace(PATHS.HOME);
+				toast.success("Welcome to Genus!", {
+					description: "Your account has been verified",
+					icon: <Check size={20} />
+				});
 				return;
 			} else {
 				if (result.status === "needs_identifier") {

@@ -210,6 +210,7 @@ export const user = pgTable(
 		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		clerkId: varchar("clerkId", { length: 191 }).notNull(),
 		email: varchar("email", { length: 191 }).notNull(),
+		username: varchar("username", { length: 191 }).default("").notNull(),
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
 		gender: userGender("gender").default("female"),
@@ -227,7 +228,7 @@ export const user = pgTable(
 		onboardingStatus: userOnboardingStatus("onboardingStatus").default("background_info").notNull(),
 		isActive: boolean("isActive").default(true).notNull(),
 		isDeleted: boolean("isDeleted").default(false).notNull(),
-		tempPassword: varchar("tempPassword", { length: 191 }).default("-XP!rFen*t-Qw4sR??x-MX4h").notNull()
+		tempPassword: varchar("tempPassword", { length: 191 }).default("").notNull()
 	},
 	table => {
 		return {

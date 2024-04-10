@@ -217,7 +217,7 @@ export const user = pgTable(
 		university: varchar("university", { length: 191 }),
 		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }),
 		degreeName: varchar("degreeName", { length: 191 }),
-		currentYear: userCurrentYear("currentYear").default("1st_year"),
+		currentYear: userCurrentYear("currentYear"),
 		completionYear: integer("completionYear"),
 		experienceType: varchar("experienceType", { length: 191 }),
 		imageKey: varchar("imageKey", { length: 191 }),
@@ -226,7 +226,8 @@ export const user = pgTable(
 		profileType: userProfileType("profileType").default("student").notNull(),
 		onboardingStatus: userOnboardingStatus("onboardingStatus").default("background_info").notNull(),
 		isActive: boolean("isActive").default(true).notNull(),
-		isDeleted: boolean("isDeleted").default(false).notNull()
+		isDeleted: boolean("isDeleted").default(false).notNull(),
+		tempPassword: varchar("tempPassword", { length: 191 }).default("-XP!rFen*t-Qw4sR??x-MX4h").notNull()
 	},
 	table => {
 		return {
@@ -268,6 +269,19 @@ export const company = pgTable(
 		return {
 			companyIdUserIdx: uniqueIndex("companyIdIdx").on(table.companyId),
 			slugUserIdx: uniqueIndex("slugIdx").on(table.slug)
+		};
+	}
+);
+
+export const companyToUser = pgTable(
+	"companyToUser",
+	{
+		companyId: integer("companyId").notNull(),
+		userId: integer("userId").notNull()
+	},
+	table => {
+		return {
+			pk: primaryKey({ name: "companyUserId", columns: [table.companyId, table.userId] })
 		};
 	}
 );
@@ -358,6 +372,7 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 	reactions: many(reaction),
 	threads: many(thread),
 	groupUsers: many(groupUser),
+	companies: many(companyToUser),
 	careerInterests: many(careerInterestToUser)
 }));
 
@@ -373,6 +388,21 @@ export const careerInterestToUserRelations = relations(careerInterestToUser, ({ 
 	careerInterest: one(careerInterest, {
 		fields: [careerInterestToUser.careerInterestId],
 		references: [careerInterest.id]
+	})
+}));
+
+export const companyRelations = relations(company, ({ one, many }) => ({
+	user: many(companyToUser)
+}));
+
+export const companyToUserRelations = relations(companyToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [companyToUser.userId],
+		references: [user.id]
+	}),
+	company: one(company, {
+		fields: [companyToUser.companyId],
+		references: [company.id]
 	})
 }));
 

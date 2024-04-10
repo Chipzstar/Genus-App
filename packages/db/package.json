@@ -14,12 +14,15 @@
     "db:push": "pnpm with-env drizzle-kit push:pg",
     "db:pull": "pnpm with-env drizzle-kit introspect:pg",
     "db:generate": "pnpm with-env drizzle-kit generate:pg",
+    "db:seed": "pnpm with-env tsx ./seed.ts",
     "db:migrate": "pnpm with-env tsx ./migrate.ts",
     "db:drop": "pnpm with-env drizzle-kit drop"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0",
-    "drizzle-orm": "^0.29.4"
+    "csv-parse": "^5.5.5",
+    "drizzle-orm": "^0.29.4",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@genus/eslint-config": "workspace:^0.2.0",

@@ -19,7 +19,7 @@ export default authMiddleware({
 		"/_axiom/web-vitals"
 	],
 	afterAuth(auth, req, evt) {
-		// prettyPrint(auth);
+		prettyPrint(auth);
 		// MANUAL check for this endpoint to ensure that it bypasses any redirects handled by the below cases
 		if (req.url.includes("/api/uploadthing?slug=")) {
 			return NextResponse.next();

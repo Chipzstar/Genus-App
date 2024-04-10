@@ -1,14 +1,4 @@
 import { format, formatDistance } from "date-fns";
-import type * as z from "zod";
-
-import type { currentYearSchema } from "@genus/validators";
-
-export const CAREER_INTERESTS = {
-	banking_finance: 1,
-	law: 2,
-	consulting: 3,
-	tech: 4
-};
 
 export const PATHS = {
 	HOME: "/",
@@ -27,9 +17,9 @@ export const PATHS = {
  * correctly.
  * @param str the string to format
  */
-export function formatString(str: string | undefined) {
+export function formatString(str: string | null | undefined) {
 	if (!str) return "";
-	if (str.length <= 3) return str.toUpperCase();
+	if (str.length <= 2) return str.toUpperCase();
 	return str
 		.replace(/__/g, ", ") // replace two underscores with comma followed by a space
 		.replace(/[_-]/g, " ") // replace underscore with a space
@@ -86,15 +76,4 @@ export function convertToNestedArray(arr: any[] = []) {
 
 export function capitalize(str: string | undefined) {
 	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
-}
-
-export function checkProfileType(currentYear: z.infer<typeof currentYearSchema>) {
-	switch (currentYear) {
-		case "graduate":
-			return "graduate";
-		case "postgraduate":
-			return "graduate";
-		default:
-			return "student";
-	}
 }

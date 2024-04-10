@@ -1,7 +1,10 @@
 import type { FC } from "react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -13,8 +16,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useStepper } from "@genus/ui/stepper";
 import { signupStep3Schema } from "@genus/validators";
 import { career_interests, companies, experience_types } from "@genus/validators/constants";
+import { decryptString } from "@genus/validators/helpers";
 
-import { formatString } from "~/utils";
+import { env } from "~/env";
+import { formatString, PATHS } from "~/utils";
+import { trpc } from "~/utils/trpc";
 import type { UserState } from "~/utils/types";
 
 const company_options: Option[] = companies.map(company => ({
@@ -25,9 +31,15 @@ const company_options: Option[] = companies.map(company => ({
 	value: company
 }));
 
+const { NEXT_PUBLIC_AXIOM_TOKEN } = env;
+
 const Step3: FC = () => {
+	const { query, replace } = useRouter();
+	const { isLoaded, signIn, setActive } = useSignIn();
 	const { context } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
+	const { mutateAsync: updateUser } = trpc.auth.updateUserStep3.useMutation();
+
 	const form = useForm<z.infer<typeof signupStep3Schema>>({
 		defaultValues: {
 			career_interests: [],
@@ -37,23 +49,63 @@ const Step3: FC = () => {
 		resolver: zodResolver(signupStep3Schema)
 	});
 
+	const handleLogin = useCallback(
+		async (email: string, password: string) => {
+			if (!isLoaded) {
+				// handle loading state
+				toast.error("Uh oh! Something went wrong.", {
+					description: "There was a problem signing you up.",
+					action: {
+						label: "Try again",
+						onClick: () => void handleLogin(email, password)
+					}
+				});
+				return null;
+			}
+			const result = await signIn.create({
+				identifier: email,
+				password
+			});
+			if (result.status === "complete" && !!result.createdSessionId) {
+				await setActive({ session: result.createdSessionId });
+				await replace(PATHS.HOME);
+				return;
+			} else {
+				if (result.status === "needs_identifier") {
+					throw new Error("Invalid email address");
+				} else if (result.status === "needs_first_factor") {
+					throw new Error("Password is incorrect");
+				} else {
+					throw new Error("There was a problem with your request.");
+				}
+			}
+		},
+		[isLoaded, replace, setActive]
+	);
+
 	const onSubmit = useCallback(
 		async (values: z.infer<typeof signupStep3Schema>) => {
 			// ✅ This will be type-safe and validated.
+			const email = context?.email ?? query.email;
 			setLoading(true);
 			try {
-				console.log(values);
-				window.open(
-					`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${context.email}&name=${context.name}`,
-					"_blank"
-				);
+				const user = await updateUser({
+					...values,
+					email
+				});
+				const name = `${user.firstname} ${user.lastname}`;
+				await handleLogin(email, decryptString(user.tempPassword, NEXT_PUBLIC_AXIOM_TOKEN));
+				window.open(`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${email}&name=${name}`, "_blank");
 			} catch (error: any) {
 				console.log(error);
+				toast.error("Uh oh! Something went wrong.", {
+					description: error.message
+				});
 			} finally {
 				setLoading(false);
 			}
 		},
-		[context]
+		[context, query]
 	);
 
 	return (

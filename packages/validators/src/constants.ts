@@ -88,7 +88,15 @@ export const ethnicities = [
 	"any_other_ethnic_group"
 ] as const;
 
-export const career_interests = ["banking_finance", "consulting", "law", "tech"] as const;
+export const career_interests = ["banking_finance", "law", "consulting", "tech"] as const;
+
+export enum CAREER_INTERESTS {
+	banking_finance = 1,
+	law = 2,
+	consulting = 3,
+	tech = 4
+}
+
 export const broad_course_categories = [
 	"accounting-and-finance",
 	"agriculture-and-environmental-sciences",
@@ -471,11 +479,6 @@ export const companies = [
 	"womble_bond_dickinson",
 	"other"
 ] as const;
-
-/*interface CompanyOptions {
-	label: string;
-	value: (typeof companies)[number];
-}*/
 
 /*export const company_options: CompanyOptions[] = [
 	{

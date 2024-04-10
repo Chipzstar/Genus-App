@@ -2,29 +2,21 @@ import { clerkClient } from "@clerk/nextjs";
 import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/server";
 import { log } from "next-axiom";
 import shortHash from "shorthash2";
-import type * as z from "zod";
 
-import type { careerInterest } from "@genus/db";
 import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
-import type { currentYearSchema, ethnicitiesSchema, gendersSchema } from "@genus/validators";
 
 import { utapi } from "~/server/uploadthing";
-import { CAREER_INTERESTS, checkProfileType } from "~/utils";
-
-type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
 
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
-		// const careerInterestsPayload = payload.unsafe_metadata.career_interests as CareerInterestSlug[];
 		// create the user
 		await db.insert(user).values({
 			clerkId: String(payload.id),
 			email: String(payload.email_addresses[0]?.email_address),
 			firstname: payload.first_name,
-			lastname: payload.last_name,
-			profileType: checkProfileType(payload.unsafe_metadata.current_year as z.infer<typeof currentYearSchema>)
+			lastname: payload.last_name
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
@@ -41,19 +33,6 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			}
 		});
 
-		/*
-		const queries = careerInterestsPayload.map(slug => {
-			return {
-				careerInterestId: CAREER_INTERESTS[slug],
-				userId: dbUser.id
-			};
-		});
-		await db.insert(careerInterestToUser).values(queries);
-		/!*const userEmailHMAC = Base64.stringify(hmacSHA256(dbUser.email, MAGICBELL_API_SECRET));
-				// attach the HMAC record to the clerk user external_id
-				await clerkClient.users.updateUser(payload.id, {
-					externalId: userEmailHMAC
-				});*!/*/
 		log.info("-----------------------------------------------");
 		log.debug("New user!!", dbUser);
 		log.info("-----------------------------------------------");

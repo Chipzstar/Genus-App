@@ -25,9 +25,10 @@ const Login: NextPageWithAuthLayout = () => {
 	const { signOut } = useAuth();
 	const [loading, setLoading] = React.useState(false);
 	const { mutateAsync: checkOnboardingStatus } = trpc.auth.checkOnboardingStatus.useMutation();
+	const { mutate: addTempPassword } = trpc.auth.addTempPassword.useMutation();
 
 	const router = useRouter();
-	// 1. Define your form.
+
 	const form = useForm<z.infer<typeof loginSchema>>({
 		defaultValues: {
 			email: "",
@@ -37,47 +38,36 @@ const Login: NextPageWithAuthLayout = () => {
 	});
 
 	const handleOnboarding = useCallback(
-		async (email: string) => {
-			if (!isLoaded) return false;
+		async ({ email, password }: z.infer<typeof loginSchema>) => {
+			let step = -1;
 			const status = await checkOnboardingStatus({
 				email
 			});
-			switch (status) {
-				case "not_started":
-					void signOut().then(() => {
-						void router.push(`${PATHS.SIGNUP}?step=0`);
-						toast.info("Finish onboarding", {
-							description: "We still need to collect some information about you before you can log in.",
-							closeButton: true,
-							duration: 3000
-						});
-					});
-					return false;
-				case "background_info":
-					void signOut().then(() => {
-						void router.push(`${PATHS.SIGNUP}?step=1`);
-						toast.info("Finish onboarding", {
-							description: "We still need to collect some information about you before you can log in.",
-							closeButton: true,
-							duration: 3000
-						});
-					});
-					return false;
-				case "career_info":
-					void signOut().then(() => {
-						void router.push(`${PATHS.SIGNUP}?step=2`);
-						toast.info("Finish onboarding", {
-							description: "We still need to collect some information about you before you can log in.",
-							closeButton: true,
-							duration: 3000
-						});
-					});
-					return false;
-				default:
-					return true;
+			if (status === "not_started") {
+				step = 0;
+			} else if (status === "background_info") {
+				step = 1;
+			} else if (status === "career_info") {
+				step = 2;
 			}
+			if (step !== -1) {
+				await signOut();
+				addTempPassword({
+					email,
+					password
+				});
+				void router.push(`${PATHS.SIGNUP}?step=${step}&email=${email}`).then(() => {
+					toast.info("Finish onboarding", {
+						description: "We still need to collect some information about you before you can log in.",
+						closeButton: true,
+						duration: 3000
+					});
+				});
+				return false;
+			}
+			return true;
 		},
-		[checkOnboardingStatus, isLoaded]
+		[checkOnboardingStatus]
 	);
 
 	const onSubmit = useCallback(
@@ -92,23 +82,22 @@ const Login: NextPageWithAuthLayout = () => {
 					identifier: values.email,
 					password: values.password
 				});
-				console.log(result);
-				if (await handleOnboarding(values.email)) {
-					if (result.status === "complete" && !!result.createdSessionId) {
+				if (result.status === "complete" && !!result.createdSessionId) {
+					if (await handleOnboarding(values)) {
 						await setActive({ session: result.createdSessionId });
 						await router.replace(PATHS.HOME);
 						return;
+					}
+				} else {
+					// Something went wrong
+					if (result.status === "needs_identifier") {
+						form.setError("email", { message: "Invalid email address" });
+					} else if (result.status === "needs_first_factor") {
+						form.setError("password", { message: "Password is incorrect" });
 					} else {
-						// Something went wrong
-						if (result.status === "needs_identifier") {
-							form.setError("email", { message: "Invalid email address" });
-						} else if (result.status === "needs_first_factor") {
-							form.setError("password", { message: "Password is incorrect" });
-						} else {
-							toast.error("Password is incorrect", {
-								description: "There was a problem with your request."
-							});
-						}
+						toast.error("Password is incorrect", {
+							description: "There was a problem with your request."
+						});
 					}
 				}
 				setLoading(false);
@@ -129,7 +118,7 @@ const Login: NextPageWithAuthLayout = () => {
 				}
 			}
 		},
-		[isLoaded]
+		[handleOnboarding, isLoaded, router, setActive]
 	);
 
 	return (

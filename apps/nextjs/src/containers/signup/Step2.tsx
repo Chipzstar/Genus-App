@@ -1,7 +1,9 @@
 import type { FC } from "react";
 import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
@@ -36,7 +38,8 @@ interface Props {
 }
 
 const Step2: FC<Props> = () => {
-	const { nextStep, prevStep, context } = useStepper<UserState>();
+	const { query } = useRouter();
+	const { nextStep, context } = useStepper<UserState>();
 	const { mutateAsync: updateUser } = trpc.auth.updateUserStep2.useMutation();
 	const [loading, setLoading] = useState(false);
 
@@ -61,16 +64,19 @@ const Step2: FC<Props> = () => {
 				console.log(values);
 				await updateUser({
 					...values,
-					email: context.email
+					email: context?.email ?? query.email
 				});
 				nextStep();
 			} catch (error: any) {
 				console.log(error);
+				toast.error("Uh oh! Something went wrong.", {
+					description: "There was a problem with your request."
+				});
 			} finally {
 				setLoading(false);
 			}
 		},
-		[context.email, nextStep, updateUser]
+		[context.email, nextStep, query]
 	);
 
 	return (
@@ -260,7 +266,7 @@ const Step2: FC<Props> = () => {
 							type="submit"
 							radius="xl"
 							form="signup-form"
-							className="w-64 text-lg font-semibold sm:w-full sm:text-xl"
+							className="w-64 text-lg font-semibold sm:h-12 sm:w-full sm:text-xl"
 						>
 							Continue
 						</Button>

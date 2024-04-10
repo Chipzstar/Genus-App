@@ -149,16 +149,16 @@ const Step1: FC<Props> = () => {
 				return null;
 			}
 			try {
-				const result = await signUp.attemptEmailAddressVerification({
+				await signUp.attemptEmailAddressVerification({
 					code: values.code
 				});
 				setTimeout(() => {
-					console.log(result);
 					setCodeVerification(false);
 					setLoading(false);
 					if (files.length) {
 						setTimeout(
 							_clerk => {
+								console.log(_clerk);
 								_clerk?.user &&
 									void _clerk.user
 										.setProfileImage({

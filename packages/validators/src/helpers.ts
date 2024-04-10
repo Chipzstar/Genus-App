@@ -21,15 +21,10 @@ export function checkProfileType(currentYear: z.infer<typeof currentYearSchema>)
 }
 
 export function encryptString(str: string, key: string) {
-	const ciphertext = cryptoJS.AES.encrypt(str, key).toString();
-	console.log(ciphertext);
-	return ciphertext;
+	return cryptoJS.AES.encrypt(str, key).toString();
 }
 
 export function decryptString(str: string, key: string) {
-	console.log(str);
 	const bytes = cryptoJS.AES.decrypt(str, key);
-	const originalText = bytes.toString(cryptoJS.enc.Utf8);
-	console.log(originalText);
-	return originalText;
+	return bytes.toString(cryptoJS.enc.Utf8);
 }

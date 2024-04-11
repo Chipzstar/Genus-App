@@ -1,9 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
 import { TRPCError } from "@trpc/server";
+import { sql } from "drizzle-orm";
 import * as z from "zod";
 
-import { careerInterestToUser, companyToUser, eq, user, type careerInterest } from "@genus/db";
+import { careerInterestToUser, companyToUser, db, eq, user, type careerInterest } from "@genus/db";
 import { signupStep2Schema, signupStep3Schema } from "@genus/validators";
 import { CAREER_INTERESTS, companies } from "@genus/validators/constants";
 import { checkProfileType, encryptString } from "@genus/validators/helpers";
@@ -11,6 +12,12 @@ import { checkProfileType, encryptString } from "@genus/validators/helpers";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
+
+const getUserByEmail = db
+	.select()
+	.from(user)
+	.where(eq(user.email, sql.placeholder("email")))
+	.prepare("getUserByEmail");
 
 export const authRouter = createTRPCRouter({
 	getUniversities: publicProcedure.query(async () => {
@@ -51,11 +58,12 @@ export const authRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			try {
-				const dbUser = await ctx.db.query.user.findFirst({
-					where: eq(user.email, input.email)
-				});
-				if (dbUser) {
-					return dbUser.onboardingStatus;
+				// const dbUser = await ctx.db.query.user.findFirst({
+				// 	where: eq(user.email, input.email)
+				// });
+				const dbUser = await getUserByEmail.execute({ email: input.email });
+				if (dbUser[0]) {
+					return dbUser[0].onboardingStatus;
 				}
 				return "completed";
 			} catch (err: any) {

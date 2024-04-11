@@ -1,35 +1,60 @@
-import React, { ReactElement, useCallback, useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
+import type { ReactElement } from "react";
+import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useWindowSize } from "usehooks-ts";
-import * as z from "zod";
+import type * as z from "zod";
 
+import type { loginSchema } from "@genus/validators";
 import { forgotPasswordSchema } from "@genus/validators";
 
 import CodeInput from "~/components/CodeInput";
 import type { EmailFormValues } from "~/containers/CheckEmailForm";
 import { CheckEmailForm } from "~/containers/CheckEmailForm";
-import ResetPasswordForm, { NewPasswordFormValues } from "~/containers/ResetPasswordForm";
+import type { NewPasswordFormValues } from "~/containers/ResetPasswordForm";
+import ResetPasswordForm from "~/containers/ResetPasswordForm";
 import AuthLayout from "~/layout/AuthLayout";
+import { handleUserOnboarding } from "~/utils";
 import { trpc } from "~/utils/trpc";
 
 const ResetPassword = () => {
+	const router = useRouter();
+	// STATE
 	const [loading, setLoading] = useState(false);
+	const { signOut } = useAuth();
 	const [codeInputLoading, setCodeInputLoading] = useState(false);
 	const [email, setEmail] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const { isLoaded, signIn, setActive } = useSignIn();
-	const { width = 0, height = 0 } = useWindowSize();
 	const [resetMode, setPasswordResetMode] = useState<"email" | "password" | "code">("email");
+
+	// TRPC
+	const { mutateAsync: checkEmail } = trpc.auth.checkEmailExists.useMutation();
+	const { mutateAsync: checkOnboardingStatus } = trpc.auth.checkOnboardingStatus.useMutation();
+	const { mutate: addTempPassword } = trpc.auth.addTempPassword.useMutation();
+
 	const form = useForm<z.infer<typeof forgotPasswordSchema>>({
 		defaultValues: {
 			email: ""
 		},
 		resolver: zodResolver(forgotPasswordSchema)
 	});
-	const { mutateAsync: checkEmail } = trpc.auth.checkEmailExists.useMutation();
+
+	const onCheckOnboarding = useCallback(
+		async (loginInfo: z.infer<typeof loginSchema>) => {
+			return handleUserOnboarding(
+				loginInfo,
+				checkOnboardingStatus,
+				signOut,
+				addTempPassword,
+				toast.info,
+				router.push
+			);
+		},
+		[checkOnboardingStatus]
+	);
 
 	const onEmailSubmit = useCallback(
 		async (values: EmailFormValues) => {
@@ -128,10 +153,12 @@ const ResetPassword = () => {
 					console.log("************************************************");
 					toast.warning("2FA required!", {});
 				} else if (result.status === "complete") {
-					await setActive({ session: result.createdSessionId });
-					toast.success("Password reset successful!", {
-						description: "We're logging you in..."
-					});
+					if (await onCheckOnboarding({ email, password: newPassword })) {
+						await setActive({ session: result.createdSessionId });
+						toast.success("Password reset successful!", {
+							description: "We're logging you in..."
+						});
+					}
 				} else {
 					console.log(result);
 					toast.error("Uh oh! Something went wrong.", {
@@ -147,7 +174,7 @@ const ResetPassword = () => {
 				setCodeInputLoading(false);
 			}
 		},
-		[isLoaded, newPassword, setActive, signIn]
+		[isLoaded, newPassword, onCheckOnboarding, signIn, email]
 	);
 
 	return (
@@ -171,7 +198,6 @@ const ResetPassword = () => {
 				<img
 					src="/images/white-logo.png"
 					alt="genus-white"
-
 					className="mt-0.5 sm:w-96"
 					style={{
 						objectFit: "contain"
@@ -179,7 +205,7 @@ const ResetPassword = () => {
 				/>
 			</div>
 			{resetMode !== "email" ? (
-				<ResetPasswordForm onSubmit={onPasswordSubmit} loading={loading}/>
+				<ResetPasswordForm onSubmit={onPasswordSubmit} loading={loading} />
 			) : (
 				<CheckEmailForm onSubmit={onEmailSubmit} loading={loading} />
 			)}

@@ -15,7 +15,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } 
 import { Input } from "@genus/ui/input";
 import { loginSchema } from "@genus/validators";
 
-import { PATHS } from "~/utils";
+import { handleUserOnboarding, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
@@ -38,34 +38,15 @@ const Login: NextPageWithAuthLayout = () => {
 	});
 
 	const handleOnboarding = useCallback(
-		async ({ email, password }: z.infer<typeof loginSchema>) => {
-			let step = -1;
-			const status = await checkOnboardingStatus({
-				email
-			});
-			if (status === "not_started") {
-				step = 0;
-			} else if (status === "background_info") {
-				step = 1;
-			} else if (status === "career_info") {
-				step = 2;
-			}
-			if (step !== -1) {
-				await signOut();
-				addTempPassword({
-					email,
-					password
-				});
-				void router.push(`${PATHS.SIGNUP}?step=${step}&email=${email}`).then(() => {
-					toast.info("Finish onboarding", {
-						description: "We still need to collect some information about you before you can log in.",
-						closeButton: true,
-						duration: 3000
-					});
-				});
-				return false;
-			}
-			return true;
+		async (loginInfo: z.infer<typeof loginSchema>) => {
+			return handleUserOnboarding(
+				loginInfo,
+				checkOnboardingStatus,
+				signOut,
+				addTempPassword,
+				toast.info,
+				router.push
+			);
 		},
 		[checkOnboardingStatus]
 	);

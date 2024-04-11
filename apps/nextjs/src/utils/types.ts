@@ -94,6 +94,8 @@ export type Message = Messages[0];
 
 export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
 
+export type UserOnboardingStatus = inferRouterOutputs<AppRouter>["auth"]["checkOnboardingStatus"];
+
 export interface MessagesProps {
 	type: "message";
 	message: Message;

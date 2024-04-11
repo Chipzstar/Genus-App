@@ -1,4 +1,7 @@
 import { format, formatDistance } from "date-fns";
+import { z } from "zod";
+
+import type { UserOnboardingStatus } from "~/utils/types";
 
 export const PATHS = {
 	HOME: "/",
@@ -77,3 +80,59 @@ export function convertToNestedArray(arr: any[] = []) {
 export function capitalize(str: string | undefined) {
 	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
 }
+
+// LoginSchema definition
+const loginSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(8)
+});
+
+// Your function types
+type CheckOnboardingFunction = (args: { email: string }) => Promise<UserOnboardingStatus>;
+type SignOutFunction = () => Promise<void>;
+type AddTempPasswordFunction = (args: { email: string; password: string }) => any;
+type ToastInfoFunction = (title: string, args: ToastOptions) => any;
+type RouterPushFunction = (route: string) => Promise<boolean>;
+
+// Options for toast
+interface ToastOptions {
+	description: string;
+	closeButton: boolean;
+	duration: number;
+}
+
+export const handleUserOnboarding = async (
+	loginInfo: z.infer<typeof loginSchema>,
+	checkOnboardingFunction: CheckOnboardingFunction,
+	signOutFunction: SignOutFunction,
+	addTempPasswordFunction: AddTempPasswordFunction,
+	toastInfoFunction: ToastInfoFunction,
+	routerPushFunction: RouterPushFunction
+): Promise<boolean> => {
+	let step = -1;
+	const status = await checkOnboardingFunction({ email: loginInfo.email });
+
+	if (status === "not_started") step = 0;
+	else if (status === "background_info") step = 1;
+	else if (status === "career_info") step = 2;
+
+	if (step !== -1) {
+		await signOutFunction();
+		addTempPasswordFunction({
+			email: loginInfo.email,
+			password: loginInfo.password
+		});
+
+		void routerPushFunction(`${PATHS.SIGNUP}?step=${step}&email=${loginInfo.email}`).then(() => {
+			toastInfoFunction("Finish onboarding", {
+				description: "We still need to collect some information about you before you can log in.",
+				closeButton: true,
+				duration: 3000
+			});
+		});
+
+		return false;
+	}
+
+	return true;
+};

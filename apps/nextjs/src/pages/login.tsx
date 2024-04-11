@@ -53,7 +53,6 @@ const Login: NextPageWithAuthLayout = () => {
 
 	const onSubmit = useCallback(
 		async (values: z.infer<typeof loginSchema>) => {
-			// Do something with the form values.
 			// ✅ This will be type-safe and validated.
 			setLoading(true);
 			try {

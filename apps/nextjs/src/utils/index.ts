@@ -1,7 +1,7 @@
 import { format, formatDistance } from "date-fns";
 import { z } from "zod";
 
-import type { UserOnboardingStatus } from "~/utils/types";
+import type { AddTempPasswordInput, UserOnboardingStatusInput, UserOnboardingStatusOutput } from "~/utils/types";
 
 export const PATHS = {
 	HOME: "/",
@@ -88,11 +88,7 @@ const loginSchema = z.object({
 });
 
 // Your function types
-type CheckOnboardingFunction = (args: { email: string }) => Promise<UserOnboardingStatus>;
-type SignOutFunction = () => Promise<void>;
-type AddTempPasswordFunction = (args: { email: string; password: string }) => any;
-type ToastInfoFunction = (title: string, args: ToastOptions) => any;
-type RouterPushFunction = (route: string) => Promise<boolean>;
+type CheckOnboardingFunction = (args: UserOnboardingStatusInput) => Promise<UserOnboardingStatusOutput>;
 
 // Options for toast
 interface ToastOptions {
@@ -104,10 +100,10 @@ interface ToastOptions {
 export const handleUserOnboarding = async (
 	loginInfo: z.infer<typeof loginSchema>,
 	checkOnboardingFunction: CheckOnboardingFunction,
-	signOutFunction: SignOutFunction,
-	addTempPasswordFunction: AddTempPasswordFunction,
-	toastInfoFunction: ToastInfoFunction,
-	routerPushFunction: RouterPushFunction
+	signOutFunction: () => Promise<void>,
+	addTempPasswordFunction: (args: AddTempPasswordInput) => any,
+	toastInfoFunction: (title: string, args: ToastOptions) => any,
+	routerPushFunction: (route: string) => Promise<boolean>
 ): Promise<boolean> => {
 	let step = -1;
 	const status = await checkOnboardingFunction({ email: loginInfo.email });

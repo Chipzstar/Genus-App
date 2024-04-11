@@ -1,4 +1,4 @@
-import type { inferRouterOutputs } from "@trpc/server";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 import type { AppRouter } from "@genus/api";
 
@@ -94,7 +94,11 @@ export type Message = Messages[0];
 
 export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
 
-export type UserOnboardingStatus = inferRouterOutputs<AppRouter>["auth"]["checkOnboardingStatus"];
+export type AddTempPasswordInput = inferRouterInputs<AppRouter>["auth"]["addTempPassword"];
+
+export type UserOnboardingStatusInput = inferRouterInputs<AppRouter>["auth"]["checkOnboardingStatus"];
+
+export type UserOnboardingStatusOutput = inferRouterOutputs<AppRouter>["auth"]["checkOnboardingStatus"];
 
 export interface MessagesProps {
 	type: "message";

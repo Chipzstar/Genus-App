@@ -12,7 +12,7 @@ import schema, { company } from "./drizzle/schema";
  * Sanitizes a string by converting it to lowercase and replacing spaces with underscores.
  * @param str
  */
-export function labelEncode(str: string): string {
+function labelEncode(str: string): string {
 	return str
 		.toLowerCase()
 		.replace(/\s&\s/g, "_")

@@ -12,7 +12,8 @@
     "start": "pnpm with-env next start -p 3001",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "dopper:sync-env": "doppler secrets download --no-file --format env > .env.doppler"
+    "dopper:sync-env": "doppler secrets download --no-file --format env > .env.doppler",
+    "webhookthing": "pnpm dlx webhookthing@latest"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.3",
@@ -75,7 +76,7 @@
     "postcss": "^8.4.19",
     "prettier": "^3.1.1",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "eslintConfig": {
     "root": true,

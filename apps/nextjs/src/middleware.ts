@@ -15,11 +15,11 @@ export default authMiddleware({
 		"/test",
 		"/reset-password",
 		"/api/clerk/webhook",
+		"/api/typeform/webhook",
 		"/api/trpc/auth(.*)",
 		"/_axiom/web-vitals"
 	],
 	afterAuth(auth, req, evt) {
-		prettyPrint(auth);
 		// MANUAL check for this endpoint to ensure that it bypasses any redirects handled by the below cases
 		if (req.url.includes("/api/uploadthing?slug=")) {
 			return NextResponse.next();
@@ -38,10 +38,6 @@ export default authMiddleware({
 			const authUrl = new URL("/", req.url);
 			return NextResponse.redirect(authUrl.href);
 		}
-		// redirect to the default group page
-		// if (req.nextUrl.pathname === '/groups') {
-		//     return NextResponse.redirect(new URL("/groups/interngen-spring-into-banking-event", req.url));
-		// }
 		/*// If the user is logged in and trying to access a protected route, allow them to access route
         if (auth.userId && !auth.isPublicRoute) {
             return NextResponse.next()

@@ -1,11 +1,14 @@
+import { sql } from "drizzle-orm";
 import {
 	boolean,
 	index,
 	integer,
+	numeric,
 	pgEnum,
 	pgTable,
 	primaryKey,
 	serial,
+	text,
 	timestamp,
 	uniqueIndex,
 	varchar
@@ -33,7 +36,6 @@ export const userOnboardingStatus = pgEnum("user_onboardingstatus", [
 	"career_info",
 	"completed"
 ]);
-
 export const userEthnicity = pgEnum("user_ethnicity", [
 	"english__welsh__scottish__northern_irish_or_british",
 	"irish",
@@ -232,8 +234,8 @@ export const user = pgTable(
 	},
 	table => {
 		return {
-			clerkIdUserIdx: uniqueIndex("clerkIdIdx").on(table.clerkId),
-			emailUserIdx: uniqueIndex("emailIdx").on(table.email)
+			clerkIdUserIdx: uniqueIndex("clerkIdUserIdx").on(table.clerkId),
+			userEmailUserIdx: uniqueIndex("userEmailUserIdx").on(table.email)
 		};
 	}
 );
@@ -268,8 +270,8 @@ export const company = pgTable(
 	},
 	table => {
 		return {
-			companyIdUserIdx: uniqueIndex("companyIdIdx").on(table.companyId),
-			slugUserIdx: uniqueIndex("slugIdx").on(table.slug)
+			companyIdIdx: uniqueIndex("companyIdIdx").on(table.companyId),
+			companySlugIdx: uniqueIndex("companySlugIdx").on(table.slug)
 		};
 	}
 );
@@ -287,6 +289,59 @@ export const companyToUser = pgTable(
 	}
 );
 
+export const review = pgTable(
+	"review",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		reviewId: varchar("reviewId", { length: 191 }).notNull(),
+		companyId: varchar("companyId", { length: 191 }).notNull(),
+		companyName: varchar("companyName", { length: 191 }),
+		experienceType: varchar("experienceType", { length: 191 }),
+		rating: numeric("rating").notNull(),
+		isConverter: boolean("isConverter").default(false).notNull(),
+		completionYear: integer("completionYear"),
+		division: varchar("division", { length: 191 }),
+		region: varchar("region", { length: 191 }).notNull(),
+		pros: text("pros")
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
+		cons: text("cons")
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			reviewIdIdx: uniqueIndex("reviewIdIdx").on(table.reviewId)
+		};
+	}
+);
+
+export const typeformWebhook = pgTable(
+	"typeformWebhook",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		eventId: varchar("eventId", { length: 191 }).notNull(),
+		eventType: varchar("eventType", { length: 191 }).notNull(),
+		typeformId: varchar("typeformId", { length: 191 }).notNull(),
+		title: varchar("title", { length: 191 }).notNull(),
+		num_questions: integer("num_questions").notNull(),
+		num_answers: integer("num_answers").notNull(),
+		url: varchar("url", { length: 191 }),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			typeFormWebhookEventIdIdx: uniqueIndex("typeFormWebhookEventIdIdx").on(table.eventId)
+		};
+	}
+);
 /*******************************************************************************
  *****************************  RELATIONS  *************************************
 /*******************************************************************************/

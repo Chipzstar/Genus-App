@@ -1,0 +1,6 @@
+{
+  "url": "http://localhost:3001/api/typeform/webhook",
+  "headers": {
+    "typeform-signature": "8b42fb9f30d91336450255505adae051333d909ddc2da8cb2e13fc0bfa5a303e"
+  }
+}

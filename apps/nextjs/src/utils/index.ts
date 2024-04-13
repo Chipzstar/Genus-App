@@ -37,9 +37,9 @@ export function formatString(str: string | null | undefined) {
 export function labelEncode(str: string): string {
 	return str
 		.toLowerCase()
-		.replace(/\s+/g, "-")
+		.replace(/\s+/g, "_")
 		.replace(/[^\w-]+/g, "")
-		.replace(/--+/g, "-")
+		.replace(/--+/g, "_")
 		.replace(/^-+/, "")
 		.replace(/-+$/, "");
 }

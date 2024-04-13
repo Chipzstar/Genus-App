@@ -48,7 +48,7 @@ const Login: NextPageWithAuthLayout = () => {
 				router.push
 			);
 		},
-		[checkOnboardingStatus]
+		[signOut, checkOnboardingStatus]
 	);
 
 	const onSubmit = useCallback(

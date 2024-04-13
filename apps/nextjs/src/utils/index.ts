@@ -100,10 +100,10 @@ interface ToastOptions {
 export const handleUserOnboarding = async (
 	loginInfo: z.infer<typeof loginSchema>,
 	checkOnboardingFunction: CheckOnboardingFunction,
-	signOutFunction: () => Promise<void>,
+	signOut: () => Promise<void>,
 	addTempPasswordFunction: (args: AddTempPasswordInput) => any,
-	toastInfoFunction: (title: string, args: ToastOptions) => any,
-	routerPushFunction: (route: string) => Promise<boolean>
+	toastInfo: (title: string, args: ToastOptions) => any,
+	routerPush: (route: string) => Promise<boolean>
 ): Promise<boolean> => {
 	let step = -1;
 	const status = await checkOnboardingFunction({ email: loginInfo.email });
@@ -113,22 +113,20 @@ export const handleUserOnboarding = async (
 	else if (status === "career_info") step = 2;
 
 	if (step !== -1) {
-		await signOutFunction();
+		await signOut();
 		addTempPasswordFunction({
 			email: loginInfo.email,
 			password: loginInfo.password
 		});
 
-		void routerPushFunction(`${PATHS.SIGNUP}?step=${step}&email=${loginInfo.email}`).then(() => {
-			toastInfoFunction("Finish onboarding", {
+		void routerPush(`${PATHS.SIGNUP}?step=${step}&email=${loginInfo.email}`).then(() => {
+			toastInfo("Finish onboarding", {
 				description: "We still need to collect some information about you before you can log in.",
 				closeButton: true,
 				duration: 3000
 			});
 		});
-
 		return false;
 	}
-
 	return true;
 };

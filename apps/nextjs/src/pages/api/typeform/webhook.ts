@@ -38,7 +38,7 @@ const verifySignature = function (receivedSignature: string | string[] | undefin
 export async function handleFormResponse(event: TypeformWebhookPayload) {
 	try {
 		if (NODE_ENV === "development") await writeToFile(event);
-		/*await db
+		await db
 			.insert(typeformWebhook)
 			.values({
 				eventId: event.event_id,
@@ -48,7 +48,7 @@ export async function handleFormResponse(event: TypeformWebhookPayload) {
 				num_questions: event.form_response.definition.fields.length,
 				num_answers: event.form_response.answers.length
 			})
-			.returning();*/
+			.returning();
 		const { companyName, companyId } = await getCompany(event.form_response);
 		const experienceType = getExperienceType(event.form_response);
 		const division = getDivision(event.form_response);

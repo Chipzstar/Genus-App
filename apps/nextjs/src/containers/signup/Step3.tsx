@@ -68,6 +68,11 @@ const Step3: FC = () => {
 				password
 			});
 			if (result.status === "complete" && !!result.createdSessionId) {
+				window.open(
+					`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${email}`,
+					"_blank",
+					"noopener,noreferrer"
+				);
 				await setActive({ session: result.createdSessionId });
 				await replace(PATHS.HOME);
 				toast.success("Welcome to Genus!", {
@@ -98,9 +103,7 @@ const Step3: FC = () => {
 					...values,
 					email
 				});
-				const name = `${user.firstname} ${user.lastname}`;
 				await handleLogin(email, decryptString(user.tempPassword, NEXT_PUBLIC_AXIOM_TOKEN));
-				window.open(`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${email}&name=${name}`, "_blank");
 			} catch (error: any) {
 				console.log(error);
 				toast.error("Uh oh! Something went wrong.", {

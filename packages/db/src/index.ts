@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTableCreator } from "drizzle-orm/pg-core";
 
-import schema from "../drizzle/schema";
+import * as schema from "../drizzle/schema";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM.

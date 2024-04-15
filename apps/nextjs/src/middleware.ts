@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server";
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
-const prettyPrint = (str: any) => {
-	console.log("-".repeat(40));
-	console.log(str);
-	console.log("-".repeat(40));
-};
-
 export default authMiddleware({
 	debug: false,
 	publicRoutes: [
@@ -14,6 +8,7 @@ export default authMiddleware({
 		"/signup",
 		"/test",
 		"/reset-password",
+		"/api/uploadthing(.*)",
 		"/api/clerk/webhook",
 		"/api/typeform/webhook",
 		"/api/trpc/auth(.*)",

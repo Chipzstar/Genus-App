@@ -432,6 +432,18 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 	careerInterests: many(careerInterestToUser)
 }));
 
+export const companyRelations = relations(company, ({ one, many }) => ({
+	user: many(companyToUser),
+	review: many(review)
+}));
+
+export const reviewRelations = relations(review, ({ one, many }) => ({
+	company: one(company, {
+		fields: [review.companyId],
+		references: [company.companyId]
+	})
+}));
+
 export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
 	user: many(careerInterestToUser)
 }));
@@ -447,10 +459,6 @@ export const careerInterestToUserRelations = relations(careerInterestToUser, ({ 
 	})
 }));
 
-export const companyRelations = relations(company, ({ one, many }) => ({
-	user: many(companyToUser)
-}));
-
 export const companyToUserRelations = relations(companyToUser, ({ one }) => ({
 	user: one(user, {
 		fields: [companyToUser.userId],
@@ -461,26 +469,3 @@ export const companyToUserRelations = relations(companyToUser, ({ one }) => ({
 		references: [company.id]
 	})
 }));
-
-const schema = {
-	user,
-	group,
-	message,
-	comment,
-	reaction,
-	thread,
-	groupUser,
-	careerInterest,
-	careerInterestToUser,
-	usersRelations,
-	groupRelations,
-	messageRelations,
-	commentRelations,
-	threadRelations,
-	groupUserRelations,
-	reactionRelations,
-	careerInterestToUserRelations,
-	careerInterestRelations
-};
-
-export default schema;

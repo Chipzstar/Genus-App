@@ -9,7 +9,6 @@ import { db, eq, user } from "@genus/db";
 export const utapi = new UTApi();
 const f = createUploadthing();
 
-
 function defineMiddleware(authMsg: string) {
 	return async ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
 		const { userId } = getAuth(req);
@@ -33,7 +32,7 @@ export const ourFileRouter = {
 			console.log("Upload complete for userId:", metadata.userId);
 			console.log("file url", file.url);
 			// update the user with the new image url + image key in the database
-			const dbUser = await db
+			await db
 				.update(user)
 				.set({
 					imageKey: file.key,
@@ -65,7 +64,7 @@ export const ourFileRouter = {
 					.returning()
 			)[0];
 
-			console.log(dbUser)
+			console.log(dbUser);
 			return {
 				uploadedBy: metadata.userId,
 				imageKey: file.key,

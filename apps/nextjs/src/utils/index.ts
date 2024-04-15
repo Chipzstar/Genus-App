@@ -10,6 +10,7 @@ export const PATHS = {
 	FORGOT_PASSWORD: "/reset-password",
 	RESET_PASSWORD: "/reset-password",
 	INSIGHTS: "/insights",
+	COMPANIES: "/companies",
 	PROFILE: "/profile",
 	NOTIFICATIONS: "/notifications",
 	GROUPS: "/groups"
@@ -71,7 +72,7 @@ export function convertToNestedArray(arr: any[] = []) {
 	// Initialize the nested array
 	const nestedArray: any[][] = [];
 	// Create the nested array with unique items and their counts
-	countMap.forEach((reactions, value) => {
+	countMap.forEach((reactions, _) => {
 		nestedArray.push(reactions);
 	});
 	return nestedArray;

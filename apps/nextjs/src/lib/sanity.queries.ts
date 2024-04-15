@@ -11,6 +11,16 @@ const insightFields = groq`
   "author": author->{name, image},
 `;
 
+const companyFields = groq`
+	_id,
+    title,
+    "slug": slug.current,
+    "category": category->{title, slug},
+    mainImage,
+    publishedAt,
+    _updatedAt,
+`;
+
 export const settingsQuery = groq`*[_type == "settings"][0]`;
 
 export const allInsightsQuery = groq`
@@ -21,6 +31,11 @@ export const allInsightsQuery = groq`
 export const allGroupsQuery = groq`
 *[_type == "group"] | order(date desc, _updatedAt desc) {
   ${insightFields}
+}`;
+
+export const allCompaniesQuery = groq`
+*[_type == "company"] | order(date desc, _updatedAt desc) {
+  ${companyFields}
 }`;
 
 export const insightAndBodyQuery = groq`
@@ -41,6 +56,11 @@ export const insightBySlugQuery = groq`
 }
 `;
 
+export const companyBySlugQuery = groq`
+*[_type == "company" && slug.current == $slug][0] {
+  ${companyFields}
+}`;
+
 interface InsightImage {
 	type: string;
 	asset: {
@@ -48,10 +68,20 @@ interface InsightImage {
 		type: string;
 	};
 }
+
 export interface Author {
 	name?: string;
 	slug?: string;
 	image?: never;
+}
+
+export interface Category {
+	title: string;
+	slug: {
+		_type: "slug";
+		current: string;
+	};
+	description?: never;
 }
 
 export interface Insight {
@@ -67,6 +97,8 @@ export interface Insight {
 }
 
 export type Group = Omit<Insight, "body">;
+
+export type Company = Omit<Insight, "body" | "author"> & { category: Category };
 
 export interface Settings {
 	title?: string;

@@ -25,6 +25,7 @@
     "./label": "./src/components/label.tsx",
     "./multi-select": "./src/components/multi-select.tsx",
     "./popover": "./src/components/popover.tsx",
+    "./rating": "./src/components/rating.tsx",
     "./scroll-area": "./src/components/scroll-area.tsx",
     "./separator": "./src/components/separator.tsx",
     "./select": "./src/components/select.tsx",

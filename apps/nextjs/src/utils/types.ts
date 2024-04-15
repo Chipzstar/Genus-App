@@ -2,6 +2,8 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 import type { AppRouter } from "@genus/api";
 
+import type { Category } from "~/lib/sanity.queries";
+
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type UserState = {
 	name: string;
@@ -46,8 +48,8 @@ export interface InsightPanel {
 	image: string;
 }
 
-export interface GroupPanel {
-	slug: string;
-	title: string;
-	image: string;
+export type GroupPanel = InsightPanel;
+
+export interface CompanyPanel extends InsightPanel {
+	category: Category;
 }

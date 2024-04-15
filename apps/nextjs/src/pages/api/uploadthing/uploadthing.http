@@ -1,0 +1,10 @@
+GET http://localhost:3001/api/uploadthing/list
+Accept: application/json
+
+###
+POST http://localhost:3001/api/uploadthing/rename
+Content-Type: application/json
+
+{
+  "key": "9b80c6a9-8bcf-4772-9a06-aaed87326924-1wubw.webp"
+}

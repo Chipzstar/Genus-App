@@ -144,6 +144,10 @@
     @apply flex grow flex-col bg-white p-6 sm:px-12
   }
 
+  .scrollable-page-container {
+    @apply min-h-screen mx-auto text-primary py-6 md:py-8
+  }
+
   .page-container {
     @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
   }

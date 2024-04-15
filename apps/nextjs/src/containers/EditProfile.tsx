@@ -81,7 +81,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 			lastname: profile.lastname,
 			university: profile.university as z.infer<typeof universitiesSchema>,
 			broad_degree_course: profile.broadDegreeCourse as z.infer<typeof broadCourseCategorySchema>,
-			degree_name: profile.degreeName,
+			degree_name: profile.degreeName!,
 			completion_year: String(profile.completionYear) as z.infer<typeof completionYearSchema>,
 			career_interests: profile.careerInterests.map(item => item.slug)
 		},
@@ -277,7 +277,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 						size="lg"
 						className="h-12 w-full font-semibold"
 					>
-						Update
+						<span className="text-lg">Update</span>
 					</Button>
 				</div>
 			</form>

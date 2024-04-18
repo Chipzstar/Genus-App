@@ -24,6 +24,12 @@ export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
 
 export type Message = Messages[0];
 
+type GetCompaniesOutput = inferRouterOutputs<AppRouter>["company"]["getCompanies"];
+
+export type Company = GetCompaniesOutput[0];
+
+export type CompanyReviews = GetCompaniesOutput[0]["reviews"];
+
 export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
 
 export type AddTempPasswordInput = inferRouterInputs<AppRouter>["auth"]["addTempPassword"];

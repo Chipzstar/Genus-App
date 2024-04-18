@@ -148,6 +148,11 @@
     @apply min-h-screen mx-auto text-primary py-6 md:py-8
   }
 
+  .home-wrapper {
+    min-height: calc(100vh - 140px);
+    @apply flex-col bg-white p-6 sm:px-12 sm:pt-12
+  }
+
   .page-container {
     @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
   }
@@ -173,7 +178,7 @@
   }
 
   .insights-scrollable-container {
-    @apply items-center whitespace-nowrap overflow-x-auto sm:flex hidden overflow-y-hidden
+    @apply whitespace-nowrap overflow-x-auto sm:flex hidden overflow-y-hidden
   }
 
   .insights-scrollable-container > div {

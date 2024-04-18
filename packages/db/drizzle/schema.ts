@@ -304,11 +304,16 @@ export const review = pgTable(
 		completionYear: integer("completionYear"),
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
+		topTip: varchar("topTip", { length: 191 }).default("").notNull(),
 		pros: text("pros")
 			.array()
 			.notNull()
 			.default(sql`'{}'::text[]`),
 		cons: text("cons")
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
+		interviewQuestions: text("interviewQuestions")
 			.array()
 			.notNull()
 			.default(sql`'{}'::text[]`),
@@ -433,8 +438,8 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 }));
 
 export const companyRelations = relations(company, ({ one, many }) => ({
-	user: many(companyToUser),
-	review: many(review)
+	users: many(companyToUser),
+	reviews: many(review)
 }));
 
 export const reviewRelations = relations(review, ({ one, many }) => ({
@@ -445,7 +450,7 @@ export const reviewRelations = relations(review, ({ one, many }) => ({
 }));
 
 export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
-	user: many(careerInterestToUser)
+	users: many(careerInterestToUser)
 }));
 
 export const careerInterestToUserRelations = relations(careerInterestToUser, ({ one }) => ({

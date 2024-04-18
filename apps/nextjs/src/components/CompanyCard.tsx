@@ -1,36 +1,48 @@
 import type { FC } from "react";
-import React from "react";
+import React, { useMemo } from "react";
+import { Image } from "@nextui-org/react";
+import pluralize from "pluralize";
 
 import { Ratings } from "@genus/ui/rating";
 
-import type { CompanyPanel } from "~/utils/types";
+import type { Company, CompanyReviews } from "~/utils/types";
 
 interface Props {
 	onClick: () => void;
-	company: CompanyPanel;
-	numReviews: number;
+	company: Company;
+	reviews: CompanyReviews;
 }
 
-const CompanyCard: FC<Props> = ({ onClick, company, numReviews }) => {
+const CompanyCard: FC<Props> = ({ onClick, company, reviews }) => {
+	const numReviews = useMemo(() => `${pluralize("review", reviews.length, true)}`, [reviews]);
+
+	const rating = useMemo(() => {
+		const total = reviews.reduce((prev, acc) => prev + parseFloat(acc.rating), 0);
+		return reviews.length ? total / reviews.length : 2.5;
+	}, [reviews]);
+
 	return (
 		<div role="button" onClick={onClick} className="grid grid-cols-3 place-items-center gap-x-8 gap-y-4">
-			<img
-				src={company.image}
-				alt={company.title}
-				style={{
-					objectFit: "contain"
-				}}
-				width={150}
-				height={100}
-			/>
+			{company.logoUrl && (
+				<Image
+					src={company.logoUrl}
+					alt={company.name}
+					style={{
+						objectFit: "contain"
+					}}
+					radius="lg"
+					width={150}
+					height={100}
+				/>
+			)}
 			<div className="flex w-full flex-col space-y-2">
-				<span className="text-ellipsis text-base font-semibold text-black md:text-lg">{company.title}</span>
+				<span className="text-ellipsis text-base font-semibold text-black md:text-lg">{company.name}</span>
 				<div className="flex">
-					<Ratings size={20} rating={4} />
+					<Ratings size={20} rating={Math.round(rating)} />
 				</div>
-				<span className="text-sm text-black md:text-lg">{numReviews} reviews</span>
+				<span className="text-sm text-black md:text-lg">{numReviews}</span>
 			</div>
-			<div className="text-2xl font-semibold md:text-3xl"></div>
+			<div className="text-2xl font-semibold md:text-3xl">{rating.toFixed(1)}</div>
 		</div>
 	);
 };

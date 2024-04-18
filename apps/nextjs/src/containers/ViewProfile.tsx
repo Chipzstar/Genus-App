@@ -62,7 +62,8 @@ const ViewProfile = ({ profile }: { profile: UserProfile | undefined }) => {
 						window.$chatwoot.toggle("open");
 					}}
 				>
-					<MessagesSquare size={25} className="mr-3" /> Chat with Support
+					<MessagesSquare size={25} className="mr-3" />
+					<span className="text-lg sm:text-xl">Chat with Support</span>
 				</Button>
 			</div>
 		</section>

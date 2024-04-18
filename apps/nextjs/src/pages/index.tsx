@@ -4,27 +4,25 @@ import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
+import { Image, Listbox, ListboxItem } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
+import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 import { career_interests } from "@genus/validators/constants";
 
 import CompanyCard from "~/components/CompanyCard";
 import TopNav from "~/components/TopNav";
+import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
-import { getAllCompanies, getAllInsights, getClient } from "~/lib/sanity.client";
+import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
-import { PATHS } from "~/utils";
+import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
-import type { CompanyPanel, InsightPanel } from "~/utils/types";
-
-interface PageProps {
-	insights: InsightPanel[];
-	companies: CompanyPanel[];
-}
+import type { InsightPanel } from "~/utils/types";
 
 const COMPANY_TABS = [
 	{
@@ -46,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { userId } = getAuth(req);
 	const client = getClient();
 	const insights = await getAllInsights(client);
-	const companies = await getAllCompanies(client);
 
 	if (!userId) {
 		return {
@@ -73,19 +70,12 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		image: urlForImage(mainImage).height(100).width(150).url()
 	}));
 
-	const formattedCompanies: CompanyPanel[] = companies.map(({ slug, title, mainImage, category }) => ({
-		slug,
-		title,
-		image: urlForImage(mainImage).height(300).width(300).url(),
-		category
-	}));
-
 	await helpers.review.getReviews.prefetch();
+	await helpers.company.getCompanies.prefetch();
 
 	return {
 		props: {
 			insights: formattedInsights,
-			companies: formattedCompanies,
 			userId,
 			trpcState: helpers.dehydrate(),
 			...buildClerkProps(req)
@@ -93,14 +83,16 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	};
 };
 
-const Home = (props: PageProps) => {
+const Home = () => {
 	const router = useRouter();
 	const { user } = useClerk();
+	const { data: companies } = trpc.company.getCompanies.useQuery();
 	const { data: reviews } = trpc.review.getReviews.useQuery();
+
 	return (
 		<div className="scrollable-page-container">
 			<TopNav />
-			<div className="h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
+			<div className="home-wrapper">
 				<div className="mx-auto max-w-3xl">
 					<header className="mb-4 text-center text-xl font-semibold text-black md:text-3xl">
 						Welcome, {user?.firstName}!
@@ -111,32 +103,33 @@ const Home = (props: PageProps) => {
 					<section className="pb-6 pt-12">
 						<div className="flex flex-col space-y-4">
 							<div className="flex items-center justify-between">
-								<header className="text-xl font-semibold">Top ranked companies</header>
+								<header className="text-xl font-semibold sm:text-2xl">Top ranked companies</header>
 							</div>
 							<div className="insights-scrollable-container genus-scrollbar auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4">
-								{props.companies.map(({ image, slug, title, category }, index) => (
+								{companies?.map(({ logoUrl, slug, name, category }, index) => (
 									<div
 										key={index}
-										className="inline-flex flex-col"
+										className="inline-flex flex-col justify-between"
 										role="button"
 										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
 									>
-										<img
-											src={image}
-											alt={slug}
-											className="overflow-hidden rounded-2xl"
-											style={{
-												objectFit: "contain"
-											}}
-											width={150}
-											height={100}
-										/>
+										{logoUrl && (
+											<div className="flex grow items-center justify-start">
+												<Image
+													src={logoUrl}
+													alt={name}
+													className="overflow-hidden rounded-2xl"
+													height={100}
+													width={120}
+												/>
+											</div>
+										)}
 										<div className="flex flex-col text-black">
 											<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
-												{title}
+												{name}
 											</span>
 											<span className="text-ellipsis whitespace-nowrap text-xs font-medium md:text-sm">
-												{category.title}
+												{formatString(category)}
 											</span>
 										</div>
 									</div>
@@ -152,27 +145,29 @@ const Home = (props: PageProps) => {
 								>
 									<CarouselPrevious />
 									<CarouselContent>
-										{props.companies.map(({ image, slug, title, category }, index) => (
+										{companies?.map(({ logoUrl, slug, name, category }, index) => (
 											<CarouselItem
 												key={index}
 												onClick={() => router.push(`${PATHS.COMPANIES}/${slug}`)}
 												className="flex flex-col items-center space-y-3 overflow-hidden pl-2"
 											>
-												<img
-													src={image}
-													alt={title}
-													style={{
-														objectFit: "contain"
-													}}
-													width={125}
-													height={50}
-												/>
+												{logoUrl && (
+													<img
+														src={logoUrl}
+														alt={name}
+														style={{
+															objectFit: "contain"
+														}}
+														width={125}
+														height={50}
+													/>
+												)}
 												<div className="flex flex-col items-center text-gray-800">
 													<span className="overflow-hidden text-ellipsis px-3 text-xs font-semibold">
-														{title}
+														{name}
 													</span>
 													<span className="text-ellipsis whitespace-nowrap text-xs font-medium md:text-sm">
-														{category.title}
+														{category}
 													</span>
 												</div>
 											</CarouselItem>
@@ -184,13 +179,13 @@ const Home = (props: PageProps) => {
 						</div>
 					</section>
 					<section className="h-full overflow-y-scroll pt-6 md:pt-12">
-						<div className="flex flex-col space-y-4" role="button">
-							<header className="text-xl font-semibold">
+						<div className="mb-4 flex flex-col" role="button">
+							<header className="text-xl font-semibold sm:text-2xl">
 								<span>Companies</span>
 							</header>
 						</div>
 						<div className="flex flex-col">
-							<Tabs defaultValue="banking_finance" className="relative w-full">
+							<Tabs defaultValue="banking_finance" className="relative mb-3 w-full">
 								<TabsList variant="outline" className="w-full">
 									{COMPANY_TABS.map((tab, index) => (
 										<TabsTrigger variant="outline" key={index} value={tab.value} className="grow">
@@ -203,37 +198,57 @@ const Home = (props: PageProps) => {
 								</TabsList>
 								{COMPANY_TABS.map((tab, index) => (
 									<TabsContent key={index} value={tab.value}>
-										{props.companies
-											.filter(({ category }) => category.slug.current === tab.value)
+										{companies
+											?.filter(({ category }) => category === tab.value)
 											.map((company, index) => (
 												<CompanyCard
 													key={index}
 													onClick={() => router.push(`${PATHS.COMPANIES}/${company.slug}`)}
 													company={company}
-													numReviews={
-														reviews?.filter(review => review.companyName === company.title)
-															.length ?? 0
-													}
+													reviews={company.reviews}
 												/>
 											))}
 									</TabsContent>
 								))}
 								<TabsContent value="other">
-									{props.companies
-										.filter(({ category }) => !(category.slug.current in career_interests))
+									{companies
+										?.filter(({ category }) => !(category in career_interests))
 										.map((company, index) => (
 											<CompanyCard
 												key={index}
 												onClick={() => router.push(`${PATHS.COMPANIES}/${company.slug}`)}
 												company={company}
-												numReviews={
-													reviews?.filter(review => review.companyName === company.title)
-														.length ?? 0
-												}
+												reviews={company.reviews}
 											/>
 										))}
 								</TabsContent>
 							</Tabs>
+							<div className="flex w-full items-center justify-center">
+								<Button variant="ghost" size="lg" onClick={() => router.push(PATHS.COMPANIES)}>
+									<span className="text-lg sm:text-xl">See all companies</span>
+								</Button>
+							</div>
+						</div>
+					</section>
+					<section className="h-full overflow-y-scroll pt-6 md:pt-12">
+						<div className="mb-4 flex flex-col" role="button">
+							<header className="text-xl font-semibold sm:text-2xl">
+								<span>Top Tips</span>
+							</header>
+						</div>
+						<div className="sm:px-6">
+							<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.COMPANIES}/${slug}`)}>
+								{reviews?.map(review => (
+									<ListboxItem key={review.companyId} className="px-0 py-0">
+										<TopTipCard
+											id={review.reviewId}
+											content={review.topTip}
+											company={review.companyName}
+											experience={review.experienceType}
+										/>
+									</ListboxItem>
+								))}
+							</Listbox>
 						</div>
 					</section>
 				</div>

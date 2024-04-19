@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useNotifications } from "@magicbell/magicbell-react";
 import { cx } from "class-variance-authority";
 
-import { BellIcon, GroupIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
+import { BellIcon, CompanyIcon, GroupIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
 
 import { PATHS } from "~/utils";
 
@@ -35,16 +35,16 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 				<button
 					type="button"
 					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
-					onClick={() => router.push(PATHS.GROUPS)}
+					onClick={() => router.push(PATHS.COMPANIES)}
 				>
-					<GroupIcon active={activePage.includes(PATHS.GROUPS)} size={25} />
+					<CompanyIcon active={activePage.includes(PATHS.COMPANIES)} size={25} />
 					<span
 						className={cx(
-							activePage.includes(PATHS.GROUPS) && "text-primary group-hover:text-primary",
+							activePage.includes(PATHS.COMPANIES) && "text-primary group-hover:text-primary",
 							"text-xs sm:text-sm"
 						)}
 					>
-						Groups
+						Companies
 					</span>
 				</button>
 				<button

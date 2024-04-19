@@ -6,7 +6,7 @@ interface Props {
 	id: string;
 	content: string | null;
 	company: string;
-	experience: string;
+	experience: string | null;
 }
 
 const TopTipCard: FC<Props> = ({ content, company, experience }) => {

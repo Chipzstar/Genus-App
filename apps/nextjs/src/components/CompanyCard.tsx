@@ -8,12 +8,12 @@ import { Ratings } from "@genus/ui/rating";
 import type { Company, CompanyReviews } from "~/utils/types";
 
 interface Props {
-	onClick: () => void;
+	onClick?: () => void;
 	company: Company;
 	reviews: CompanyReviews;
 }
 
-const CompanyCard: FC<Props> = ({ onClick, company, reviews }) => {
+const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews }) => {
 	const numReviews = useMemo(() => `${pluralize("review", reviews.length, true)}`, [reviews]);
 
 	const rating = useMemo(() => {

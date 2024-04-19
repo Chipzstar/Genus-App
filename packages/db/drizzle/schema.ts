@@ -297,7 +297,7 @@ export const review = pgTable(
 		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		reviewId: varchar("reviewId", { length: 191 }).notNull(),
 		companyId: varchar("companyId", { length: 191 }).notNull(),
-		companyName: varchar("companyName", { length: 191 }),
+		companyName: varchar("companyName", { length: 191 }).notNull(),
 		experienceType: varchar("experienceType", { length: 191 }),
 		rating: numeric("rating").notNull(),
 		isConverter: boolean("isConverter").default(false).notNull(),

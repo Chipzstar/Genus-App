@@ -237,8 +237,12 @@ const Home = () => {
 							</header>
 						</div>
 						<div className="sm:px-6">
-							<Listbox aria-label="Actions" onAction={slug => router.push(`${PATHS.COMPANIES}/${slug}`)}>
-								{reviews?.map(review => (
+							<Listbox
+								aria-label="Actions"
+								items={reviews}
+								onAction={slug => router.push(`${PATHS.COMPANIES}/${slug}`)}
+							>
+								{review => (
 									<ListboxItem key={review.companyId} className="px-0 py-0">
 										<TopTipCard
 											id={review.reviewId}
@@ -247,7 +251,7 @@ const Home = () => {
 											experience={review.experienceType}
 										/>
 									</ListboxItem>
-								))}
+								)}
 							</Listbox>
 						</div>
 					</section>

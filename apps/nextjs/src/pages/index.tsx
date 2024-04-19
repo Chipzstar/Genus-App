@@ -18,7 +18,6 @@ import CompanyCard from "~/components/CompanyCard";
 import TopNav from "~/components/TopNav";
 import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
-import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
@@ -42,15 +41,10 @@ const COMPANY_TABS = [
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { req } = ctx;
 	const { userId } = getAuth(req);
-	const client = getClient();
-	const insights = await getAllInsights(client);
 
 	if (!userId) {
 		return {
-			props: {
-				insights: [],
-				companies: []
-			}
+			props: {}
 		};
 	}
 
@@ -64,18 +58,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	const formattedInsights: InsightPanel[] = insights.map(({ slug, title, mainImage }) => ({
-		slug,
-		title,
-		image: urlForImage(mainImage).height(100).width(150).url()
-	}));
-
 	await helpers.review.getReviews.prefetch();
 	await helpers.company.getCompanies.prefetch();
 
 	return {
 		props: {
-			insights: formattedInsights,
 			userId,
 			trpcState: helpers.dehydrate(),
 			...buildClerkProps(req)

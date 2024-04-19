@@ -112,7 +112,7 @@ const Companies = () => {
 						>
 							{company => (
 								<ListboxItem key={company.slug} className="px-0 py-0" textValue={company.name}>
-									<CompanyCard company={company} reviews={company.reviews} />
+									<CompanyCard company={company} reviews={company.reviews} hideRating />
 								</ListboxItem>
 							)}
 						</Listbox>

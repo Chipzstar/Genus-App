@@ -1,4 +1,5 @@
-import React, { type ReactElement } from "react";
+import React from "react";
+import type { ReactElement } from "react";
 import { useRouter } from "next/router";
 
 import { Button } from "@genus/ui/button";
@@ -13,10 +14,10 @@ const NotFound = () => {
 			<div className="mx-auto max-w-lg space-y-8 text-center">
 				<h3 className="text-xl font-semibold text-secondary sm:text-3xl">404 Error</h3>
 				<p className="text-4xl font-semibold sm:text-5xl">Page not found</p>
-				<p className="text-xl leading-normal">
+				<p className="text-lg leading-normal sm:text-xl">
 					Sorry, the page you are looking for could not be found or has been removed.
 				</p>
-				<div className="flex flex-wrap items-center justify-center gap-3">
+				<div className="flex flex-wrap items-center justify-center gap-4">
 					<Button
 						onClick={router.back}
 						className="block w-2/5 rounded-lg bg-secondary px-4 py-2 font-medium text-white duration-150 hover:bg-secondary-400 active:bg-indigo-700"
@@ -25,7 +26,7 @@ const NotFound = () => {
 					</Button>
 					<Button
 						onClick={() => router.push(PATHS.HOME)}
-						className="block w-2/5 rounded-lg px-4 py-2 font-medium text-gray-700 duration-150 active:bg-gray-100"
+						className="block rounded-lg px-4 py-2 font-medium text-gray-700 duration-150 active:bg-gray-100 sm:w-2/5"
 					>
 						Back to Homepage
 					</Button>

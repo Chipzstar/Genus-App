@@ -13,10 +13,13 @@ const TopTipCard: FC<Props> = ({ content, company, experience }) => {
 	return (
 		<div className="flex items-center gap-x-3 pb-6 text-black sm:gap-x-6">
 			<div className="h-auto w-24">
-				<Image src="/images/checkmark.svg" height={75} width={75} />
+				<Image src="/images/checkmark.svg" height={50} width={50} />
 			</div>
-			<div className="flex shrink flex-col">
-				<blockquote className="font-semibold sm:text-2.5xl">
+			<div className="flex shrink flex-col tracking-tight">
+				<div className="relative z-10 font-semibold">
+					<p className="text-gray-800 sm:text-2xl">{content}</p>
+				</div>
+				<blockquote className="sm:text-2.5xl">
 					<svg
 						className="absolute -top-3 start-10 size-12 text-gray-100 sm:-top-6 sm:start-16 sm:size-16"
 						width="16"
@@ -31,10 +34,6 @@ const TopTipCard: FC<Props> = ({ content, company, experience }) => {
 							fill="currentColor"
 						></path>
 					</svg>
-
-					<div className="relative z-10">
-						<p className="text-gray-800 sm:text-2xl">{content}</p>
-					</div>
 				</blockquote>
 				<p className="text-sm font-light italic sm:text-base">
 					{company} - {experience}

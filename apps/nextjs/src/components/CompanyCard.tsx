@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import { Image } from "@nextui-org/react";
 import pluralize from "pluralize";
 
+import { cn } from "@genus/ui";
 import { Ratings } from "@genus/ui/rating";
 
 import type { Company, CompanyReviews } from "~/utils/types";
@@ -11,9 +12,10 @@ interface Props {
 	onClick?: () => void;
 	company: Company;
 	reviews: CompanyReviews;
+	hideRating?: boolean;
 }
 
-const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews }) => {
+const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRating = false }) => {
 	const numReviews = useMemo(() => `${pluralize("review", reviews.length, true)}`, [reviews]);
 
 	const rating = useMemo(() => {
@@ -27,6 +29,7 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews }) => {
 				<Image
 					src={company.logoUrl}
 					alt={company.name}
+					className="sm:p-5"
 					style={{
 						objectFit: "contain"
 					}}
@@ -35,14 +38,24 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews }) => {
 					height={100}
 				/>
 			)}
-			<div className="flex w-full flex-col space-y-2">
+			<div
+				className={cn("flex w-full flex-col space-y-2", {
+					"col-span-2": hideRating
+				})}
+			>
 				<span className="text-ellipsis text-base font-semibold text-black md:text-lg">{company.name}</span>
 				<div className="flex">
 					<Ratings size={20} rating={Math.round(rating)} />
 				</div>
 				<span className="text-sm text-black md:text-lg">{numReviews}</span>
 			</div>
-			<div className="text-2xl font-semibold md:text-3xl">{rating.toFixed(1)}</div>
+			<div
+				className={cn("text-2xl font-semibold md:text-3xl", {
+					hidden: hideRating
+				})}
+			>
+				{rating.toFixed(1)}
+			</div>
 		</div>
 	);
 };

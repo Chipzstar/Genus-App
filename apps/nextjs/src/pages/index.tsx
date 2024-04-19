@@ -213,7 +213,7 @@ const Home = () => {
 							</Tabs>
 							<div className="flex w-full items-center justify-center">
 								<Button variant="ghost" size="lg" onClick={() => router.push(PATHS.COMPANIES)}>
-									<span className="text-lg sm:text-xl">See all companies</span>
+									<span className="text-base sm:text-xl">See all companies</span>
 								</Button>
 							</div>
 						</div>

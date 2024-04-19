@@ -18,10 +18,8 @@ import CompanyCard from "~/components/CompanyCard";
 import TopNav from "~/components/TopNav";
 import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
-import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
-import type { InsightPanel } from "~/utils/types";
 
 const COMPANY_TABS = [
 	{
@@ -154,7 +152,7 @@ const Home = () => {
 														{name}
 													</span>
 													<span className="text-ellipsis whitespace-nowrap text-xs font-medium md:text-sm">
-														{category}
+														{formatString(category)}
 													</span>
 												</div>
 											</CarouselItem>

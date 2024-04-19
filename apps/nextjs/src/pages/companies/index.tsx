@@ -123,7 +123,12 @@ const Companies = () => {
 	);
 };
 
-Companies.getLayout = function getLayout(page: ReactElement) {
-	return <AppLayout>{page}</AppLayout>;
+Companies.getLayout = function getLayout(
+	page: ReactElement,
+	props: {
+		userId: string;
+	}
+) {
+	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 export default Companies;

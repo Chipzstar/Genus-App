@@ -212,7 +212,10 @@ const Home = () => {
 								))}
 								<TabsContent value="other">
 									{companies
-										?.filter(({ category }) => !(category in career_interests))
+										?.filter(
+											({ category }) =>
+												category === "tech" || !career_interests.includes(category)
+										)
 										.map((company, index) => (
 											<CompanyCard
 												key={index}

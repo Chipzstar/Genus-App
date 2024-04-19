@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useNotifications } from "@magicbell/magicbell-react";
 import { cx } from "class-variance-authority";
 
-import { BellIcon, CompanyIcon, GroupIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
+import { BellIcon, CompanyIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
 
 import { PATHS } from "~/utils";
 

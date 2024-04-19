@@ -16,6 +16,7 @@ const COMPANY_NAME_FIELD_ID = "ZEQq3C2K8gPz";
 const OTHER_COMPANY_NAME_FIELD_ID = "Fq3ZNvlIW4co";
 const EXPERIENCE_TYPE_FIELD_ID = "SlCBuLn0rCmE";
 const INDUSTRY_FIELD_ID = "7JB0DGtjMraj";
+const TOP_TIP_FIELD_ID = "eXK07QSdTjCO";
 const INDUSTRY_OPTIONS_MAP: Record<IndustryChoiceId, { label: Industry; divisionFieldId: string }> = {
 	fDKse3jQNE1r: {
 		label: "banking_finance",
@@ -114,6 +115,12 @@ export const getRegion = (form: FormResponse) => {
 	const region = form.answers.find(a => a.field.id === REGION_FIELD_ID);
 	if (region?.type !== "choice") return null;
 	return region.choice.label;
+};
+
+export const getTopTip = (form: FormResponse) => {
+	const topTip = form.answers.find(a => a.field.id === TOP_TIP_FIELD_ID);
+	if (topTip?.type !== "text") return "";
+	return topTip.text;
 };
 
 export const calculateRating = (form: FormResponse) => {

@@ -304,7 +304,7 @@ export const review = pgTable(
 		completionYear: integer("completionYear"),
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
-		topTip: varchar("topTip", { length: 191 }).default("").notNull(),
+		topTip: varchar("topTip", { length: 191 }).notNull(),
 		pros: text("pros")
 			.array()
 			.notNull()

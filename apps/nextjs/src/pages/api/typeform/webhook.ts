@@ -19,7 +19,8 @@ import {
 	getCompletionYear,
 	getDivision,
 	getExperienceType,
-	getRegion
+	getRegion,
+	getTopTip
 } from "~/server/typeform";
 import type { TypeformWebhookPayload } from "~/types/typeform";
 
@@ -56,6 +57,7 @@ export async function handleFormResponse(event: TypeformWebhookPayload) {
 		const region = getRegion(event.form_response);
 		const rating = calculateRating(event.form_response);
 		const isConverter = checkConverted(event.form_response);
+		const topTip = getTopTip(event.form_response);
 		// const { pros, cons } = getProsAndCons(event.form_response);
 		console.table({ companyId, companyName, division, experienceType, completionYear, region, rating });
 		if (companyId && region && rating && isConverter) {
@@ -70,7 +72,8 @@ export async function handleFormResponse(event: TypeformWebhookPayload) {
 					completionYear,
 					region,
 					isConverter,
-					rating: rating.toFixed(2)
+					rating: rating.toFixed(2),
+					topTip
 				})
 				.returning();
 			prettyPrint(dbReview[0]);
@@ -102,7 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				break;
 		}
 		return res.status(200).json({ received: true, message: `Webhook received`, data: { isValid, ...data } });
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err);
 		return res.status(400).json({ received: true, message: `Webhook received`, error: err.message });
 	}

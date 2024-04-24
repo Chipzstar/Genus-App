@@ -96,7 +96,7 @@ const Home = () => {
 										key={index}
 										className="inline-flex flex-col justify-between"
 										role="button"
-										onClick={() => router.push(`${PATHS.INSIGHTS}/${slug}`)}
+										onClick={() => router.push(`${PATHS.COMPANIES}/${slug}`)}
 									>
 										{logoUrl && (
 											<div className="flex grow items-center justify-start">

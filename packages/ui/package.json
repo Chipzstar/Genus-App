@@ -25,6 +25,7 @@
     "./label": "./src/components/label.tsx",
     "./multi-select": "./src/components/multi-select.tsx",
     "./popover": "./src/components/popover.tsx",
+    "./progress": "./src/components/progress.tsx",
     "./rating": "./src/components/rating.tsx",
     "./scroll-area": "./src/components/scroll-area.tsx",
     "./separator": "./src/components/separator.tsx",
@@ -53,7 +54,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-collapsible": "^1.0.3",
@@ -81,8 +81,7 @@
     "react-loader-spinner": "^6.1.6",
     "sonner": "^1.4.1",
     "tailwind-merge": "^2.0.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.18.0"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@genus/eslint-config": "workspace:^0.2.0",

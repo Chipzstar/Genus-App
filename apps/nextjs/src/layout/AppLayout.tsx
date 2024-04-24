@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { MagicBellProvider } from "@magicbell/magicbell-react";
 import { cx } from "class-variance-authority";
 
-import BottomNav from "~/components/BottomNav";
 import ChatwootWidget from "~/components/ChatwootWidget";
 import { env } from "~/env";
+import BottomNav from "~/layout/BottomNav";
 import { fontSans } from "~/layout/Layout";
 
 const { NEXT_PUBLIC_MAGICBELL_API_KEY, NEXT_PUBLIC_CHATWOOT_TOKEN } = env;

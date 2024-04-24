@@ -2,13 +2,14 @@ import type { ReactElement } from "react";
 import React from "react";
 import type { GetServerSideProps } from "next/types";
 import { useNotifications } from "@magicbell/magicbell-react";
+
 import { Separator } from "@genus/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 
 import NotificationList from "~/components/NotificationList";
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
-import TopNav from "~/components/TopNav";
 
 export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 

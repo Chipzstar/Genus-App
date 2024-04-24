@@ -2,24 +2,31 @@ import type { FC } from "react";
 import React from "react";
 import { Image } from "@nextui-org/react";
 
+import { cn } from "@genus/ui";
+
 interface Props {
 	id: string;
 	content: string | null;
 	company: string;
 	experience: string | null;
+	hideBlockQuote?: boolean;
 }
 
-const TopTipCard: FC<Props> = ({ content, company, experience }) => {
+const TopTipCard: FC<Props> = ({ content, company, experience, hideBlockQuote = false }) => {
 	return (
-		<div className="flex items-center gap-x-3 pb-6 text-black sm:gap-x-6">
-			<div className="h-auto w-24">
+		<div className="flex shrink items-center gap-x-3 pb-6 text-black sm:gap-x-6">
+			<div className="h-auto w-24 max-w-fit">
 				<Image src="/images/checkmark.svg" height={50} width={50} />
 			</div>
 			<div className="flex shrink flex-col tracking-tight">
 				<div className="relative z-10 font-semibold">
 					<p className="text-gray-800 sm:text-2xl">{content}</p>
 				</div>
-				<blockquote className="sm:text-2.5xl">
+				<blockquote
+					className={cn("sm:text-2.5xl", {
+						hidden: hideBlockQuote
+					})}
+				>
 					<svg
 						className="absolute -top-3 start-10 size-12 text-gray-100 sm:-top-6 sm:start-16 sm:size-16"
 						width="16"

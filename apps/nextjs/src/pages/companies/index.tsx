@@ -9,14 +9,13 @@ import { useDebounceValue } from "usehooks-ts";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
-import { Input } from "@genus/ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { career_interests } from "@genus/validators/constants";
 
 import CompanyCard from "~/components/CompanyCard";
-import TopNav from "~/components/TopNav";
+import SearchFilterPanel from "~/components/SearchFilterPanel";
 import AppLayout from "~/layout/AppLayout";
-import { formatString, PATHS } from "~/utils";
+import TopNav from "~/layout/TopNav";
+import { PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { Company } from "~/utils/types";
 
@@ -77,33 +76,7 @@ const Companies = () => {
 			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-2xl font-bold text-black sm:text-4xl">Companies</header>
-					<div className="flex items-center justify-between space-x-10 py-6">
-						<div className="flex sm:w-64">
-							<Input
-								value={search}
-								onChange={handleChange}
-								className="w-full rounded-3xl bg-neutral-100 font-semibold text-black placeholder:text-neutral-400"
-								placeholder="Search"
-							/>
-						</div>
-						<div className="flex sm:w-64">
-							<Select>
-								<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
-									<SelectValue defaultValue="all" placeholder="All types" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectItem value="all">All types</SelectItem>
-										{career_interests.map((item, index) => (
-											<SelectItem key={index} value={item}>
-												{formatString(item)}
-											</SelectItem>
-										))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</div>
-					</div>
+					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
 					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll">
 						<Listbox
 							aria-label="Actions"

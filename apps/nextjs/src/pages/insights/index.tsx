@@ -1,4 +1,5 @@
-import React, { ChangeEvent, ReactElement, useCallback, useState } from "react";
+import type { ChangeEvent, ReactElement } from "react";
+import React, { useCallback, useState } from "react";
 import type { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
@@ -9,8 +10,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { career_interests } from "@genus/validators/constants";
 
 import InsightCard from "~/components/InsightCard";
-import TopNav from "~/components/TopNav";
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { getAllInsights, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";
@@ -62,11 +63,16 @@ const Insights = (props: PageProps) => {
 	);
 
 	return (
-		<div className="page-container overflow-y-hidden bg-white">
-			<TopNav imagePath="/images/green-logo.png" />
-			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
+		<div className="page-container overflow-y-hidden">
+			<TopNav />
+			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto max-w-3xl">
-					<header className="text-2xl font-bold text-black sm:text-4xl">Industry Insights</header>
+					<header className="mb-2 text-2xl font-bold text-black sm:text-4xl">
+						InternGen speaker insights!
+					</header>
+					<p className="text-lg font-semibold text-gray-800">
+						Stay tuned for our upcoming networking events!
+					</p>
 					<div className="flex items-center justify-between space-x-10 py-6">
 						<div className="flex sm:w-64">
 							<Input

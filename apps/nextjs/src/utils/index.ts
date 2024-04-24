@@ -1,6 +1,8 @@
 import { format, formatDistance } from "date-fns";
 import { z } from "zod";
 
+import type { careerInterestsSchema } from "@genus/validators";
+
 import type { AddTempPasswordInput, UserOnboardingStatusInput, UserOnboardingStatusOutput } from "~/utils/types";
 
 export const PATHS = {
@@ -16,13 +18,18 @@ export const PATHS = {
 	GROUPS: "/groups"
 };
 
+export type FormatType = "default" | "category";
+type StringInput<T> = T extends "category" ? z.infer<typeof careerInterestsSchema> : string | null | undefined;
+
 /**
- * Replaces underscores, two underscores, and converts the first character of each word to uppercase, handling commas
- * correctly.
- * @param str the string to format
+ * Formats a string based on the specified format type.
+ * @param str The input string to be formatted.
+ * @param format The format type, either "default" or "category". Defaults to "default".
+ * @returns The formatted string.
  */
-export function formatString(str: string | null | undefined) {
+export function formatString<T extends FormatType = "default">(str: StringInput<T>, format?: T): string {
 	if (!str) return "";
+	if (format === "category" && str === "banking_finance") return "Banking & Finance";
 	if (str.length <= 2) return str.toUpperCase();
 	return str
 		.replace(/__/g, ", ") // replace two underscores with comma followed by a space
@@ -80,6 +87,17 @@ export function convertToNestedArray(arr: any[] = []) {
 
 export function capitalize(str: string | undefined) {
 	return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : str;
+}
+
+/**
+ * Converts a numeric value to a percentage based on a total value.
+ * @param value The numeric value to be converted to a percentage.
+ * @param total The total value against which the value is to be converted.
+ * @returns The percentage value of the given value with respect to the total value.
+ */
+export function convertToPercentage(value: number, total: number): number {
+	if (total === 0) return 0;
+	return Math.round((value / total) * 100);
 }
 
 // LoginSchema definition

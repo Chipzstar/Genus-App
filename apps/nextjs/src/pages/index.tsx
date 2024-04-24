@@ -15,9 +15,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 import { career_interests } from "@genus/validators/constants";
 
 import CompanyCard from "~/components/CompanyCard";
-import TopNav from "~/components/TopNav";
 import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 
@@ -114,7 +114,7 @@ const Home = () => {
 												{name}
 											</span>
 											<span className="text-ellipsis whitespace-nowrap text-xs font-medium md:text-sm">
-												{formatString(category)}
+												{formatString(category, "category")}
 											</span>
 										</div>
 									</div>
@@ -152,7 +152,7 @@ const Home = () => {
 														{name}
 													</span>
 													<span className="text-ellipsis whitespace-nowrap text-xs font-medium md:text-sm">
-														{formatString(category)}
+														{formatString(category, "category")}
 													</span>
 												</div>
 											</CarouselItem>

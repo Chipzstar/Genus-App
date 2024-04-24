@@ -18,8 +18,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { career_interests } from "@genus/validators/constants";
 
 import InsightCard from "~/components/InsightCard";
-import TopNav from "~/components/TopNav";
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { getAllGroups, getClient } from "~/lib/sanity.client";
 import { urlForImage } from "~/lib/sanity.image";
 import { formatString, PATHS } from "~/utils";

@@ -19,7 +19,7 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRat
 	const numReviews = useMemo(() => `${pluralize("review", reviews.length, true)}`, [reviews]);
 
 	const rating = useMemo(() => {
-		const total = reviews.reduce((prev, acc) => prev + parseFloat(acc.rating), 0);
+		const total = reviews.reduce((prev, acc) => prev + parseFloat(acc.avgRating), 0);
 		return reviews.length ? total / reviews.length : 2.5;
 	}, [reviews]);
 

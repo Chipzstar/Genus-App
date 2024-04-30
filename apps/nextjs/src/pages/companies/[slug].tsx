@@ -100,7 +100,7 @@ const CompanySlug = () => {
 					{isLoading ? (
 						<Loader />
 					) : company ? (
-						<section className="flex h-full flex-col px-4">
+						<section className="flex h-full flex-col sm:px-4">
 							<div className="-mb-12 flex w-full justify-center">
 								<Image
 									className="border-gray bottom-16 overflow-hidden rounded-3xl border-2 bg-white shadow-sm"

@@ -17,7 +17,14 @@ const OTHER_COMPANY_NAME_FIELD_ID = "Fq3ZNvlIW4co";
 const EXPERIENCE_TYPE_FIELD_ID = "SlCBuLn0rCmE";
 const INDUSTRY_FIELD_ID = "7JB0DGtjMraj";
 const TOP_TIP_FIELD_ID = "eXK07QSdTjCO";
-const INDUSTRY_OPTIONS_MAP: Record<IndustryChoiceId, { label: Industry; divisionFieldId: string }> = {
+
+export const INTERVIEW_PROCESS_FIELD_ID = "Y3A9fYmILXfX";
+export const DIVERSITY_FIELD_ID = "liymQSrVVhNY";
+export const WORK_EXPERIENCE_FIELD_ID = "GFXPNfi3VN4W";
+export const TEAM_CULTURE_FIELD_ID = "McGjQaGZyj3e";
+export const RECOMMEND_TO_FRIEND_FIELD_ID = "2i1MEONS86JI";
+
+export const INDUSTRY_OPTIONS_MAP: Record<IndustryChoiceId, { label: Industry; divisionFieldId: string }> = {
 	fDKse3jQNE1r: {
 		label: "banking_finance",
 		divisionFieldId: "fjfX6mO0hvUP"
@@ -37,18 +44,12 @@ const INDUSTRY_OPTIONS_MAP: Record<IndustryChoiceId, { label: Industry; division
 };
 const COMPLETION_YEAR_FIELD_ID = "UmrcanD5wUFQ";
 const REGION_FIELD_ID = "pADAoljdawAu";
-const RATING_FIELD_IDS = [
-	"Y3A9fYmILXfX",
-	"liymQSrVVhNY",
-	"GFXPNfi3VN4W",
-	"McGjQaGZyj3e",
-	"2i1MEONS86JI",
-	"8PT4TSMTimUf"
-];
+const RATING_FIELD_IDS = ["Y3A9fYmILXfX", "liymQSrVVhNY", "GFXPNfi3VN4W", "McGjQaGZyj3e", "2i1MEONS86JI"];
 const IS_CONVERTER_FIELD_ID = "JujDUonW2zpe";
 
 export const getCompany = async (form: FormResponse) => {
-	let name = null;
+	let name = null,
+		dbCompany: (typeof company.$inferSelect)[] = [];
 	const field = form.definition.fields.find(
 		field => field.title.includes("company") || field.id === COMPANY_NAME_FIELD_ID
 	);
@@ -59,7 +60,6 @@ export const getCompany = async (form: FormResponse) => {
 		name = answer.choice.label;
 	}
 	if (!name) return { companyId: null, companyName: name };
-	let dbCompany = await db.select().from(company).where(eq(company.name, name));
 	// If no company with the given name was found, or if the user selected "Other", create a new one in the database
 	if (name === "Other") {
 		// find the user's answer to the industry question
@@ -70,15 +70,20 @@ export const getCompany = async (form: FormResponse) => {
 		// find the user's answer to the "Enter your company Name question"
 		const answer = form.answers.find(a => a.field.id === OTHER_COMPANY_NAME_FIELD_ID);
 		if (answer?.type !== "text") return { companyId: null, companyName: name };
-		dbCompany = await db
-			.insert(company)
-			.values({
-				companyId: `company_${nanoid(18)}`,
-				name: answer.text,
-				slug: labelEncode(answer.text),
-				category
-			})
-			.returning();
+		dbCompany = await db.select().from(company).where(eq(company.name, answer.text));
+		if (!dbCompany.length) {
+			dbCompany = await db
+				.insert(company)
+				.values({
+					companyId: `company_${nanoid(18)}`,
+					name: answer.text,
+					slug: labelEncode(answer.text),
+					category
+				})
+				.returning();
+		}
+	} else {
+		dbCompany = await db.select().from(company).where(eq(company.name, name));
 	}
 	prettyPrint(dbCompany);
 	return {
@@ -117,13 +122,19 @@ export const getRegion = (form: FormResponse) => {
 	return region.choice.label;
 };
 
+export const getRating = (form: FormResponse, fieldId: string) => {
+	const rating = form.answers.find(a => a.field.id === fieldId && a.field.type === "rating");
+	if (rating?.type !== "number") return null;
+	return rating.number;
+};
+
 export const getTopTip = (form: FormResponse) => {
 	const topTip = form.answers.find(a => a.field.id === TOP_TIP_FIELD_ID);
 	if (topTip?.type !== "text") return "";
 	return topTip.text;
 };
 
-export const calculateRating = (form: FormResponse) => {
+export const calculateAvgRating = (form: FormResponse) => {
 	const ratings = form.answers.filter(
 		a => RATING_FIELD_IDS.includes(a.field.id) && a.field.type === "rating"
 	) as NumberType[];
@@ -135,6 +146,10 @@ export const checkConverted = (form: FormResponse) => {
 	const isConverted = form.answers.find(a => a.field.id === IS_CONVERTER_FIELD_ID);
 	if (isConverted?.type !== "boolean") return null;
 	return isConverted.boolean;
+};
+
+export const getInterviewQuestions = (form: FormResponse) => {
+	return [];
 };
 
 export const getProsAndCons = (form: FormResponse) => {};

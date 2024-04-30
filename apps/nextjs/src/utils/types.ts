@@ -59,3 +59,5 @@ export type GroupPanel = InsightPanel;
 export interface CompanyPanel extends InsightPanel {
 	category: Category;
 }
+
+export type RatingLevel = "Low" | "Medium" | "High" | "Super";

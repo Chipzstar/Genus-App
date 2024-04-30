@@ -3,7 +3,12 @@ import { z } from "zod";
 
 import type { careerInterestsSchema } from "@genus/validators";
 
-import type { AddTempPasswordInput, UserOnboardingStatusInput, UserOnboardingStatusOutput } from "~/utils/types";
+import type {
+	AddTempPasswordInput,
+	RatingLevel,
+	UserOnboardingStatusInput,
+	UserOnboardingStatusOutput
+} from "~/utils/types";
 
 export const PATHS = {
 	HOME: "/",
@@ -27,7 +32,7 @@ type StringInput<T> = T extends "category" ? z.infer<typeof careerInterestsSchem
  * @param format The format type, either "default" or "category". Defaults to "default".
  * @returns The formatted string.
  */
-export function formatString<T extends FormatType = "default">(str: StringInput<T>, format?: T): string {
+export function formatString<T extends FormatType = "default">(str: StringInput<T>, format?: T) {
 	if (!str) return "";
 	if (format === "category" && str === "banking_finance") return "Banking & Finance";
 	if (str.length <= 2) return str.toUpperCase();
@@ -100,14 +105,24 @@ export function convertToPercentage(value: number, total: number): number {
 	return Math.round((value / total) * 100);
 }
 
+/**
+ * Converts a rating value to a level.
+ * @param value The rating value to be converted to a level.
+ * @returns The level of the given rating value.
+ */
+export function convertRatingToLevel(value: number): RatingLevel {
+	console.log({ value });
+	if (value >= 0 && value <= 1) return "Low";
+	if (value >= 2 && value <= 3) return "Medium";
+	if (value >= 4 && value < 5) return "High";
+	return "Super";
+}
+
 // LoginSchema definition
 const loginSchema = z.object({
 	email: z.string().email(),
 	password: z.string().min(8)
 });
-
-// Your function types
-type CheckOnboardingFunction = (args: UserOnboardingStatusInput) => Promise<UserOnboardingStatusOutput>;
 
 // Options for toast
 interface ToastOptions {
@@ -118,14 +133,14 @@ interface ToastOptions {
 
 export const handleUserOnboarding = async (
 	loginInfo: z.infer<typeof loginSchema>,
-	checkOnboardingFunction: CheckOnboardingFunction,
+	checkOnboarding: (args: UserOnboardingStatusInput) => Promise<UserOnboardingStatusOutput>,
 	signOut: () => Promise<void>,
-	addTempPasswordFunction: (args: AddTempPasswordInput) => any,
+	addTempPassword: (args: AddTempPasswordInput) => any,
 	toastInfo: (title: string, args: ToastOptions) => any,
 	routerPush: (route: string) => Promise<boolean>
 ): Promise<boolean> => {
 	let step = -1;
-	const status = await checkOnboardingFunction({ email: loginInfo.email });
+	const status = await checkOnboarding({ email: loginInfo.email });
 
 	if (status === "not_started") step = 0;
 	else if (status === "background_info") step = 1;
@@ -133,7 +148,7 @@ export const handleUserOnboarding = async (
 
 	if (step !== -1) {
 		await signOut();
-		addTempPasswordFunction({
+		addTempPassword({
 			email: loginInfo.email,
 			password: loginInfo.password
 		});

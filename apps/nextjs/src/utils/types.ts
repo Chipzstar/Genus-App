@@ -30,6 +30,8 @@ export type Company = GetCompaniesOutput[0];
 
 export type CompanyReviews = GetCompaniesOutput[0]["reviews"];
 
+export type CompanyReview = CompanyReviews[0];
+
 export type UserProfile = inferRouterOutputs<AppRouter>["user"]["getByClerkId"];
 
 export type AddTempPasswordInput = inferRouterInputs<AppRouter>["auth"]["addTempPassword"];

@@ -309,7 +309,12 @@ export const review = pgTable(
 		completionYear: integer("completionYear"),
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
+		role: varchar("role", { length: 191 }).default("Summer Intern").notNull(),
 		topTip: varchar("topTip", { length: 191 }).notNull(),
+		topSkills: text("topSkills")
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
 		pros: text("pros")
 			.array()
 			.notNull()

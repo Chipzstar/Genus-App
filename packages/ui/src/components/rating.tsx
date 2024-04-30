@@ -5,12 +5,16 @@ import { cn } from "../lib/utils";
 
 const ratingVariants = {
 	default: {
-		star: "text-foreground",
+		star: "text-primary",
 		emptyStar: "text-muted-foreground"
 	},
 	destructive: {
 		star: "text-red-500",
 		emptyStar: "text-red-200"
+	},
+	primary: {
+		start: "text-primary",
+		emptyStar: "text-primary-200"
 	},
 	yellow: {
 		star: "text-yellow-500",
@@ -47,7 +51,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
 				React.cloneElement(Icon, {
 					key: i,
 					size,
-					className: cn(fill ? "fill-current" : "fill-transparent", ratingVariants[variant].star)
+					className: cn(fill ? "fill-primary" : "fill-transparent", ratingVariants[variant].star)
 				})
 			)}
 			{partialStar}
@@ -87,7 +91,7 @@ const PartialStar = ({ ...props }: PartialStarProps) => {
 			>
 				{React.cloneElement(Icon, {
 					size,
-					className: cn("fill-current", className)
+					className: cn("fill-primary", className)
 				})}
 			</div>
 		</div>

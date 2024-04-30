@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 
 import CompanyOverview from "~/components/CompanyOverview";
 import Loader from "~/components/Loader";
+import ReviewCard from "~/components/ReviewCard";
 import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
@@ -139,6 +140,17 @@ const CompanySlug = () => {
 													content={r.topTip}
 													experience={r.experienceType}
 													hideBlockQuote
+												/>
+											</div>
+										))}
+									</TabsContent>
+									<TabsContent key={3} value="all_reviews" className="max-w-3xl">
+										{company.reviews.map(review => (
+											<div key={review.id} className="flex rounded-lg border p-4">
+												<ReviewCard
+													id={review.reviewId}
+													company={company.name}
+													review={review}
 												/>
 											</div>
 										))}

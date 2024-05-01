@@ -1,0 +1,15 @@
+{
+	"extends": "@genus/tsconfig/base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"jsx": "preserve",
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+	},
+	"include": [
+		"*.ts",
+		"src/emails"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

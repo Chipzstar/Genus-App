@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
 import { Resend } from "resend";
 
+import { ReferralEmail } from "@genus/email";
 import { referralEmailSchema } from "@genus/validators";
 
 import { env } from "~/env";
-import { EmailTemplate } from "~/templates/referralEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			from: `Genus <${RESEND_SENDER_EMAIL}>`,
 			to: recipients,
 			subject,
-			react: EmailTemplate({ formUrl: REVIEW_FORM_URL }),
+			react: ReferralEmail({ formUrl: REVIEW_FORM_URL }),
 			reply_to: referrerEmail,
 			text: `Hey, ${referrerName} wants you to fill out a review form for Genus. Here's the link\n\n${REVIEW_FORM_URL}`
 		});

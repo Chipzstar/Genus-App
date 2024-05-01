@@ -1,0 +1,43 @@
+{
+  "name": "@genus/email",
+  "private": true,
+  "version": "0.1.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "email dev",
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-email": "^2.1.2",
+    "@react-email/components": "^0.0.17"
+  },
+  "devDependencies": {
+    "@genus/eslint-config": "workspace:^0.2.0",
+    "@genus/prettier-config": "workspace:^0.1.0",
+    "@genus/tailwind-config": "workspace:^0.1.0",
+    "@genus/tsconfig": "workspace:^0.1.0",
+    "eslint": "^8.53.0",
+    "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@genus/eslint-config/base",
+      "@genus/eslint-config/react"
+    ]
+  },
+  "prettier": "@genus/prettier-config"
+}

@@ -22,6 +22,7 @@
     "@genus/db": "workspace:^0.1.0",
     "@genus/magicbell": "workspace:^0.1.0",
     "@genus/ui": "workspace:^0.1.0",
+    "@genus/email": "workspace:^0.1.0",
     "@genus/validators": "workspace:^0.1.0",
     "@hookform/resolvers": "^3.3.2",
     "@magicbell/magicbell-react": "^10.10.0",

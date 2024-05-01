@@ -3,7 +3,7 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
 	debug: false,
-	ignoredRoutes: ["/refer-a-friend"],
+	ignoredRoutes: ["/refer-a-friend", "/api/email/send"],
 	publicRoutes: [
 		"/login",
 		"/signup",

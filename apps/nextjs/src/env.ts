@@ -28,6 +28,9 @@ export const env = createEnv({
 		UPLOADTHING_SECRET: z.string(),
 		UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 		UPSTASH_REDIS_REST_URL: z.string().optional(),
+		RESEND_API_KEY: z.string(),
+		RESEND_SENDER_EMAIL: z.string(),
+		REVIEW_FORM_URL: z.string(),
 		SANITY_API_READ_TOKEN: z.string(),
 		TYPEFORM_WEBHOOK_SECRET: z.string()
 	},

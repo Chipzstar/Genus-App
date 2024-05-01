@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,18 +15,17 @@ import AuthLayout from "~/layout/AuthLayout";
 const LIMIT = 3;
 
 const referralFormSchema = z.object({
-	emails: z
-		.array(
-			z.object({
-				value: z.string().email({ message: "Please enter a valid email." })
-			})
-		)
-		.optional()
+	emails: z.array(
+		z.object({
+			value: z.string().email({ message: "Please enter a valid email." })
+		})
+	)
 });
 
 type ReferralFormValues = z.infer<typeof referralFormSchema>;
 
 const ReferAFriend = () => {
+	const [loading, setLoading] = useState(false);
 	const form = useForm<ReferralFormValues>({
 		resolver: zodResolver(referralFormSchema),
 		defaultValues: {
@@ -44,9 +43,57 @@ const ReferAFriend = () => {
 		control: form.control
 	});
 
-	const onSubmit = (data: ReferralFormValues) => {
-		console.log(data);
-	};
+	const onSubmit = useCallback(
+		async (values: ReferralFormValues) => {
+			// check if there is a query param for email
+			if (window?.location.search) {
+				const query = new URLSearchParams(window.location.search);
+				const email = query.get("email");
+				const name = query.get("name");
+				if (!email) {
+					toast.error(
+						"It looks like you are visiting this page from the wrong source. " +
+							"This page is intended to be used as a referral link after completing our review form"
+					);
+					return;
+				}
+
+				if (fields.length > LIMIT) {
+					toast.error("You can only add up to 3 emails.");
+					return;
+				}
+				if (fields.length === 0) {
+					toast.error("Please add at least one email.");
+					return;
+				}
+				try {
+					setLoading(true);
+					const result = await fetch("/api/email/send", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							subject: "Refer a Friend",
+							referrerName: name,
+							referrerEmail: email,
+							recipients: values.emails.map(email => email.value)
+						})
+					});
+					console.log(await result.json());
+					toast.success("Emails sent!");
+				} catch (err: any) {
+					console.error(err.message);
+					toast.error("Uh oh! Something went wrong.", {
+						description: "There was a problem with your request."
+					});
+				} finally {
+					setLoading(false);
+				}
+			}
+		},
+		[fields]
+	);
 
 	return (
 		<div className="page-container flex items-center justify-center">
@@ -67,7 +114,6 @@ const ReferAFriend = () => {
 										key={field.id}
 										name={`emails.${index}.value`}
 										render={({ field }) => {
-											console.log(field);
 											return (
 												<FormItem>
 													<FormLabel className={cn(index !== 0 && "sr-only")}>
@@ -75,6 +121,7 @@ const ReferAFriend = () => {
 													</FormLabel>
 													<FormControl>
 														<Input
+															className="bg-transparent text-black"
 															id="email"
 															{...field}
 															placeholder="Enter your friend's email"
@@ -107,7 +154,13 @@ const ReferAFriend = () => {
 								</div>
 							</div>
 						</div>
-						<Button className="w-full" size="lg" type="submit" disabled={!form.formState.isValid}>
+						<Button
+							loading={loading}
+							className="w-full"
+							size="lg"
+							type="submit"
+							disabled={!form.formState.isValid}
+						>
 							<span className="text-lg font-medium">Send Invite 📨</span>
 						</Button>
 					</form>

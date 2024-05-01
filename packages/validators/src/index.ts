@@ -158,3 +158,10 @@ export const profileSchema = signupBaseSchema.omit({
 	gender: true,
 	ethnicity: true
 });
+
+export const referralEmailSchema = z.object({
+	recipients: z.array(z.string().email()),
+	subject: z.string(),
+	referrerName: z.string(),
+	referrerEmail: z.string().email()
+});

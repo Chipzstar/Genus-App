@@ -12,7 +12,9 @@ interface EmailTemplateProps {
 
 type ReferralEmailPreviewProps = EmailTemplateProps;
 
-const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+	? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+	: "http://localhost:3000";
 console.log(baseUrl);
 
 export const ReferralEmail = ({

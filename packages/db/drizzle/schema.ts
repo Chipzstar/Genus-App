@@ -336,6 +336,29 @@ export const review = pgTable(
 	}
 );
 
+export const referral = pgTable(
+	"referral",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		submissionId: varchar("submissionId", { length: 191 }).notNull(),
+		referralId: varchar("referralId", { length: 191 }).notNull(),
+		referrerName: varchar("referrerName", { length: 191 }).notNull(),
+		referrerEmail: varchar("referrerEmail", { length: 191 }).notNull(),
+		refereeEmail1: varchar("refereeEmail1", { length: 191 }).notNull(),
+		refereeEmail2: varchar("refereeEmail2", { length: 191 }),
+		refereeEmail3: varchar("refereeEmail3", { length: 191 }),
+		isActive: boolean("isActive").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			referralIdIdx: uniqueIndex("referralIdIdx").on(table.referralId)
+		};
+	}
+);
+
 export const typeformWebhook = pgTable(
 	"typeformWebhook",
 	{

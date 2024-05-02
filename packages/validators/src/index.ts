@@ -160,6 +160,7 @@ export const profileSchema = signupBaseSchema.omit({
 });
 
 export const referralEmailSchema = z.object({
+	submissionId: z.string(),
 	recipients: z.array(z.string().email()),
 	subject: z.string(),
 	referrerName: z.string(),

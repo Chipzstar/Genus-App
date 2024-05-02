@@ -51,6 +51,7 @@ const ReferAFriend = () => {
 			// check if there is a query param for email
 			if (window?.location.search) {
 				const query = new URLSearchParams(window.location.search);
+				const submissionId = query.get("submissionId");
 				const email = query.get("email");
 				const name = query.get("name");
 				if (!email) {
@@ -77,6 +78,7 @@ const ReferAFriend = () => {
 							"Content-Type": "application/json"
 						},
 						body: JSON.stringify({
+							submissionId,
 							subject: "Refer a Friend",
 							referrerName: name,
 							referrerEmail: email,

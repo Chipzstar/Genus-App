@@ -738,3 +738,52 @@ export const experience_types = [
 	"off-cycle_internship",
 	"other"
 ] as const;
+
+export const skillsets = [
+	"written_communication",
+	"verbal_communication",
+	"interpersonal_skills",
+	"time_management",
+	"emotional_intelligence",
+	"critical_thinking",
+	"sales",
+	"leadership_&_management",
+	"negotiation",
+	"creativity",
+	"teamwork",
+	"financial_literacy",
+	"analytical_skills",
+	"problem_solving",
+	"project_management",
+	"adaptability",
+	"delegation",
+	"data_analysis",
+	"technical_&_coding_skills",
+	"research",
+	"public_speaking_&_presentation",
+	"social_media_&_content_creation",
+	"digital_skills",
+	"marketing",
+	"strategy",
+	"organisation",
+	"attention_to_detail",
+	"conflict_resolution",
+	"artistic_skills",
+	"modelling",
+	"commercial_awareness",
+	"enterprise_and_entrepreneurial_skills",
+	"customer_service",
+	"design",
+	"videography_&_photography"
+] as const;
+
+export const working_environment_types = [
+	"fast-paced_and_dynamic",
+	"collaborative",
+	"individual-focused",
+	"traditional_office",
+	"hybrid_and_flexible",
+	"remote",
+	"innovative_and_entrepreneurial",
+	"artistic_and_creative"
+] as const;

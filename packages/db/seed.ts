@@ -6,7 +6,7 @@ import { parse } from "csv-parse";
 import { drizzle } from "drizzle-orm/neon-http";
 import { nanoid } from "nanoid";
 
-import schema, { company } from "./drizzle/schema";
+import schema, { company, skillset, skillsetSlug } from "./drizzle/schema";
 
 /**
  * Sanitizes a string by converting it to lowercase and replacing spaces with underscores.
@@ -22,6 +22,18 @@ function labelEncode(str: string): string {
 		.replace(/^-+/, "")
 		.replace(/-+$/, "");
 }
+
+export function formatString(str: string, format: "default" | "category" = "default") {
+	if (!str) return "";
+	if (format === "category" && str === "banking_finance") return "Banking & Finance";
+	if (str.length <= 2) return str.toUpperCase();
+	return str
+		.replace(/__/g, ", ") // replace two underscores with comma followed by a space
+		.replace(/[_-]/g, " ") // replace underscore with a space
+		.replace(/\b\w/g, l => l.toUpperCase()) // convert the first character of each word to uppercase
+		.replace(/'(\w)/g, (_, letter) => "'" + letter.toLowerCase()); // handle special case for apostrophe
+}
+
 type Category = "law" | "banking_finance" | "consulting" | "tech";
 
 interface CompanyRecord {
@@ -71,23 +83,45 @@ export const connectionString = [
 const sql = neon(connectionString);
 const db = drizzle(sql, { schema });
 
-const main = async () => {
-	try {
-		const companies = await processFile();
-		const data: (typeof company.$inferInsert)[] = [];
+const insertCompanies = async () => {
+	const companies = await processFile();
+	const data: (typeof company.$inferInsert)[] = [];
 
-		for (const c of companies) {
-			data.push({
-				id: c.id,
-				companyId: `company_${nanoid(18)}`,
-				name: c.name,
-				slug: c.slug,
-				category: c.category,
-				isDeleted: false
-			});
+	for (const c of companies) {
+		data.push({
+			id: c.id,
+			companyId: `company_C${nanoid(18)}`,
+			name: c.name,
+			slug: c.slug,
+			category: c.category,
+			isDeleted: false
+		});
+	}
+	console.log("Seed start");
+	await db.insert(company).values(data);
+};
+
+const insertSkillsets = async () => {
+	const data: (typeof skillset.$inferInsert)[] = [];
+
+	skillsetSlug.enumValues.forEach((slug, idx) => {
+		data.push({
+			id: idx + 1,
+			name: formatString(slug),
+			slug
+		});
+	});
+	console.log("Seed start");
+	await db.insert(skillset).values(data);
+};
+
+const main = async (type: "company" | "skillset") => {
+	try {
+		if (type === "company") {
+			await insertCompanies();
+		} else {
+			await insertSkillsets();
 		}
-		console.log("Seed start");
-		await db.insert(company).values(data);
 	} catch (error) {
 		console.error("Error during seeding:", error);
 
@@ -95,4 +129,5 @@ const main = async () => {
 	}
 };
 
-void main().then(r => console.log("Seed done"));
+// void main("company").then(r => console.log("Seed done"));
+void main("skillset").then(r => console.log("Seed done"));

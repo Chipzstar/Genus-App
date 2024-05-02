@@ -16,7 +16,13 @@ import { MultiSelect } from "@genus/ui/multi-select";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { useStepper } from "@genus/ui/stepper";
 import { signupStep3Schema } from "@genus/validators";
-import { career_interests, companies, experience_types } from "@genus/validators/constants";
+import {
+	career_interests,
+	companies,
+	experience_types,
+	skillsets,
+	working_environment_types
+} from "@genus/validators/constants";
 import { decryptString } from "@genus/validators/helpers";
 
 import { env } from "~/env";
@@ -31,6 +37,14 @@ const company_options: Option[] = companies.map(company => ({
 		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" "),
 	value: company
+}));
+
+const skillset_options: Option[] = skillsets.map(skillset => ({
+	label: skillset
+		.split("_")
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" "),
+	value: skillset
 }));
 
 const { NEXT_PUBLIC_AXIOM_TOKEN } = env;
@@ -48,6 +62,8 @@ const Step3: FC = () => {
 		defaultValues: {
 			career_interests: [],
 			company_interests: [],
+			skillsets: [],
+			work_environment: undefined,
 			experience_type: undefined
 		},
 		resolver: zodResolver(signupStep3Schema)
@@ -139,55 +155,60 @@ const Step3: FC = () => {
 				</div>
 				<Form {...form}>
 					<form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
-						<section className="grid gap-x-12 gap-y-4 sm:gap-y-8">
-							<FormField
-								control={form.control}
-								name="career_interests"
-								render={() => (
-									<FormItem>
-										<FormLabel>Career interests</FormLabel>
-										<FormDescription className="text-neutral-600">
-											Select all that apply
-										</FormDescription>
-										<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-											{career_interests.map((item, index) => (
-												<FormField
-													key={index}
-													control={form.control}
-													name="career_interests"
-													render={({ field }) => {
-														return (
-															<FormItem
-																key={index}
-																className="flex flex-row items-start space-x-3 space-y-0"
-															>
-																<FormControl>
-																	<Checkbox
-																		checked={field.value?.includes(item)}
-																		onCheckedChange={(checked: boolean) => {
-																			return checked
-																				? field.onChange([...field.value, item])
-																				: field.onChange(
-																						field.value?.filter(
-																							value => value !== item
-																						)
-																					);
-																		}}
-																	/>
-																</FormControl>
-																<FormLabel className="whitespace-nowrap font-normal">
-																	{formatString(item)}
-																</FormLabel>
-															</FormItem>
-														);
-													}}
-												/>
-											))}
-										</div>
-										<FormMessage className="text-red-500/75" />
-									</FormItem>
-								)}
-							/>
+						<section className="grid w-full grid-cols-1 gap-x-12 gap-y-4 sm:gap-y-8 lg:grid-cols-2">
+							<div className="mx-auto lg:col-span-2">
+								<FormField
+									control={form.control}
+									name="career_interests"
+									render={() => (
+										<FormItem>
+											<FormLabel>Career interests</FormLabel>
+											<FormDescription className="text-neutral-600">
+												Select all that apply
+											</FormDescription>
+											<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+												{career_interests.map((item, index) => (
+													<FormField
+														key={index}
+														control={form.control}
+														name="career_interests"
+														render={({ field }) => {
+															return (
+																<FormItem
+																	key={index}
+																	className="flex flex-row items-start space-x-3 space-y-0"
+																>
+																	<FormControl>
+																		<Checkbox
+																			checked={field.value?.includes(item)}
+																			onCheckedChange={(checked: boolean) => {
+																				return checked
+																					? field.onChange([
+																							...field.value,
+																							item
+																						])
+																					: field.onChange(
+																							field.value?.filter(
+																								value => value !== item
+																							)
+																						);
+																			}}
+																		/>
+																	</FormControl>
+																	<FormLabel className="whitespace-nowrap font-normal">
+																		{formatString(item)}
+																	</FormLabel>
+																</FormItem>
+															);
+														}}
+													/>
+												))}
+											</div>
+											<FormMessage className="text-red-500/75" />
+										</FormItem>
+									)}
+								/>
+							</div>
 							<FormField
 								control={form.control}
 								name="company_interests"
@@ -204,6 +225,55 @@ const Step3: FC = () => {
 												onChange={options => field.onChange(options.map(o => o.value))}
 												defaultOptions={company_options}
 												placeholder="Select up to 5 companies"
+												emptyIndicator={
+													<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+														no results found.
+													</p>
+												}
+											/>
+										</div>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="work_environment"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Preferred working environment</FormLabel>
+										<Select onValueChange={field.onChange} defaultValue={field.value}>
+											<FormControl>
+												<SelectTrigger className="rounded-xl">
+													<SelectValue placeholder="Select your work environment type" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{working_environment_types.map(type => (
+													<SelectItem key={type} value={type}>
+														{formatString(type.toLowerCase())}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="skillsets"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Skillsets</FormLabel>
+										<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+											<MultiSelect
+												value={field.value.map(value => ({
+													label: formatString(value),
+													value
+												}))}
+												maxSelected={5}
+												onChange={options => field.onChange(options.map(o => o.value))}
+												defaultOptions={skillset_options}
+												placeholder="Select up to 5 skills"
 												emptyIndicator={
 													<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
 														no results found.

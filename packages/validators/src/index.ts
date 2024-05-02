@@ -9,8 +9,10 @@ import {
 	experience_types,
 	genders,
 	profile_types,
+	skillsets,
 	universities,
-	university_years
+	university_years,
+	working_environment_types
 } from "./constants";
 
 export const gendersSchema = z.enum(genders);
@@ -25,6 +27,8 @@ export const universitiesSchema = z.enum(universities);
 
 export const companiesSchema = z.enum(companies);
 
+export const skillsetsSchema = z.enum(skillsets);
+
 export const completionYearSchema = z.enum(completion_years);
 
 export const currentYearSchema = z.enum(university_years);
@@ -32,6 +36,8 @@ export const currentYearSchema = z.enum(university_years);
 export const profileTypeSchema = z.enum(profile_types);
 
 export const experienceTypeSchema = z.enum(experience_types);
+
+export const workEnvironmentSchema = z.enum(working_environment_types);
 
 export const loginSchema = z.object({
 	email: z
@@ -88,7 +94,9 @@ export const signupBaseSchema = z.object({
 		.array(careerInterestsSchema)
 		.nonempty({ message: "Please select at least one career interest" }),
 	company_interests: z.array(companiesSchema).nonempty({ message: "Please select at least one company" }),
-	experience_type: experienceTypeSchema
+	experience_type: experienceTypeSchema,
+	work_environment: workEnvironmentSchema,
+	skillsets: z.array(skillsetsSchema).nonempty({ message: "Please select at least one skillset" })
 });
 
 export const signupStep1Schema = signupBaseSchema
@@ -123,6 +131,8 @@ export const signupStep2Schema = signupBaseSchema.pick({
 export const signupStep3Schema = signupBaseSchema.pick({
 	career_interests: true,
 	company_interests: true,
+	work_environment: true,
+	skillsets: true,
 	experience_type: true
 });
 

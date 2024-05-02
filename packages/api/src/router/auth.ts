@@ -1,10 +1,19 @@
-import fs from "fs/promises";
-import path from "path";
 import { TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm";
 import * as z from "zod";
 
-import { and, careerInterestToUser, companyToUser, db, eq, user, type careerInterest } from "@genus/db";
+import {
+	and,
+	careerInterestToUser,
+	companyToUser,
+	db,
+	eq,
+	inArray,
+	skillset,
+	skillsetToUser,
+	user,
+	type careerInterest
+} from "@genus/db";
 import { signupStep2Schema, signupStep3Schema } from "@genus/validators";
 import { CAREER_INTERESTS, companies } from "@genus/validators/constants";
 import { checkProfileType, encryptString } from "@genus/validators/helpers";
@@ -18,20 +27,6 @@ const getUserByEmail = db
 	.prepare("getUserByEmail");
 
 export const authRouter = createTRPCRouter({
-	getUniversities: publicProcedure.query(async () => {
-		try {
-			let file = await path.join(process.cwd(), "assets", "universities.txt");
-			console.log("File path:", file);
-			let data = await fs.readFile(file, "utf-8");
-			// Remove the newline character from each line
-			// Now 'lines' is an array containing each line in the file
-			return data.split("\n").map(line => line.trim());
-		} catch (err) {
-			console.error(err);
-			// @ts-ignore
-			return [];
-		}
-	}),
 	checkEmailExists: publicProcedure
 		.input(
 			z.object({
@@ -164,10 +159,21 @@ export const authRouter = createTRPCRouter({
 				});
 				await ctx.db.insert(careerInterestToUser).values(careerInterestQueries);
 
+				// insert the new skillsets
+				const dbSkillsets = await ctx.db.query.skillset.findMany({
+					where: inArray(skillset.slug, input.skillsets)
+				});
+				const skillsetQueries = dbSkillsets.map(({ id }) => {
+					return {
+						skillsetId: id,
+						userId: dbUser.id
+					};
+				});
+				await ctx.db.insert(skillsetToUser).values(skillsetQueries);
+
 				// insert the new companies
 				const companyQueries = input.company_interests.map(company => {
 					const companyId = companies.indexOf(company) + 1; // + 1 to account array indexing starting at 0
-					console.log({ companyId });
 					return {
 						companyId,
 						userId: dbUser.id

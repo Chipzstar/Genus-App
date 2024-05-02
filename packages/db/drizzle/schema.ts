@@ -16,6 +16,43 @@ import {
 import { relations } from "drizzle-orm/relations";
 
 export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
+export const skillsetSlug = pgEnum("skillset_slug", [
+	"written_communication",
+	"verbal_communication",
+	"interpersonal_skills",
+	"time_management",
+	"emotional_intelligence",
+	"critical_thinking",
+	"sales",
+	"leadership_&_management",
+	"negotiation",
+	"creativity",
+	"teamwork",
+	"financial_literacy",
+	"analytical_skills",
+	"problem_solving",
+	"project_management",
+	"adaptability",
+	"delegation",
+	"data_analysis",
+	"technical_&_coding_skills",
+	"research",
+	"public_speaking_&_presentation",
+	"social_media_&_content_creation",
+	"digital_skills",
+	"marketing",
+	"strategy",
+	"organisation",
+	"attention_to_detail",
+	"conflict_resolution",
+	"artistic_skills",
+	"modelling",
+	"commercial_awareness",
+	"enterprise_and_entrepreneurial_skills",
+	"customer_service",
+	"design",
+	"videography_&_photography"
+]);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
 export const userCurrentYear = pgEnum("user_currentyear", [
@@ -67,6 +104,20 @@ export const careerInterest = pgTable(
 	table => {
 		return {
 			idx49236CareerInterestSlugKey: uniqueIndex("idx_49236_careerInterest_slug_key").on(table.slug)
+		};
+	}
+);
+
+export const skillset = pgTable(
+	"skillset",
+	{
+		id: serial("id").primaryKey().notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		slug: skillsetSlug("slug").notNull()
+	},
+	table => {
+		return {
+			idx49237SkillsetSlugKey: uniqueIndex("idx_49237_skillset_slug_key").on(table.slug)
 		};
 	}
 );
@@ -249,6 +300,19 @@ export const careerInterestToUser = pgTable(
 	table => {
 		return {
 			pk: primaryKey({ name: "careerInterestUserId", columns: [table.careerInterestId, table.userId] })
+		};
+	}
+);
+
+export const skillsetToUser = pgTable(
+	"skillsetToUser",
+	{
+		skillsetId: integer("skillsetId").notNull(),
+		userId: integer("userId").notNull()
+	},
+	table => {
+		return {
+			pk: primaryKey({ name: "skillsetUserId", columns: [table.skillsetId, table.userId] })
 		};
 	}
 );
@@ -486,6 +550,10 @@ export const careerInterestRelations = relations(careerInterest, ({ one, many })
 	users: many(careerInterestToUser)
 }));
 
+export const skillsetRelations = relations(skillset, ({ one, many }) => ({
+	users: many(skillsetToUser)
+}));
+
 export const careerInterestToUserRelations = relations(careerInterestToUser, ({ one }) => ({
 	user: one(user, {
 		fields: [careerInterestToUser.userId],
@@ -494,6 +562,17 @@ export const careerInterestToUserRelations = relations(careerInterestToUser, ({ 
 	careerInterest: one(careerInterest, {
 		fields: [careerInterestToUser.careerInterestId],
 		references: [careerInterest.id]
+	})
+}));
+
+export const skillsetToUserRelations = relations(skillsetToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [skillsetToUser.userId],
+		references: [user.id]
+	}),
+	skillset: one(skillset, {
+		fields: [skillsetToUser.skillsetId],
+		references: [skillset.id]
 	})
 }));
 

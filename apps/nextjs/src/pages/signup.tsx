@@ -8,12 +8,15 @@ import { Step, Stepper } from "@genus/ui/stepper";
 import Step1 from "~/containers/signup/Step1";
 import Step2 from "~/containers/signup/Step2";
 import Step3 from "~/containers/signup/Step3";
+import { env } from "~/env";
 import AuthLayout from "../layout/AuthLayout";
 import type { NextPageWithAuthLayout } from "./_app";
 
 interface StepItems extends StepItem {
 	component: React.FC;
 }
+
+const { NODE_ENV } = env;
 
 const Signup: NextPageWithAuthLayout = () => {
 	const router = useRouter();
@@ -36,6 +39,7 @@ const Signup: NextPageWithAuthLayout = () => {
 	return (
 		<div className="flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
+				onClickStep={(step, setStep) => (NODE_ENV === "development" ? setStep(step) : undefined)}
 				initialStep={initialStep}
 				steps={steps}
 				styles={{

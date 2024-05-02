@@ -255,6 +255,9 @@ importers:
       shorthash2:
         specifier: ^1.0.3
         version: 1.0.3
+      sonner:
+        specifier: ^1.4.41
+        version: 1.4.41(react-dom@18.2.0)(react@18.2.0)
       svix:
         specifier: ^1.15.0
         version: 1.22.0
@@ -619,7 +622,7 @@ importers:
         specifier: ^6.1.6
         version: 6.1.6(react-dom@18.2.0)(react@18.2.0)
       sonner:
-        specifier: ^1.4.1
+        specifier: ^1.4.41
         version: 1.4.41(react-dom@18.2.0)(react@18.2.0)
       tailwind-merge:
         specifier: ^2.0.0

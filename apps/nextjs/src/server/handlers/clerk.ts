@@ -3,6 +3,7 @@ import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextj
 import { log } from "next-axiom";
 import shortHash from "shorthash2";
 
+import { posthog } from "@genus/api";
 import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
 import { magicbell } from "@genus/magicbell";
 
@@ -11,6 +12,13 @@ import { utapi } from "~/server/uploadthing";
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
+		const posthogUser = posthog.identify(String(payload.id), {
+			email: payload.email_addresses[0]?.email_address,
+			firstname: payload.first_name,
+			lastname: payload.last_name
+		});
+		const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
+		console.log({ waitingListEnabled });
 		// create the user
 		await db.insert(user).values({
 			clerkId: String(payload.id),
@@ -18,7 +26,8 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			firstname: payload.first_name,
 			lastname: payload.last_name,
 			username: payload.unsafe_metadata.username as string,
-			tempPassword: payload.unsafe_metadata.tempPassword as string
+			tempPassword: payload.unsafe_metadata.tempPassword as string,
+			isActive: !waitingListEnabled
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
@@ -40,7 +49,8 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 		log.info("-----------------------------------------------");
 		return {
 			dbUser,
-			magicBellUser
+			magicBellUser,
+			posthogUser
 		};
 	} catch (err: any) {
 		console.error(err);

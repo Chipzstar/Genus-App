@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import React, { FC, useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@genus/ui/input";
 
 import AuthLayout from "~/layout/AuthLayout";
+import { PATHS } from "~/utils";
 
 const LIMIT = 3;
 
@@ -25,6 +27,7 @@ const referralFormSchema = z.object({
 type ReferralFormValues = z.infer<typeof referralFormSchema>;
 
 const ReferAFriend = () => {
+	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const form = useForm<ReferralFormValues>({
 		resolver: zodResolver(referralFormSchema),
@@ -100,8 +103,9 @@ const ReferAFriend = () => {
 			<div className="w-full max-w-lg space-y-6 rounded-lg bg-white p-6 shadow-md">
 				<h1 className="text-center text-3xl font-bold text-gray-900 dark:text-gray-100">Refer a Friend 🤝</h1>
 				<div className="flex justify-center text-center">
-					<p className="mt-2 max-w-sm text-xl text-gray-600 dark:text-gray-400">
-						Invite your friends to join and get a chance to win a prize! 🎁
+					<p className="mt-2 text-balance text-base text-gray-600 md:text-xl">
+						Invite your friends to join and increase your chances of winning a prize <br />
+						<strong>incl £50 CASH PRIZES 🤑</strong>
 					</p>
 				</div>
 				<Form {...form}>
@@ -162,6 +166,19 @@ const ReferAFriend = () => {
 							disabled={!form.formState.isValid}
 						>
 							<span className="text-lg font-medium">Send Invite 📨</span>
+						</Button>
+						<Button
+							loading={loading}
+							className="w-full bg-secondary-400 py-10 hover:bg-secondary-400/90"
+							size="lg"
+							type="button"
+							onClick={() => router.push(PATHS.SIGNUP)}
+						>
+							<span className="line-clamp-2 text-balance text-base font-medium">
+								Want to see other reviews? 👀
+								<br />
+								Join our waiting list!
+							</span>
 						</Button>
 					</form>
 				</Form>

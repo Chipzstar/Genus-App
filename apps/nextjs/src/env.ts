@@ -28,6 +28,7 @@ export const env = createEnv({
 		UPLOADTHING_SECRET: z.string(),
 		UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 		UPSTASH_REDIS_REST_URL: z.string().optional(),
+		POSTHOG_API_TOKEN: z.string(),
 		RESEND_API_KEY: z.string(),
 		RESEND_SENDER_EMAIL: z.string(),
 		REVIEW_FORM_URL: z.string(),

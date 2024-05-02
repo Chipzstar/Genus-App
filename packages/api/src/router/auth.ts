@@ -4,14 +4,12 @@ import { TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm";
 import * as z from "zod";
 
-import { careerInterestToUser, companyToUser, db, eq, user, type careerInterest } from "@genus/db";
+import { and, careerInterestToUser, companyToUser, db, eq, user, type careerInterest } from "@genus/db";
 import { signupStep2Schema, signupStep3Schema } from "@genus/validators";
 import { CAREER_INTERESTS, companies } from "@genus/validators/constants";
 import { checkProfileType, encryptString } from "@genus/validators/helpers";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
-
-type CareerInterestSlug = typeof careerInterest.$inferSelect.slug;
 
 const getUserByEmail = db
 	.select()
@@ -67,6 +65,23 @@ export const authRouter = createTRPCRouter({
 				}
 				return "completed";
 			} catch (err: any) {
+				console.error(err);
+				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
+			}
+		}),
+	checkUserActive: publicProcedure
+		.input(
+			z.object({
+				email: z.string().email()
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			try {
+				const dbUser = await ctx.db.query.user.findFirst({
+					where: and(eq(user.email, input.email), eq(user.isActive, true))
+				});
+				return !!dbUser;
+			} catch (err) {
 				console.error(err);
 				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 			}

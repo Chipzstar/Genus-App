@@ -2,7 +2,7 @@
 import "../styles/globals.css";
 
 import type { ReactElement, ReactNode } from "react";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { InferGetServerSidePropsType, NextPage } from "next";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";

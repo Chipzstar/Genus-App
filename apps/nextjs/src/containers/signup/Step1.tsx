@@ -5,6 +5,7 @@ import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react";
 import { Mail, User } from "lucide-react";
+import posthog from "posthog-js";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -172,7 +173,7 @@ const Step1: FC<Props> = () => {
 						);
 					}
 					nextStep();
-					void clerk.signOut();
+					void clerk.signOut().then(() => posthog.reset());
 				}, 1000);
 			} catch (err: any) {
 				setLoading(false);

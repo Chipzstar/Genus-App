@@ -40,6 +40,7 @@ const Step3: FC = () => {
 	const { context } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const { mutateAsync: updateUser } = trpc.auth.updateUserStep3.useMutation();
+	const { mutateAsync: checkUserActive } = trpc.auth.checkUserActive.useMutation();
 
 	const form = useForm<z.infer<typeof signupStep3Schema>>({
 		defaultValues: {
@@ -61,6 +62,15 @@ const Step3: FC = () => {
 						onClick: () => void handleLogin(email, password)
 					}
 				});
+				return null;
+			}
+			// check if the user is active
+			if (!(await checkUserActive({ email }))) {
+				toast.success("Thanks for joining our waiting list", {
+					description:
+						"We will send you an email once our platform is ready. Please keep an eye on your inbox!!"
+				});
+				setTimeout(() => void replace(PATHS.LOGIN), 1500);
 				return null;
 			}
 			const result = await signIn.create({
@@ -237,7 +247,7 @@ const Step3: FC = () => {
 								radius="xl"
 								className="text-lg font-semibold sm:text-xl"
 							>
-								Click here
+								Join our waiting list!
 							</Button>
 						</div>
 					</div>

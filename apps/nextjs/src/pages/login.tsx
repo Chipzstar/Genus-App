@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth, useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import posthog from "posthog-js";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -26,6 +27,16 @@ const Login: NextPageWithAuthLayout = () => {
 	const [loading, setLoading] = React.useState(false);
 	const { mutateAsync: checkOnboardingStatus } = trpc.auth.checkOnboardingStatus.useMutation();
 	const { mutate: addTempPassword } = trpc.auth.addTempPassword.useMutation();
+	const { mutateAsync: checkUserActive } = trpc.auth.checkUserActive.useMutation({
+		onSuccess(active) {
+			if (!active) {
+				void signOut().then(() => posthog.reset());
+				toast.error(
+					"Your account is not yet active as you are on our waitlist. Please keep a look out for an email to activate your account."
+				);
+			}
+		}
+	});
 
 	const router = useRouter();
 
@@ -63,7 +74,7 @@ const Login: NextPageWithAuthLayout = () => {
 					password: values.password
 				});
 				if (result.status === "complete" && !!result.createdSessionId) {
-					if (await handleOnboarding(values)) {
+					if ((await checkUserActive({ email: values.email })) && (await handleOnboarding(values))) {
 						await setActive({ session: result.createdSessionId });
 						await router.replace(PATHS.HOME);
 						return;
@@ -131,7 +142,12 @@ const Login: NextPageWithAuthLayout = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<Input placeholder="Email address" {...field} className="md:h-12" />
+										<Input
+											placeholder="Email address"
+											{...field}
+											value={field.value.trim()}
+											className="md:h-12"
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>

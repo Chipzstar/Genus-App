@@ -1,4 +1,5 @@
 import { format, formatDistance } from "date-fns";
+import posthog from "posthog-js";
 import { z } from "zod";
 
 import type { careerInterestsSchema } from "@genus/validators";
@@ -147,7 +148,7 @@ export const handleUserOnboarding = async (
 	else if (status === "career_info") step = 2;
 
 	if (step !== -1) {
-		await signOut();
+		void signOut().then(() => posthog.reset());
 		addTempPassword({
 			email: loginInfo.email,
 			password: loginInfo.password

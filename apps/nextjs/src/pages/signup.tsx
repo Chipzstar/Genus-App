@@ -36,7 +36,6 @@ const Signup: NextPageWithAuthLayout = () => {
 	return (
 		<div className="flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
-				onClickStep={(step, setStep) => setStep(step)}
 				initialStep={1}
 				steps={steps}
 				styles={{

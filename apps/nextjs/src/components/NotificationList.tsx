@@ -1,11 +1,11 @@
 import type { FC } from "react";
 import React from "react";
 import { useRouter } from "next/router";
-import type { IRemoteNotification } from "@magicbell/magicbell-react";
 
 import { ScrollArea } from "@genus/ui/scroll-area";
 
 import NotificationCard from "~/components/NotificationCard";
+import type { IRemoteNotification } from "~/components/NotificationCard";
 import { PATHS } from "~/utils";
 
 interface Props {

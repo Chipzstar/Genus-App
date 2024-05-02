@@ -5,17 +5,19 @@ import shortHash from "shorthash2";
 
 import { posthog } from "@genus/api";
 import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
-import { magicbell } from "@genus/magicbell";
 
 import { utapi } from "~/server/uploadthing";
 
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
-		const posthogUser = posthog.identify(String(payload.id), {
-			email: payload.email_addresses[0]?.email_address,
-			firstname: payload.first_name,
-			lastname: payload.last_name
+		const posthogUser = posthog.identify({
+			distinctId: String(payload.id),
+			properties: {
+				email: payload.email_addresses[0]?.email_address,
+				firstname: payload.first_name,
+				lastname: payload.last_name
+			}
 		});
 		const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
 		console.log({ waitingListEnabled });
@@ -34,22 +36,11 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 
 		if (!dbUser) throw new Error("Could not create user");
 
-		const magicBellUser = await magicbell.users.create({
-			external_id: payload.id,
-			email: payload.email_addresses[0]?.email_address,
-			first_name: payload.first_name,
-			last_name: payload.last_name,
-			custom_attributes: {
-				profileType: dbUser.profileType
-			}
-		});
-
 		log.info("-----------------------------------------------");
 		log.debug("New user!!", dbUser);
 		log.info("-----------------------------------------------");
 		return {
 			dbUser,
-			magicBellUser,
 			posthogUser
 		};
 	} catch (err: any) {
@@ -151,8 +142,6 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		await db.delete(reaction).where(eq(reaction.authorId, payload.id!));
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id!));
-		// delete the magicbell user
-		await magicbell.users.delete(`external_id:${payload.id}`);
 		if (user) {
 			log.info("-----------------------------------------------");
 			log.debug("User deleted!!", dbUser);

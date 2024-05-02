@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 import React from "react";
 import type { GetServerSideProps } from "next/types";
-import { useNotifications } from "@magicbell/magicbell-react";
 
 import { Separator } from "@genus/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
@@ -14,9 +13,6 @@ import { getServerSidePropsHelper } from "~/server/serverPropsHelper";
 export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const Notifications = () => {
-	const allStore = useNotifications("default");
-	const unreadStore = useNotifications("unread");
-
 	return (
 		<div className="page-container">
 			<TopNav />
@@ -36,10 +32,10 @@ const Notifications = () => {
 						</div>
 						<Separator className="mb-3" />
 						<TabsContent value="unread" className="m-0">
-							<NotificationList items={unreadStore?.notifications ?? []} />
+							<NotificationList items={[]} />
 						</TabsContent>
 						<TabsContent value="all" className="m-0">
-							<NotificationList items={allStore?.notifications ?? []} />
+							<NotificationList items={[]} />
 						</TabsContent>
 					</Tabs>
 				</div>
@@ -48,8 +44,6 @@ const Notifications = () => {
 	);
 };
 
-Notifications.getLayout = (page: ReactElement, props: { userId: string }) => (
-	<AppLayout userId={props.userId}>{page}</AppLayout>
-);
+Notifications.getLayout = (page: ReactElement) => <AppLayout>{page}</AppLayout>;
 
 export default Notifications;

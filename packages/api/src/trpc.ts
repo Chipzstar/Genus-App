@@ -1,8 +1,6 @@
 import type { SignedInAuthObject } from "@clerk/nextjs/api";
 import { initTRPC, TRPCError } from "@trpc/server";
 
-import { magicBellUserClient } from "@genus/magicbell";
-
 import { transformer } from "../transformer";
 import { type Context } from "./context";
 
@@ -18,11 +16,9 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" });
 	}
 	let auth = ctx.auth as SignedInAuthObject;
-	let magicbell = await magicBellUserClient(auth.userId);
 	return next({
 		ctx: {
-			auth,
-			magicbell
+			auth
 		}
 	});
 });

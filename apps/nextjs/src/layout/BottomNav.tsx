@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useNotifications } from "@magicbell/magicbell-react";
 import { cx } from "class-variance-authority";
 
 import { BellIcon, CompanyIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
@@ -13,7 +12,8 @@ interface Props {
 
 const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 	const router = useRouter();
-	const unreadStore = useNotifications("unread");
+	// const unreadStore = useNotifications("unread");
+	const unreadStore: { notifications: [] } = { notifications: [] };
 	return (
 		<div className="border-gray-2000 fixed bottom-0 left-0 z-50 h-16 w-full border-t bg-white">
 			<div className="mx-auto grid h-full max-w-2xl grid-cols-5 font-medium text-gray-500">

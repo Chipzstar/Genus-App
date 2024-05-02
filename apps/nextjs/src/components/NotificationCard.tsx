@@ -1,12 +1,21 @@
 import type { FC } from "react";
 import React from "react";
-import { useNotification, type IRemoteNotification } from "@magicbell/magicbell-react";
 import { formatDistanceToNow, fromUnixTime } from "date-fns";
-import { toast } from "sonner";
 
 import { cn } from "@genus/ui";
 
 import { formatString } from "~/utils";
+
+export interface IRemoteNotification {
+	id: string;
+	actionUrl: string;
+	title: string;
+	content: string;
+	topic?: string | null;
+	isRead: boolean;
+	readAt: number | null;
+	sentAt: number | null;
+}
 
 interface Props {
 	item: IRemoteNotification;
@@ -14,7 +23,6 @@ interface Props {
 }
 
 const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
-	const notification = useNotification(item);
 	return (
 		<button
 			key={item.id}
@@ -23,15 +31,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 					" hover:bg-accent"
 			)}
 			onClick={() => {
-				void notification
-					.markAsRead()
-					.then(() => onClick(item))
-					.catch(err => {
-						console.error(err);
-						toast.error("Failed to mark as read", {
-							description: err.message
-						});
-					});
+				console.log("mark as read", item);
 			}}
 		>
 			<div className="flex w-full flex-col gap-1">
@@ -46,7 +46,7 @@ const NotificationCard: FC<Props> = ({ item, onClick }: Props) => {
 						})}
 					</div>
 				</div>
-				<div className="text-xs font-medium">{formatString(item.topic!)}</div>
+				<div className="text-xs font-medium">{formatString(item.topic)}</div>
 			</div>
 			<div className="line-clamp-2 text-xs text-muted-foreground">{item.content?.substring(0, 300)}</div>
 		</button>

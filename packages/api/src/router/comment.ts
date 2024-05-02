@@ -101,15 +101,15 @@ export const commentRouter = createTRPCRouter({
 					}
 				});
 				if (ctx.auth.userId !== input.authorId) {
-					const title = input.isAnonymous ?  "Comment from anon" : `Comment from ${author}`;
-					const notification = await ctx.magicbell.store.create({
+					const title = input.isAnonymous ? "Comment from anon" : `Comment from ${author}`;
+					/*const notification = await ctx.magicbell.store.create({
 						title,
 						content: input.content,
 						recipients: [{ external_id: input.authorId }],
 						topic: dbThread.group.slug,
 						category: "comment",
 						action_url: `/${dbThread.group.slug}?messageId=${dbThread.messageId}&commentId=${commentId}`
-					});
+					});*/
 					ctx.logger.info("-----------------------------------------------");
 					ctx.logger.debug("New notification!!", notification);
 					ctx.logger.info("-----------------------------------------------");
@@ -163,15 +163,15 @@ export const commentRouter = createTRPCRouter({
 					authorId: true
 				}
 			});
-			const title = input.isAnonymous ?  "Comment from anon" : `Comment from ${author}`;
-			const notification = await ctx.magicbell.store.create({
+			const title = input.isAnonymous ? "Comment from anon" : `Comment from ${author}`;
+			/*const notification = await ctx.magicbell.store.create({
 				title,
 				content: input.content,
 				recipients: recipients.map(c => ({ external_id: c.authorId })),
 				category: "comment",
 				topic: dbComment.group.slug,
 				action_url: `/${dbComment.group.slug}?messageId=${dbComment.thread.messageId}&commentId=${commentId}`
-			});
+			});*/
 
 			ctx.logger.info("-----------------------------------------------");
 			ctx.logger.debug("New notification!!", notification);

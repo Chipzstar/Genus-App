@@ -24,6 +24,7 @@ if (typeof window !== "undefined") {
 	// checks that we are client-side
 	posthog.init(String(NEXT_PUBLIC_POSTHOG_KEY), {
 		api_host: NEXT_PUBLIC_POSTHOG_HOST ?? "https://app.posthog.com",
+		disable_session_recording: NODE_ENV === "development",
 		loaded: posthog => {
 			if (NODE_ENV === "development") posthog.debug(); // debug mode in development
 		}

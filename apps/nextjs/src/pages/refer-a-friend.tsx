@@ -168,7 +168,6 @@ const ReferAFriend = () => {
 							<span className="text-lg font-medium">Send Invite 📨</span>
 						</Button>
 						<Button
-							loading={loading}
 							className="w-full bg-secondary-400 py-10 hover:bg-secondary-400/90"
 							size="lg"
 							type="button"

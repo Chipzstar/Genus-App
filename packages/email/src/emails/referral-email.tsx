@@ -1,14 +1,24 @@
 import * as React from "react";
-import { Body, Head, Html, Link } from "@react-email/components";
+import { Body, Column, Head, Html, Img, Link, Row, Section } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 
 interface EmailTemplateProps {
 	formUrl?: string;
+	instagram?: string;
+	linkedin?: string;
+	tiktok?: string;
 }
 
-export const ReferralEmail: React.FC<Readonly<EmailTemplateProps>> = ({
+type ReferralEmailPreviewProps = EmailTemplateProps;
+
+const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+
+export const ReferralEmail = ({
+	linkedin,
+	tiktok,
+	instagram,
 	formUrl = "https://genusnetworks.fillout.com/review"
-}) => (
+}: EmailTemplateProps) => (
 	<Html>
 		<Head />
 		<Tailwind>
@@ -16,13 +26,19 @@ export const ReferralEmail: React.FC<Readonly<EmailTemplateProps>> = ({
 				<div className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-md">
 					<h1 className="text-xl font-semibold text-gray-900">Hey there!</h1>
 					<p className="mt-2 text-base text-gray-700">
-						{
-							"We're thrilled to have you as part of the Genus community. We constantly strive to improve, and your feedback is invaluable to us."
-						}
+						We’re Genus an emerging careers guidance platform, helping students gain real and practical
+						insights towards finding and securing the right corporate role for them”. [Insert name - take
+						from form if poss?], recently helped us share their internship/graduate experience! They
+						recommended you as someone who would be perfect in sharing your experience(s) (don’t worry, it’s
+						all anonymous)!
 					</p>
 					<p className="mt-2 text-base text-gray-700">
-						Could you spare a few moments to fill out a review? Your insights will help us enhance your
-						experience.
+						It would be amazing to fill out your review below (it only takes c.6 mins) - you could even be
+						in the chance of winning £50! 🤩
+					</p>
+					<p className="mt-2 text-base text-gray-700">
+						Do check out (and follow) below our socials for valuable career insights across Banking &
+						Finance, Consulting & Tech. 📈
 					</p>
 					<Link
 						role="button"
@@ -32,13 +48,28 @@ export const ReferralEmail: React.FC<Readonly<EmailTemplateProps>> = ({
 					>
 						Fill in Review
 					</Link>
-					<p className="mt-4 text-sm text-gray-600">
-						Thank you for your time and support. We look forward to reading your feedback!
-					</p>
+					<p className="mt-4 text-sm text-gray-600">From the Genus Team</p>
+					<section className="flex gap-x-4">
+						<Link href="https://www.instagram.com/genusnetworks/" target="_blank" role="button">
+							<Img src={instagram} width="32" height="32" alt="instagram" />
+						</Link>
+						<Link href="https://www.linkedin.com/company/genusnetworks/" target="_blank" role="button">
+							<Img src={linkedin} width="32" height="32" alt="linkedin" />
+						</Link>
+						<Link role="button" href="https://www.tiktok.com/@genusnetworks/" target="_blank">
+							<Img src={tiktok} width="32" height="32" alt="tiktok" />
+						</Link>
+					</section>
 				</div>
 			</Body>
 		</Tailwind>
 	</Html>
 );
+
+ReferralEmail.PreviewProps = {
+	instagram: `${baseUrl}/static/instagram.png`,
+	linkedin: `${baseUrl}/static/linkedin.png`,
+	tiktok: `${baseUrl}/static/tiktok.png`
+} as ReferralEmailPreviewProps;
 
 export default ReferralEmail;

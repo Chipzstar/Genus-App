@@ -5,16 +5,8 @@
   "exports": {
     ".": "./index.ts"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "src/*"
-      ]
-    }
-  },
-  "license": "MIT",
   "scripts": {
-    "dev": "email dev",
+    "dev": "email dev --dir src/emails",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
@@ -32,6 +24,13 @@
     "@genus/tsconfig": "workspace:^0.1.0",
     "eslint": "^8.53.0",
     "typescript": "^5.2.2"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
   },
   "eslintConfig": {
     "extends": [

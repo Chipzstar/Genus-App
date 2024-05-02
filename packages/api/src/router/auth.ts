@@ -83,6 +83,7 @@ export const authRouter = createTRPCRouter({
 				return !!dbUser;
 			} catch (err) {
 				console.error(err);
+				ctx.logger.error(err);
 				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 			}
 		}),

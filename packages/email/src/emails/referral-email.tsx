@@ -55,13 +55,13 @@ export const ReferralEmail = ({
 					<p className="mt-4 text-sm text-gray-600">From the Genus Team</p>
 					<section className="flex gap-x-4">
 						<Link href="https://www.instagram.com/genusnetworks/" target="_blank" role="button">
-							<Img src={instagram} width="32" height="32" alt="instagram" />
+							<Img src={`${baseUrl}/static/instagram.png`} width="32" height="32" alt="instagram" />
 						</Link>
 						<Link href="https://www.linkedin.com/company/genusnetworks/" target="_blank" role="button">
-							<Img src={linkedin} width="32" height="32" alt="linkedin" />
+							<Img src={`${linkedin}/static/linkedin.png`} width="32" height="32" alt="linkedin" />
 						</Link>
 						<Link role="button" href="https://www.tiktok.com/@genusnetworks/" target="_blank">
-							<Img src={tiktok} width="32" height="32" alt="tiktok" />
+							<Img src={`${tiktok}/static/tiktok.png`} width="32" height="32" alt="tiktok" />
 						</Link>
 					</section>
 				</div>

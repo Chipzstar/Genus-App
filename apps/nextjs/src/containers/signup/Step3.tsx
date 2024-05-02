@@ -66,9 +66,10 @@ const Step3: FC = () => {
 			}
 			// check if the user is active
 			if (!(await checkUserActive({ email }))) {
-				toast.success("Thanks for joining our waiting list", {
+				toast.info("Thanks for joining our waiting list", {
 					description:
-						"We will send you an email once our platform is ready. Please keep an eye on your inbox!!"
+						"We will send you an email once our platform is ready. Please keep an eye on your inbox!!",
+					duration: 7500
 				});
 				setTimeout(() => void replace(PATHS.LOGIN), 1500);
 				return null;

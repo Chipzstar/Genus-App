@@ -31,8 +31,11 @@ const Login: NextPageWithAuthLayout = () => {
 		onSuccess(active) {
 			if (!active) {
 				void signOut().then(() => posthog.reset());
-				toast.error(
-					"Your account is not yet active as you are on our waitlist. Please keep a look out for an email to activate your account."
+				toast.info(
+					"Your account is not yet active as you are on our waitlist. Please keep a look out for an email to activate your account.",
+					{
+						duration: 7500
+					}
 				);
 			}
 		}

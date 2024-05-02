@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Body, Column, Head, Html, Img, Link, Row, Section } from "@react-email/components";
+import { Body, Head, Html, Img, Link } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 
 interface EmailTemplateProps {

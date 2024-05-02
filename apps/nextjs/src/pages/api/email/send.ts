@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			from: `Genus <${RESEND_SENDER_EMAIL}>`,
 			to: recipients,
 			subject,
-			react: ReferralEmail({ formUrl: REVIEW_FORM_URL }),
+			react: ReferralEmail({ formUrl: REVIEW_FORM_URL, referrerName }),
 			reply_to: referrerEmail,
 			text: `Hey, ${referrerName} wants you to fill out a review form for Genus. Here's the link\n\n${REVIEW_FORM_URL}`
 		});

@@ -3,7 +3,8 @@ import { Body, Head, Html, Img, Link } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 
 interface EmailTemplateProps {
-	formUrl?: string;
+	formUrl: string;
+	referrerName: string;
 	instagram?: string;
 	linkedin?: string;
 	tiktok?: string;
@@ -17,7 +18,8 @@ export const ReferralEmail = ({
 	linkedin,
 	tiktok,
 	instagram,
-	formUrl = "https://genusnetworks.fillout.com/review"
+	formUrl = "https://genusnetworks.fillout.com/review",
+	referrerName
 }: EmailTemplateProps) => (
 	<Html>
 		<Head />
@@ -27,10 +29,9 @@ export const ReferralEmail = ({
 					<h1 className="text-xl font-semibold text-gray-900">Hey there!</h1>
 					<p className="mt-2 text-base text-gray-700">
 						We’re Genus an emerging careers guidance platform, helping students gain real and practical
-						insights towards finding and securing the right corporate role for them”. [Insert name - take
-						from form if poss?], recently helped us share their internship/graduate experience! They
-						recommended you as someone who would be perfect in sharing your experience(s) (don’t worry, it’s
-						all anonymous)!
+						insights towards finding and securing the right corporate role for them”. {referrerName},
+						recently helped us share their internship/graduate experience! They recommended you as someone
+						who would be perfect in sharing your experience(s) (don’t worry, it’s all anonymous)!
 					</p>
 					<p className="mt-2 text-base text-gray-700">
 						It would be amazing to fill out your review below (it only takes c.6 mins) - you could even be

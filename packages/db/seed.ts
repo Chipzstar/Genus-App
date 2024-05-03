@@ -6,7 +6,8 @@ import { parse } from "csv-parse";
 import { drizzle } from "drizzle-orm/neon-http";
 import { nanoid } from "nanoid";
 
-import schema, { company, skillset, skillsetSlug } from "./drizzle/schema";
+import * as schema from "./drizzle/schema";
+import { company, skillset, skillsetSlug } from "./drizzle/schema";
 
 /**
  * Sanitizes a string by converting it to lowercase and replacing spaces with underscores.
@@ -129,5 +130,4 @@ const main = async (type: "company" | "skillset") => {
 	}
 };
 
-// void main("company").then(r => console.log("Seed done"));
 void main("skillset").then(r => console.log("Seed done"));

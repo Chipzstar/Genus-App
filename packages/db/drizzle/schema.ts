@@ -15,85 +15,29 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm/relations";
 
-export const careerInterestSlug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
-export const skillsetSlug = pgEnum("skillset_slug", [
-	"written_communication",
-	"verbal_communication",
-	"interpersonal_skills",
-	"time_management",
-	"emotional_intelligence",
-	"critical_thinking",
-	"sales",
-	"leadership_&_management",
-	"negotiation",
-	"creativity",
-	"teamwork",
-	"financial_literacy",
-	"analytical_skills",
-	"problem_solving",
-	"project_management",
-	"adaptability",
-	"delegation",
-	"data_analysis",
-	"technical_&_coding_skills",
-	"research",
-	"public_speaking_&_presentation",
-	"social_media_&_content_creation",
-	"digital_skills",
-	"marketing",
-	"strategy",
-	"organisation",
-	"attention_to_detail",
-	"conflict_resolution",
-	"artistic_skills",
-	"modelling",
-	"commercial_awareness",
-	"enterprise_and_entrepreneurial_skills",
-	"customer_service",
-	"design",
-	"videography_&_photography"
-]);
+import {
+	career_interests,
+	ethnicities,
+	genders,
+	profile_types,
+	skillsets,
+	university_years
+} from "@genus/validators/constants";
+
+export const careerInterestSlug = pgEnum("careerinterest_slug", career_interests);
+export const skillsetSlug = pgEnum("skillset_slug", skillsets);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
-export const userCurrentYear = pgEnum("user_currentyear", [
-	"1st_year",
-	"2nd_year",
-	"3rd_year",
-	"4th_year",
-	"graduate",
-	"postgraduate",
-	"phd",
-	"other"
-]);
-export const userGender = pgEnum("user_gender", ["male", "female", "non_binary", "other"]);
-export const userProfileType = pgEnum("user_profiletype", ["student", "graduate", "admin", "expert"]);
+export const userCurrentYear = pgEnum("user_currentyear", university_years);
+export const userGender = pgEnum("user_gender", genders);
+export const userProfileType = pgEnum("user_profiletype", profile_types);
 export const userOnboardingStatus = pgEnum("user_onboardingstatus", [
 	"not_started",
 	"background_info",
 	"career_info",
 	"completed"
 ]);
-export const userEthnicity = pgEnum("user_ethnicity", [
-	"english__welsh__scottish__northern_irish_or_british",
-	"irish",
-	"gypsy_or_irish_traveller",
-	"roma",
-	"any_other_white_background",
-	"caribbean",
-	"african",
-	"any_other_black__black_british__or_caribbean_background",
-	"indian",
-	"pakistani",
-	"bangladeshi",
-	"chinese",
-	"any_other_asian_background",
-	"white_and_black_caribbean",
-	"white_and_black_african",
-	"white_and_asian",
-	"any_other_mixed_or_multiple_ethnic_background",
-	"arab",
-	"any_other_ethnic_group"
-]);
+export const userEthnicity = pgEnum("user_ethnicity", ethnicities);
 
 export const careerInterest = pgTable(
 	"careerInterest",

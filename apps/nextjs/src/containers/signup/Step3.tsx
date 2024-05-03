@@ -93,11 +93,6 @@ const Step3: FC = () => {
 				password
 			});
 			if (result.status === "complete" && !!result.createdSessionId) {
-				window.open(
-					`https://hodpo2py6ju.typeform.com/to/XOethBN1#&email=${email}`,
-					"_blank",
-					"noopener,noreferrer"
-				);
 				await setActive({ session: result.createdSessionId });
 				await replace(PATHS.HOME);
 				toast.success("Welcome to Genus!", {

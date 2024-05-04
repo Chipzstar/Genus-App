@@ -154,7 +154,7 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../../packages/ui
       '@genus/validators':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../../packages/validators
       '@hookform/resolvers':
         specifier: ^3.3.2
@@ -8579,7 +8579,7 @@ packages:
     engines: {node: '>=14.18'}
     dependencies:
       '@sanity/eventsource': 5.0.2
-      get-it: 8.4.27(debug@4.3.4)
+      get-it: 8.4.27(debug@3.2.7)
       rxjs: 7.8.1
     transitivePeerDependencies:
       - debug
@@ -8941,7 +8941,7 @@ packages:
       '@sanity/client': ^6.12.3
       react: ^18.2.0
     dependencies:
-      '@sanity/client': 6.17.0(debug@3.2.7)
+      '@sanity/client': 6.17.0(debug@4.3.4)
       react: 18.2.0
     dev: false
 
@@ -8955,7 +8955,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@sanity/client': 6.17.0(debug@3.2.7)
+      '@sanity/client': 6.17.0(debug@4.3.4)
       '@sanity/preview-kit-compat': 1.4.4(@sanity/client@6.17.0)(react@18.2.0)
       '@vercel/stega': 0.1.0
       lru-cache: 10.2.0
@@ -17018,10 +17018,10 @@ packages:
       sanity: ^3.25
       styled-components: ^5.2 || ^6.0
     dependencies:
-      '@sanity/client': 6.17.0(debug@3.2.7)
+      '@sanity/client': 6.17.0(debug@4.3.4)
       '@sanity/icons': 2.11.8(react@18.2.0)
       '@sanity/preview-kit': 5.0.20(@sanity/client@6.17.0)(react@18.2.0)
-      '@sanity/types': 3.40.0(debug@3.2.7)
+      '@sanity/types': 3.40.0(debug@4.3.4)
       '@sanity/ui': 2.1.4(react-dom@18.2.0)(react-is@18.3.1)(react@18.2.0)(styled-components@6.1.9)
       '@sanity/visual-editing': 1.2.2(next@13.5.6)
       '@sanity/webhook': 4.0.0

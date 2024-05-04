@@ -59,7 +59,7 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 							"text-xs sm:text-sm"
 						)}
 					>
-						Insights
+						Resources
 					</span>
 				</button>
 				<button

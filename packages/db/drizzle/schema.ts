@@ -335,6 +335,10 @@ export const review = pgTable(
 			.array()
 			.notNull()
 			.default(sql`'{}'::text[]`),
+		topResources: text("topResources")
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
 		isDeleted: boolean("isDeleted").default(false).notNull()
 	},
 	table => {

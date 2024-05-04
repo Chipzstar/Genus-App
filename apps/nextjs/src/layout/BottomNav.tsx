@@ -50,12 +50,12 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 				<button
 					type="button"
 					className="group mr-2 inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
-					onClick={() => router.push(PATHS.INSIGHTS)}
+					onClick={() => router.push(PATHS.RESOURCES)}
 				>
-					<SearchIcon active={activePage.includes(PATHS.INSIGHTS)} size={25} />
+					<SearchIcon active={activePage.includes(PATHS.RESOURCES)} size={25} />
 					<span
 						className={cx(
-							activePage.includes(PATHS.INSIGHTS) && "text-primary group-hover:text-primary",
+							activePage.includes(PATHS.RESOURCES) && "text-primary group-hover:text-primary",
 							"text-xs sm:text-sm"
 						)}
 					>

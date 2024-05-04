@@ -21,7 +21,8 @@ export const PATHS = {
 	COMPANIES: "/companies",
 	PROFILE: "/profile",
 	NOTIFICATIONS: "/notifications",
-	GROUPS: "/groups"
+	GROUPS: "/groups",
+	RESOURCES: "/resources"
 };
 
 export type FormatType = "default" | "category";
@@ -148,18 +149,19 @@ export const handleUserOnboarding = async (
 	else if (status === "career_info") step = 2;
 
 	if (step !== -1) {
-		void signOut().then(() => posthog.reset());
 		addTempPassword({
 			email: loginInfo.email,
 			password: loginInfo.password
 		});
-
-		void routerPush(`${PATHS.SIGNUP}?step=${step}&email=${loginInfo.email}`).then(() => {
-			toastInfo("Finish onboarding", {
-				description: "We still need to collect some information about you before you can log in.",
-				closeButton: true,
-				duration: 3000
+		void signOut().then(() => {
+			void routerPush(`${PATHS.SIGNUP}?step=${step}&email=${loginInfo.email}`).then(() => {
+				toastInfo("Finish onboarding", {
+					description: "We still need to collect some information about you before you can log in.",
+					closeButton: true,
+					duration: 3000
+				});
 			});
+			posthog.reset();
 		});
 		return false;
 	}

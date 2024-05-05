@@ -157,7 +157,7 @@ export const authRouter = createTRPCRouter({
 						userId: dbUser.id
 					};
 				});
-				await ctx.db.insert(careerInterestToUser).values(careerInterestQueries);
+				await ctx.db.insert(careerInterestToUser).values(careerInterestQueries).onConflictDoNothing();
 
 				// insert the new skillsets
 				const dbSkillsets = await ctx.db.query.skillset.findMany({
@@ -179,7 +179,7 @@ export const authRouter = createTRPCRouter({
 						userId: dbUser.id
 					};
 				});
-				await ctx.db.insert(companyToUser).values(companyQueries);
+				await ctx.db.insert(companyToUser).values(companyQueries).onConflictDoNothing();
 
 				const updatedUser = await ctx.db
 					.update(user)

@@ -29,7 +29,6 @@ export const reviewRouter = createTRPCRouter({
 					const count = industryResources.get(resourceLower) || 0;
 					industryResources.set(resourceLower, count + 1);
 				});
-				// groupedResources.set(r.industry, industryResources);
 			});
 
 			const allResources = reviews

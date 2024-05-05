@@ -25,6 +25,7 @@ import {
 } from "@genus/validators/constants";
 
 export const careerInterestSlug = pgEnum("careerinterest_slug", career_interests);
+export const reviewIndustry = pgEnum("review_industry", [...career_interests, "other"]);
 export const skillsetSlug = pgEnum("skillset_slug", skillsets);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
@@ -306,6 +307,7 @@ export const review = pgTable(
 		reviewId: varchar("reviewId", { length: 191 }).notNull(),
 		companyId: varchar("companyId", { length: 191 }).notNull(),
 		companyName: varchar("companyName", { length: 191 }).notNull(),
+		industry: reviewIndustry("industry").default("banking_finance").notNull(),
 		experienceType: varchar("experienceType", { length: 191 }),
 		interviewProcess: numeric("interviewProcess").notNull(),
 		diversity: numeric("diversity").notNull(),

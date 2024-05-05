@@ -12,16 +12,18 @@ import { transformer } from "@genus/api/transformer";
 import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
+import type { Industry } from "@genus/validators";
 import { career_interests } from "@genus/validators/constants";
 
 import CompanyCard from "~/components/CompanyCard";
+import ResourceCard from "~/components/ResourceCard";
 import TopTipCard from "~/components/TopTipCard";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 
-const COMPANY_TABS = [
+const TAB_CATEGORIES: { label: string; value: Industry }[] = [
 	{
 		label: "Banking & finance",
 		value: "banking_finance"
@@ -33,6 +35,10 @@ const COMPANY_TABS = [
 	{
 		label: "Consulting",
 		value: "consulting"
+	},
+	{
+		label: "Other",
+		value: "other"
 	}
 ];
 
@@ -73,6 +79,7 @@ const Home = () => {
 	const { user } = useClerk();
 	const { data: companies } = trpc.company.getCompanies.useQuery();
 	const { data: reviews } = trpc.review.getReviews.useQuery();
+	const { data: resources } = trpc.review.getResources.useQuery();
 
 	return (
 		<div className="scrollable-page-container">
@@ -163,6 +170,7 @@ const Home = () => {
 							</div>
 						</div>
 					</section>
+
 					<section className="h-full overflow-y-scroll pt-6 md:pt-12">
 						<div className="mb-4 flex flex-col" role="button">
 							<header className="text-xl font-semibold sm:text-2xl">
@@ -172,19 +180,20 @@ const Home = () => {
 						<div className="flex flex-col">
 							<Tabs defaultValue="banking_finance" className="relative mb-3 w-full">
 								<TabsList variant="outline" className="w-full">
-									{COMPANY_TABS.map((tab, index) => (
+									{TAB_CATEGORIES.map((tab, index) => (
 										<TabsTrigger variant="outline" key={index} value={tab.value} className="grow">
 											<span className="text-xs md:text-base">{tab.label}</span>
 										</TabsTrigger>
 									))}
-									<TabsTrigger variant="outline" key={900} value="other" className="grow">
-										<span className="text-xs md:text-base">Other</span>
-									</TabsTrigger>
 								</TabsList>
-								{COMPANY_TABS.map((tab, index) => (
+								{TAB_CATEGORIES.map((tab, index) => (
 									<TabsContent key={index} value={tab.value}>
 										{companies
-											?.filter(({ category }) => category === tab.value)
+											?.filter(({ category }) =>
+												tab.value === "other"
+													? category === "tech" || !career_interests.includes(category)
+													: category === tab.value
+											)
 											.map((company, index) => (
 												<CompanyCard
 													key={index}
@@ -195,25 +204,59 @@ const Home = () => {
 											))}
 									</TabsContent>
 								))}
-								<TabsContent value="other">
-									{companies
-										?.filter(
-											({ category }) =>
-												category === "tech" || !career_interests.includes(category)
-										)
-										.map((company, index) => (
-											<CompanyCard
-												key={index}
-												onClick={() => router.push(`${PATHS.COMPANIES}/${company.slug}`)}
-												company={company}
-												reviews={company.reviews}
-											/>
-										))}
-								</TabsContent>
 							</Tabs>
 							<div className="flex w-full items-center justify-center">
 								<Button variant="ghost" size="lg" onClick={() => router.push(PATHS.COMPANIES)}>
 									<span className="text-base sm:text-xl">See all companies</span>
+								</Button>
+							</div>
+						</div>
+					</section>
+					<section className="h-full overflow-y-scroll pt-6 md:pt-12">
+						<div className="mb-4 flex flex-col" role="button">
+							<header className="text-xl font-semibold sm:text-2xl">
+								<span>Top Resources</span>
+							</header>
+						</div>
+						<div className="flex flex-col">
+							<Tabs defaultValue="banking_finance" className="relative mb-3 w-full">
+								<TabsList variant="outline" className="w-full">
+									{TAB_CATEGORIES.map((tab, index) => (
+										<TabsTrigger variant="outline" key={index} value={tab.value} className="grow">
+											<span className="text-xs md:text-base">{tab.label}</span>
+										</TabsTrigger>
+									))}
+								</TabsList>
+								{TAB_CATEGORIES.map((tab, index) => {
+									const map = resources?.grouped.get(tab.value);
+									console.log(tab.value, map);
+									if (!map || map.size === 0) {
+										return (
+											<TabsContent key={index} value={tab.value}>
+												<span className="text-sm text-primary sm:text-base">
+													No resources found
+												</span>
+											</TabsContent>
+										);
+									}
+									const values = Array.from(map.keys());
+									return (
+										<TabsContent key={index} value={tab.value}>
+											{values.map((resource, index) => (
+												<ResourceCard
+													key={index}
+													text={resource}
+													count={map.get(resource) ?? 0}
+													total={values.length}
+												/>
+											))}
+										</TabsContent>
+									);
+								})}
+							</Tabs>
+							<div className="flex w-full items-center justify-center">
+								<Button variant="ghost" size="lg" onClick={() => router.push(PATHS.RESOURCES)}>
+									<span className="text-base sm:text-xl">See all top resources</span>
 								</Button>
 							</div>
 						</div>

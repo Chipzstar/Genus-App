@@ -15,7 +15,6 @@ export const companyRouter = createTRPCRouter({
 					reviews: true
 				}
 			});
-			console.log(companyWithReviews);
 			return companyWithReviews;
 		} catch (err) {
 			console.error(err);

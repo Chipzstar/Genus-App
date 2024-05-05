@@ -1,6 +1,8 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import { z } from "zod";
 
 import type { AppRouter } from "@genus/api";
+import { careerInterestsSchema } from "@genus/validators";
 
 import type { Category } from "~/lib/sanity.queries";
 

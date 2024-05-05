@@ -21,6 +21,8 @@ export const ethnicitiesSchema = z.enum(ethnicities);
 
 export const careerInterestsSchema = z.enum(career_interests);
 
+export type Industry = z.infer<typeof careerInterestsSchema> | "other";
+
 export const broadCourseCategorySchema = z.enum(broad_course_categories);
 
 export const universitiesSchema = z.enum(universities);

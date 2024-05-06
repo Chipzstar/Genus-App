@@ -90,6 +90,8 @@ export const ethnicities = [
 
 export const career_interests = ["banking_finance", "law", "consulting", "tech"] as const;
 
+export const industries = ["banking_finance", "law", "consulting", "tech", "other"] as const;
+
 export enum CAREER_INTERESTS {
 	banking_finance = 1,
 	law = 2,

@@ -8,6 +8,7 @@ import {
 	ethnicities,
 	experience_types,
 	genders,
+	industries,
 	profile_types,
 	skillsets,
 	universities,
@@ -19,9 +20,11 @@ export const gendersSchema = z.enum(genders);
 
 export const ethnicitiesSchema = z.enum(ethnicities);
 
+export const industrySchema = z.enum(industries);
+
 export const careerInterestsSchema = z.enum(career_interests);
 
-export type Industry = z.infer<typeof careerInterestsSchema> | "other";
+export type Industry = z.infer<typeof industrySchema>;
 
 export const broadCourseCategorySchema = z.enum(broad_course_categories);
 

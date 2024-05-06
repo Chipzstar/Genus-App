@@ -1,0 +1,5 @@
+### GET request to example server
+GET https://api.fillout.com/v1/api/forms/{{formId}}/submissions/{{submissionId}}
+Authorization: Bearer {{$auth.token("fillout_api_key")}}
+
+###

@@ -43,7 +43,7 @@ const verifySignature = function (receivedSignature: string | string[] | undefin
 	return receivedSignature === `sha256=${hash}`;
 };
 
-export async function handleFormResponse(event: TypeformWebhookPayload) {
+async function handleFormResponse(event: TypeformWebhookPayload) {
 	try {
 		if (NODE_ENV === "development") await writeToFile(event);
 		if (NODE_ENV === "production")

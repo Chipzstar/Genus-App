@@ -23,6 +23,8 @@ export const env = createEnv({
 		NODE_ENV: z.enum(["development", "test", "production"]),
 		CLERK_SECRET_KEY: z.string(),
 		CLERK_WEBHOOK_SECRET: z.string(),
+		FILLOUT_WEBHOOK_SECRET: z.string(),
+		FILLOUT_FORM_ID: z.string(),
 		UPLOADTHING_APP_ID: z.string(),
 		UPLOADTHING_SECRET: z.string(),
 		UPSTASH_REDIS_REST_TOKEN: z.string().optional(),

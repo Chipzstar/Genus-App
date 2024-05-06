@@ -185,6 +185,7 @@ export const authRouter = createTRPCRouter({
 					.update(user)
 					.set({
 						experienceType: input.experience_type,
+						workPreference: input.work_environment,
 						onboardingStatus: "completed"
 					})
 					.where(eq(user.email, input.email))

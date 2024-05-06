@@ -49,7 +49,9 @@ export function formatString<T extends FormatType = "default">(str: StringInput<
  * Sanitizes a string by converting it to lowercase and replacing spaces with hyphens.
  * @param str
  */
-export function labelEncode(str: string): string {
+export function labelEncode<T extends FormatType = "default">(str: string, format?: T): string {
+	if (!str) return "";
+	if (format === "category") str = str.replace(/\s&\s/g, "_");
 	return str
 		.toLowerCase()
 		.replace(/\s+/g, "_")

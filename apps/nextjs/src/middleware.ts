@@ -12,6 +12,7 @@ export default authMiddleware({
 		"/api/uploadthing(.*)",
 		"/api/clerk/webhook",
 		"/api/typeform/webhook",
+		"/api/fillout/webhook",
 		"/api/trpc/auth(.*)",
 		"/_axiom/web-vitals"
 	],

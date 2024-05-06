@@ -219,6 +219,7 @@ export const user = pgTable(
 		currentYear: userCurrentYear("currentYear"),
 		completionYear: integer("completionYear"),
 		experienceType: varchar("experienceType", { length: 191 }),
+		workPreference: varchar("workPreference", { length: 191 }),
 		imageKey: varchar("imageKey", { length: 191 }),
 		imageUrl: varchar("imageUrl", { length: 191 }),
 		clerkImageHash: varchar("clerkImageHash", { length: 191 }),

@@ -24,7 +24,11 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRat
 	}, [reviews]);
 
 	return (
-		<div role="button" onClick={onClick} className="grid grid-cols-3 place-items-center gap-x-8 gap-y-4">
+		<div
+			role="button"
+			onClick={onClick}
+			className="mb-5 grid grid-cols-3 place-items-center gap-x-8 gap-y-4 sm:mb-0"
+		>
 			{company.logoUrl && (
 				<Image
 					src={company.logoUrl}

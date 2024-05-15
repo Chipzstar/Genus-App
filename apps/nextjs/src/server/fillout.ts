@@ -7,9 +7,10 @@ import type { careerInterestsSchema } from "@genus/validators";
 import { industrySchema } from "@genus/validators";
 import { prettyPrint } from "@genus/validators/helpers";
 
-import type { RatingType, Submission } from "~/types/fillout";
+import type { RatingType, ReviewType, Submission } from "~/types/fillout";
 import { labelEncode, sanitize } from "~/utils";
 
+const REVIEW_TYPE_FIELD_ID = "6XzkUL3dqz3ZaBiU9cXwCZ";
 const COMPANY_NAME_FIELD_ID = "pXSotdYMKF13MKwc2LfuMS";
 const OTHER_COMPANY_NAME_FIELD_ID = "3t42iRkLQTk79ppuiGWCSz";
 const INDUSTRY_FIELD_ID = "8G8mChQYfzjoCg4kgaiT3q";
@@ -21,6 +22,12 @@ export const INDUSTRY_DIVISION_MAP: Record<CompanyIndustry, string> = {
 	tech: ""
 };
 
+export const getReviewType = (form: Submission) => {
+	const reviewType = form.questions.find(q => q.id === REVIEW_TYPE_FIELD_ID)?.value as ReviewType;
+	prettyPrint(reviewType, "#");
+	return reviewType;
+};
+
 type CompanyIndustry = z.infer<typeof careerInterestsSchema>;
 
 export const getCompanyAndIndustry = async (form: Submission) => {
@@ -29,6 +36,7 @@ export const getCompanyAndIndustry = async (form: Submission) => {
 	const industry = form.questions.find(q => q.id === INDUSTRY_FIELD_ID)?.value as string;
 	const industryLabel = labelEncode(industry, "category") as CompanyIndustry;
 	const field = form.questions.find(q => q.id === COMPANY_NAME_FIELD_ID);
+	console.log({ industry, industryLabel, field });
 
 	if (!field) return { companyId: null, companyName: name, industry };
 	const answer = field.value;

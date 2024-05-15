@@ -20,6 +20,7 @@ import {
 	getProsAndCons,
 	getRating,
 	getRegion,
+	getReviewType,
 	getTopResources,
 	getTopSkills,
 	getTopTip,
@@ -55,6 +56,9 @@ const verifySignature = (sig: string | string[] | undefined) => {
 
 async function handleFormResponse(event: FormEvent) {
 	if (NODE_ENV === "development") await writeToFile(event);
+
+	const reviewType = getReviewType(event.submission);
+	if (reviewType === "Student") throw new Error("Form responses from students cannot be parsed");
 
 	const { companyName, companyId, industry } = await getCompanyAndIndustry(event.submission);
 	const division = getDivision(event.submission);

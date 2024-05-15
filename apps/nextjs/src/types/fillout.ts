@@ -86,3 +86,5 @@ export type RatingType =
 	| "flexibility"
 	| "authenticity"
 	| "work-life-balance";
+
+export type ReviewType = "Student" | "Young professional";

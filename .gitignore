@@ -54,3 +54,4 @@ yarn-error.log*
 .idea
 /apps/nextjs/.thing/hooks/fillout/submissions/
 /apps/nextjs/src/pages/api/fillout/http-client.env.json
+!/apps/nextjs/public/images/companies/

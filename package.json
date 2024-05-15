@@ -1,7 +1,7 @@
 {
   "name": "genus-app",
   "private": true,
-  "packageManager": "pnpm@7.13.0",
+  "packageManager": "pnpm@9.1.0",
   "scripts": {
     "build": "turbo build",
     "clean": "rm -rf node_modules pnpm-lock.yaml",

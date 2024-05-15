@@ -6,7 +6,7 @@ import { and, company, eq, isNotNull } from "@genus/db";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const companyRouter = createTRPCRouter({
-	getCompanies: publicProcedure.query(async ({ ctx }) => {
+	getReviewCompanies: publicProcedure.query(async ({ ctx }) => {
 		try {
 			const companyWithReviews = await ctx.db.query.company.findMany({
 				// where: inArray(company.slug, ["barclays", "jp_morgan", "goldman_sachs", "bank_of_england", "hsbc"]),
@@ -30,12 +30,11 @@ export const companyRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			try {
 				const companyWithReviews = await ctx.db.query.company.findFirst({
-					where: and(eq(company.slug, input.slug), isNotNull(company.logoUrl)),
+					where: eq(company.slug, input.slug),
 					with: {
 						reviews: true
 					}
 				});
-				console.log(companyWithReviews);
 				return companyWithReviews;
 			} catch (err) {
 				console.error(err);

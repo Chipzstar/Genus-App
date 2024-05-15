@@ -26,7 +26,7 @@ export type Messages = Pick<GetGroupBySlugOutput, "messages">["messages"];
 
 export type Message = Messages[0];
 
-type GetCompaniesOutput = inferRouterOutputs<AppRouter>["company"]["getCompanies"];
+type GetCompaniesOutput = inferRouterOutputs<AppRouter>["company"]["getReviewCompanies"];
 
 export type Company = GetCompaniesOutput[0];
 

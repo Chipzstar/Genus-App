@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	await helpers.company.getCompanies.prefetch();
+	await helpers.company.getReviewCompanies.prefetch();
 
 	return {
 		props: {
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const Companies = () => {
 	const router = useRouter();
 	const [search, setSearch] = useState("");
-	const { data } = trpc.company.getCompanies.useQuery();
+	const { data } = trpc.company.getReviewCompanies.useQuery();
 	const [companies, setCompanies] = useState<Company[]>(data);
 	const [debouncedCompanies] = useDebounceValue<Company[]>(companies, 500);
 

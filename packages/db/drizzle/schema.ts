@@ -310,18 +310,20 @@ export const review = pgTable(
 		companyName: varchar("companyName", { length: 191 }).notNull(),
 		industry: reviewIndustry("industry").default("banking_finance").notNull(),
 		experienceType: varchar("experienceType", { length: 191 }),
+		applicationProcess: numeric("applicationProcess").notNull(),
 		interviewProcess: numeric("interviewProcess").notNull(),
 		diversity: numeric("diversity").notNull(),
-		workExperience: numeric("workExperience").notNull(),
+		flexibility: numeric("flexibility").notNull(),
 		teamCulture: numeric("teamCulture").notNull(),
+		workLifeBalance: numeric("workLifeBalance").notNull(),
+		authenticity: numeric("authenticity").notNull(),
 		recommendToFriend: numeric("recommendToFriend").notNull(),
 		avgRating: numeric("avgRating").notNull(),
 		isConverter: boolean("isConverter").default(false).notNull(),
 		completionYear: integer("completionYear"),
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
-		role: varchar("role", { length: 191 }).default("Summer Intern").notNull(),
-		topTip: varchar("topTip", { length: 191 }).notNull(),
+		topTip: varchar("topTip", { length: 191 }).default("").notNull(),
 		topSkills: text("topSkills")
 			.array()
 			.notNull()

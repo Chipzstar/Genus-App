@@ -19,7 +19,7 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRat
 	const numReviews = useMemo(() => `${pluralize("review", reviews.length, true)}`, [reviews]);
 
 	const rating = useMemo(() => {
-		const total = reviews.reduce((prev, acc) => prev + parseFloat(acc.avgRating), 0);
+		const total = reviews.reduce((prev, acc) => prev + Number(acc.avgRating) / 2, 0);
 		return reviews.length ? total / reviews.length : 2.5;
 	}, [reviews]);
 
@@ -49,7 +49,7 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRat
 			>
 				<span className="text-ellipsis text-base font-semibold text-black md:text-lg">{company.name}</span>
 				<div className="flex">
-					<Ratings size={20} rating={Math.round(rating)} />
+					<Ratings size={20} rating={rating} />
 				</div>
 				<span className="text-sm text-black md:text-lg">{numReviews}</span>
 			</div>

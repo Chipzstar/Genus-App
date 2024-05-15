@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	});
 
 	await helpers.review.getReviews.prefetch();
-	await helpers.company.getCompanies.prefetch();
+	await helpers.company.getReviewCompanies.prefetch();
 
 	return {
 		props: {
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const Home = () => {
 	const router = useRouter();
 	const { user } = useClerk();
-	const { data: companies } = trpc.company.getCompanies.useQuery();
+	const { data: companies } = trpc.company.getReviewCompanies.useQuery();
 	const { data: reviews } = trpc.review.getReviews.useQuery();
 	const { data: resources } = trpc.review.getResources.useQuery();
 
@@ -229,7 +229,6 @@ const Home = () => {
 								</TabsList>
 								{TAB_CATEGORIES.map((tab, index) => {
 									const map = resources?.grouped.get(tab.value);
-									console.log(tab.value, map);
 									if (!map || map.size === 0) {
 										return (
 											<TabsContent key={index} value={tab.value}>
@@ -242,7 +241,7 @@ const Home = () => {
 									const values = Array.from(map.keys());
 									return (
 										<TabsContent key={index} value={tab.value}>
-											{values.map((resource, index) => (
+											{values.slice(0, 5).map((resource, index) => (
 												<ResourceCard
 													key={index}
 													text={resource}
@@ -270,12 +269,13 @@ const Home = () => {
 						<div className="sm:px-6">
 							<Listbox
 								aria-label="Actions"
-								items={reviews}
+								items={reviews?.filter(review => review.topTip)}
 								onAction={slug => router.push(`${PATHS.COMPANIES}/${slug}`)}
 							>
 								{review => (
 									<ListboxItem key={review.companyId} className="px-0 py-0">
 										<TopTipCard
+											hideBlockQuote
 											id={review.reviewId}
 											content={review.topTip}
 											company={review.companyName}

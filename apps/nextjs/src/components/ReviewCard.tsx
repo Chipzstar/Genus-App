@@ -27,9 +27,7 @@ const ReviewCard: FC<Props> = ({ review, company }) => {
 				</div>
 				<div className="col-span-8 flex w-full flex-col space-y-1 text-wrap">
 					<span className="text-lg font-semibold">
-						{company} {review.division},
-						<br />
-						{review.role}
+						{company} {review.division}
 					</span>
 					<div className="flex items-center">
 						<span className="grow font-semibold">{review.completionYear}</span>
@@ -52,7 +50,7 @@ const ReviewCard: FC<Props> = ({ review, company }) => {
 			</section>
 			<section className="grid grid-cols-2 gap-x-8 gap-y-4">
 				<div className="flex flex-col">
-					<span className="text-success font-semibold">Pros</span>
+					<span className="font-semibold text-success">Pros</span>
 					<ul className="text-sm">
 						{review.pros.length ? (
 							review.pros.map((pro, index) => <li key={index}>{pro}</li>)

@@ -1,7 +1,9 @@
-import React, { FC } from "react";
+import type { FC } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { SignedIn, useAuth } from "@clerk/nextjs";
-import { Navbar, NavbarBrand, NavbarSlots, SlotsToClasses } from "@nextui-org/react";
+import type { NavbarSlots, SlotsToClasses } from "@nextui-org/react";
+import { Navbar, NavbarBrand } from "@nextui-org/react";
 import { usePostHog } from "posthog-js/react";
 
 import { Button } from "@genus/ui/button";

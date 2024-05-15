@@ -61,6 +61,10 @@ export function labelEncode<T extends FormatType = "default">(str: string, forma
 		.replace(/-+$/, "");
 }
 
+export function sanitize(str: string) {
+	return str.split("(", 2)[0]!.trim().replace("\n", "");
+}
+
 export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }

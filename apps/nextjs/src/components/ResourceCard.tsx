@@ -12,7 +12,6 @@ interface Props {
 }
 
 const ResourceCard: FC<Props> = ({ text, count, total }) => {
-	console.table({ count, total });
 	return (
 		<div className="flex grid auto-cols-auto grid-flow-col grid-cols-6 items-center px-0 py-3">
 			<span className="col-span-3 text-base font-medium capitalize tracking-tight text-black sm:text-xl sm:font-semibold lg:col-span-2">

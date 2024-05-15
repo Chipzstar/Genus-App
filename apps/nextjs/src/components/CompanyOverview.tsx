@@ -23,23 +23,23 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		}
 		const average = reviews.reduce((acc, { avgRating }) => acc + Number(avgRating), 0) / reviews.length;
 		const rating1 = convertToPercentage(
-			reviews.filter(({ avgRating }) => Math.round(Number(avgRating)) === 1).length,
+			reviews.filter(({ avgRating }) => Math.round(Number(avgRating) / 2) === 1).length,
 			reviews.length
 		);
 		const rating2 = convertToPercentage(
-			reviews.filter(({ avgRating }) => Math.round(Number(avgRating)) === 2).length,
+			reviews.filter(({ avgRating }) => Math.round(Number(avgRating) / 2) === 2).length,
 			reviews.length
 		);
 		const rating3 = convertToPercentage(
-			reviews.filter(({ avgRating }) => Math.round(Number(avgRating)) === 3).length,
+			reviews.filter(({ avgRating }) => Math.round(Number(avgRating) / 2) === 3).length,
 			reviews.length
 		);
 		const rating4 = convertToPercentage(
-			reviews.filter(({ avgRating }) => Math.round(Number(avgRating)) === 4).length,
+			reviews.filter(({ avgRating }) => Math.round(Number(avgRating) / 2) === 4).length,
 			reviews.length
 		);
 		const rating5 = convertToPercentage(
-			reviews.filter(({ avgRating }) => Math.round(Number(avgRating)) === 5).length,
+			reviews.filter(({ avgRating }) => Math.round(Number(avgRating) / 2) === 5).length,
 			reviews.length
 		);
 		return {
@@ -48,7 +48,7 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		};
 	}, [reviews]);
 
-	const { interviewProcess, diversity, workExperience, teamCulture, recommendToFriend } = useMemo(() => {
+	const { interviewProcess, diversity, flexibility, teamCulture, recommendToFriend } = useMemo(() => {
 		if (reviews.length === 0) return {};
 		const interviewProcess = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.interviewProcess), 0) / reviews.length
@@ -56,8 +56,8 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		const diversity = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.diversity), 0) / reviews.length
 		);
-		const workExperience = convertRatingToLevel(
-			reviews.reduce((prev, acc) => prev + Number(acc.workExperience), 0) / reviews.length
+		const flexibility = convertRatingToLevel(
+			reviews.reduce((prev, acc) => prev + Number(acc.flexibility), 0) / reviews.length
 		);
 		const teamCulture = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.teamCulture), 0) / reviews.length
@@ -65,7 +65,7 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		const recommendToFriend = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.recommendToFriend), 0) / reviews.length
 		);
-		return { interviewProcess, diversity, workExperience, teamCulture, recommendToFriend };
+		return { interviewProcess, diversity, flexibility, teamCulture, recommendToFriend };
 	}, [reviews]);
 
 	return (
@@ -120,8 +120,8 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 						<RatingLabel value={diversity} />
 					</div>
 					<div className="flex flex-col">
-						<span>Work experience</span>
-						<RatingLabel value={workExperience} />
+						<span>Flexibility</span>
+						<RatingLabel value={flexibility} />
 					</div>
 					<div className="flex flex-col">
 						<span>Team culture</span>

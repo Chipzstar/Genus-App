@@ -105,7 +105,7 @@ const CompanySlug = () => {
 							<div className="-mb-12 flex w-full justify-center">
 								<Image
 									className="border-gray bottom-16 overflow-hidden rounded-3xl border-2 bg-white shadow-sm"
-									src={company.logoUrl}
+									src={company?.logoUrl ?? "/images/spring-weeks-ldn.svg"}
 									alt="backdrop-image"
 									width={125}
 								/>
@@ -132,17 +132,19 @@ const CompanySlug = () => {
 										))}
 									</TabsList>
 									<TabsContent key={1} value="top_tips" className="max-w-3xl">
-										{company.reviews.map(r => (
-											<div key={r.id} className="flex px-4">
-												<TopTipCard
-													id={r.reviewId}
-													company={company.name}
-													content={r.topTip}
-													experience={r.experienceType}
-													hideBlockQuote
-												/>
-											</div>
-										))}
+										{company.reviews
+											.filter(r => r.topTip)
+											.map(r => (
+												<div key={r.id} className="flex px-4">
+													<TopTipCard
+														id={r.reviewId}
+														company={company.name}
+														content={r.topTip}
+														experience={r.experienceType}
+														hideBlockQuote
+													/>
+												</div>
+											))}
 									</TabsContent>
 									<TabsContent key={3} value="all_reviews" className="max-w-3xl">
 										{company.reviews.map(review => (

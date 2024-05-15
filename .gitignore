@@ -52,5 +52,5 @@ yarn-error.log*
 
 # IDE
 .idea
-!/apps/nextjs/.thing/hooks/fillout/submissions/
+/apps/nextjs/.thing/hooks/fillout/submissions/
 /apps/nextjs/src/pages/api/fillout/http-client.env.json

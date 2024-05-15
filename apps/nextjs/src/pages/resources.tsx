@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const Resources = () => {
 	const [search, setSearch] = useState("");
 	const { data } = trpc.review.getResources.useQuery();
-	const [resources, setResources] = useState<string[]>(data.all ?? []);
+	const [resources, setResources] = useState<string[]>(data?.all ?? []);
 	const [debouncedResources] = useDebounceValue<string[]>(resources, 500);
 
 	const handleChange = useCallback(

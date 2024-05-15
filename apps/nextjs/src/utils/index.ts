@@ -120,9 +120,9 @@ export function convertToPercentage(value: number, total: number): number {
  */
 export function convertRatingToLevel(value: number): RatingLevel {
 	console.log({ value });
-	if (value >= 0 && value <= 1) return "Low";
-	if (value >= 2 && value <= 3) return "Medium";
-	if (value >= 4 && value < 5) return "High";
+	if (value >= 0 && value <= 3) return "Low";
+	if (value >= 4 && value <= 7) return "Medium";
+	if (value >= 8 && value < 10) return "High";
 	return "Super";
 }
 

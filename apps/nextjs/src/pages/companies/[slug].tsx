@@ -148,7 +148,7 @@ const CompanySlug = () => {
 									</TabsContent>
 									<TabsContent key={3} value="all_reviews" className="max-w-3xl">
 										{company.reviews.map(review => (
-											<div key={review.id} className="flex rounded-lg border p-4">
+											<div key={review.id} className="mb-4 flex rounded-lg border p-4">
 												<ReviewCard
 													id={review.reviewId}
 													company={company.name}

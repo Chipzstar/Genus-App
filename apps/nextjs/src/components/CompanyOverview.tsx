@@ -48,10 +48,16 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		};
 	}, [reviews]);
 
-	const { interviewProcess, diversity, flexibility, teamCulture, recommendToFriend } = useMemo(() => {
+	const ratings = useMemo(() => {
 		if (reviews.length === 0) return {};
+		const applicationProcess = convertRatingToLevel(
+			reviews.reduce((prev, acc) => prev + Number(acc.applicationProcess), 0) / reviews.length
+		);
 		const interviewProcess = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.interviewProcess), 0) / reviews.length
+		);
+		const workLifeBalance = convertRatingToLevel(
+			reviews.reduce((prev, acc) => prev + Number(acc.workLifeBalance), 0) / reviews.length
 		);
 		const diversity = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.diversity), 0) / reviews.length
@@ -62,10 +68,22 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 		const teamCulture = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.teamCulture), 0) / reviews.length
 		);
+		const authenticity = convertRatingToLevel(
+			reviews.reduce((prev, acc) => prev + Number(acc.authenticity), 0) / reviews.length
+		);
 		const recommendToFriend = convertRatingToLevel(
 			reviews.reduce((prev, acc) => prev + Number(acc.recommendToFriend), 0) / reviews.length
 		);
-		return { interviewProcess, diversity, flexibility, teamCulture, recommendToFriend };
+		return {
+			applicationProcess,
+			interviewProcess,
+			workLifeBalance,
+			diversity,
+			flexibility,
+			teamCulture,
+			authenticity,
+			recommendToFriend
+		};
 	}, [reviews]);
 
 	return (
@@ -112,24 +130,36 @@ const CompanyOverview: FC<Props> = ({ reviews }) => {
 				</div>
 				<div className="grid grid-cols-2 gap-y-4 pt-5 font-medium italic">
 					<div className="flex flex-col">
+						<span>Application process</span>
+						<RatingLabel value={ratings.applicationProcess} />
+					</div>
+					<div className="flex flex-col">
 						<span>Interview process</span>
-						<RatingLabel value={interviewProcess} />
+						<RatingLabel value={ratings.interviewProcess} />
+					</div>
+					<div className="flex flex-col">
+						<span>Side hustle / hobbies</span>
+						<RatingLabel value={ratings.workLifeBalance} />
 					</div>
 					<div className="flex flex-col">
 						<span>Diversity</span>
-						<RatingLabel value={diversity} />
+						<RatingLabel value={ratings.diversity} />
 					</div>
 					<div className="flex flex-col">
-						<span>Flexibility</span>
-						<RatingLabel value={flexibility} />
+						<span>Flexible working</span>
+						<RatingLabel value={ratings.flexibility} />
 					</div>
 					<div className="flex flex-col">
 						<span>Team culture</span>
-						<RatingLabel value={teamCulture} />
+						<RatingLabel value={ratings.teamCulture} />
 					</div>
-					<div className="col-span-2 flex auto-cols-fr flex-col">
+					<div className="flex flex-col">
+						<span>Be true to yourself</span>
+						<RatingLabel value={ratings.authenticity} />
+					</div>
+					<div className="flex flex-col">
 						<span>Recommend to a friend</span>
-						<RatingLabel value={recommendToFriend} />
+						<RatingLabel value={ratings.recommendToFriend} />
 					</div>
 				</div>
 			</CardContent>

@@ -6,6 +6,7 @@ import { Check, MapPin } from "lucide-react";
 import { cn } from "@genus/ui";
 import { Ratings } from "@genus/ui/rating";
 
+import { formatString } from "~/utils";
 import type { CompanyReview } from "~/utils/types";
 
 interface Props {
@@ -18,16 +19,16 @@ const ReviewCard: FC<Props> = ({ review, company }) => {
 	return (
 		<div className="flex w-full shrink flex-col gap-x-3 gap-y-2 text-black sm:gap-x-6">
 			<section className="grid grid-cols-9 place-items-center gap-3">
-				<span className="text-xl font-semibold italic sm:text-2xl">{review.avgRating}</span>
+				<span className="text-xl font-semibold italic sm:text-2xl">{Number(review.avgRating) / 2}</span>
 				<div className="col-span-8 flex h-full w-full items-center">
-					<Ratings size={20} rating={Math.round(Number(review.avgRating))} />
+					<Ratings size={20} rating={Math.round(Number(review.avgRating) / 2)} />
 				</div>
 				<div className="h-10 w-10">
 					<Image src="/images/avatar-placeholder-2.svg" alt="person-placeholder" />
 				</div>
 				<div className="col-span-8 flex w-full flex-col space-y-1 text-wrap">
 					<span className="text-lg font-semibold">
-						{company} {review.division}
+						{company} {formatString(review.division)}
 					</span>
 					<div className="flex items-center">
 						<span className="grow font-semibold">{review.completionYear}</span>

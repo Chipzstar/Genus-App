@@ -24,7 +24,7 @@ function labelEncode(str: string): string {
 		.replace(/-+$/, "");
 }
 
-export function formatString(str: string, format: "default" | "category" = "default") {
+function formatString(str: string, format: "default" | "category" = "default") {
 	if (!str) return "";
 	if (format === "category" && str === "banking_finance") return "Banking & Finance";
 	if (str.length <= 2) return str.toUpperCase();

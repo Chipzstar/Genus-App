@@ -2,9 +2,9 @@
   "formId": "9t3sPzWWrhus",
   "formName": "Anonymous Review",
   "submission": {
-    "submissionId": "a45c4af8-7d34-42b2-a640-d40afb4056ca",
-    "submissionTime": "2024-05-10T13:56:07.927Z",
-    "lastUpdatedAt": "2024-05-10T13:56:07.927Z",
+    "submissionId": "93e45fa9-0997-4487-83d4-7e2956ab4d5b",
+    "submissionTime": "2024-05-10T11:21:23.735Z",
+    "lastUpdatedAt": "2024-05-10T11:21:23.735Z",
     "questions": [
       {
         "id": "sB3i7AbVzZPQcyt5TByZU3",
@@ -16,19 +16,19 @@
         "id": "5UX6v54K9Bmy3FiHMnwXCs",
         "name": "Gender",
         "type": "Dropdown",
-        "value": "Male\n"
+        "value": "Female"
       },
       {
         "id": "mebvZFY1fTM4b2tYiwNRgb",
         "name": "Ethnicity",
         "type": "Dropdown",
-        "value": "White - Irish"
+        "value": " Black or Black British - African"
       },
       {
         "id": "uSdcMzY1D5gmRjsUhbQhuk",
         "name": "Nationality",
         "type": "Dropdown",
-        "value": "Irish"
+        "value": "British"
       },
       {
         "id": "pitWCTc47arJ9aCqzZVwZM",
@@ -52,7 +52,7 @@
         "id": "6PTqhiSMmyWawyh2ejQxyG",
         "name": "University / University attended (Do check \"University of...\" if not appearing alphabetically\"",
         "type": "Dropdown",
-        "value": "London School of Economics"
+        "value": " University of Nottingham"
       },
       {
         "id": "eX4dYyLR5zHbHTDdrBKwwC",
@@ -64,7 +64,7 @@
         "id": "6w2HxyNeZUDw5ZfiqCq72L",
         "name": "Broad degree course",
         "type": "Dropdown",
-        "value": "Mathematics & Statistics"
+        "value": "Economics"
       },
       {
         "id": "mCfuAGo3BsUrvshb8z4oyJ",
@@ -82,33 +82,25 @@
         "id": "6XzkUL3dqz3ZaBiU9cXwCZ",
         "name": "What option best describes you? (1)",
         "type": "MultipleChoice",
-        "value": "Student"
+        "value": "Young professional\n"
       },
       {
         "id": "qcWCedxLAFTRhGuKftDgPp",
         "name": "What option best describes you?",
         "type": "MultipleChoice",
-        "value": "Postgraduate"
+        "value": null
       },
       {
         "id": "8G8mChQYfzjoCg4kgaiT3q",
         "name": "Industry?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Consulting & Professional Services"
       },
       {
         "id": "mB6aK5ieo4gRBmByjkvvGp",
         "name": "What have been the most difficult challenges faced with the career search?",
         "type": "Checkboxes",
-        "value": [
-          "Competitive nature of careers\n",
-          "Application process (i.e. CV and Cover letters)",
-          "Limited relevant experiences ",
-          "Balancing careers with university life",
-          "Not knowing what to do",
-          "Financial concerns",
-          "Motivation "
-        ]
+        "value": null
       },
       {
         "id": "jRHpZ5d6PkgMdqctiC3QMq",
@@ -126,49 +118,52 @@
         "id": "o1DZYA4QRpQf6QJiWqpGtQ",
         "name": "Division? (2)",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Data & Analytics"
       },
       {
         "id": "eou4p79yZr2fMMtx2USWD4",
         "name": "Do you have someone that you can reach out to anytime for relevant career guidance (i.e. family member, young professional, career mentor or coach?)",
         "type": "MultipleChoice",
-        "value": "Yes"
+        "value": null
       },
       {
         "id": "u8hh3VM9bvPs3kggub7gXZ",
         "name": "Do you have peers / peer group that you can reach out to anytime for relevant career guidance",
         "type": "MultipleChoice",
-        "value": "Yes"
+        "value": null
       },
       {
         "id": "hnuXBVUirZmLYpjHXZttHf",
         "name": "If yes, how regularly do you communicate with them?",
         "type": "MultipleChoice",
-        "value": "Rarely\n"
+        "value": null
       },
       {
         "id": "pXSotdYMKF13MKwc2LfuMS",
         "name": "Name of company",
         "type": "Dropdown",
-        "value": null
+        "value": "Other"
       },
       {
         "id": "3t42iRkLQTk79ppuiGWCSz",
         "name": "If other, select \"Other\" and then insert name here",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Kubrick Group"
       },
       {
         "id": "aATpXbM5LLUR2tnEs9x1at",
         "name": "How did you hear about this opportunity?",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "Network / word of mouth",
+          "Company website"
+        ]
       },
       {
         "id": "7Xe3dhF26QJnpcuc6cQBJ3",
         "name": "Do you feel you need more assistance with learning and finding about jobs and roles?",
         "type": "MultipleChoice",
-        "value": "No"
+        "value": null
       },
       {
         "id": "oHu8upm4etnzBMMnBdTn7P",
@@ -180,16 +175,13 @@
         "id": "e9xkikJZCrKySoiVRSFDAT",
         "name": "Region?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "London"
       },
       {
         "id": "sp6Fn39iwaGZ7QJ88EoJwm",
         "name": "Industry Interest(s):",
         "type": "Checkboxes",
-        "value": [
-          "Banking & Finance",
-          "Tech & Data Science"
-        ]
+        "value": null
       },
       {
         "id": "aYGjAeLdqA2BaU2P9z3b2m",
@@ -213,13 +205,13 @@
         "id": "kRKgrz18v4hnqQktmLfUH1",
         "name": "Duration? (1)",
         "type": "MultipleChoice",
-        "value": null
+        "value": "2-5 years"
       },
       {
         "id": "wXUXcMzfBKeDNycgFvyGEw",
         "name": "Have you had an internship / work experience or are an incoming offer holder?",
         "type": "MultipleChoice",
-        "value": "No\n"
+        "value": null
       },
       {
         "id": "byriSNP9sLDwTpvLBvN3vr",
@@ -297,87 +289,85 @@
         "id": "5cRshM5FxDpARuqcMNkFAf",
         "name": "In simple terms, what is your role and industry is about?",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Data Management Consulting"
       },
       {
         "id": "6n1BJqFrbnCC6AgdxCCjXa",
         "name": "Overall experience satisfaction",
         "type": "StarRating",
-        "value": null
+        "value": 4
       },
       {
         "id": "rkL4WyoKYSzfEkxp6r67Z5",
         "name": "Application process",
         "type": "StarRating",
-        "value": null
+        "value": 7
       },
       {
         "id": "uDnqJtFFY2ungT6A2JaMSE",
         "name": "Interview process",
         "type": "StarRating",
-        "value": null
+        "value": 8
       },
       {
         "id": "qQX9K7jXkyQeQ7LHMT5pDa",
         "name": "Diversity",
         "type": "StarRating",
-        "value": null
+        "value": 4
       },
       {
         "id": "d7WdPQuiT69AWQ2atQgy7E",
         "name": "Team culture",
         "type": "StarRating",
-        "value": null
+        "value": 3
       },
       {
         "id": "dPDMwnhhLJkzksqxk9FUV7",
         "name": "Opportunities to learn &amp; develop skills (i.e. on projects)",
         "type": "StarRating",
-        "value": null
+        "value": 7
       },
       {
         "id": "trCAzBfDqqQNVHd46i5Zdo",
         "name": "Flexibility &amp; Hybrid-working",
         "type": "StarRating",
-        "value": null
+        "value": 8
       },
       {
         "id": "nPQTqMLWtz6ggCuaizRYcD",
         "name": "Mentoring opportunities (i.e. a buddy)",
         "type": "StarRating",
-        "value": null
+        "value": 3
       },
       {
         "id": "x6VdWc3hfvPvFETDdyD4pR",
         "name": "Work-life balance (i.e. reasonable hours, extra-curricular activities and networks)",
         "type": "StarRating",
-        "value": null
+        "value": 5
       },
       {
         "id": "rvnBNeNuHPS53bsNfuSMNG",
         "name": "Career trajectory &amp; promotion",
         "type": "StarRating",
-        "value": null
+        "value": 2
       },
       {
         "id": "bdnFCmtQbTevLgwUhGwY6Y",
         "name": "Would you recommend to a friend?",
         "type": "StarRating",
-        "value": null
+        "value": 5
       },
       {
         "id": "v1oRMeJePs33GUuC9XtfAv",
         "name": "Confidence with current skillset when interning / working?",
         "type": "StarRating",
-        "value": 7
+        "value": null
       },
       {
         "id": "eMWnLA98vzp4sqJuDRa7CR",
         "name": "Are there any skills you wish to develop?",
         "type": "Checkboxes",
-        "value": [
-          "None"
-        ]
+        "value": null
       },
       {
         "id": "dEnPiDw43Y5euYiNRg5shj",
@@ -389,7 +379,11 @@
         "id": "voSmSck2VnBjbgRjiTDyav",
         "name": "Main work skillsets for this role? (can choose more than 1 option)",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "Data & Analytics ",
+          "Presentation deck creation (i.e. slide writing)\n",
+          "Speaking with clients\n"
+        ]
       },
       {
         "id": "pnaSu1Txa7VuqdExPZwHsx",
@@ -419,7 +413,7 @@
         "id": "e79n7rBeBTwStWdPwgY5Hv",
         "name": "Do you feel you need more assistance with career development and progression opportunities?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Yes\n"
       },
       {
         "id": "pRq6hSiUzESkrz63ZZVpZT",
@@ -431,31 +425,33 @@
         "id": "1V8ggJg8RP8HVCeWfDSoJ6",
         "name": "Do you have someone that you can reach out to anytime for relevant career guidance (i.e. family member, career mentor or coach?)",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Sometimes"
       },
       {
         "id": "bwYHcR2LCsbc579DpZiUnr",
         "name": "Is this also within the company you work for?",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "No"
+        ]
       },
       {
         "id": "aw2YUWMbEvmoPpFyNwZsr7",
         "name": "Do you have peers / peer group that you can reach out to anytime for relevant career guidance?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Yes"
       },
       {
         "id": "quCjDQ6GVMMSRbLUQEYivD",
         "name": "If yes to any of the above options, how regularly do you communicate with them?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Frequently\n"
       },
       {
         "id": "bt8zUfu28P52y7uU7mi6gR",
         "name": "What is one thing you wished you told your pre-internship / graduate self?",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Be engaging and network "
       },
       {
         "id": "kTK2JLXMTBExgPqn34Lqro",
@@ -467,13 +463,13 @@
         "id": "wBbLtaikXWTpUkvqYrrkjT",
         "name": "1. Resource and organisation",
         "type": "ShortAnswer",
-        "value": "LSE Careers"
+        "value": "SEO"
       },
       {
         "id": "hmnRQRcMHr64NxGohdwBBw",
         "name": "2. Resource and organisation",
         "type": "ShortAnswer",
-        "value": "Na"
+        "value": "Bright Network"
       },
       {
         "id": "cK7fwRf5AwjmMxnw59xF5n",
@@ -491,79 +487,89 @@
         "id": "ei9szwjj5Hrbw5u1MDfs7A",
         "name": "Paid experience?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Yes"
       },
       {
         "id": "7owud8N3bh6V3mCLiDhisN",
         "name": "Salary amount (only requires number. If possible, base value on annual salary, if nothing select \"0\", if not applicable \"00\")",
         "type": "NumberInput",
-        "value": null
+        "value": 58000
       },
       {
         "id": "hMRc2J6DysrJBVmftMrFzR",
         "name": "Pros of working experience",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "Gained knowledge and expertise ",
+          "Gained practical skills\n",
+          "Salary and benefits\n"
+        ]
       },
       {
         "id": "oJybESrCasyGUHtTmF8xap",
         "name": "Step 1 (1)",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Online Application"
       },
       {
         "id": "goPdmhhqFkbXwwyqgPYKnR",
         "name": "Step 2 (1)",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Tests"
       },
       {
         "id": "sSZwzaw2Qjw2T4hnFFqAX7",
         "name": "Step 3 (1)",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Interview "
       },
       {
         "id": "gzTmKU34tt4dijv3BFXDs1",
         "name": "Step 1",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Prepare Cv well"
       },
       {
         "id": "dFw9defErgWnpqiXniTHRD",
         "name": "Step 2",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Be well versed technically"
       },
       {
         "id": "3fRW3NLhiBgvSP73ACbS69",
         "name": "Step 3",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Be engaging"
       },
       {
         "id": "2aqg6HmV7x3TEiTEoiU6AF",
         "name": "Cons of working experience",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "The team and its culture\n",
+          "Salary and benefits\n",
+          "Limited career development opportunities ",
+          "Not diverse and inclusive enough",
+          "Work and activities not exciting and varied enough"
+        ]
       },
       {
         "id": "gEqoQsmxdiH3RQRqYjJBxr",
         "name": "Were you able to convert / secure role?",
         "type": "MultipleChoice",
-        "value": null
+        "value": "Currently in role "
       },
       {
         "id": "cGaT1e1Cemi7j1LktQXCSB",
         "name": "Division",
         "type": "Dropdown",
-        "value": "Banking & Finance"
+        "value": null
       },
       {
         "id": "vd5j7T57HWoYZp2rogLLGo",
         "name": "Question (s):",
         "type": "ShortAnswer",
-        "value": "What tips (that aren’t obvious) to use in applications and interviews "
+        "value": null
       },
       {
         "id": "uSmENr4Btbc1TKkGXazVgF",
@@ -575,13 +581,13 @@
         "id": "1YgSPQsomDw8XKdtmafamp",
         "name": "Example of interview question asked - 1",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Why the company"
       },
       {
         "id": "4jjLfL1KYkkoToCA4bFNK3",
         "name": "Example of interview question asked - 2",
         "type": "ShortAnswer",
-        "value": null
+        "value": "Why this role"
       },
       {
         "id": "gWtNeT2Lc144gX1BcAyd72",
@@ -605,31 +611,42 @@
         "id": "aHmbvwS4qsoJfbHKsYD4zp",
         "name": "Confidence with current skillset when interning / working? (1)",
         "type": "StarRating",
-        "value": null
+        "value": 4
       },
       {
         "id": "tmtQxndiEphCohK65JD1vo",
         "name": "Any differences in initial expectations vs realities of role? \"No\" = 0 and \"Yes\" = 100",
         "type": "Slider",
-        "value": null
+        "value": 65
       },
       {
         "id": "xAtmY7g5YuyEFesz3JkbxD",
         "name": "Are there any skills you wish to develop? (1)",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "Written communication",
+          "Verbal communication",
+          "Interpersonal skills",
+          "Leadership & Management",
+          "Creativity",
+          "Data analysis",
+          "Technical & coding skills",
+          "Modelling (i.e. creating market models)"
+        ]
       },
       {
         "id": "wkHYphiZxkDURX6xdvJCNp",
         "name": "Working environment style? (can select more than 1 option)",
         "type": "Checkboxes",
-        "value": null
+        "value": [
+          "Hybrid and flexible\n"
+        ]
       },
       {
         "id": "wzmK8bh2shVjxoxnmWsNQf",
         "name": "Ability to be your authentic self? (100% refers to \"being your true authentic self\")",
         "type": "Slider",
-        "value": null
+        "value": 41
       }
     ],
     "calculations": [

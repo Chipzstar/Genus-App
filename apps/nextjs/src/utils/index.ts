@@ -51,7 +51,11 @@ export function formatString<T extends FormatType = "default">(str: StringInput<
  */
 export function labelEncode<T extends FormatType = "default">(str: string, format?: T): string {
 	if (!str) return "";
-	if (format === "category") str = str.replace(/\s&\s/g, "_");
+	if (format === "category") {
+		str = str.replace(/.*(banking|finance).*/i, "banking_finance");
+		str = str.replace(/.*consulting.*/i, "consulting");
+		str = str.replace(/.*law.*/i, "law");
+	}
 	return str
 		.toLowerCase()
 		.replace(/\s+/g, "_")

@@ -25,7 +25,7 @@ import {
 } from "@genus/validators/constants";
 
 export const careerInterestSlug = pgEnum("careerinterest_slug", career_interests);
-export const reviewIndustry = pgEnum("review_industry", [...career_interests, "other"]);
+export const companyIndustry = pgEnum("company_industry", [...career_interests, "other"]);
 export const skillsetSlug = pgEnum("skillset_slug", skillsets);
 export const groupUserRole = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const messageType = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
@@ -272,7 +272,7 @@ export const company = pgTable(
 		companyId: varchar("companyId", { length: 191 }).notNull(),
 		name: varchar("name", { length: 191 }).notNull(),
 		slug: varchar("slug", { length: 191 }).notNull(),
-		category: careerInterestSlug("category").default("banking_finance").notNull(),
+		category: companyIndustry("category").default("banking_finance").notNull(),
 		description: varchar("description", { length: 191 }),
 		logoUrl: varchar("logoUrl", { length: 191 }),
 		websiteUrl: varchar("websiteUrl", { length: 191 }),
@@ -308,7 +308,7 @@ export const review = pgTable(
 		reviewId: varchar("reviewId", { length: 191 }).notNull(),
 		companyId: varchar("companyId", { length: 191 }).notNull(),
 		companyName: varchar("companyName", { length: 191 }).notNull(),
-		industry: reviewIndustry("industry").default("banking_finance").notNull(),
+		industry: companyIndustry("industry").default("banking_finance").notNull(),
 		experienceType: varchar("experienceType", { length: 191 }),
 		applicationProcess: numeric("applicationProcess").notNull(),
 		interviewProcess: numeric("interviewProcess").notNull(),

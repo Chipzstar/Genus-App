@@ -10,6 +10,7 @@ import { prettyPrint } from "@genus/validators/helpers";
 import type { RatingType, ReviewType, Submission } from "~/types/fillout";
 import { labelEncode, sanitize } from "~/utils";
 
+const NULL_VALUES = ["n/a", "na"];
 const REVIEW_TYPE_FIELD_ID = "6XzkUL3dqz3ZaBiU9cXwCZ";
 const COMPANY_NAME_FIELD_ID = "pXSotdYMKF13MKwc2LfuMS";
 const OTHER_COMPANY_NAME_FIELD_ID = "3t42iRkLQTk79ppuiGWCSz";
@@ -59,7 +60,7 @@ export const getCompanyAndIndustry = async (form: Submission) => {
 				companyId: `company_${nanoid(18)}`,
 				name,
 				slug: labelEncode(name),
-				category: industryLabel
+				category: industrySchema.catch("other").parse(industryLabel)
 			})
 			.returning();
 	}
@@ -219,7 +220,7 @@ export const getTopResources = (form: Submission) => {
 	const resources: string[] = [];
 	const resourceQuestions = form.questions.filter(q => TOP_RESOURCES_FIELDS.includes(q.id));
 	for (const q of resourceQuestions) {
-		if (q.value === null) continue;
+		if (!q.value || NULL_VALUES.includes(String(q.value).toLowerCase())) continue;
 		resources.push(q.value as string);
 	}
 	return resources;
@@ -233,7 +234,7 @@ export const getInterviewQuestions = (form: Submission) => {
 	const result: string[] = [];
 	const interviewQuestions = form.questions.filter(q => INTERVIEW_QUESTIONS_FIELDS.includes(q.id));
 	for (const q of interviewQuestions) {
-		if (q.value === null) continue;
+		if (!q.value || NULL_VALUES.includes(String(q.value).toLowerCase())) continue;
 		result.push(sanitize(q.value as string));
 	}
 	return result;

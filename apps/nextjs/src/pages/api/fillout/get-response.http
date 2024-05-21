@@ -1,7 +1,7 @@
-@submissionId = 93e45fa9-0997-4487-83d4-7e2956ab4d5b
+@submissionId = 78f2b46d-8589-43a6-8674-7fd66bdd1cdc
 ### GET request to example server
 GET https://api.fillout.com/v1/api/forms/{{formId}}/submissions/{{submissionId}}
 Authorization: Bearer {{$auth.token("fillout_api_key")}}
 
-> 0eeac8be-b5d8-4d2c-b125-9f35cf3c84d3.json
+> 78f2b46d-8589-43a6-8674-7fd66bdd1cdc.json
 ###

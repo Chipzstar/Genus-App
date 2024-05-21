@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
-import { and, company, eq, isNotNull } from "@genus/db";
+import { company, eq, isNotNull, or, review } from "@genus/db";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -10,12 +10,12 @@ export const companyRouter = createTRPCRouter({
 		try {
 			const companyWithReviews = await ctx.db.query.company.findMany({
 				// where: inArray(company.slug, ["barclays", "jp_morgan", "goldman_sachs", "bank_of_england", "hsbc"]),
-				where: isNotNull(company.logoUrl),
 				with: {
 					reviews: true
 				}
 			});
-			return companyWithReviews;
+			const filteredCompanies = companyWithReviews.filter(company => company.reviews.length || company.logoUrl);
+			return filteredCompanies;
 		} catch (err) {
 			console.error(err);
 			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" });

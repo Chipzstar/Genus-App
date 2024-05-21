@@ -29,19 +29,18 @@ const CompanyCard: FC<Props> = ({ onClick = undefined, company, reviews, hideRat
 			onClick={onClick}
 			className="mb-5 grid grid-cols-3 place-items-center gap-x-8 gap-y-4 sm:mb-0"
 		>
-			{company.logoUrl && (
-				<Image
-					src={company.logoUrl}
-					alt={company.name}
-					className="sm:p-5"
-					style={{
-						objectFit: "contain"
-					}}
-					radius="lg"
-					width={150}
-					height={100}
-				/>
-			)}
+			<Image
+				src={company.logoUrl ?? "/images/spring-weeks-ldn.svg"}
+				alt={company.name}
+				className="sm:p-5"
+				style={{
+					objectFit: "contain"
+				}}
+				radius="lg"
+				width={150}
+				height={100}
+			/>
+
 			<div
 				className={cn("flex w-full flex-col space-y-2", {
 					"col-span-2": hideRating

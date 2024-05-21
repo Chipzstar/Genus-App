@@ -5,7 +5,7 @@ import { connectionString } from "./src";
 export default {
 	schema: "./drizzle/schema.ts",
 	out: "./drizzle",
-	driver: "pg",
-	dbCredentials: { connectionString },
+	dbCredentials: { url: connectionString },
+	dialect: "postgresql",
 	verbose: false
 } satisfies Config;

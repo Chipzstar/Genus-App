@@ -105,17 +105,16 @@ const Home = () => {
 										role="button"
 										onClick={() => router.push(`${PATHS.COMPANIES}/${slug}`)}
 									>
-										{logoUrl && (
-											<div className="flex grow items-center justify-start">
-												<Image
-													src={logoUrl}
-													alt={name}
-													className="overflow-hidden rounded-2xl"
-													height={100}
-													width={120}
-												/>
-											</div>
-										)}
+										<div className="flex grow items-center justify-start">
+											<Image
+												src={logoUrl ?? "/images/spring-weeks-ldn.svg"}
+												alt={name}
+												className="overflow-hidden rounded-2xl"
+												height={100}
+												width={120}
+											/>
+										</div>
+
 										<div className="flex flex-col text-black">
 											<span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold md:text-base">
 												{name}

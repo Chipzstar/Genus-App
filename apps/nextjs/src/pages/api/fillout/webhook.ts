@@ -2,7 +2,6 @@ import { promises as fs } from "node:fs";
 import type { NextApiRequest, NextApiResponse } from "next/types";
 import { createInsertSchema } from "drizzle-zod";
 import { buffer } from "micro";
-import { nanoid } from "nanoid";
 import { log } from "next-axiom";
 import { z } from "zod";
 
@@ -82,7 +81,7 @@ async function handleFormResponse(event: FormEvent) {
 	const topTip = getTopTip(event.submission);
 
 	const payload = {
-		reviewId: `review_R${nanoid(18)}`,
+		reviewId: event.submission.submissionId,
 		companyId,
 		companyName,
 		industry,
@@ -118,6 +117,7 @@ async function handleFormResponse(event: FormEvent) {
 	}
 
 	// insert new review record
+	// @ts-ignore
 	const dbReview = await db.insert(review).values(parsedPayload.data).returning();
 	prettyPrint(dbReview[0]);
 	return dbReview[0];

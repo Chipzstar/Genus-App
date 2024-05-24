@@ -6,8 +6,8 @@ import { parse } from "csv-parse";
 import { drizzle } from "drizzle-orm/neon-http";
 import { nanoid } from "nanoid";
 
-import * as schema from "./drizzle/schema";
-import { company, skillset, skillsetSlug } from "./drizzle/schema";
+import * as schema from "./drizzle/schemas/schema";
+import { company, skillset, skillsetSlug } from "./drizzle/schemas/schema";
 
 /**
  * Sanitizes a string by converting it to lowercase and replacing spaces with underscores.

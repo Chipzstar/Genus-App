@@ -11,9 +11,9 @@
     "clean": "rm -rf .turbo node_modules",
     "with-env": "dotenv -e ../../.env --",
     "db:studio": "pnpm with-env drizzle-kit studio",
-    "db:push": "pnpm with-env drizzle-kit push:pg",
-    "db:pull": "pnpm with-env drizzle-kit introspect:pg",
-    "db:generate": "pnpm with-env drizzle-kit generate:pg",
+    "db:push": "pnpm with-env drizzle-kit push",
+    "db:pull": "pnpm with-env drizzle-kit introspect",
+    "db:generate": "pnpm with-env drizzle-kit generate",
     "db:seed": "pnpm with-env tsx ./seed.ts",
     "db:migrate": "pnpm with-env tsx ./migrate.ts",
     "db:drop": "pnpm with-env drizzle-kit drop"

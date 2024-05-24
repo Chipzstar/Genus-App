@@ -2,7 +2,7 @@ import { format, formatDistance } from "date-fns";
 import posthog from "posthog-js";
 import { z } from "zod";
 
-import type { careerInterestsSchema } from "@genus/validators";
+import type { careerInterestsSchema, Industry } from "@genus/validators";
 
 import type {
 	AddTempPasswordInput,
@@ -26,10 +26,10 @@ export const PATHS = {
 };
 
 export type FormatType = "default" | "category";
-type StringInput<T> = T extends "category" ? z.infer<typeof careerInterestsSchema> : string | null | undefined;
+type StringInput<T> = T extends "category" ? Industry : string | null | undefined;
 
 /**
- * Formats a string based on the specified format type.
+ tton
  * @param str The input string to be formatted.
  * @param format The format type, either "default" or "category". Defaults to "default".
  * @returns The formatted string.

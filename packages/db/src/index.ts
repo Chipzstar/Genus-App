@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTableCreator } from "drizzle-orm/pg-core";
 
-import * as schema from "../drizzle/schema";
+import * as schema from "../drizzle/schemas/schema";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM.
@@ -13,7 +13,7 @@ import * as schema from "../drizzle/schema";
 const prefix = "";
 export const tableCreator = pgTableCreator(name => prefix.concat(name));
 
-export * from "../drizzle/schema";
+export * from "../drizzle/schemas/schema";
 
 export const connectionString = [
 	"postgresql://",

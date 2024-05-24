@@ -1,0 +1,1444 @@
+{
+  "id": "83f0c57e-e77b-4dc0-9939-cf3f2402a9c2",
+  "prevId": "0a2a3f61-bc98-4268-a630-78eb27edd19c",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.careerInterest": {
+      "name": "careerInterest",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "careerinterest_slug",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49236_careerInterest_slug_key": {
+          "name": "idx_49236_careerInterest_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.careerInterestToUser": {
+      "name": "careerInterestToUser",
+      "schema": "",
+      "columns": {
+        "careerInterestId": {
+          "name": "careerInterestId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "careerInterestUserId": {
+          "name": "careerInterestUserId",
+          "columns": [
+            "careerInterestId",
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.comment": {
+      "name": "comment",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "commentId": {
+          "name": "commentId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isAnonymous": {
+          "name": "isAnonymous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_49241_comment_authorId_threadId_groupId_idx": {
+          "name": "idx_49241_comment_authorId_threadId_groupId_idx",
+          "columns": [
+            "authorId",
+            "threadId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49241_comment_commentId_key": {
+          "name": "idx_49241_comment_commentId_key",
+          "columns": [
+            "commentId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.company": {
+      "name": "company",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "company_industry",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "logoUrl": {
+          "name": "logoUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "websiteUrl": {
+          "name": "websiteUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "companyIdIdx": {
+          "name": "companyIdIdx",
+          "columns": [
+            "companyId"
+          ],
+          "isUnique": true
+        },
+        "companySlugIdx": {
+          "name": "companySlugIdx",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.companyToUser": {
+      "name": "companyToUser",
+      "schema": "",
+      "columns": {
+        "companyId": {
+          "name": "companyId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "companyUserId": {
+          "name": "companyUserId",
+          "columns": [
+            "companyId",
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.group": {
+      "name": "group",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49250_group_groupId_key": {
+          "name": "idx_49250_group_groupId_key",
+          "columns": [
+            "groupId"
+          ],
+          "isUnique": true
+        },
+        "idx_49250_group_slug_key": {
+          "name": "idx_49250_group_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.groupUser": {
+      "name": "groupUser",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "groupuser_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MEMBER'"
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "groupUser_userId_groupId_idx": {
+          "name": "groupUser_userId_groupId_idx",
+          "columns": [
+            "userId",
+            "groupId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.message": {
+      "name": "message",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "message_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'NORMAL'"
+        },
+        "isAnonymous": {
+          "name": "isAnonymous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "idx_49267_message_messageId_key": {
+          "name": "idx_49267_message_messageId_key",
+          "columns": [
+            "messageId"
+          ],
+          "isUnique": true
+        },
+        "idx_49267_message_authorId_groupId_idx": {
+          "name": "idx_49267_message_authorId_groupId_idx",
+          "columns": [
+            "authorId",
+            "groupId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.reaction": {
+      "name": "reaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reactionId": {
+          "name": "reactionId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "commentId": {
+          "name": "commentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "emoji": {
+          "name": "emoji",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49277_reaction_authorId_messageId_commentId_idx": {
+          "name": "idx_49277_reaction_authorId_messageId_commentId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "commentId"
+          ],
+          "isUnique": false
+        },
+        "idx_49277_reaction_reactionId_key": {
+          "name": "idx_49277_reaction_reactionId_key",
+          "columns": [
+            "reactionId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.referral": {
+      "name": "referral",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "submissionId": {
+          "name": "submissionId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "referralId": {
+          "name": "referralId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "referrerName": {
+          "name": "referrerName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "referrerEmail": {
+          "name": "referrerEmail",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refereeEmail1": {
+          "name": "refereeEmail1",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refereeEmail2": {
+          "name": "refereeEmail2",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refereeEmail3": {
+          "name": "refereeEmail3",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "referralIdIdx": {
+          "name": "referralIdIdx",
+          "columns": [
+            "referralId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.review": {
+      "name": "review",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reviewId": {
+          "name": "reviewId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "companyName": {
+          "name": "companyName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "industry": {
+          "name": "industry",
+          "type": "company_industry",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "experienceType": {
+          "name": "experienceType",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "applicationProcess": {
+          "name": "applicationProcess",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interviewProcess": {
+          "name": "interviewProcess",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "diversity": {
+          "name": "diversity",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flexibility": {
+          "name": "flexibility",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teamCulture": {
+          "name": "teamCulture",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "workLifeBalance": {
+          "name": "workLifeBalance",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authenticity": {
+          "name": "authenticity",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recommendToFriend": {
+          "name": "recommendToFriend",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avgRating": {
+          "name": "avgRating",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isConverter": {
+          "name": "isConverter",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "completionYear": {
+          "name": "completionYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "division": {
+          "name": "division",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "region": {
+          "name": "region",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "topTip": {
+          "name": "topTip",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "topSkills": {
+          "name": "topSkills",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "pros": {
+          "name": "pros",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "cons": {
+          "name": "cons",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "interviewQuestions": {
+          "name": "interviewQuestions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "topResources": {
+          "name": "topResources",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "reviewIdIdx": {
+          "name": "reviewIdIdx",
+          "columns": [
+            "reviewId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.skillset": {
+      "name": "skillset",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "skillset_slug",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49237_skillset_slug_key": {
+          "name": "idx_49237_skillset_slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.skillsetToUser": {
+      "name": "skillsetToUser",
+      "schema": "",
+      "columns": {
+        "skillsetId": {
+          "name": "skillsetId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "skillsetUserId": {
+          "name": "skillsetUserId",
+          "columns": [
+            "skillsetId",
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.thread": {
+      "name": "thread",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "threadId": {
+          "name": "threadId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_49286_thread_authorId_messageId_groupId_idx": {
+          "name": "idx_49286_thread_authorId_messageId_groupId_idx",
+          "columns": [
+            "authorId",
+            "messageId",
+            "groupId"
+          ],
+          "isUnique": false
+        },
+        "idx_49286_thread_threadId_key": {
+          "name": "idx_49286_thread_threadId_key",
+          "columns": [
+            "threadId"
+          ],
+          "isUnique": true
+        },
+        "idx_49286_thread_messageId_key": {
+          "name": "idx_49286_thread_messageId_key",
+          "columns": [
+            "messageId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.typeformWebhook": {
+      "name": "typeformWebhook",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "eventId": {
+          "name": "eventId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventType": {
+          "name": "eventType",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "typeformId": {
+          "name": "typeformId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "num_questions": {
+          "name": "num_questions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "num_answers": {
+          "name": "num_answers",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "typeFormWebhookEventIdIdx": {
+          "name": "typeFormWebhookEventIdIdx",
+          "columns": [
+            "eventId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "clerkId": {
+          "name": "clerkId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gender": {
+          "name": "gender",
+          "type": "user_gender",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'female'"
+        },
+        "ethnicity": {
+          "name": "ethnicity",
+          "type": "user_ethnicity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'african'"
+        },
+        "university": {
+          "name": "university",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "broadDegreeCourse": {
+          "name": "broadDegreeCourse",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "degreeName": {
+          "name": "degreeName",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "currentYear": {
+          "name": "currentYear",
+          "type": "user_currentyear",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completionYear": {
+          "name": "completionYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experienceType": {
+          "name": "experienceType",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "workPreference": {
+          "name": "workPreference",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageKey": {
+          "name": "imageKey",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clerkImageHash": {
+          "name": "clerkImageHash",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profileType": {
+          "name": "profileType",
+          "type": "user_profiletype",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'student'"
+        },
+        "onboardingStatus": {
+          "name": "onboardingStatus",
+          "type": "user_onboardingstatus",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'background_info'"
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "tempPassword": {
+          "name": "tempPassword",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "clerkIdUserIdx": {
+          "name": "clerkIdUserIdx",
+          "columns": [
+            "clerkId"
+          ],
+          "isUnique": true
+        },
+        "userEmailUserIdx": {
+          "name": "userEmailUserIdx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.careerinterest_slug": {
+      "name": "careerinterest_slug",
+      "schema": "public",
+      "values": [
+        "banking_finance",
+        "law",
+        "consulting",
+        "tech"
+      ]
+    },
+    "public.company_industry": {
+      "name": "company_industry",
+      "schema": "public",
+      "values": [
+        "other"
+      ]
+    },
+    "public.groupuser_role": {
+      "name": "groupuser_role",
+      "schema": "public",
+      "values": [
+        "ADMIN",
+        "EXPERT",
+        "MEMBER"
+      ]
+    },
+    "public.message_type": {
+      "name": "message_type",
+      "schema": "public",
+      "values": [
+        "NORMAL",
+        "EVENT",
+        "ANNOUNCEMENT"
+      ]
+    },
+    "public.skillset_slug": {
+      "name": "skillset_slug",
+      "schema": "public",
+      "values": [
+        "written_communication",
+        "verbal_communication",
+        "interpersonal_skills",
+        "time_management",
+        "emotional_intelligence",
+        "critical_thinking",
+        "sales",
+        "leadership_&_management",
+        "negotiation",
+        "creativity",
+        "teamwork",
+        "financial_literacy",
+        "analytical_skills",
+        "problem_solving",
+        "project_management",
+        "adaptability",
+        "delegation",
+        "data_analysis",
+        "technical_&_coding_skills",
+        "research",
+        "public_speaking_&_presentation",
+        "social_media_&_content_creation",
+        "digital_skills",
+        "marketing",
+        "strategy",
+        "organisation",
+        "attention_to_detail",
+        "conflict_resolution",
+        "artistic_skills",
+        "modelling",
+        "commercial_awareness",
+        "enterprise_and_entrepreneurial_skills",
+        "customer_service",
+        "design",
+        "videography_&_photography"
+      ]
+    },
+    "public.user_currentyear": {
+      "name": "user_currentyear",
+      "schema": "public",
+      "values": [
+        "1st_year",
+        "2nd_year",
+        "3rd_year",
+        "4th_year",
+        "graduate",
+        "postgraduate",
+        "phd",
+        "other"
+      ]
+    },
+    "public.user_ethnicity": {
+      "name": "user_ethnicity",
+      "schema": "public",
+      "values": [
+        "english__welsh__scottish__northern_irish_or_british",
+        "irish",
+        "gypsy_or_irish_traveller",
+        "roma",
+        "any_other_white_background",
+        "caribbean",
+        "african",
+        "any_other_black__black_british__or_caribbean_background",
+        "indian",
+        "pakistani",
+        "bangladeshi",
+        "chinese",
+        "any_other_asian_background",
+        "white_and_black_caribbean",
+        "white_and_black_african",
+        "white_and_asian",
+        "any_other_mixed_or_multiple_ethnic_background",
+        "arab",
+        "any_other_ethnic_group"
+      ]
+    },
+    "public.user_gender": {
+      "name": "user_gender",
+      "schema": "public",
+      "values": [
+        "male",
+        "female",
+        "non_binary",
+        "other"
+      ]
+    },
+    "public.user_onboardingstatus": {
+      "name": "user_onboardingstatus",
+      "schema": "public",
+      "values": [
+        "not_started",
+        "background_info",
+        "career_info",
+        "completed"
+      ]
+    },
+    "public.user_profiletype": {
+      "name": "user_profiletype",
+      "schema": "public",
+      "values": [
+        "student",
+        "graduate",
+        "admin",
+        "expert"
+      ]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

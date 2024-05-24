@@ -188,11 +188,7 @@ const Home = () => {
 								{TAB_CATEGORIES.map((tab, index) => (
 									<TabsContent key={index} value={tab.value}>
 										{companies
-											?.filter(({ category }) =>
-												tab.value === "other"
-													? category === "tech" || !career_interests.includes(category)
-													: category === tab.value
-											)
+											?.filter(({ category }) => category === tab.value)
 											.map((company, index) => (
 												<CompanyCard
 													key={index}

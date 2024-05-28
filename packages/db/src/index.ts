@@ -2,7 +2,8 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTableCreator } from "drizzle-orm/pg-core";
 
-import * as schema from "../drizzle/schemas/schema";
+import * as _relations from "../drizzle/schemas/relations";
+import * as _schema from "../drizzle/schemas/schema";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM.
@@ -29,7 +30,7 @@ export const connectionString = [
 
 const sql = neon(connectionString);
 
-const db = drizzle(sql, { schema });
+const db = drizzle(sql, { schema: { ..._schema, ..._relations } });
 
 export type DrizzleClient = typeof db;
 

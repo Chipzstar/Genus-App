@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import React from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
@@ -13,7 +13,6 @@ import { Button } from "@genus/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@genus/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@genus/ui/tabs";
 import type { Industry } from "@genus/validators";
-import { career_interests } from "@genus/validators/constants";
 
 import CompanyCard from "~/components/CompanyCard";
 import ResourceCard from "~/components/ResourceCard";
@@ -81,6 +80,15 @@ const Home = () => {
 	const { data: reviews } = trpc.review.getReviews.useQuery();
 	const { data: resources } = trpc.review.getResources.useQuery();
 
+	const topRankedCompanies = useMemo(() => {
+		return (
+			companies?.filter(c => {
+				const total = c.reviews.reduce((prev, review) => prev + Number(review.avgRating), 0);
+				return total / c.reviews.length >= 7.5;
+			}) ?? []
+		);
+	}, [companies]);
+
 	return (
 		<div className="scrollable-page-container">
 			<TopNav />
@@ -98,7 +106,7 @@ const Home = () => {
 								<header className="text-xl font-semibold sm:text-2xl">Top ranked companies</header>
 							</div>
 							<div className="insights-scrollable-container genus-scrollbar auto-cols-fr grid-cols-2 gap-x-4 sm:grid-cols-4">
-								{companies?.map(({ logoUrl, slug, name, category }, index) => (
+								{topRankedCompanies.map(({ logoUrl, slug, name, category }, index) => (
 									<div
 										key={index}
 										className="inline-flex flex-col justify-between"
@@ -136,7 +144,7 @@ const Home = () => {
 								>
 									<CarouselPrevious />
 									<CarouselContent>
-										{companies?.map(({ logoUrl, slug, name, category }, index) => (
+										{topRankedCompanies.map(({ logoUrl, slug, name, category }, index) => (
 											<CarouselItem
 												key={index}
 												onClick={() => router.push(`${PATHS.COMPANIES}/${slug}`)}
@@ -189,6 +197,7 @@ const Home = () => {
 									<TabsContent key={index} value={tab.value}>
 										{companies
 											?.filter(({ category }) => category === tab.value)
+											.slice(0, 5)
 											.map((company, index) => (
 												<CompanyCard
 													key={index}

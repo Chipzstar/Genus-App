@@ -29,7 +29,6 @@ export const skillset_slug = pgEnum("skillset_slug", [
 	"leadership_&_management",
 	"negotiation",
 	"creativity",
-	"customer_service",
 	"teamwork",
 	"financial_literacy",
 	"analytical_skills",
@@ -52,6 +51,7 @@ export const skillset_slug = pgEnum("skillset_slug", [
 	"modelling",
 	"commercial_awareness",
 	"enterprise_and_entrepreneurial_skills",
+	"customer_service",
 	"design",
 	"videography_&_photography"
 ]);
@@ -108,51 +108,6 @@ export const user_profiletype = pgEnum("user_profiletype", [
 	"expert"
 ]);
 
-export const typeformWebhook = pgTable(
-	"typeformWebhook",
-	{
-		id: serial("id").primaryKey().notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		eventId: varchar("eventId", { length: 191 }).notNull(),
-		eventType: varchar("eventType", { length: 191 }).notNull(),
-		typeformId: varchar("typeformId", { length: 191 }).notNull(),
-		title: varchar("title", { length: 191 }).notNull(),
-		num_questions: integer("num_questions").notNull(),
-		num_answers: integer("num_answers").notNull(),
-		url: varchar("url", { length: 191 }),
-		isDeleted: boolean("isDeleted").default(false).notNull()
-	},
-	table => {
-		return {
-			typeFormWebhookEventIdIdx: uniqueIndex("typeFormWebhookEventIdIdx").on(table.eventId)
-		};
-	}
-);
-
-export const referral = pgTable(
-	"referral",
-	{
-		id: serial("id").primaryKey().notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		submissionId: varchar("submissionId", { length: 191 }).notNull(),
-		referralId: varchar("referralId", { length: 191 }).notNull(),
-		referrerName: varchar("referrerName", { length: 191 }).notNull(),
-		referrerEmail: varchar("referrerEmail", { length: 191 }).notNull(),
-		refereeEmail1: varchar("refereeEmail1", { length: 191 }).notNull(),
-		refereeEmail2: varchar("refereeEmail2", { length: 191 }),
-		refereeEmail3: varchar("refereeEmail3", { length: 191 }),
-		isActive: boolean("isActive").default(true).notNull(),
-		isDeleted: boolean("isDeleted").default(false).notNull()
-	},
-	table => {
-		return {
-			dIdx: uniqueIndex("referralIdIdx").on(table.referralId)
-		};
-	}
-);
-
 export const group = pgTable(
 	"group",
 	{
@@ -171,94 +126,39 @@ export const group = pgTable(
 	}
 );
 
-export const groupUser = pgTable(
-	"groupUser",
+export const user = pgTable(
+	"user",
 	{
 		id: serial("id").primaryKey().notNull(),
-		userId: varchar("userId", { length: 191 }).notNull(),
-		groupId: varchar("groupId", { length: 191 }).notNull(),
-		role: groupuser_role("role").default("MEMBER").notNull(),
-		firstname: varchar("firstname", { length: 191 }),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		clerkId: varchar("clerkId", { length: 191 }).notNull(),
+		email: varchar("email", { length: 191 }).notNull(),
+		firstname: varchar("firstname", { length: 191 }).notNull(),
+		lastname: varchar("lastname", { length: 191 }).notNull(),
+		gender: user_gender("gender").default("female"),
+		completionYear: integer("completionYear"),
+		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }),
+		university: varchar("university", { length: 191 }),
+		degreeName: varchar("degreeName", { length: 191 }),
+		imageKey: varchar("imageKey", { length: 191 }),
 		imageUrl: varchar("imageUrl", { length: 191 }),
-		lastname: varchar("lastname", { length: 191 })
+		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
+		profileType: user_profiletype("profileType").default("student").notNull(),
+		ethnicity: user_ethnicity("ethnicity").default("african"),
+		currentYear: user_currentyear("currentYear"),
+		experienceType: varchar("experienceType", { length: 191 }),
+		onboardingStatus: user_onboardingstatus("onboardingStatus").default("background_info").notNull(),
+		isActive: boolean("isActive").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull(),
+		tempPassword: varchar("tempPassword", { length: 191 }).default("").notNull(),
+		username: varchar("username", { length: 191 }).default("").notNull(),
+		workPreference: varchar("workPreference", { length: 191 })
 	},
 	table => {
 		return {
-			userId_groupId_idx: index("groupUser_userId_groupId_idx").on(table.userId, table.groupId)
-		};
-	}
-);
-
-export const careerInterest = pgTable(
-	"careerInterest",
-	{
-		id: serial("id").primaryKey().notNull(),
-		slug: careerinterest_slug("slug").notNull()
-	},
-	table => {
-		return {
-			idx_49236_careerInterest_slug_key: uniqueIndex("idx_49236_careerInterest_slug_key").on(table.slug)
-		};
-	}
-);
-
-export const message = pgTable(
-	"message",
-	{
-		id: serial("id").primaryKey().notNull(),
-		content: varchar("content", { length: 191 }).notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		messageId: varchar("messageId", { length: 191 }).notNull(),
-		authorId: varchar("authorId", { length: 191 }).notNull(),
-		groupId: varchar("groupId", { length: 191 }).notNull(),
-		type: message_type("type").default("NORMAL").notNull(),
-		isAnonymous: boolean("isAnonymous").default(false).notNull()
-	},
-	table => {
-		return {
-			idx_49267_message_messageId_key: uniqueIndex("idx_49267_message_messageId_key").on(table.messageId),
-			idx_49267_message_authorId_groupId_idx: index("idx_49267_message_authorId_groupId_idx").on(
-				table.authorId,
-				table.groupId
-			)
-		};
-	}
-);
-
-export const comment = pgTable(
-	"comment",
-	{
-		id: serial("id").primaryKey().notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		commentId: varchar("commentId", { length: 191 }).notNull(),
-		content: varchar("content", { length: 191 }).notNull(),
-		authorId: varchar("authorId", { length: 191 }).notNull(),
-		threadId: varchar("threadId", { length: 191 }).notNull(),
-		groupId: varchar("groupId", { length: 191 }).notNull(),
-		isAnonymous: boolean("isAnonymous").default(false).notNull()
-	},
-	table => {
-		return {
-			idx_49241_comment_authorId_threadId_groupId_idx: index(
-				"idx_49241_comment_authorId_threadId_groupId_idx"
-			).on(table.authorId, table.threadId, table.groupId),
-			idx_49241_comment_commentId_key: uniqueIndex("idx_49241_comment_commentId_key").on(table.commentId)
-		};
-	}
-);
-
-export const skillset = pgTable(
-	"skillset",
-	{
-		id: serial("id").primaryKey().notNull(),
-		name: varchar("name", { length: 191 }).notNull(),
-		slug: skillset_slug("slug").notNull()
-	},
-	table => {
-		return {
-			idx_49237_skillset_slug_key: uniqueIndex("idx_49237_skillset_slug_key").on(table.slug)
+			clerkIdUserIdx: uniqueIndex("clerkIdUserIdx").on(table.clerkId),
+			mailUserIdx: uniqueIndex("userEmailUserIdx").on(table.email)
 		};
 	}
 );
@@ -309,39 +209,80 @@ export const thread = pgTable(
 	}
 );
 
-export const user = pgTable(
-	"user",
+export const careerInterest = pgTable(
+	"careerInterest",
+	{
+		id: serial("id").primaryKey().notNull(),
+		slug: careerinterest_slug("slug").notNull()
+	},
+	table => {
+		return {
+			idx_49236_careerInterest_slug_key: uniqueIndex("idx_49236_careerInterest_slug_key").on(table.slug)
+		};
+	}
+);
+
+export const groupUser = pgTable(
+	"groupUser",
+	{
+		id: serial("id").primaryKey().notNull(),
+		userId: varchar("userId", { length: 191 }).notNull(),
+		groupId: varchar("groupId", { length: 191 }).notNull(),
+		role: groupuser_role("role").default("MEMBER").notNull(),
+		firstname: varchar("firstname", { length: 191 }),
+		imageUrl: varchar("imageUrl", { length: 191 }),
+		lastname: varchar("lastname", { length: 191 })
+	},
+	table => {
+		return {
+			userId_groupId_idx: index("groupUser_userId_groupId_idx").on(table.userId, table.groupId)
+		};
+	}
+);
+
+export const comment = pgTable(
+	"comment",
 	{
 		id: serial("id").primaryKey().notNull(),
 		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		clerkId: varchar("clerkId", { length: 191 }).notNull(),
-		email: varchar("email", { length: 191 }).notNull(),
-		firstname: varchar("firstname", { length: 191 }).notNull(),
-		lastname: varchar("lastname", { length: 191 }).notNull(),
-		gender: user_gender("gender").default("female"),
-		completionYear: integer("completionYear"),
-		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }),
-		university: varchar("university", { length: 191 }),
-		degreeName: varchar("degreeName", { length: 191 }),
-		imageKey: varchar("imageKey", { length: 191 }),
-		imageUrl: varchar("imageUrl", { length: 191 }),
-		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
-		profileType: user_profiletype("profileType").default("student").notNull(),
-		ethnicity: user_ethnicity("ethnicity").default("african"),
-		currentYear: user_currentyear("currentYear"),
-		onboardingStatus: user_onboardingstatus("onboardingStatus").default("background_info").notNull(),
-		isActive: boolean("isActive").default(true).notNull(),
-		isDeleted: boolean("isDeleted").default(false).notNull(),
-		experienceType: varchar("experienceType", { length: 191 }),
-		tempPassword: varchar("tempPassword", { length: 191 }).default("").notNull(),
-		username: varchar("username", { length: 191 }).default("").notNull(),
-		workPreference: varchar("workPreference", { length: 191 })
+		commentId: varchar("commentId", { length: 191 }).notNull(),
+		content: varchar("content", { length: 191 }).notNull(),
+		authorId: varchar("authorId", { length: 191 }).notNull(),
+		threadId: varchar("threadId", { length: 191 }).notNull(),
+		groupId: varchar("groupId", { length: 191 }).notNull(),
+		isAnonymous: boolean("isAnonymous").default(false).notNull()
 	},
 	table => {
 		return {
-			clerkIdUserIdx: uniqueIndex("clerkIdUserIdx").on(table.clerkId),
-			mailUserIdx: uniqueIndex("userEmailUserIdx").on(table.email)
+			idx_49241_comment_authorId_threadId_groupId_idx: index(
+				"idx_49241_comment_authorId_threadId_groupId_idx"
+			).on(table.authorId, table.threadId, table.groupId),
+			idx_49241_comment_commentId_key: uniqueIndex("idx_49241_comment_commentId_key").on(table.commentId)
+		};
+	}
+);
+
+export const message = pgTable(
+	"message",
+	{
+		id: serial("id").primaryKey().notNull(),
+		content: varchar("content", { length: 191 }).notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		messageId: varchar("messageId", { length: 191 }).notNull(),
+		authorId: varchar("authorId", { length: 191 }).notNull(),
+		groupId: varchar("groupId", { length: 191 }).notNull(),
+		type: message_type("type").default("NORMAL").notNull(),
+		isAnonymous: boolean("isAnonymous").default(false).notNull()
+	},
+	table => {
+		return {
+			idx_49267_message_messageId_key: uniqueIndex("idx_49267_message_messageId_key").on(table.messageId),
+			idx_49267_message_authorId_groupId_idx: index("idx_49267_message_authorId_groupId_idx").on(
+				table.authorId,
+				table.groupId
+			)
 		};
 	}
 );
@@ -359,12 +300,71 @@ export const company = pgTable(
 		logoUrl: varchar("logoUrl", { length: 191 }),
 		websiteUrl: varchar("websiteUrl", { length: 191 }),
 		isDeleted: boolean("isDeleted").default(false).notNull(),
-		category: company_industry("category")
+		category: company_industry("category").notNull()
 	},
 	table => {
 		return {
 			dIdx: uniqueIndex("companyIdIdx").on(table.companyId),
 			lugIdx: uniqueIndex("companySlugIdx").on(table.slug)
+		};
+	}
+);
+
+export const typeformWebhook = pgTable(
+	"typeformWebhook",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		eventId: varchar("eventId", { length: 191 }).notNull(),
+		eventType: varchar("eventType", { length: 191 }).notNull(),
+		typeformId: varchar("typeformId", { length: 191 }).notNull(),
+		title: varchar("title", { length: 191 }).notNull(),
+		num_questions: integer("num_questions").notNull(),
+		num_answers: integer("num_answers").notNull(),
+		url: varchar("url", { length: 191 }),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			typeFormWebhookEventIdIdx: uniqueIndex("typeFormWebhookEventIdIdx").on(table.eventId)
+		};
+	}
+);
+
+export const referral = pgTable(
+	"referral",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		submissionId: varchar("submissionId", { length: 191 }).notNull(),
+		referralId: varchar("referralId", { length: 191 }).notNull(),
+		referrerName: varchar("referrerName", { length: 191 }).notNull(),
+		referrerEmail: varchar("referrerEmail", { length: 191 }).notNull(),
+		refereeEmail1: varchar("refereeEmail1", { length: 191 }).notNull(),
+		refereeEmail2: varchar("refereeEmail2", { length: 191 }),
+		refereeEmail3: varchar("refereeEmail3", { length: 191 }),
+		isActive: boolean("isActive").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			dIdx: uniqueIndex("referralIdIdx").on(table.referralId)
+		};
+	}
+);
+
+export const skillset = pgTable(
+	"skillset",
+	{
+		id: serial("id").primaryKey().notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		slug: skillset_slug("slug").notNull()
+	},
+	table => {
+		return {
+			idx_49237_skillset_slug_key: uniqueIndex("idx_49237_skillset_slug_key").on(table.slug)
 		};
 	}
 );
@@ -408,6 +408,22 @@ export const review = pgTable(
 	}
 );
 
+export const careerInterestToUser = pgTable(
+	"careerInterestToUser",
+	{
+		careerInterestId: integer("careerInterestId").notNull(),
+		userId: integer("userId").notNull()
+	},
+	table => {
+		return {
+			careerInterestUserId: primaryKey({
+				columns: [table.careerInterestId, table.userId],
+				name: "careerInterestUserId"
+			})
+		};
+	}
+);
+
 export const companyToUser = pgTable(
 	"companyToUser",
 	{
@@ -430,22 +446,6 @@ export const skillsetToUser = pgTable(
 	table => {
 		return {
 			skillsetUserId: primaryKey({ columns: [table.skillsetId, table.userId], name: "skillsetUserId" })
-		};
-	}
-);
-
-export const careerInterestToUser = pgTable(
-	"careerInterestToUser",
-	{
-		careerInterestId: integer("careerInterestId").notNull(),
-		userId: integer("userId").notNull()
-	},
-	table => {
-		return {
-			careerInterestUserId: primaryKey({
-				columns: [table.careerInterestId, table.userId],
-				name: "careerInterestUserId"
-			})
 		};
 	}
 );

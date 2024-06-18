@@ -109,6 +109,7 @@ const RECOMMENDATION_RATING_FIELDS = ["bdnFCmtQbTevLgwUhGwY6Y", "pUcy4PPnyg3Ldsc
 const FLEXIBILITY_RATING_FIELDS = ["trCAzBfDqqQNVHd46i5Zdo", "ew1GxxRx39dvDxu5aFS46a"];
 const AUTHENTICITY_RATING_FIELDS = ["wzmK8bh2shVjxoxnmWsNQf"];
 const WORK_LIFE_BALANCE_RATING_FIELDS = ["x6VdWc3hfvPvFETDdyD4pR", "pXBamkrmVjAfqzRHC85pdd"];
+const TOP_TIP_FIELDS = ["bt8zUfu28P52y7uU7mi6gR", "5zo7seAXfEpisxvuFShBFm"];
 
 export const getRating = (form: Submission, type: RatingType, percentage = false) => {
 	function getValue(fields: string[]) {
@@ -181,9 +182,12 @@ export const checkIsConverter = (form: Submission) => {
 };
 
 export const getTopTip = (form: Submission) => {
-	const topTip = form.questions.find(q => q.id === "oACTfp9xoW55T1fatzaC1W");
-	if (!topTip || !topTip?.value) return "";
-	return topTip.value as string;
+	const topTips = form.questions.filter(q => TOP_TIP_FIELDS.includes(q.id));
+	for (const q of topTips) {
+		if (!q.value || NULL_VALUES.includes(String(q.value).toLowerCase())) continue;
+		return q.value as string;
+	}
+	return "";
 };
 
 export const getTopSkills = (form: Submission) => {

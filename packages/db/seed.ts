@@ -105,6 +105,11 @@ const insertCompanies = async () => {
 const insertSkillsets = async () => {
 	const data: (typeof skillset.$inferInsert)[] = [];
 
+	const skillsets = await db.select().from(skillset);
+	if (skillsets.length > 0) {
+		console.log("Skillsets already seeded");
+		return;
+	}
 	skillset_slug.enumValues.forEach((slug, idx) => {
 		data.push({
 			id: idx + 1,
@@ -119,6 +124,11 @@ const insertSkillsets = async () => {
 const insertHobbyInterests = async () => {
 	const data: (typeof hobbyInterest.$inferInsert)[] = [];
 
+	const hobbies = await db.select().from(hobbyInterest);
+	if (hobbies.length > 0) {
+		console.log("Hobby interests already seeded");
+		return;
+	}
 	// Assuming you have a predefined list of hobby interests similar to skillset_slug.enumValues
 	hobbies_interests_slug.enumValues.forEach((slug, idx) => {
 		data.push({

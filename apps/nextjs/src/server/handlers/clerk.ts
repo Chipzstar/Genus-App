@@ -19,7 +19,7 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 				lastname: payload.last_name
 			}
 		});
-		const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
+		// const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
 		// log.info("Feature flag", { waitingListEnabled });
 		// create the user
 		await db.insert(user).values({

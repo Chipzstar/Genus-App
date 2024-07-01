@@ -33,8 +33,7 @@ export const env = createEnv({
 		RESEND_API_KEY: z.string(),
 		RESEND_SENDER_EMAIL: z.string(),
 		REVIEW_FORM_URL: z.string(),
-		SANITY_API_READ_TOKEN: z.string(),
-		TYPEFORM_WEBHOOK_SECRET: z.string()
+		SANITY_API_READ_TOKEN: z.string()
 	},
 
 	/**

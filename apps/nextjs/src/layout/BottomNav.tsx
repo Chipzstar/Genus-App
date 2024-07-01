@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { cx } from "class-variance-authority";
 
-import { BellIcon, CompanyIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
+import { BellIcon, ChurchIcon, CompanyIcon, HomeIcon, ProfileIcon, SearchIcon } from "@genus/ui/icons";
 
 import { PATHS } from "~/utils";
 
@@ -37,29 +37,14 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
 					onClick={() => router.push(PATHS.COMPANIES)}
 				>
-					<CompanyIcon active={activePage.includes(PATHS.COMPANIES)} size={25} />
+					<ChurchIcon active={activePage.includes(PATHS.COMPANIES)} size={25} />
 					<span
 						className={cx(
 							activePage.includes(PATHS.COMPANIES) && "text-primary group-hover:text-primary",
 							"text-xs sm:text-sm"
 						)}
 					>
-						Companies
-					</span>
-				</button>
-				<button
-					type="button"
-					className="group mr-2 inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
-					onClick={() => router.push(PATHS.RESOURCES)}
-				>
-					<SearchIcon active={activePage.includes(PATHS.RESOURCES)} size={25} />
-					<span
-						className={cx(
-							activePage.includes(PATHS.RESOURCES) && "text-primary group-hover:text-primary",
-							"text-xs sm:text-sm"
-						)}
-					>
-						Resources
+						Church
 					</span>
 				</button>
 				<button

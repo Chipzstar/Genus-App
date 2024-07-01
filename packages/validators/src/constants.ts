@@ -92,6 +92,51 @@ export const career_interests = ["banking_finance", "law", "consulting", "tech"]
 
 export const industries = ["banking_finance", "law", "consulting", "tech", "other"] as const;
 
+export const role_sectors = [
+	"accounting",
+	"aerospace",
+	"agriculture",
+	"arts_fashion_creatives",
+	"business_management",
+	"charities_voluntary_sector",
+	"commerce",
+	"construction",
+	"consulting_professional_services",
+	"design",
+	"distribution",
+	"economics",
+	"education_teaching",
+	"electronics",
+	"energy_utilities_mining",
+	"engineering",
+	"entrepreneurial_startups",
+	"finance_banking",
+	"food_fmcg",
+	"forestry",
+	"healthcare_pharmaceuticals_biotechnology",
+	"hospitality_leisure",
+	"infrastructure",
+	"international_development",
+	"insurance",
+	"journalism_communications",
+	"law_legal_services",
+	"media_entertainment",
+	"politics_government",
+	"production",
+	"public_sector",
+	"recruitment_human_resources",
+	"retail",
+	"robotics",
+	"sales_advertising_marketing",
+	"security",
+	"sport",
+	"sustainability_esg",
+	"technology_data_science_ict",
+	"telecommunications",
+	"trade",
+	"transport"
+] as const;
+
 export enum CAREER_INTERESTS {
 	banking_finance = 1,
 	law = 2,
@@ -788,4 +833,21 @@ export const working_environment_types = [
 	"remote",
 	"innovative_and_entrepreneurial",
 	"artistic_and_creative"
+] as const;
+
+export const hobbies = [
+	"reading",
+	"writing",
+	"music",
+	"art",
+	"socialising",
+	"sports",
+	"cooking",
+	"dancing",
+	"property",
+	"traveling",
+	"photography",
+	"gaming",
+	"hiking",
+	"other"
 ] as const;

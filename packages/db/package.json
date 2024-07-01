@@ -15,6 +15,7 @@
     "db:pull": "pnpm with-env drizzle-kit introspect",
     "db:generate": "pnpm with-env drizzle-kit generate",
     "db:seed": "pnpm with-env tsx ./seed.ts",
+    "db:seed:prod": "doppler run ",
     "db:migrate": "pnpm with-env tsx ./migrate.ts",
     "db:drop": "pnpm with-env drizzle-kit drop"
   },

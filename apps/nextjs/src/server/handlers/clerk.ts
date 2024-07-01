@@ -20,7 +20,7 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			}
 		});
 		const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
-		log.info("Feature flag", { waitingListEnabled });
+		// log.info("Feature flag", { waitingListEnabled });
 		// create the user
 		await db.insert(user).values({
 			clerkId: String(payload.id),
@@ -29,7 +29,7 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			lastname: payload.last_name,
 			username: payload.unsafe_metadata.username as string,
 			tempPassword: payload.unsafe_metadata.tempPassword as string,
-			isActive: !waitingListEnabled
+			isActive: true
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];

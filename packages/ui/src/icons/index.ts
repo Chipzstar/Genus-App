@@ -4,3 +4,4 @@ export { SearchIcon } from "./SearchIcon";
 export { BellIcon } from "./BellIcon";
 export { ProfileIcon } from "./ProfileIcon";
 export { CompanyIcon } from "./CompanyIcon";
+export { ChurchIcon } from "./ChurchIcon";

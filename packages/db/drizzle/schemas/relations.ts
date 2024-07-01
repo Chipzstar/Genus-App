@@ -12,6 +12,8 @@ import {
 	companyToUser,
 	group,
 	groupUser,
+	hobbyInterest,
+	hobbyInterestToUser,
 	message,
 	reaction,
 	review,
@@ -158,5 +160,16 @@ export const companyToUserRelations = relations(companyToUser, ({ one }) => ({
 	company: one(company, {
 		fields: [companyToUser.companyId],
 		references: [company.id]
+	})
+}));
+
+export const hobbyInterestToUserRelations = relations(hobbyInterestToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [hobbyInterestToUser.userId],
+		references: [user.id]
+	}),
+	hobbyInterest: one(hobbyInterest, {
+		fields: [hobbyInterestToUser.hobbyInterestId],
+		references: [hobbyInterest.id]
 	})
 }));

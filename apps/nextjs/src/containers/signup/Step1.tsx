@@ -185,7 +185,7 @@ const Step1: FC<Props> = () => {
 		[isLoaded, signUp, files, nextStep, clerk]
 	);
 	return (
-		<>
+		<div className="flex h-full w-full flex-col items-center justify-center">
 			<CodeInput
 				onSubmit={confirmSignUp}
 				opened={isOpen}
@@ -311,7 +311,7 @@ const Step1: FC<Props> = () => {
 					</form>
 				</Form>
 			</div>
-		</>
+		</div>
 	);
 };
 

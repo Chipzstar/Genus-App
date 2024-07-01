@@ -7,7 +7,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { nanoid } from "nanoid";
 
 import * as schema from "./drizzle/schemas/schema";
-import { company, skillset, skillsetSlug } from "./drizzle/schemas/schema";
+import { company, hobbies_interests_slug, hobbyInterest, skillset, skillset_slug } from "./drizzle/schemas/schema";
 
 /**
  * Sanitizes a string by converting it to lowercase and replacing spaces with underscores.
@@ -67,7 +67,7 @@ const processFile = async () => {
 	return records;
 };
 
-if (!("DATABASE_URL" in process.env)) throw new Error("DATABASE_URL not found on .env.development");
+if (!("DB_HOST" in process.env)) throw new Error("DATABASE_URL not found on .env");
 
 export const connectionString = [
 	"postgresql://",
@@ -105,7 +105,7 @@ const insertCompanies = async () => {
 const insertSkillsets = async () => {
 	const data: (typeof skillset.$inferInsert)[] = [];
 
-	skillsetSlug.enumValues.forEach((slug, idx) => {
+	skillset_slug.enumValues.forEach((slug, idx) => {
 		data.push({
 			id: idx + 1,
 			name: formatString(slug),
@@ -116,12 +116,29 @@ const insertSkillsets = async () => {
 	await db.insert(skillset).values(data);
 };
 
-const main = async (type: "company" | "skillset") => {
+const insertHobbyInterests = async () => {
+	const data: (typeof hobbyInterest.$inferInsert)[] = [];
+
+	// Assuming you have a predefined list of hobby interests similar to skillset_slug.enumValues
+	hobbies_interests_slug.enumValues.forEach((slug, idx) => {
+		data.push({
+			id: idx + 1,
+			name: formatString(slug), // Assuming formatString can be used here similarly
+			slug
+		});
+	});
+	console.log("Seeding hobby interests");
+	await db.insert(hobbyInterest).values(data);
+};
+
+const main = async (type: "company" | "skillset" | "hobbyInterest") => {
 	try {
 		if (type === "company") {
 			await insertCompanies();
-		} else {
+		} else if (type === "skillset") {
 			await insertSkillsets();
+		} else if (type === "hobbyInterest") {
+			await insertHobbyInterests(); // Assuming insertHobbyInterests is defined similarly to insertSkillsets
 		}
 	} catch (error) {
 		console.error("Error during seeding:", error);
@@ -130,4 +147,4 @@ const main = async (type: "company" | "skillset") => {
 	}
 };
 
-void main("skillset").then(r => console.log("Seed done"));
+void main("hobbyInterest").then(r => console.log("Seed done"));

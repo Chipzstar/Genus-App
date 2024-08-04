@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "../trpc";
 import { authRouter } from "./auth";
+import { businessRouter } from "./business";
 import { commentRouter } from "./comment";
 import { companyRouter } from "./company";
 import { groupRouter } from "./group";
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
 	comment: commentRouter,
 	reaction: reactionRouter,
 	company: companyRouter,
-	review: reviewRouter
+	review: reviewRouter,
+	business: businessRouter
 });
 
 // export type definition of API

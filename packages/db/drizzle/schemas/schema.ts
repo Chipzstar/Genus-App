@@ -17,6 +17,7 @@ import {
 export const careerinterest_slug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const company_industry = pgEnum("company_industry", ["other", "law", "tech", "consulting", "banking_finance"]);
 export const groupuser_role = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
+export const businessuser_role = pgEnum("business_role", ["ADMIN", "MEMBER"]);
 export const message_type = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
 export const skillset_slug = pgEnum("skillset_slug", [
 	"written_communication",
@@ -408,6 +409,28 @@ export const referral = pgTable(
 		};
 	}
 );
+export const business = pgTable("business", {
+	id: serial("id").primaryKey().notNull(),
+	createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+	updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+	businessId: varchar("businessId", { length: 191 }).notNull(),
+	name: varchar("name", { length: 191 }).notNull(),
+	slug: varchar("slug", { length: 191 }).notNull(),
+	description: varchar("description", { length: 191 }),
+	logoUrl: varchar("logoUrl", { length: 191 }),
+	websiteUrl: varchar("websiteUrl", { length: 191 }),
+	tags: text("tags")
+		.default(sql`'{}'::text[]`)
+		.array()
+		.notNull(),
+	socialHandles: text("socialHandles")
+		.default(sql`'{}'::text[]`)
+		.array()
+		.notNull()
+		.array()
+		.notNull(),
+	isDeleted: boolean("isDeleted").default(false).notNull()
+});
 
 export const skillset = pgTable(
 	"skillset",
@@ -519,3 +542,9 @@ export const hobbyInterestToUser = pgTable(
 		};
 	}
 );
+
+export const businessToUser = pgTable("businessToUser", {
+	userId: integer("userId").notNull(),
+	businessId: integer("businessId").notNull(),
+	role: businessuser_role("role").default("MEMBER").notNull()
+});

@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
-import { careerInterest, careerInterestToUser, db, eq, inArray, sql, user } from "@genus/db";
+import { careerInterest, careerInterestToUser, db, eq, hobbyInterestToUser, inArray, sql, user } from "@genus/db";
 import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
@@ -58,6 +58,30 @@ export const userRouter = createTRPCRouter({
 			ctx.logger.info("-----------------------------------------");
 			return { ...dbUser, careerInterests };
 		} catch (err: any) {
+			console.error(err);
+			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.body.message });
+		}
+	}),
+	getHobbyInterests: protectedProcedure.input(z.number()).query(async ({ input, ctx }) => {
+		try {
+			console.log({ input });
+			const dbHobbyInterests = await ctx.db.query.hobbyInterestToUser.findMany({
+				where: eq(hobbyInterestToUser.userId, input),
+				with: {
+					hobbyInterest: {
+						columns: {
+							name: true
+						}
+					}
+				}
+			});
+			console.log(dbHobbyInterests);
+
+			ctx.logger.info("-----------------------------------------");
+			ctx.logger.debug("HobbyInterests", dbHobbyInterests);
+			ctx.logger.info("-----------------------------------------");
+			return dbHobbyInterests;
+		} catch (err) {
 			console.error(err);
 			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.body.message });
 		}

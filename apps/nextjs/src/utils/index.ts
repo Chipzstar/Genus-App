@@ -22,7 +22,8 @@ export const PATHS = {
 	PROFILE: "/profile",
 	NOTIFICATIONS: "/notifications",
 	GROUPS: "/groups",
-	RESOURCES: "/resources"
+	RESOURCES: "/resources",
+	CHURCH: "/church"
 };
 
 export type FormatType = "default" | "category";

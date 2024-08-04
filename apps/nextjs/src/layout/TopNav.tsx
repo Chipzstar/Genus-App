@@ -15,7 +15,7 @@ interface Props {
 	imagePath?: string;
 }
 
-const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/white-logo.png" }: Props) => {
+const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/green-logo.png" }: Props) => {
 	const router = useRouter();
 	const { signOut } = useAuth();
 	const posthog = usePostHog();

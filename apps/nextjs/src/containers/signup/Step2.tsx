@@ -147,6 +147,7 @@ const Step2: FC<Props> = () => {
 									<FormLabel>Age</FormLabel>
 									<FormControl>
 										<Input
+											placeholder="Please enter your age"
 											{...field}
 											type="number"
 											className="rounded-xl"

@@ -12,19 +12,20 @@ interface Props {
 }
 
 export const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
+
 const Layout = ({ children }: Props) => {
-	const posthog = usePostHog()
-	const { user } = useClerk()
+	const posthog = usePostHog();
+	const { user } = useClerk();
 	if (user) {
 		const { id, emailAddresses, firstName, lastName } = user;
 		posthog.identify(
-			id,  // Replace 'distinct_id' with your user's unique identifier
+			id, // Replace 'distinct_id' with your user's unique identifier
 			{
 				email: emailAddresses[0]!.emailAddress,
 				name: `${firstName} ${lastName}`
 			} // optional: set additional user properties
 		);
-		if (typeof window !== "undefined" && window.$chatwoot) {
+		if (window?.$chatwoot) {
 			// @ts-expect-error chatwootSDK.setUser
 			(window as any).$chatwoot.setUser(user.id, {
 				email: user.emailAddresses[0]!.emailAddress,

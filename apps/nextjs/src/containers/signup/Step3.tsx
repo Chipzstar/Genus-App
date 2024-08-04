@@ -18,7 +18,6 @@ import { hobbies } from "@genus/validators/constants";
 import { decryptString, prettyPrint } from "@genus/validators/helpers";
 
 import { env } from "~/env";
-import WaitingList from "~/modals/WaitingList";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { UserState } from "~/utils/types";
@@ -35,12 +34,10 @@ const { NEXT_PUBLIC_AXIOM_TOKEN } = env;
 
 const Step3: FC = () => {
 	const { query, replace } = useRouter();
-	const [open, setOpen] = useState(false);
 	const { isLoaded, signIn, setActive } = useSignIn();
 	const { context } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const { mutateAsync: updateUser } = trpc.auth.updateUserStep3.useMutation();
-	const { mutateAsync: checkUserActive } = trpc.auth.checkUserActive.useMutation();
 
 	const form = useForm<z.infer<typeof signupStep3Schema>>({
 		defaultValues: {
@@ -63,11 +60,11 @@ const Step3: FC = () => {
 				return null;
 			}
 			// check if the user is active
-			if (!(await checkUserActive({ email }))) {
+			/*if (!(await checkUserActive({ email }))) {
 				setOpen(true);
 				setTimeout(() => void replace(PATHS.LOGIN), 1500);
 				return null;
-			}
+			}*/
 			const result = await signIn.create({
 				identifier: email,
 				password
@@ -120,8 +117,7 @@ const Step3: FC = () => {
 
 	return (
 		<>
-			<WaitingList open={open} onClose={() => setOpen(false)} />
-			<div className="flex w-full flex-col space-y-12 md:w-1/2">
+			<div className="flex h-full w-full flex-col space-y-12 md:w-1/2 md:justify-center">
 				<div className="mt-12 text-balance text-center font-semibold sm:mt-0 sm:gap-y-4">
 					<span className="text-2.5xl sm:text-4xl sm:leading-tight">
 						Third-spaces and communities for <span className="underline">you.</span>

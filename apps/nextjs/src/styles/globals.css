@@ -145,7 +145,7 @@
   }
 
   .scrollable-page-container {
-    @apply min-h-screen mx-auto text-primary py-6 md:py-8
+    @apply min-h-screen mx-auto text-primary py-6 md:py-8 bg-white
   }
 
   .home-wrapper {
@@ -155,6 +155,10 @@
 
   .page-container {
     @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
+  }
+
+  .church-container {
+    @apply min-h-screen sm:h-screen mx-auto bg-white text-black
   }
 
   .insights-container {

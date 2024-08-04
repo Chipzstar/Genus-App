@@ -15,8 +15,8 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 	// const unreadStore = useNotifications("unread");
 	const unreadStore: { notifications: [] } = { notifications: [] };
 	return (
-		<div className="border-gray-2000 fixed bottom-0 left-0 z-50 h-16 w-full border-t bg-white">
-			<div className="mx-auto grid h-full max-w-2xl grid-cols-5 font-medium text-gray-500">
+		<div className="fixed bottom-0 left-0 z-50 h-16 w-full border-t border-gray-200 bg-white">
+			<div className="mx-auto grid h-full max-w-3xl grid-cols-4 font-medium text-gray-500">
 				<button
 					type="button"
 					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
@@ -35,12 +35,12 @@ const BottomNav = ({ activePage = PATHS.HOME }: Props) => {
 				<button
 					type="button"
 					className="group inline-flex flex-col items-center justify-center px-5 dark:hover:bg-gray-800"
-					onClick={() => router.push(PATHS.COMPANIES)}
+					onClick={() => router.push(PATHS.CHURCH)}
 				>
-					<ChurchIcon active={activePage.includes(PATHS.COMPANIES)} size={25} />
+					<ChurchIcon active={activePage.includes(PATHS.CHURCH)} size={25} />
 					<span
 						className={cx(
-							activePage.includes(PATHS.COMPANIES) && "text-primary group-hover:text-primary",
+							activePage.includes(PATHS.CHURCH) && "text-primary group-hover:text-primary",
 							"text-xs sm:text-sm"
 						)}
 					>

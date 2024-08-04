@@ -1,8 +1,8 @@
-GET http://localhost:3001/api/uploadthing/list
+GET http://localhost:3002/api/uploadthing/list
 Accept: application/json
 
 ###
-POST http://localhost:3001/api/uploadthing/rename
+POST http://localhost:3002/api/uploadthing/rename
 Content-Type: application/json
 
 {

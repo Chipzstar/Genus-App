@@ -145,7 +145,7 @@
   }
 
   .scrollable-page-container {
-    @apply min-h-screen mx-auto text-primary py-6 md:py-8 bg-white
+    @apply min-h-screen mx-auto bg-white
   }
 
   .home-wrapper {

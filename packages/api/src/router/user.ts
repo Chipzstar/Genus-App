@@ -81,9 +81,9 @@ export const userRouter = createTRPCRouter({
 			ctx.logger.debug("HobbyInterests", dbHobbyInterests);
 			ctx.logger.info("-----------------------------------------");
 			return dbHobbyInterests;
-		} catch (err) {
+		} catch (err: any) {
 			console.error(err);
-			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.body.message });
+			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 		}
 	}),
 	updateProfile: protectedProcedure

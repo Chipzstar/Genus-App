@@ -86,7 +86,7 @@ const CompanySlug = () => {
 	);
 
 	return (
-		<div className="scrollable-page-container overflow-y-hidden">
+		<div className="scrollable-page-container overflow-y-hidden py-6 md:py-8">
 			<TopNav />
 			<div className="flex h-full flex-col bg-white text-black">
 				<div className="mx-auto max-w-xl">

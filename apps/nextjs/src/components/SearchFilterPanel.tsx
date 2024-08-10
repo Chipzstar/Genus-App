@@ -1,6 +1,7 @@
 import React from "react";
 import type { z } from "zod";
 
+import { cn } from "@genus/ui";
 import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { careerInterestsSchema } from "@genus/validators";
@@ -11,11 +12,12 @@ interface Props<T = z.infer<typeof careerInterestsSchema>> {
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	categories: T[] | readonly T[];
+	classNames?: string;
 }
 
-const SearchFilterPanel = <T,>({ value, onChange, categories = [] }: Props<T>) => (
+const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames }: Props<T>) => (
 	<div className="flex items-center justify-between space-x-10 py-6">
-		<div className="flex sm:w-64">
+		<div className={cn("flex sm:w-64", classNames)}>
 			<Input
 				value={value}
 				onChange={onChange}
@@ -26,7 +28,7 @@ const SearchFilterPanel = <T,>({ value, onChange, categories = [] }: Props<T>) =
 		<div className="flex sm:w-64">
 			<Select>
 				<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
-					<SelectValue defaultValue="all" placeholder="All types" />
+					<SelectValue defaultValue="all" placeholder="Filter" />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>

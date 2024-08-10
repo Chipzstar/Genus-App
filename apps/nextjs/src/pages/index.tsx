@@ -1,43 +1,51 @@
-import type { FC, ReactElement } from "react";
+import type { ReactElement } from "react";
 import React from "react";
 import { useRouter } from "next/router";
+import type { GetServerSideProps } from "next/types";
+import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { Image } from "@nextui-org/react";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 
+import { appRouter, createContextInner } from "@genus/api";
+import { transformer } from "@genus/api/transformer";
+
+import { BusinessCard } from "~/components/BusinessCard";
 import Loader from "~/components/Loader";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
 import { formatString, PATHS } from "~/utils";
-import type { RouterOutputs } from "~/utils/trpc";
 import { trpc } from "~/utils/trpc";
 
-const BusinessCard: FC<{ business: RouterOutputs["business"]["getAll"][number] }> = props => {
-	const { name, logoUrl, tags } = props.business;
-	console.log(tags);
-	return (
-		<div
-			className="relative w-36 overflow-hidden"
-			style={{
-				borderRadius: "35px"
-			}}
-		>
-			<Image src={logoUrl ?? "/images/logo.png"} width="100%" />
-			<div
-				className="absolute bottom-0 z-10 flex h-14 w-full flex-col bg-gray-400/50 px-3 pt-2 text-white"
-				style={{
-					borderRadius: "0 0 35px 35px"
-				}}
-			>
-				<span>{name}</span>
-				<div className="flex flex-wrap text-wrap">
-					{tags.map((tag, index) => (
-						<span key={index} className="inline-block rounded-full text-xs font-semibold tracking-tight">
-							#{tag}&nbsp;
-						</span>
-					))}
-				</div>
-			</div>
-		</div>
-	);
+export const getServerSideProps: GetServerSideProps = async ctx => {
+	const { req } = ctx;
+	const { userId } = getAuth(req);
+
+	if (!userId) {
+		return {
+			props: {}
+		};
+	}
+
+	const helpers = createServerSideHelpers({
+		router: appRouter,
+		transformer,
+		ctx: await createContextInner({
+			auth: {
+				userId
+			}
+		})
+	});
+
+	// await helpers.user.getHobbyInterests.prefetch(userId);
+	await helpers.business.getAll.prefetch();
+
+	return {
+		props: {
+			userId,
+			trpcState: helpers.dehydrate(),
+			...buildClerkProps(req)
+		}
+	};
 };
 
 const Home = () => {
@@ -47,7 +55,7 @@ const Home = () => {
 	const { data: businesses } = trpc.business.getAll.useQuery();
 
 	return (
-		<div className="scrollable-page-container">
+		<div className="scrollable-page-container py-6 md:py-8">
 			<TopNav />
 			{isLoading ? (
 				<Loader />
@@ -80,6 +88,7 @@ const Home = () => {
 							<div className="grid grid-cols-3 gap-3 md:grid-cols-5">
 								{hobbyInterests?.map(({ hobbyInterest, index }) => (
 									<div
+										role="button"
 										key={index}
 										className="flex items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/55 to-secondary-300/55 p-2"
 									>

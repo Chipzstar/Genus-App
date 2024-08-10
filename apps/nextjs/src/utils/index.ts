@@ -2,7 +2,7 @@ import { format, formatDistance } from "date-fns";
 import posthog from "posthog-js";
 import { z } from "zod";
 
-import type { careerInterestsSchema, Industry } from "@genus/validators";
+import type { Industry } from "@genus/validators";
 
 import type {
 	AddTempPasswordInput,
@@ -23,7 +23,9 @@ export const PATHS = {
 	NOTIFICATIONS: "/notifications",
 	GROUPS: "/groups",
 	RESOURCES: "/resources",
-	CHURCH: "/church"
+	CHURCH: "/church",
+	BUSINESSES: "/businesses",
+	CREATE_BUSINESS: "/create/business"
 };
 
 export type FormatType = "default" | "category";

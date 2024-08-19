@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ReactElement } from "react";
-import { AvatarIcon } from "@nextui-org/react";
+import { useUser } from "@clerk/nextjs";
+import { AvatarIcon, Image } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -14,10 +15,12 @@ import { Textarea } from "@genus/ui/textarea";
 import { BackButton } from "~/components/BackButton";
 import { useFileContext } from "~/context/FileContext";
 import AppLayout from "~/layout/AppLayout";
+import { getInitials } from "~/utils";
 import { useUploadThing } from "~/utils/uploadthing";
 
 const CreatePost = () => {
 	const { files, updateFile } = useFileContext();
+	const { user } = useUser();
 
 	const onDrop = (acceptedFile: File[]) => {
 		console.log("Files:", acceptedFile);
@@ -52,13 +55,33 @@ const CreatePost = () => {
 		maxFiles: 1
 	});
 
+	const initials = useMemo(() => {
+		if (!user?.firstName || !user?.lastName) return "";
+		return getInitials(user.firstName, user.lastName);
+	}, [user]);
+
 	return (
 		<div className="scrollable-page-container overflow-y-hidden pb-20 text-black">
 			<div className="relative flex h-full flex-col">
 				<div className="mx-auto h-full w-full max-w-3xl p-4">
 					<BackButton />
 					<div className="flex flex-col items-center">
-						<div className="h-32 w-full rounded-md bg-gray-200" />
+						{files[0] ? (
+							<div className="w-full">
+								<Image
+									src={URL.createObjectURL(files[0])}
+									className="h-32 w-full"
+									alt="overlay"
+									width="100%"
+									style={{
+										objectFit: "cover",
+										opacity: 0.5
+									}}
+								/>
+							</div>
+						) : (
+							<div className="h-32 w-full rounded-md bg-gray-200" />
+						)}
 						<div className="absolute top-32 z-10 mb-4 flex h-28 w-28 items-center justify-center">
 							<div {...getRootProps()} className="relative inline-block cursor-pointer">
 								<input {...getInputProps()} />
@@ -81,16 +104,9 @@ const CreatePost = () => {
 						<div className="mb-2 flex items-center space-x-2">
 							<Avatar>
 								<AvatarImage src="/placeholder-user.jpg" alt="Kris Gold" />
-								<AvatarFallback>KG</AvatarFallback>
+								<AvatarFallback>{initials}</AvatarFallback>
 							</Avatar>
-							<span>Kris Gold</span>
-						</div>
-						<div className="mb-2 flex items-center space-x-2">
-							<Avatar>
-								<AvatarImage src="/placeholder-user.jpg" alt="Kris Gold" />
-								<AvatarFallback>KG</AvatarFallback>
-							</Avatar>
-							<span>Kris Gold</span>
+							<span>{user?.firstName + " " + user?.lastName}</span>
 						</div>
 					</div>
 					<div className="mb-4 space-y-3">

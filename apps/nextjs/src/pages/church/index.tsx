@@ -39,7 +39,11 @@ const Church = () => {
 						</section>
 						<section className="flex h-48 flex-col">
 							<div className="flex h-full gap-x-6 px-4">
-								<article role="button" className="flex items-center space-x-3">
+								<article
+									role="button"
+									className="flex items-center space-x-3"
+									onClick={() => router.push(PATHS.MEMBERS)}
+								>
 									<Image src="/images/member.svg" width={75} />
 									<span className="text-wrap text-xl font-semibold md:text-2xl">
 										Member directory

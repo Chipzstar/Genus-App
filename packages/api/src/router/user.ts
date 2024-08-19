@@ -17,6 +17,9 @@ export const userRouter = createTRPCRouter({
 		// return ctx.db.query.user.findFirst({ where: eq(user.id, 76) });
 		return (await ctx.db.select().from(user).where(eq(user.id, input)))[0];
 	}),
+	getUsers: protectedProcedure.query(async ({ ctx, input }) => {
+		return await ctx.db.select().from(user);
+	}),
 	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
 		try {
 			const fields = {

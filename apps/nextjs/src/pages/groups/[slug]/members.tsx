@@ -1,4 +1,4 @@
-import type { ReactElement} from "react";
+import type { ReactElement } from "react";
 import { useMemo } from "react";
 import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
@@ -28,7 +28,6 @@ export const getServerSideProps = (async ({ params, req }) => {
 
 const Members: NextPageWithAppLayout<any> = (props: any) => {
 	const router = useRouter();
-	const utils = trpc.useUtils();
 
 	const { isLoading, data, failureReason, error } = trpc.group.getGroupBySlug.useQuery(
 		{
@@ -75,7 +74,7 @@ const Members: NextPageWithAppLayout<any> = (props: any) => {
 						height={75}
 						className="opacity-1"
 					/>
-					<span className="whitespace-pre-wrap text-lg font-semibold text-center sm:text-2xl">
+					<span className="whitespace-pre-wrap text-center text-lg font-semibold sm:text-2xl">
 						InternGen: Spring into Banking
 					</span>
 					<span className="text-sm sm:text-base">{members?.length} members</span>

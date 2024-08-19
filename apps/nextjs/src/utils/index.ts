@@ -25,7 +25,8 @@ export const PATHS = {
 	RESOURCES: "/resources",
 	CHURCH: "/church",
 	BUSINESSES: "/businesses",
-	CREATE_BUSINESS: "/create/business"
+	CREATE_BUSINESS: "/create/business",
+	MEMBERS: "/members"
 };
 
 export type FormatType = "default" | "category";
@@ -74,6 +75,10 @@ export function sanitize(str: string) {
 
 export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function getInitials(firstName: string, lastName: string) {
+	return `${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`;
 }
 
 export function formatTimestamp(timestamp: string | Date, method = "default") {

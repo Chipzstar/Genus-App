@@ -13,9 +13,10 @@ interface Props<T = z.infer<typeof careerInterestsSchema>> {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	categories: T[] | readonly T[];
 	classNames?: string;
+	withFilter?: boolean;
 }
 
-const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames }: Props<T>) => (
+const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames, withFilter = true }: Props<T>) => (
 	<div className="flex items-center justify-between space-x-10 py-6">
 		<div className={cn("flex sm:w-64", classNames)}>
 			<Input
@@ -25,29 +26,31 @@ const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames }:
 				placeholder="Search"
 			/>
 		</div>
-		<div className="flex sm:w-64">
-			<Select>
-				<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
-					<SelectValue defaultValue="all" placeholder="Filter" />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectGroup>
-						<SelectItem value="all">All types</SelectItem>
-						{categories.map((item, index) => {
-							const parsed = careerInterestsSchema.safeParse(item);
-							const formattedItem = parsed.success
-								? formatString(parsed.data, "category")
-								: formatString(String(item), "default");
-							return (
-								<SelectItem key={index} value={String(item)}>
-									{formattedItem}
-								</SelectItem>
-							);
-						})}
-					</SelectGroup>
-				</SelectContent>
-			</Select>
-		</div>
+		{withFilter && (
+			<div className="flex sm:w-64">
+				<Select>
+					<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
+						<SelectValue defaultValue="all" placeholder="Filter" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectGroup>
+							<SelectItem value="all">All types</SelectItem>
+							{categories.map((item, index) => {
+								const parsed = careerInterestsSchema.safeParse(item);
+								const formattedItem = parsed.success
+									? formatString(parsed.data, "category")
+									: formatString(String(item), "default");
+								return (
+									<SelectItem key={index} value={String(item)}>
+										{formattedItem}
+									</SelectItem>
+								);
+							})}
+						</SelectGroup>
+					</SelectContent>
+				</Select>
+			</div>
+		)}
 	</div>
 );
 

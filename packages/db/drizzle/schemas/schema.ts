@@ -426,8 +426,6 @@ export const business = pgTable("business", {
 	socialHandles: text("socialHandles")
 		.default(sql`'{}'::text[]`)
 		.array()
-		.notNull()
-		.array()
 		.notNull(),
 	isDeleted: boolean("isDeleted").default(false).notNull()
 });
@@ -470,11 +468,26 @@ export const review = pgTable(
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
 		topTip: varchar("topTip", { length: 191 }).default("").notNull(),
-		topSkills: text("topSkills").default("{}").array().notNull(),
-		pros: text("pros").default("{}").array().notNull(),
-		cons: text("cons").default("{}").array().notNull(),
-		interviewQuestions: text("interviewQuestions").default("{}").array().notNull(),
-		topResources: text("topResources").default("{}").array().notNull(),
+		topSkills: text("topSkills")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		pros: text("pros")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		cons: text("cons")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		interviewQuestions: text("interviewQuestions")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		topResources: text("topResources")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
 		isDeleted: boolean("isDeleted").default(false).notNull(),
 		industry: company_industry("industry").notNull()
 	},

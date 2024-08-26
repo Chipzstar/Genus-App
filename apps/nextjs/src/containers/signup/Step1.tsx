@@ -43,7 +43,7 @@ const Step1: FC<Props> = () => {
 	}, []);
 
 	// HOOKS
-	const { isLoaded, signUp, setSession } = useSignUp();
+	const { isLoaded, signUp } = useSignUp();
 
 	const form = useForm<z.infer<typeof signupStep1Schema>>({
 		defaultValues: {

@@ -12,8 +12,8 @@ const Church = () => {
 		<div className="church-container overflow-y-hidden">
 			<div className="relative flex h-full flex-col bg-white">
 				<div className="mx-auto max-w-xl">
-					<Image src="/images/arc2.0-banner.png" height={150} width="100%" />
-					<div className="absolute left-1/2 top-32 z-10 flex h-28 w-28 -translate-x-1/2 transform flex-col md:top-48 md:h-32 md:w-32">
+					<img src="/images/arc2.0-banner.png" className="w-full md:h-48" />
+					<div className="absolute left-1/2 top-32 z-10 flex h-28 w-28 -translate-x-1/2 transform flex-col md:h-32 md:w-32">
 						<Image src="/images/arc2.0-avatar.png" width="100%" height="100%" />
 					</div>
 					<div className="mt-20 flex h-full w-full flex-col space-y-8 text-center">

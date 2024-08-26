@@ -187,3 +187,17 @@ export const referralEmailSchema = z.object({
 	referrerName: z.string(),
 	referrerEmail: z.string().email()
 });
+
+export const CreateBusinessSchema = z.object({
+	title: z.string().min(1, "Business name is required"),
+	description: z.string().min(1, "Description is required"),
+	tags: z.array(z.string()).nonempty("At least one tag is required"),
+	admins: z.array(z.string()).nonempty("At least one admin is required"),
+	logoUrl: z.string().url(),
+	twitter: z.string().optional(),
+	instagram: z.string().optional(),
+	linkedIn: z.string().optional(),
+	other: z.string().optional()
+});
+
+export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;

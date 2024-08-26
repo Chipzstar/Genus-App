@@ -2,7 +2,6 @@ import { promises as fs } from "node:fs";
 import type { NextApiRequest, NextApiResponse } from "next/types";
 import { createInsertSchema } from "drizzle-zod";
 import { buffer } from "micro";
-import { log } from "next-axiom";
 import { z } from "zod";
 
 import { db, review } from "@genus/db";
@@ -111,7 +110,7 @@ async function handleFormResponse(event: FormEvent) {
 
 	// validate insert payload
 	if (!parsedPayload.success) {
-		log.error(parsedPayload.error.message);
+		// log.error(parsedPayload.error.message);
 		console.log(parsedPayload.error);
 		return { result: null };
 	}

@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
+import { UTApi } from "uploadthing/server";
 
 import { cors, runMiddleware } from "~/pages/api/cors";
-import { utapi } from "~/server/uploadthing";
+
+const utapi = new UTApi();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "POST") {

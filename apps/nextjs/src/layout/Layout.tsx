@@ -2,7 +2,6 @@ import React from "react";
 import { Montserrat as FontSans } from "next/font/google";
 import Head from "next/head";
 import { useClerk } from "@clerk/nextjs";
-import { AxiomWebVitals } from "next-axiom";
 import { usePostHog } from "posthog-js/react";
 
 import { Toaster } from "@genus/ui/sonner";
@@ -39,7 +38,6 @@ const Layout = ({ children }: Props) => {
 			<Head>
 				<title>Genus Networks</title>
 			</Head>
-			<AxiomWebVitals />
 			<main className={fontSans.className}>
 				{children}
 				<Toaster richColors />

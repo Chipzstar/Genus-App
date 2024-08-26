@@ -1,12 +1,12 @@
 import { clerkClient } from "@clerk/nextjs";
 import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/server";
-import { log } from "next-axiom";
 import shortHash from "shorthash2";
+import { UTApi } from "uploadthing/server";
 
 import { posthog } from "@genus/api";
 import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
 
-import { utapi } from "~/server/uploadthing";
+const utapi = new UTApi();
 
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
@@ -36,16 +36,16 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 
 		if (!dbUser) throw new Error("Could not create user");
 
-		log.info("-----------------------------------------------");
-		log.debug("New user!!", dbUser);
-		log.info("-----------------------------------------------");
+		// log.info("-----------------------------------------------");
+		// log.debug("New user!!", dbUser);
+		// log.info("-----------------------------------------------");
 		return {
 			dbUser,
 			posthogUser
 		};
 	} catch (err: any) {
 		console.error(err);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		throw err;
 	}
 };
@@ -75,7 +75,6 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
-		if (uploadedFile?.data) log.debug("Uploaded image data for " + payload.id, uploadedFile.data);
 
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {
@@ -89,9 +88,9 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					ut_url: uploadedFile.data.url
 				}
 			});
-			log.info("-----------------------------------------------");
-			log.debug("Updated clerk user!!", clerkUser);
-			log.info("-----------------------------------------------");
+			// log.info("-----------------------------------------------");
+			// log.debug("Updated clerk user!!", clerkUser);
+			// log.info("-----------------------------------------------");
 		}
 
 		const shouldUpdate = Boolean(
@@ -118,13 +117,13 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					.where(eq(user.clerkId, payload.id))
 					.returning()
 			)[0];
-		log.info("-----------------------------------------------");
-		log.debug("Updated user!!", dbUser);
-		log.info("-----------------------------------------------");
+		// log.info("-----------------------------------------------");
+		// log.debug("Updated user!!", dbUser);
+		// log.info("-----------------------------------------------");
 		return dbUser;
 	} catch (err: any) {
 		console.error(err);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		throw err;
 	}
 };
@@ -143,14 +142,14 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id!));
 		if (user) {
-			log.info("-----------------------------------------------");
-			log.debug("User deleted!!", dbUser);
-			log.info("-----------------------------------------------");
+			// log.info("-----------------------------------------------");
+			// log.debug("User deleted!!", dbUser);
+			// log.info("-----------------------------------------------");
 		}
 		return;
 	} catch (err: any) {
 		console.error(err.meta);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		return err.meta.cause;
 	}
 };

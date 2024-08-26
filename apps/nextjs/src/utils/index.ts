@@ -77,8 +77,11 @@ export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function getInitials(firstName: string, lastName: string) {
-	return `${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`;
+export function getInitials(str: string) {
+	return str
+		.split(" ")
+		.map(s => s[0])
+		.join("");
 }
 
 export function formatTimestamp(timestamp: string | Date, method = "default") {

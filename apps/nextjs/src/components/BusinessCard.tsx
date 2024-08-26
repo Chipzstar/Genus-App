@@ -1,13 +1,17 @@
 import type { FC } from "react";
 import React from "react";
+import { useRouter } from "next/router";
 import { Image } from "@nextui-org/react";
 
+import { PATHS } from "~/utils";
 import type { RouterOutputs } from "~/utils/trpc";
 
 export const BusinessCard: FC<{ business: RouterOutputs["business"]["getAll"][number] }> = props => {
-	const { name, logoUrl, tags } = props.business;
+	const { name, logoUrl, tags, slug } = props.business;
+	const router = useRouter();
 	return (
 		<div
+			onClick={() => router.push(`${PATHS.BUSINESS}/${slug}`)}
 			role="button"
 			className="relative h-40 w-40 overflow-hidden"
 			style={{

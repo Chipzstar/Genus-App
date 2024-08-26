@@ -26,7 +26,8 @@ export const PATHS = {
 	CHURCH: "/church",
 	BUSINESSES: "/businesses",
 	CREATE_BUSINESS: "/create/business",
-	MEMBERS: "/members"
+	MEMBERS: "/members",
+	BUSINESS: "/business"
 };
 
 export type FormatType = "default" | "category";

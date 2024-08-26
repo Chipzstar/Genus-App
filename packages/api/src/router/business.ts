@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
+import { z } from "zod";
 
 import { business, businessToUser, eq, user } from "@genus/db";
 import { CreateBusinessSchema } from "@genus/validators";
@@ -50,6 +51,20 @@ export const businessRouter = createTRPCRouter({
 				socialHandles: [input.linkedIn, input.twitter, input.instagram, input.other]
 			});
 			console.log(dbBusiness);
+			return dbBusiness;
+		} catch (err) {
+			console.error(err);
+			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
+		}
+	}),
+	getBusinessBySlug: protectedProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
+		try {
+			const dbBusiness = await ctx.db.query.business.findFirst({
+				where: eq(business.slug, input.slug)
+			});
+			if (!dbBusiness) {
+				throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });
+			}
 			return dbBusiness;
 		} catch (err) {
 			console.error(err);

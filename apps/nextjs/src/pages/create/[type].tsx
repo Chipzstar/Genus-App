@@ -38,7 +38,7 @@ const defaultTags: Option[] = hobbies.map(hobby => ({
 }));
 
 const CreatePost = () => {
-	const { files, updateFile } = useFileContext();
+	const { files, updateFile, setFiles } = useFileContext();
 	const router = useRouter();
 	const { user } = useUser();
 	const [newAdmin, setNewAdmin] = useState("");
@@ -100,7 +100,6 @@ const CreatePost = () => {
 	const admins = form.watch("admins");
 
 	const onSubmit = useCallback(async (data: CreateBusiness) => {
-		console.log(data);
 		try {
 			const result = await mutateAsync(data);
 			console.log(result);
@@ -108,6 +107,7 @@ const CreatePost = () => {
 				duration: 5000
 			});
 			router.back();
+			setFiles([]);
 		} catch (err) {
 			console.error(err);
 			toast.error("Error!", {

@@ -416,11 +416,16 @@ export const business = pgTable(
 		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 		businessId: varchar("businessId", { length: 191 }).notNull(),
+		ownerId: varchar("ownerId", { length: 191 }).notNull(),
 		name: varchar("name", { length: 191 }).notNull(),
 		slug: varchar("slug", { length: 191 }).notNull(),
 		description: varchar("description", { length: 191 }).notNull(),
 		logoUrl: varchar("logoUrl", { length: 191 }),
 		websiteUrl: varchar("websiteUrl", { length: 191 }),
+		admins: text("admins")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
 		tags: text("tags")
 			.default(sql`'{}'::text[]`)
 			.array()

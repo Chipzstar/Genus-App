@@ -41,14 +41,27 @@ export const businessRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
 			}
 			console.log(input);
-			const dbBusiness = await ctx.db.insert(business).values({
-				businessId: `business_${nanoid(18)}`,
-				name: input.title,
-				slug: slugify(input.title, { lower: true }),
-				description: input.description,
-				tags: input.tags,
-				logoUrl: input.logoUrl,
-				socialHandles: [input.linkedIn, input.twitter, input.instagram, input.other]
+			const dbBusiness = await ctx.db
+				.insert(business)
+				.values({
+					businessId: `business_${nanoid(18)}`,
+					ownerId: ctx.auth.userId,
+					name: input.title,
+					slug: slugify(input.title, { lower: true }),
+					description: input.description,
+					tags: input.tags,
+					logoUrl: input.logoUrl,
+					socialHandles: [input.linkedIn, input.twitter, input.instagram, input.other],
+					admins: input.admins.slice(1) ?? []
+				})
+				.returning();
+
+			if (!dbBusiness[0]) {
+				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to create business" });
+			}
+			await ctx.db.insert(businessToUser).values({
+				businessId: dbBusiness[0].id,
+				userId: dbUser.id
 			});
 			console.log(dbBusiness);
 			return dbBusiness;
@@ -60,7 +73,10 @@ export const businessRouter = createTRPCRouter({
 	getBusinessBySlug: protectedProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
 		try {
 			const dbBusiness = await ctx.db.query.business.findFirst({
-				where: eq(business.slug, input.slug)
+				where: eq(business.slug, input.slug),
+				with: {
+					owner: true
+				}
 			});
 			if (!dbBusiness) {
 				throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });

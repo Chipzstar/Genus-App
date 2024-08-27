@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
@@ -9,12 +10,11 @@ import { createServerSideHelpers } from "@trpc/react-query/server";
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
-import { Button } from "@genus/ui/button";
 import { Input } from "@genus/ui/input";
-import { Textarea } from "@genus/ui/textarea";
 
 import Loader from "~/components/Loader";
 import AppLayout from "~/layout/AppLayout";
+import { PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
@@ -51,7 +51,18 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const BusinessDetails = () => {
 	const router = useRouter();
 	const slug = router.query.slug as string;
-	const { isLoading, data: business } = trpc.business.getBusinessBySlug.useQuery({ slug });
+	const [owner, setOwner] = React.useState<string>("");
+	const [ownerAvatar, setOwnerAvatar] = React.useState<string>("");
+	const { isLoading, data: business } = trpc.business.getBusinessBySlug.useQuery(
+		{ slug },
+		{
+			onSuccess: data => {
+				const { firstname, lastname, imageUrl } = data.owner;
+				setOwner(`${firstname} ${lastname}`);
+				if (imageUrl) setOwnerAvatar(imageUrl);
+			}
+		}
+	);
 
 	if (isLoading) return <Loader />;
 
@@ -64,7 +75,7 @@ const BusinessDetails = () => {
 					<div className="flex flex-col items-center">
 						<div className="w-full">
 							<Image
-								src={business.logoUrl!}
+								src={business.logoUrl}
 								className="h-40 w-full"
 								alt="overlay"
 								width="100%"
@@ -77,7 +88,7 @@ const BusinessDetails = () => {
 						<div className="absolute top-24 z-10 mb-4 flex h-28 w-28 items-center justify-center">
 							<div className="relative inline-block cursor-pointer">
 								<Avatar className="h-28 w-28">
-									<AvatarImage className="relative" src={business.logoUrl!} alt="Avatar Thumbnail" />
+									<AvatarImage className="relative" src={business.logoUrl} alt="Avatar Thumbnail" />
 									<AvatarFallback className="bg-neutral-300">
 										<AvatarIcon />
 									</AvatarFallback>
@@ -112,17 +123,26 @@ const BusinessDetails = () => {
 
 					<div className="my-4 space-y-6 px-4">
 						<h2 className="text-xl font-semibold italic text-black">About Owner</h2>
-						<div className="flex items-center">
+						<div className="flex items-center space-x-5">
 							<div className="flex flex-col space-y-2">
 								<Avatar className="h-20 w-20">
-									<AvatarImage className="relative" src={business.logoUrl} alt="Avatar Thumbnail" />
+									<AvatarImage className="relative" src={ownerAvatar} alt="Avatar Thumbnail" />
 									<AvatarFallback className="bg-neutral-300">
 										<AvatarIcon />
 									</AvatarFallback>
 								</Avatar>
 							</div>
-							<div className="flex flex-col space-y-3"></div>
+							<div className="flex flex-col space-y-2">
+								<h3 className="text-xl font-semibold text-black">{owner}</h3>
+								<Link href={`${PATHS.BUSINESS}/${business.slug}/profile`}>
+									<span className="text-lg font-bold text-primary underline">View Profile</span>
+								</Link>
+							</div>
 						</div>
+					</div>
+
+					<div className="mt-12 space-y-6 px-4">
+						<h2 className="text-xl font-semibold italic text-black">Other Ventures from owner</h2>
 					</div>
 				</div>
 			</div>

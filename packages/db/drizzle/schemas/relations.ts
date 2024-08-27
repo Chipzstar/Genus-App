@@ -113,7 +113,11 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 }));
 
 export const businessRelations = relations(business, ({ one, many }) => ({
-	businessMembers: many(businessToUser)
+	businessMembers: many(businessToUser),
+	owner: one(user, {
+		fields: [business.ownerId],
+		references: [user.clerkId]
+	})
 }));
 
 export const companyRelations = relations(company, ({ one, many }) => ({

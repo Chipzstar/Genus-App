@@ -53,8 +53,12 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const MembersDirectory = () => {
 	const [search, setSearch] = useState("");
-	const { data } = trpc.user.getUsers.useQuery();
-	const [members, setMembers] = useState<Members>(data ?? []);
+	const { data } = trpc.user.getUsers.useQuery(undefined, {
+		onSuccess: data => {
+			setMembers(data);
+		}
+	});
+	const [members, setMembers] = useState<Members>([]);
 	const [debouncedMembers] = useDebounceValue<Members>(members, 500);
 
 	const handleChange = useCallback(

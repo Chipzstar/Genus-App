@@ -6,6 +6,7 @@ import { companyRouter } from "./company";
 import { groupRouter } from "./group";
 import { messageRouter } from "./message";
 import { reactionRouter } from "./reaction";
+import { resourceRouter } from "./resource";
 import { reviewRouter } from "./review";
 import { threadRouter } from "./thread";
 import { userRouter } from "./user";
@@ -20,7 +21,8 @@ export const appRouter = createTRPCRouter({
 	reaction: reactionRouter,
 	company: companyRouter,
 	review: reviewRouter,
-	business: businessRouter
+	business: businessRouter,
+	resource: resourceRouter
 });
 
 // export type definition of API

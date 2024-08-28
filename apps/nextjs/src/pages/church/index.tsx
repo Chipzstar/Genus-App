@@ -24,17 +24,17 @@ const Church = () => {
 							</span>
 						</div>
 						<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-							<div role="button">
-								<Image src="/images/instagram.svg" />
+							<div role="button" className="h-8 w-8">
+								<Image src="/images/instagram.png" />
 							</div>
-							<div role="button">
-								<Image src="/images/tiktok.svg" />
+							<div role="button" className="h-8 w-8">
+								<Image src="/images/tiktok.png" />
 							</div>
-							<div role="button">
-								<Image src="/images/youtube.svg" />
+							<div role="button" className="h-8 w-8">
+								<Image src="/images/youtube.png" />
 							</div>
-							<div role="button">
-								<Image src="/images/email.svg" />
+							<div role="button" className="h-8 w-8">
+								<Image src="/images/email.png" />
 							</div>
 						</section>
 						<section className="flex h-48 flex-col">
@@ -63,7 +63,11 @@ const Church = () => {
 							</div>
 							<hr className="my-3" />
 							<div className="mt-2 flex">
-								<article role="button" className="flex w-full items-center justify-center space-x-3">
+								<article
+									role="button"
+									className="flex w-full items-center justify-center space-x-3"
+									onClick={() => router.push(PATHS.RECOMMEND)}
+								>
 									<Image src="/images/share.svg" width={60} />
 									<span className="text-wrap text-start text-xl font-semibold md:text-2xl">
 										Share & Recommend

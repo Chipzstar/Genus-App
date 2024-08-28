@@ -50,7 +50,7 @@ const CreatePost = () => {
 			description: "",
 			tags: [],
 			admins: [],
-			twitter: "",
+			tiktok: "",
 			instagram: "",
 			linkedIn: "",
 			logoUrl: undefined,
@@ -282,11 +282,11 @@ const CreatePost = () => {
 						/>
 						<FormField
 							control={form.control}
-							name="twitter"
+							name="tiktok"
 							render={({ field }) => (
 								<FormItem className="mb-4 px-4">
 									<Label htmlFor="social-media" className="text-lg font-semibold">
-										Twitter handle
+										Tiktok handle
 									</Label>
 									<Input
 										value={field.value}

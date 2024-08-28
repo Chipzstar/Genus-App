@@ -1,7 +1,17 @@
 import { TRPCError } from "@trpc/server";
 import * as z from "zod";
 
-import { careerInterest, careerInterestToUser, db, eq, hobbyInterestToUser, inArray, sql, user } from "@genus/db";
+import {
+	careerInterest,
+	careerInterestToUser,
+	db,
+	eq,
+	hobbyInterest,
+	hobbyInterestToUser,
+	inArray,
+	sql,
+	user
+} from "@genus/db";
 import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
@@ -33,15 +43,15 @@ export const userRouter = createTRPCRouter({
 				degreeName: user.degreeName,
 				completionYear: user.completionYear,
 				currentYear: user.currentYear,
-				careerInterests: careerInterest.slug
+				hobbyInterests: hobbyInterest.slug
 			};
 			const dbUser = await ctx.db.query.user.findFirst({
 				where: eq(user.clerkId, ctx.auth.userId),
 				with: {
-					careerInterests: {
+					hobbies: {
 						columns: {},
 						with: {
-							careerInterest: {
+							hobbyInterest: {
 								columns: {
 									slug: true
 								}
@@ -53,13 +63,13 @@ export const userRouter = createTRPCRouter({
 
 			if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
 
-			let careerInterests = dbUser.careerInterests.map(({ careerInterest }) => careerInterest);
+			let hobbyInterests = dbUser.hobbies.map(({ hobbyInterest }) => hobbyInterest);
 
 			ctx.logger.info("-----------------------------------------");
 			ctx.logger.debug("User", dbUser);
-			ctx.logger.debug("CareerInterests", careerInterests);
+			ctx.logger.debug("Hobbies", hobbyInterests);
 			ctx.logger.info("-----------------------------------------");
-			return { ...dbUser, careerInterests };
+			return { ...dbUser, hobbyInterests };
 		} catch (err: any) {
 			console.error(err);
 			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.body.message });

@@ -1,7 +1,6 @@
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
-import type { GetServerSideProps } from "next";
-import Link from "next/link";
+import type { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { useDebounceValue } from "usehooks-ts";
@@ -10,16 +9,13 @@ import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { career_interests } from "@genus/validators/constants";
 
-import { BackButton } from "~/components/BackButton";
-import { BusinessCard } from "~/components/BusinessCard";
 import SearchFilterPanel from "~/components/SearchFilterPanel";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
-import { PATHS } from "~/utils";
 import type { RouterOutputs } from "~/utils/trpc";
 import { trpc } from "~/utils/trpc";
 
-type Businesses = RouterOutputs["business"]["getAll"];
+type Resources = RouterOutputs["resource"]["getResources"];
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { req } = ctx;
@@ -41,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	await helpers.business.getAll.prefetch();
+	await helpers.resource.getResources.prefetch();
 
 	return {
 		props: {
@@ -52,16 +48,20 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	};
 };
 
-const BusinessDirectory = () => {
+const Resources = () => {
 	const [search, setSearch] = useState("");
-	const { data } = trpc.business.getAll.useQuery();
-	const [businesses, setBusinesses] = useState<Businesses>(data ?? []);
-	const [debouncedBusinesses] = useDebounceValue<Businesses>(businesses, 500);
+	const { data } = trpc.resource.getResources.useQuery(undefined, {
+		onSuccess: data => {
+			setResources(data);
+		}
+	});
+	const [resources, setResources] = useState<Resources>(data ?? []);
+	const [debouncedResources] = useDebounceValue<Resources>(resources, 500);
 
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			setSearch(event.target.value);
-			setBusinesses(
+			setResources(
 				prev =>
 					data?.filter(r => {
 						return r.name.toLowerCase().includes(event.target.value.toLowerCase());
@@ -72,30 +72,32 @@ const BusinessDirectory = () => {
 	);
 
 	return (
-		<div className="page-container overflow-y-hidden bg-white">
+		<div className="church-container overflow-y-hidden py-6 md:py-8">
 			<TopNav />
 			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
-				<div className="mx-auto w-full max-w-3xl">
-					<nav className="flex grow items-center justify-between">
-						<section className="flex items-center space-x-4">
-							<BackButton />
-							<header className="text-xl font-bold text-black sm:text-2xl md:text-4xl">
-								Business Directory
-							</header>
-						</section>
-						<Link href={PATHS.CREATE_BUSINESS}>
-							<span className="text-base font-bold text-primary underline sm:text-2xl">Create Post</span>
-						</Link>
-					</nav>
-					<SearchFilterPanel
-						value={search}
-						onChange={handleChange}
-						categories={career_interests}
-						classNames="sm:w-full"
-					/>
-					<div className="genus-scrollbar grid grid-cols-2 flex-col overflow-y-scroll text-black lg:grid-cols-4">
-						{debouncedBusinesses.map((business, index) => (
-							<BusinessCard key={index} business={business} />
+				<div className="mx-auto max-w-3xl">
+					<header className="text-2xl font-bold text-black sm:text-4xl">Resources</header>
+					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
+					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll text-black">
+						{debouncedResources.map((resource, index) => (
+							<div key={index} className="flex flex-col space-y-1 px-0 py-3">
+								<span className="text-xl font-bold capitalize tracking-tight sm:text-2xl">
+									{resource.name}
+								</span>
+								<span className="text-dark text-lg font-semibold italic">
+									Posted by {resource.author.firstname}
+								</span>
+								<div className="flex flex-wrap space-x-2">
+									{resource.tags.map((tag, index) => (
+										<span
+											key={index}
+											className="inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
+										>
+											#{tag}
+										</span>
+									))}
+								</div>
+							</div>
 						))}
 					</div>
 				</div>
@@ -104,7 +106,7 @@ const BusinessDirectory = () => {
 	);
 };
 
-BusinessDirectory.getLayout = function getLayout(
+Resources.getLayout = function getLayout(
 	page: ReactElement,
 	props: {
 		userId: string;
@@ -113,4 +115,4 @@ BusinessDirectory.getLayout = function getLayout(
 	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
-export default BusinessDirectory;
+export default Resources;

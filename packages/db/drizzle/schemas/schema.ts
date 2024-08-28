@@ -444,6 +444,28 @@ export const business = pgTable(
 	}
 );
 
+export const resource = pgTable(
+	"resource",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		resourceId: varchar("resourceId", { length: 191 }).notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		authorId: varchar("authorId", { length: 191 }).notNull(),
+		description: varchar("description", { length: 191 }),
+		tags: text("tags")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		url: varchar("url", { length: 191 })
+	},
+	table => {
+		return {
+			resourceIdIdx: uniqueIndex("resourceIdIdx").on(table.resourceId)
+		};
+	}
+);
 export const skillset = pgTable(
 	"skillset",
 	{

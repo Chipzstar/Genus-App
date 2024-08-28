@@ -107,13 +107,6 @@ export const signupBaseSchema = z.object({
 			})
 	]),
 	role_sector: roleSectorsSchema,
-	career_interests: z
-		.array(careerInterestsSchema)
-		.nonempty({ message: "Please select at least one career interest" }),
-	company_interests: z.array(companiesSchema).nonempty({ message: "Please select at least one company" }),
-	experience_type: experienceTypeSchema,
-	work_environment: workEnvironmentSchema,
-	skillsets: z.array(skillsetsSchema).nonempty({ message: "Please select at least one skillset" }),
 	hobbies_interests: z.array(hobbiesInterestsSchema).nonempty({ message: "Please select at least one hobby" })
 });
 
@@ -194,7 +187,7 @@ export const CreateBusinessSchema = z.object({
 	tags: z.array(z.string()).nonempty("At least one tag is required"),
 	admins: z.array(z.string()).nonempty("At least one admin is required"),
 	logoUrl: z.string().url(),
-	twitter: z.string().optional(),
+	tiktok: z.string().optional(),
 	instagram: z.string().optional(),
 	linkedIn: z.string().optional(),
 	other: z.string().optional()

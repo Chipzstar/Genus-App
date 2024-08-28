@@ -18,6 +18,7 @@ import {
 	hobbyInterestToUser,
 	message,
 	reaction,
+	resource,
 	review,
 	skillset,
 	skillsetToUser,
@@ -109,13 +110,22 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 	threads: many(thread),
 	groupUsers: many(groupUser),
 	companies: many(companyToUser),
-	careerInterests: many(careerInterestToUser)
+	careerInterests: many(careerInterestToUser),
+	hobbies: many(hobbyInterestToUser),
+	resources: many(resource)
 }));
 
 export const businessRelations = relations(business, ({ one, many }) => ({
 	businessMembers: many(businessToUser),
 	owner: one(user, {
 		fields: [business.ownerId],
+		references: [user.clerkId]
+	})
+}));
+
+export const resourceRelations = relations(resource, ({ one, many }) => ({
+	author: one(user, {
+		fields: [resource.authorId],
 		references: [user.clerkId]
 	})
 }));

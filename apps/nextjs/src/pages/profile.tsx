@@ -3,16 +3,18 @@
 import type { ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import type { GetServerSideProps } from "next/types";
-import { useClerk } from "@clerk/nextjs";
+import { SignedIn, useAuth, useClerk } from "@clerk/nextjs";
 import { AvatarIcon, Navbar, NavbarBrand } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { Pencil } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { isMobile } from "react-device-detect";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
 import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
+import { Button } from "@genus/ui/button";
 
 import { ImageCropper } from "~/components/ImageCropper";
 import Loader from "~/components/Loader";
@@ -29,8 +31,10 @@ import { useUploadThing } from "~/utils/uploadthing";
 export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 
 const UserProfilePage = () => {
+	const { signOut } = useAuth();
 	const { user } = useClerk();
-	const [mode, toggle, setValue] = useViewEditToggle();
+	const [mode, setValue] = useViewEditToggle();
+	const posthog = usePostHog();
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
 	const [temp, setTemp] = useState<{ file: File[]; src: string }>({
@@ -146,6 +150,18 @@ const UserProfilePage = () => {
 			>
 				<NavbarBrand>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
+						<div className="absolute right-2 top-2 sm:right-4 sm:top-4">
+							<SignedIn>
+								<Button
+									size="sm"
+									onClick={e => {
+										void signOut().then(() => posthog.reset());
+									}}
+								>
+									Logout
+								</Button>
+							</SignedIn>
+						</div>
 						<div
 							{...getRootProps()}
 							className={cn("relative inline-block rounded-full", { "cursor-pointer": mode === "edit" })}

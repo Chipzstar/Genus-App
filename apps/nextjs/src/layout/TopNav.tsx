@@ -1,10 +1,8 @@
 import type { FC } from "react";
 import React from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "@clerk/nextjs";
 import type { NavbarSlots, SlotsToClasses } from "@nextui-org/react";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
-import { usePostHog } from "posthog-js/react";
 
 import { PATHS } from "~/utils";
 
@@ -14,8 +12,6 @@ interface Props {
 
 const TopNav: FC<Props> = ({ classNames = {} }: Props) => {
 	const router = useRouter();
-	const { signOut } = useAuth();
-	const posthog = usePostHog();
 	return (
 		<Navbar
 			classNames={{

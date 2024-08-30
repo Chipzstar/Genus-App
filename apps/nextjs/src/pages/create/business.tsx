@@ -38,7 +38,7 @@ const defaultTags: Option[] = hobbies.map(hobby => ({
 	value: hobby
 }));
 
-const CreatePost = () => {
+const NewBusiness = () => {
 	const { files, updateFile, setFiles } = useFileContext();
 	const router = useRouter();
 	const { user } = useUser();
@@ -355,7 +355,7 @@ const CreatePost = () => {
 	);
 };
 
-CreatePost.getLayout = function getLayout(
+NewBusiness.getLayout = function getLayout(
 	page: ReactElement,
 	props: {
 		userId: string;
@@ -364,4 +364,4 @@ CreatePost.getLayout = function getLayout(
 	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
-export default CreatePost;
+export default NewBusiness;

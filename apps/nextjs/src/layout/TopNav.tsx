@@ -23,7 +23,7 @@ const TopNav: FC<Props> = ({ classNames = {} }: Props) => {
 				...classNames
 			}}
 		>
-			<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
+			<NavbarBrand role="button" onClick={() => router.push(PATHS.CHURCH)}>
 				<img
 					src="/images/arc2.0-banner.png"
 					alt="genus-white"

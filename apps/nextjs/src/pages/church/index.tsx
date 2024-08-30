@@ -56,7 +56,7 @@ const Church = () => {
 						<article
 							role="button"
 							className="flex items-center justify-between"
-							onClick={() => router.push(PATHS.BUSINESSES)}
+							onClick={() => router.push(PATHS.BUSINESS)}
 						>
 							<div className="flex items-center space-x-3">
 								<Image src="/images/business.png" width={50} />

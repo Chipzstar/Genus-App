@@ -24,11 +24,11 @@ export const PATHS = {
 	GROUPS: "/groups",
 	RESOURCES: "/resources",
 	CHURCH: "/church",
-	BUSINESSES: "/businesses",
 	CREATE_BUSINESS: "/create/business",
 	MEMBERS: "/members",
 	BUSINESS: "/business",
-	RECOMMEND: "/recommend"
+	RECOMMEND: "/recommend",
+	CREATE_RESOURCE: "/create/resource"
 };
 
 export type FormatType = "default" | "category";

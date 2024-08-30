@@ -1,5 +1,6 @@
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
+import Link from "next/link";
 import type { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { createServerSideHelpers } from "@trpc/react-query/server";
@@ -13,6 +14,7 @@ import { BackButton } from "~/components/BackButton";
 import SearchFilterPanel from "~/components/SearchFilterPanel";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
+import { PATHS } from "~/utils";
 import type { RouterOutputs } from "~/utils/trpc";
 import { trpc } from "~/utils/trpc";
 
@@ -77,10 +79,15 @@ const Resources = () => {
 			<TopNav />
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto  w-full max-w-3xl">
-					<section className="flex items-center space-x-4">
-						<BackButton />
-						<header className="text-2xl font-bold text-black sm:text-4xl">Recommend</header>
-					</section>
+					<nav className="flex grow items-center justify-between">
+						<section className="flex items-center space-x-4">
+							<BackButton />
+							<header className="text-2xl font-bold text-black sm:text-4xl">Recommend</header>
+						</section>
+						<Link href={PATHS.CREATE_RESOURCE}>
+							<span className="text-base font-bold text-primary underline sm:text-2xl">Create Post</span>
+						</Link>
+					</nav>
 					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
 					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll text-black">
 						{debouncedResources.map((resource, index) => (

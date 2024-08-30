@@ -183,7 +183,10 @@ export const referralEmailSchema = z.object({
 
 export const CreateBusinessSchema = z.object({
 	title: z.string().min(1, "Business name is required"),
-	description: z.string().min(1, "Description is required"),
+	description: z
+		.string()
+		.min(10, "Description must have at least 10 characters")
+		.nonempty({ message: "Description is required" }),
 	tags: z.array(z.string()).nonempty("At least one tag is required"),
 	admins: z.array(z.string()).nonempty("At least one admin is required"),
 	logoUrl: z.string().url(),
@@ -193,4 +196,13 @@ export const CreateBusinessSchema = z.object({
 	other: z.string().optional()
 });
 
+export const CreateResourceSchema = z.object({
+	title: z.string().min(1, "Resource title is required"),
+	description: z.string().min(10, "Description must have at least 10 characters").optional(),
+	url: z.string().url().optional(),
+	tags: z.array(z.string()).nonempty("At least one tag is required")
+});
+
 export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
+
+export type CreateResource = z.infer<typeof CreateResourceSchema>;

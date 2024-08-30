@@ -9,6 +9,7 @@ import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { career_interests } from "@genus/validators/constants";
 
+import { BackButton } from "~/components/BackButton";
 import SearchFilterPanel from "~/components/SearchFilterPanel";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
@@ -72,11 +73,14 @@ const Resources = () => {
 	);
 
 	return (
-		<div className="church-container overflow-y-hidden py-6 md:py-8">
+		<div className="page-container overflow-y-hidden">
 			<TopNav />
-			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
-				<div className="mx-auto max-w-3xl">
-					<header className="text-2xl font-bold text-black sm:text-4xl">Resources</header>
+			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
+				<div className="mx-auto  w-full max-w-3xl">
+					<section className="flex items-center space-x-4">
+						<BackButton />
+						<header className="text-2xl font-bold text-black sm:text-4xl">Recommend</header>
+					</section>
 					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
 					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll text-black">
 						{debouncedResources.map((resource, index) => (

@@ -65,10 +65,6 @@ export const userRouter = createTRPCRouter({
 
 			let hobbyInterests = dbUser.hobbies.map(({ hobbyInterest }) => hobbyInterest);
 
-			ctx.logger.info("-----------------------------------------");
-			ctx.logger.debug("User", dbUser);
-			ctx.logger.debug("Hobbies", hobbyInterests);
-			ctx.logger.info("-----------------------------------------");
 			return { ...dbUser, hobbyInterests };
 		} catch (err: any) {
 			console.error(err);
@@ -90,9 +86,6 @@ export const userRouter = createTRPCRouter({
 			});
 			console.log(dbHobbyInterests);
 
-			ctx.logger.info("-----------------------------------------");
-			ctx.logger.debug("HobbyInterests", dbHobbyInterests);
-			ctx.logger.info("-----------------------------------------");
 			return dbHobbyInterests;
 		} catch (err: any) {
 			console.error(err);

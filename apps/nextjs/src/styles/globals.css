@@ -154,11 +154,7 @@
   }
 
   .page-container {
-    @apply min-h-screen sm:h-screen mx-auto text-primary py-6 md:py-8
-  }
-
-  .church-container {
-    @apply min-h-screen sm:h-screen mx-auto bg-white text-black
+    @apply min-h-screen sm:h-screen mx-auto bg-white py-4 md:py-8 text-black
   }
 
   .insights-container {

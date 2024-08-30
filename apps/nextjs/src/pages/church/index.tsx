@@ -4,78 +4,82 @@ import { useRouter } from "next/router";
 import { Image } from "@nextui-org/image";
 
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { PATHS } from "~/utils";
 
 const Church = () => {
 	const router = useRouter();
 	return (
-		<div className="church-container overflow-y-hidden">
-			<div className="relative flex h-full flex-col bg-white">
-				<div className="mx-auto max-w-xl">
-					<img src="/images/arc2.0-banner.png" className="w-full md:h-48" />
-					<div className="absolute left-1/2 top-32 z-10 flex h-28 w-28 -translate-x-1/2 transform flex-col md:h-32 md:w-32">
+		<div className="page-container overflow-y-hidden">
+			<TopNav />
+			<div className="mx-auto max-w-xl">
+				<section className="bg-gradient-radial flex w-full flex-col items-center justify-center from-primary from-25% to-secondary-300 py-6">
+					<div className="flex h-32 w-32">
 						<Image src="/images/arc2.0-avatar.png" width="100%" height="100%" />
 					</div>
-					<div className="mt-20 flex h-full w-full flex-col space-y-8 text-center">
-						<div className="flex flex-col space-y-4">
-							<h2 className="px-4 text-3xl font-bold md:text-4xl">Arc 2.0</h2>
-							<span className="text-pretty px-4 text-lg font-semibold tracking-tight md:text-xl">
-								Knowing Jesus and making Jesus known
-							</span>
-						</div>
-						<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-							<div role="button" className="h-8 w-8">
-								<Image src="/images/instagram.png" />
-							</div>
-							<div role="button" className="h-8 w-8">
-								<Image src="/images/tiktok.png" />
-							</div>
-							<div role="button" className="h-8 w-8">
-								<Image src="/images/youtube.png" />
-							</div>
-							<div role="button" className="h-8 w-8">
-								<Image src="/images/email.png" />
-							</div>
-						</section>
-						<section className="flex h-48 flex-col">
-							<div className="flex h-full gap-x-6 px-4">
-								<article
-									role="button"
-									className="flex items-center space-x-3"
-									onClick={() => router.push(PATHS.MEMBERS)}
-								>
-									<Image src="/images/member.svg" width={75} />
-									<span className="text-wrap text-xl font-semibold md:text-2xl">
-										Member directory
-									</span>
-								</article>
-								<div className="flex flex-col border" />
-								<article
-									role="button"
-									className="flex items-center space-x-3"
-									onClick={() => router.push(PATHS.BUSINESSES)}
-								>
-									<Image src="/images/business.svg" width={75} />
-									<span className="text-wrap text-xl font-semibold md:text-2xl">
-										Business directory
-									</span>
-								</article>
-							</div>
-							<hr className="my-3" />
-							<div className="mt-2 flex">
-								<article
-									role="button"
-									className="flex w-full items-center justify-center space-x-3"
-									onClick={() => router.push(PATHS.RECOMMEND)}
-								>
-									<Image src="/images/share.svg" width={60} />
-									<span className="text-wrap text-start text-xl font-semibold md:text-2xl">
-										Share & Recommend
-									</span>
-								</article>
-							</div>
-						</section>
+					<div className="flex flex-col space-y-4 text-center text-white">
+						<h2 className="text-3xl font-bold drop-shadow-md md:text-4xl">Arc 2.0</h2>
+						<span className="text-pretty px-4 text-lg font-semibold tracking-tight md:text-xl">
+							Knowing Jesus and making Jesus known
+						</span>
 					</div>
+				</section>
+				<div className="flex h-full w-full flex-col space-y-8 text-center">
+					<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5] py-1">
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/instagram.png" />
+						</div>
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/tiktok.png" />
+						</div>
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/youtube.png" />
+						</div>
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/email.png" />
+						</div>
+					</section>
+
+					<section className="flex flex-col px-5">
+						<article
+							role="button"
+							className="flex items-center justify-between"
+							onClick={() => router.push(PATHS.MEMBERS)}
+						>
+							<div className="flex items-center space-x-3">
+								<Image src="/images/member.png" width={50} />
+								<span className="text-wrap text-xl font-semibold md:text-2xl">Member directory</span>
+							</div>
+							<Image src="/static/forward-arrow.png" width={12} />
+						</article>
+						<hr className="my-3" />
+						<article
+							role="button"
+							className="flex items-center justify-between"
+							onClick={() => router.push(PATHS.BUSINESSES)}
+						>
+							<div className="flex items-center space-x-3">
+								<Image src="/images/business.png" width={50} />
+								<span className="text-wrap text-xl font-semibold md:text-2xl">Business directory</span>
+							</div>
+							<Image src="/static/forward-arrow.png" width={12} />
+						</article>
+						<hr className="my-3" />
+
+						<article
+							role="button"
+							className="flex w-full items-center justify-between"
+							onClick={() => router.push(PATHS.RECOMMEND)}
+						>
+							<div className="flex items-center space-x-3">
+								<Image src="/images/share.png" width={50} />
+								<span className="text-wrap text-start text-xl font-semibold md:text-2xl">
+									Share & Recommend
+								</span>
+							</div>
+							<Image src="/static/forward-arrow.png" width={12} />
+						</article>
+					</section>
 				</div>
 			</div>
 		</div>

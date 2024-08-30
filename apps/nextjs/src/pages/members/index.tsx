@@ -58,7 +58,7 @@ const MembersDirectory = () => {
 			setMembers(data);
 		}
 	});
-	const [members, setMembers] = useState<Members>([]);
+	const [members, setMembers] = useState<Members>(data ?? []);
 	const [debouncedMembers] = useDebounceValue<Members>(members, 500);
 
 	const handleChange = useCallback(
@@ -78,21 +78,21 @@ const MembersDirectory = () => {
 	);
 
 	return (
-		<div className="page-container overflow-y-hidden bg-white">
+		<div className="page-container overflow-y-hidden">
 			<TopNav />
-			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
+			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto w-full max-w-3xl">
 					<nav className="flex grow items-center justify-between">
 						<section className="flex items-center space-x-4">
 							<BackButton />
-							<header className="text-2xl font-bold text-black sm:text-4xl">Members Directory</header>
+							<header className="text-2xl font-bold text-black sm:text-4xl">Member Directory</header>
 						</section>
 					</nav>
 					<SearchFilterPanel
 						value={search}
 						onChange={handleChange}
 						categories={career_interests}
-						classNames="sm:w-full"
+						classNames="w-full"
 						withFilter={false}
 					/>
 					<div className="genus-scrollbar grid flex-col gap-y-3 overflow-y-scroll text-black lg:grid-cols-2">

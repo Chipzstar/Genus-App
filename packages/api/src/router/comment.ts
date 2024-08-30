@@ -110,9 +110,6 @@ export const commentRouter = createTRPCRouter({
 						category: "comment",
 						action_url: `/${dbThread.group.slug}?messageId=${dbThread.messageId}&commentId=${commentId}`
 					});*/
-					ctx.logger.info("-----------------------------------------------");
-					ctx.logger.debug("New notification!!", notification);
-					ctx.logger.info("-----------------------------------------------");
 				}
 				return dbThread;
 			}
@@ -172,14 +169,8 @@ export const commentRouter = createTRPCRouter({
 				topic: dbComment.group.slug,
 				action_url: `/${dbComment.group.slug}?messageId=${dbComment.thread.messageId}&commentId=${commentId}`
 			});*/
-
-			ctx.logger.info("-----------------------------------------------");
-			ctx.logger.debug("New notification!!", notification);
-			ctx.logger.info("------------------------------------------------");
-
 			return dbComment;
 		} catch (err) {
-			ctx.logger.error("Something went wrong!", err);
 			throw new TRPCError({
 				code: "BAD_REQUEST",
 				message: "Something went wrong!",

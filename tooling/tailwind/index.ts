@@ -21,6 +21,9 @@ export default {
 			}
 		},
 		extend: {
+			backgroundImage: {
+				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))"
+			},
 			fontSize: {
 				h1: ["2.5rem", { lineHeight: "2.5rem" }],
 				h2: ["2rem", { lineHeight: "2rem" }],

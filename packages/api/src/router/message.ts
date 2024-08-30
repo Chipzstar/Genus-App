@@ -87,14 +87,10 @@ export const messageRouter = createTRPCRouter({
 						  action_url: `/${message.group.slug}?messageId=${message.messageId}`
 					  }
 				  })*/
-					ctx.logger.info("-----------------------------------------------");
-					ctx.logger.debug("New notification!!", notification);
-					ctx.logger.info("-----------------------------------------------");
 				}
 				return dbMessage;
 			} catch (err) {
 				console.error(err);
-				ctx.logger.error("Something went wrong!", err);
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: "Something went wrong!",

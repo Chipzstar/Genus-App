@@ -69,7 +69,9 @@ const NewResource = () => {
 	}, []);
 
 	const author = useMemo(() => {
-		return `${user.firstName} ${user.lastName}`;
+		if (user) {
+			return `${user.firstName} ${user.lastName}`;
+		}
 	}, [user]);
 
 	return (

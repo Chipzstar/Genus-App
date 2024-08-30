@@ -138,10 +138,7 @@ const NewBusiness = () => {
 			<TopNav />
 			<div className="relative flex h-full flex-col">
 				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="mx-auto h-full w-full max-w-3xl pb-4 sm:px-4"
-					>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto h-full w-full max-w-3xl px-6 pb-4">
 						<div className="flex flex-col items-center">
 							{isUploading ? (
 								<div className="h-32">
@@ -184,7 +181,7 @@ const NewBusiness = () => {
 							</div>
 						</div>
 
-						<div className="mb-4 px-4">
+						<div className="mb-4 ">
 							<h2 className="text-lg font-semibold">Creator & Admins</h2>
 							<div className="flex flex-col space-y-2">
 								{admins.map((admin, index) => (
@@ -215,7 +212,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="tags"
 							render={({ field }) => (
-								<FormItem className="mb-4 flex flex-col space-y-3 px-4">
+								<FormItem className="mb-4 flex flex-col space-y-3 ">
 									<FormLabel className="text-lg font-semibold">Tags (up to 5)</FormLabel>
 									<div className="flex flex-wrap space-x-2">
 										{field.value.map((tag, index) => (
@@ -251,7 +248,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="description"
 							render={({ field }) => (
-								<FormItem className="mb-4 px-4">
+								<FormItem className="mb-4 ">
 									<FormLabel htmlFor="description" className="text-lg font-semibold">
 										Description <span className="text-red-500">*</span>
 									</FormLabel>
@@ -270,7 +267,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="tiktok"
 							render={({ field }) => (
-								<FormItem className="mb-4 px-4">
+								<FormItem className="mb-4 ">
 									<Label htmlFor="social-media" className="text-lg font-semibold">
 										Tiktok handle
 									</Label>
@@ -288,7 +285,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="instagram"
 							render={({ field }) => (
-								<FormItem className="mb-4 px-4">
+								<FormItem className="mb-4 ">
 									<Label htmlFor="social-media" className="text-lg font-semibold">
 										Instagram handle
 									</Label>
@@ -306,7 +303,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="linkedIn"
 							render={({ field }) => (
-								<FormItem className="mb-4 px-4">
+								<FormItem className="mb-4 ">
 									<Label htmlFor="social-media" className="text-lg font-semibold">
 										LinkedIn handle
 									</Label>
@@ -324,7 +321,7 @@ const NewBusiness = () => {
 							control={form.control}
 							name="other"
 							render={({ field }) => (
-								<FormItem className="mb-4 px-4">
+								<FormItem className="mb-4 ">
 									<Label htmlFor="social-media" className="text-lg font-semibold">
 										Other social media handle(s)
 										<br /> (comma-separated)

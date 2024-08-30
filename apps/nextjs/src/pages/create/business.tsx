@@ -22,6 +22,7 @@ import type { CreateBusiness } from "@genus/validators";
 import { CreateBusinessSchema } from "@genus/validators";
 import { hobbies } from "@genus/validators/constants";
 
+import { BackButton } from "~/components/BackButton";
 import Loader from "~/components/Loader";
 import { useFileContext } from "~/context/FileContext";
 import AppLayout from "~/layout/AppLayout";
@@ -139,7 +140,10 @@ const NewBusiness = () => {
 			<div className="relative flex h-full flex-col">
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto h-full w-full max-w-3xl px-6 pb-4">
-						<div className="flex flex-col items-center">
+						<div className="relative flex flex-col items-center">
+							<div className="absolute left-0 right-0 top-0">
+								<BackButton />
+							</div>
 							{isUploading ? (
 								<div className="h-32">
 									<Loader color="#2AA6B7" />
@@ -172,7 +176,7 @@ const NewBusiness = () => {
 											<Input
 												{...field}
 												placeholder="Business Name"
-												className="mb-2 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
+												className="w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
 											/>
 											<FormMessage className="text-center" />
 										</FormItem>

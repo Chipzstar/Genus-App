@@ -67,7 +67,7 @@ const Home = () => {
 	const imageSrc = `${clerkUser?.imageUrl}?${params.toString()}`;
 
 	return (
-		<div className="scrollable-page-container py-6 md:py-8">
+		<div className="scrollable-page-container py-4 md:py-8">
 			<TopNav />
 			{isLoading ? (
 				<Loader />

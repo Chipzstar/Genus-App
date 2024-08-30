@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,7 @@ import type { CreateResource } from "@genus/validators";
 import { CreateResourceSchema } from "@genus/validators";
 import { hobbies } from "@genus/validators/constants";
 
-import { useFileContext } from "~/context/FileContext";
+import { BackButton } from "~/components/BackButton";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
 import { getInitials } from "~/utils";
@@ -34,39 +34,39 @@ const defaultTags: Option[] = hobbies.map(hobby => ({
 }));
 
 const NewResource = () => {
-	const { files, updateFile, setFiles } = useFileContext();
 	const router = useRouter();
 	const { user } = useUser();
-	const [newAdmin, setNewAdmin] = useState("");
 	const { mutateAsync } = trpc.resource.createResource.useMutation();
 
 	const form = useForm<CreateResource>({
 		defaultValues: {
 			title: "",
-			description: "",
+			description: null,
 			tags: [],
 			url: ""
 		},
 		resolver: zodResolver(CreateResourceSchema)
 	});
 
-	const onSubmit = useCallback(async (data: CreateResource) => {
-		try {
-			const result = await mutateAsync(data);
-			console.log(result);
-			toast.success("Resource created successfully!", {
-				duration: 5000
-			});
-			router.back();
-			setFiles([]);
-		} catch (err) {
-			console.error(err);
-			toast.error("Error!", {
-				description: "There was an error creating your resource.",
-				duration: 5000
-			});
-		}
-	}, []);
+	const onSubmit = useCallback(
+		async (data: CreateResource) => {
+			try {
+				const result = await mutateAsync(data);
+				console.log(result);
+				toast.success("Resource created successfully!", {
+					duration: 5000
+				});
+				router.back();
+			} catch (err) {
+				console.error(err);
+				toast.error("Error!", {
+					description: "There was an error creating your resource.",
+					duration: 5000
+				});
+			}
+		},
+		[mutateAsync]
+	);
 
 	const author = useMemo(() => {
 		if (user) {
@@ -84,7 +84,8 @@ const NewResource = () => {
 						className="mx-auto h-full w-full max-w-3xl pb-4 sm:px-4"
 					>
 						<div className="flex flex-col items-center">
-							<div className="mb-4 flex justify-center">
+							<div className="mb-4 flex items-center justify-center">
+								<BackButton />
 								<FormField
 									control={form.control}
 									name="title"
@@ -93,7 +94,7 @@ const NewResource = () => {
 											<Input
 												{...field}
 												placeholder="Recommendation"
-												className="mb-2 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
+												className="w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
 											/>
 											<FormMessage className="text-center" />
 										</FormItem>
@@ -107,8 +108,8 @@ const NewResource = () => {
 							<div className="flex flex-col space-y-2">
 								<div className="flex items-center space-x-2">
 									<Avatar>
-										<AvatarImage src="/placeholder-user.jpg" alt="Kris Gold" />
-										<AvatarFallback>{getInitials(author)}</AvatarFallback>
+										<AvatarImage src="/placeholder-user.jpg" alt="user avatar	" />
+										<AvatarFallback>{getInitials(author ?? "")}</AvatarFallback>
 									</Avatar>
 									<span>{author}</span>
 								</div>

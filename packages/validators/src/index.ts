@@ -198,7 +198,7 @@ export const CreateBusinessSchema = z.object({
 
 export const CreateResourceSchema = z.object({
 	title: z.string().min(1, "Resource title is required"),
-	description: z.string().min(10, "Description must have at least 10 characters").optional(),
+	description: z.string().min(0, "Description must have at least 10 characters").optional().nullable(),
 	url: z.string().url().optional(),
 	tags: z.array(z.string()).nonempty("At least one tag is required")
 });

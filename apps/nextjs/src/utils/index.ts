@@ -79,6 +79,14 @@ export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export const parseURL = (url: string) => {
+	if (url && !url.includes("https://") && !url.includes("http://")) {
+		return `https://${url}`;
+	}
+
+	return url;
+};
+
 export function getInitials(str: string) {
 	return str
 		.split(" ")

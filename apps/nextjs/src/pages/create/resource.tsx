@@ -22,7 +22,7 @@ import { hobbies } from "@genus/validators/constants";
 import { BackButton } from "~/components/BackButton";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
-import { getInitials } from "~/utils";
+import { getInitials, parseURL } from "~/utils";
 import { trpc } from "~/utils/trpc";
 
 const defaultTags: Option[] = hobbies.map(hobby => ({
@@ -181,11 +181,12 @@ const NewResource = () => {
 									</Label>
 									<Input
 										value={field.value}
-										onChange={e => field.onChange(e.target.value)}
+										onChange={e => field.onChange(parseURL(e.target.value))}
 										id="url-link"
 										placeholder=""
 										className="mt-2 w-full border-gray-900 bg-transparent text-black"
 									/>
+									<FormMessage />
 								</FormItem>
 							)}
 						/>

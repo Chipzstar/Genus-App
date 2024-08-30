@@ -119,8 +119,8 @@ const Home = () => {
 							<div className="grid grid-cols-3 gap-3 md:grid-cols-5">
 								{hobbyInterests?.map(({ hobbyInterest, index }) => (
 									<div
-										role="button"
 										key={index}
+										role="button"
 										className="flex items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/55 to-secondary-300/55 p-2"
 									>
 										<span className="text-lg">{hobbyInterest.name}</span>

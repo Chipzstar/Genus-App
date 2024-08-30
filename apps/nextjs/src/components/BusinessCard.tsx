@@ -13,7 +13,7 @@ export const BusinessCard: FC<{ business: RouterOutputs["business"]["getAll"][nu
 		<div
 			onClick={() => router.push(`${PATHS.BUSINESS}/${slug}`)}
 			role="button"
-			className="relative h-40 w-40 overflow-hidden"
+			className="relative w-40 overflow-hidden sm:h-40"
 			style={{
 				borderRadius: "35px"
 			}}
@@ -25,8 +25,8 @@ export const BusinessCard: FC<{ business: RouterOutputs["business"]["getAll"][nu
 					borderRadius: "0 0 35px 35px"
 				}}
 			>
-				<span>{name}</span>
-				<div className="flex flex-wrap text-wrap">
+				<span className="truncate text-ellipsis">{name}</span>
+				<div className="flex truncate text-wrap">
 					{tags.map((tag, index) => (
 						<span key={index} className="inline-block rounded-full text-xs font-semibold tracking-tight">
 							#{tag}&nbsp;

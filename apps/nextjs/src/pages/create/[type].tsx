@@ -25,6 +25,7 @@ import { hobbies } from "@genus/validators/constants";
 import Loader from "~/components/Loader";
 import { useFileContext } from "~/context/FileContext";
 import AppLayout from "~/layout/AppLayout";
+import TopNav from "~/layout/TopNav";
 import { getInitials } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import { useUploadThing } from "~/utils/uploadthing";
@@ -133,7 +134,8 @@ const CreatePost = () => {
 	}, [form.formState.errors]);
 
 	return (
-		<div className="scrollable-page-container overflow-y-hidden pb-20 text-black">
+		<div className="scrollable-page-container overflow-y-hidden pb-20 pt-6 text-black">
+			<TopNav />
 			<div className="relative flex h-full flex-col">
 				<Form {...form}>
 					<form
@@ -147,23 +149,7 @@ const CreatePost = () => {
 								</div>
 							) : (
 								<>
-									{files[0] ? (
-										<div className="w-full">
-											<Image
-												src={URL.createObjectURL(files[0])}
-												className="h-32 w-full"
-												alt="overlay"
-												width="100%"
-												style={{
-													objectFit: "cover",
-													opacity: 0.5
-												}}
-											/>
-										</div>
-									) : (
-										<div className="h-32 w-full rounded-md bg-gray-200" />
-									)}
-									<div className="absolute top-20 z-10 mb-4 flex h-28 w-28 items-center justify-center">
+									<div className="mb-4 flex h-28 w-28 items-center justify-center">
 										<div {...getRootProps()} className="relative inline-block cursor-pointer">
 											<input {...getInputProps()} />
 											<Avatar className="h-28 w-28">
@@ -180,7 +166,7 @@ const CreatePost = () => {
 									</div>
 								</>
 							)}
-							<div className="flex justify-center">
+							<div className="mb-4 flex justify-center">
 								<FormField
 									control={form.control}
 									name="title"
@@ -189,7 +175,7 @@ const CreatePost = () => {
 											<Input
 												{...field}
 												placeholder="Business Name"
-												className="mb-4 mt-20 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
+												className="mb-2 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
 											/>
 											<FormMessage className="text-center" />
 										</FormItem>

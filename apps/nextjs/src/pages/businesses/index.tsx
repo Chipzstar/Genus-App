@@ -93,7 +93,7 @@ const BusinessDirectory = () => {
 						categories={career_interests}
 						classNames="sm:w-full"
 					/>
-					<div className="genus-scrollbar grid grid-cols-2 flex-col overflow-y-scroll text-black lg:grid-cols-4">
+					<div className="genus-scrollbar grid grid-cols-2 flex-col gap-x-4 overflow-y-scroll text-black lg:grid-cols-4">
 						{debouncedBusinesses.map((business, index) => (
 							<BusinessCard key={index} business={business} />
 						))}

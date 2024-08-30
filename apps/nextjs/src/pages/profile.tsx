@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactElement} from "react";
+import type { ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import type { GetServerSideProps } from "next/types";
 import { useClerk } from "@clerk/nextjs";
@@ -145,13 +145,6 @@ const UserProfilePage = () => {
 				}}
 			>
 				<NavbarBrand>
-					<div className="absolute right-3 top-3" role="button" onClick={toggle}>
-						<img
-							src="/images/cog-white.svg"
-							alt="cog-wheel-white"
-							className="h-6 w-6 hover:animate-spin lg:h-10 lg:w-10"
-						/>
-					</div>
 					<div className="flex grow flex-col items-center justify-center space-y-3">
 						<div
 							{...getRootProps()}
@@ -194,16 +187,12 @@ const UserProfilePage = () => {
 			) : (
 				<div className="profile-form mb-4 flex flex-col bg-white pb-8 lg:pb-0">
 					<div className="mx-auto h-full w-full max-w-3xl">
-						{mode === "edit" ? (
-							<EditProfile
-								profile={profile!}
-								updateUserProfile={updateUserProfile}
-								startUpload={startUpload}
-								resetMode={() => setValue("view")}
-							/>
-						) : (
-							<ViewProfile profile={profile} />
-						)}
+						<EditProfile
+							profile={profile!}
+							updateUserProfile={updateUserProfile}
+							startUpload={startUpload}
+							resetMode={() => setValue("view")}
+						/>
 					</div>
 				</div>
 			)}

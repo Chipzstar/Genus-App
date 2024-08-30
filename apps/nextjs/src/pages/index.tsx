@@ -2,12 +2,14 @@ import type { ReactElement } from "react";
 import React from "react";
 import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
+import { useUser } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
-import { Image } from "@nextui-org/react";
+import { AvatarIcon, Image } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
+import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 
 import { BusinessCard } from "~/components/BusinessCard";
 import Loader from "~/components/Loader";
@@ -50,9 +52,19 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const Home = () => {
 	const router = useRouter();
+	const { user: clerkUser } = useUser();
 	const { isLoading, data: user } = trpc.user.getByClerkId.useQuery();
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
 	const { data: businesses } = trpc.business.getAll.useQuery();
+
+	const params = new URLSearchParams();
+
+	params.set("height", "200");
+	params.set("width", "200");
+	params.set("quality", "100");
+	params.set("fit", "crop");
+
+	const imageSrc = `${clerkUser?.imageUrl}?${params.toString()}`;
 
 	return (
 		<div className="scrollable-page-container py-6 md:py-8">
@@ -60,18 +72,37 @@ const Home = () => {
 			{isLoading ? (
 				<Loader />
 			) : (
-				<div className="home-wrapper">
-					<div className="mx-auto max-w-3xl">
-						<header className="mb-4 text-center text-3xl font-bold text-black md:text-5xl">
+				<div className="mx-auto max-w-3xl">
+					<section className="relative flex w-full flex-col items-center justify-center bg-gradient-to-tr from-secondary-300/[0.85] from-5% via-primary via-15% to-secondary-300 to-100% py-6 text-white">
+						<div
+							className="absolute right-3 top-3"
+							role="button"
+							onClick={() => router.push(PATHS.PROFILE)}
+						>
+							<img
+								src="/images/cog-white.png"
+								alt="cog-wheel-white"
+								className="h-10 w-10 hover:animate-spin"
+							/>
+						</div>
+						<Avatar className="h-28 w-28">
+							<AvatarImage className="relative" src={imageSrc} alt="Avatar Thumbnail"></AvatarImage>
+							<AvatarFallback className="bg-neutral-300">
+								<AvatarIcon />
+							</AvatarFallback>
+						</Avatar>
+						<header className="mb-2 mt-4 text-center text-3xl font-bold md:text-5xl">
 							{user?.firstname}
 						</header>
-						<p className="text-balance text-center text-xl font-semibold italic text-black md:text-2xl">
+						<p className="text-balance text-center text-xl font-normal md:text-2xl">
 							{formatString(user?.gender)}, {formatString(user?.roleSector)}
 						</p>
-						<div className="mt-12 flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-							<Image src="/images/instagram.svg" />
-							<Image src="/images/tiktok.svg" />
-						</div>
+					</section>
+					<div className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
+						<Image src="/images/instagram.svg" />
+						<Image src="/images/tiktok.svg" />
+					</div>
+					<div className="p-6 sm:px-12">
 						<section
 							className="space-y-2 py-6 font-semibold text-black"
 							role="button"

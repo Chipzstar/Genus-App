@@ -3,12 +3,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AvatarIcon, Image } from "@nextui-org/react";
+import { AvatarIcon } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
+import { cn } from "@genus/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { Badge } from "@genus/ui/badge";
 import { Button } from "@genus/ui/button";
@@ -153,10 +154,14 @@ const NewBusiness = () => {
 									<div className="mb-4 flex h-28 w-28 items-center justify-center">
 										<div {...getRootProps()} className="relative inline-block cursor-pointer">
 											<input {...getInputProps()} />
-											<Avatar className="h-28 w-28">
+											<Avatar
+												className={cn("h-28 w-28", {
+													"opacity-30": !files[0]
+												})}
+											>
 												<AvatarImage
 													className="relative"
-													src={files[0] ? URL.createObjectURL(files[0]) : "/images/logo.png"}
+													src={files[0] ? URL.createObjectURL(files[0]) : undefined}
 													alt="Avatar Thumbnail"
 												></AvatarImage>
 												<AvatarFallback className="bg-neutral-300">

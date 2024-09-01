@@ -52,7 +52,7 @@ const BusinessOwnerProfile = () => {
 	const slug = router.query.slug as string;
 	const { isLoading, data: user } = trpc.business.getBusinessOwner.useQuery({ slug });
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
-	const { data: businesses } = trpc.business.getAll.useQuery();
+	const { data: businesses } = trpc.business.all.useQuery();
 
 	return (
 		<div className="scrollable-page-container py-6 md:py-8">

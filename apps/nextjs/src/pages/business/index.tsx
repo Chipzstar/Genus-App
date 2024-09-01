@@ -1,8 +1,8 @@
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
+import { Link } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { useDebounceValue } from "usehooks-ts";
 
@@ -19,7 +19,7 @@ import { PATHS } from "~/utils";
 import type { RouterOutputs } from "~/utils/trpc";
 import { trpc } from "~/utils/trpc";
 
-type Businesses = RouterOutputs["business"]["getAll"];
+type Businesses = RouterOutputs["business"]["all"];
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { req } = ctx;
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	await helpers.business.getAll.prefetch();
+	await helpers.business.all.prefetch();
 
 	return {
 		props: {
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const BusinessDirectory = () => {
 	const [search, setSearch] = useState("");
-	const { data } = trpc.business.getAll.useQuery();
+	const { data } = trpc.business.all.useQuery();
 	const [businesses, setBusinesses] = useState<Businesses>(data ?? []);
 	const [debouncedBusinesses] = useDebounceValue<Businesses>(businesses, 500);
 
@@ -77,14 +77,16 @@ const BusinessDirectory = () => {
 			<div className="flex h-full flex-col bg-white p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto w-full max-w-3xl">
 					<nav className="flex grow items-center justify-between">
-						<section className="flex items-center space-x-4">
+						<section className="flex items-center space-x-4 md:space-x-8">
 							<BackButton />
 							<header className="text-xl font-bold text-black sm:text-2xl md:text-4xl">
 								Business Directory
 							</header>
 						</section>
 						<Link href={PATHS.CREATE_BUSINESS}>
-							<span className="text-base font-bold text-primary underline sm:text-2xl">Create Post</span>
+							<span className="min-w-28 text-base font-bold text-primary underline sm:text-2xl">
+								Create Post
+							</span>
 						</Link>
 					</nav>
 					<SearchFilterPanel
@@ -93,7 +95,7 @@ const BusinessDirectory = () => {
 						categories={career_interests}
 						classNames="sm:w-full"
 					/>
-					<div className="genus-scrollbar grid grid-cols-2 flex-col gap-x-4 overflow-y-scroll text-black sm:grid-cols-3 lg:grid-cols-4">
+					<div className="genus-scrollbar grid grid-cols-2 flex-col gap-4 overflow-y-scroll text-black sm:grid-cols-3 lg:grid-cols-4">
 						{debouncedBusinesses.map((business, index) => (
 							<BusinessCard key={index} business={business} />
 						))}

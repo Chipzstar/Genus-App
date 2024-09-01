@@ -169,8 +169,8 @@ export const profileSchema = signupBaseSchema.omit({
 	email: true,
 	password: true,
 	confirmPassword: true,
-	gender: true,
-	ethnicity: true
+	ethnicity: true,
+	username: true
 });
 
 export const referralEmailSchema = z.object({

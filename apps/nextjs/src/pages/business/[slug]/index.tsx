@@ -12,6 +12,7 @@ import { transformer } from "@genus/api/transformer";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { Input } from "@genus/ui/input";
 
+import { BusinessCard } from "~/components/BusinessCard";
 import Loader from "~/components/Loader";
 import AppLayout from "~/layout/AppLayout";
 import { PATHS } from "~/utils";
@@ -63,6 +64,13 @@ const BusinessDetails = () => {
 			}
 		}
 	);
+	const { data: otherBusinesses } = trpc.business.getBusinessesByOwner.useQuery(
+		{
+			ownerId: business!.ownerId,
+			ignoreSlug: business!.slug
+		},
+		{ enabled: !!business }
+	);
 
 	if (isLoading) return <Loader />;
 
@@ -107,17 +115,17 @@ const BusinessDetails = () => {
 					</div>
 
 					<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-						<div role="button">
-							<Image src="/images/instagram.svg" />
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/instagram.png" />
 						</div>
-						<div role="button">
-							<Image src="/images/tiktok.svg" />
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/tiktok.png" />
 						</div>
-						<div role="button">
-							<Image src="/images/youtube.svg" />
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/youtube.png" />
 						</div>
-						<div role="button">
-							<Image src="/images/email.svg" />
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/email.png" />
 						</div>
 					</section>
 
@@ -143,6 +151,11 @@ const BusinessDetails = () => {
 
 					<div className="mt-12 space-y-6 px-4">
 						<h2 className="text-xl font-semibold italic text-black">Other Ventures from owner</h2>
+						<div className="genus-scrollbar grid grid-cols-2 flex-col gap-x-4 overflow-y-scroll text-black sm:grid-cols-3 lg:grid-cols-4">
+							{otherBusinesses?.map((business, index) => (
+								<BusinessCard key={index} business={business} />
+							))}
+						</div>
 					</div>
 				</div>
 			</div>

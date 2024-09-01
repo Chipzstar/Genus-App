@@ -116,10 +116,10 @@ const Login: NextPageWithAuthLayout = () => {
 	);
 
 	return (
-		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8 sm:py-0">
+		<div className="flex grow flex-col items-center justify-center gap-y-8 px-4 py-8 sm:gap-y-3 sm:py-0">
 			<header className="relative flex w-2/3 flex-col items-center space-y-3 sm:min-h-[250px] sm:w-1/2 sm:space-y-0 lg:w-2/3">
 				<img src="/images/powered-by-genus-white.png" alt="powered-by-genus" className="w-32" />
-				<span className="text-2xl font-semibold sm:text-3xl">Welcome to the</span>
+				<span className="text-2xl font-semibold sm:pb-3 sm:text-3xl">Welcome to the</span>
 				<img
 					src="/images/arc2.0-avatar.png"
 					alt="genus-white"

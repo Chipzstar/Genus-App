@@ -434,6 +434,7 @@ export const business = pgTable(
 			.default(sql`'{}'::text[]`)
 			.array()
 			.notNull(),
+		isPublic: boolean("isPublic").default(true).notNull(),
 		isDeleted: boolean("isDeleted").default(false).notNull()
 	},
 	table => {

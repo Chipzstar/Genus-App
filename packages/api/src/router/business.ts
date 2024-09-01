@@ -3,13 +3,13 @@ import { nanoid } from "nanoid";
 import slugify from "slugify";
 import { z } from "zod";
 
-import { business, businessToUser, eq, user } from "@genus/db";
+import { and, business, businessToUser, eq, ne, user } from "@genus/db";
 import { CreateBusinessSchema } from "@genus/validators";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const businessRouter = createTRPCRouter({
-	getAll: protectedProcedure.query(async ({ ctx }) => {
+	all: protectedProcedure.query(async ({ ctx }) => {
 		try {
 			return (await ctx.db.query.business.findMany()) ?? [];
 		} catch (err) {
@@ -17,7 +17,7 @@ export const businessRouter = createTRPCRouter({
 			return [];
 		}
 	}),
-	getMembers: protectedProcedure.query(async ({ ctx }) => {
+	members: protectedProcedure.query(async ({ ctx }) => {
 		try {
 			const dbUser = await ctx.db.query.user.findFirst({ where: eq(user.clerkId, ctx.auth.userId) });
 			if (!dbUser) {
@@ -102,5 +102,41 @@ export const businessRouter = createTRPCRouter({
 			console.error(err);
 			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 		}
-	})
+	}),
+	getBusinessesByOwner: protectedProcedure
+		.input(z.object({ ownerId: z.string(), ignoreSlug: z.string() }))
+		.query(async ({ ctx, input }) => {
+			try {
+				const dbBusinesses = ctx.db.query.business.findMany({
+					where: and(eq(business.ownerId, input.ownerId), ne(business.slug, input.ignoreSlug))
+				});
+				console.log(dbBusinesses);
+				return dbBusinesses;
+			} catch (err) {
+				console.error(err);
+			}
+		}),
+	updateBusinessVisibility: protectedProcedure
+		.input(z.object({ slug: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			try {
+				const dbBusiness = await ctx.db.query.business.findFirst({ where: eq(business.slug, input.slug) });
+				if (!dbBusiness) {
+					throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });
+				}
+				const res = await ctx.db
+					.update(business)
+					.set({ isPublic: !dbBusiness.isPublic })
+					.where(eq(business.slug, input.slug))
+					.returning();
+				console.log(res);
+				if (!res || !res[0]) {
+					throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to update visibility" });
+				}
+				return res[0];
+			} catch (err) {
+				console.error(err);
+				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
+			}
+		})
 });

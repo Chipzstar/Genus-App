@@ -55,7 +55,7 @@ const Home = () => {
 	const { user: clerkUser } = useUser();
 	const { isLoading, data: user } = trpc.user.getByClerkId.useQuery();
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
-	const { data: businesses } = trpc.business.getAll.useQuery();
+	const { data: businesses } = trpc.business.all.useQuery();
 
 	const params = new URLSearchParams();
 
@@ -99,8 +99,12 @@ const Home = () => {
 						</p>
 					</section>
 					<div className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-						<Image src="/images/instagram.svg" />
-						<Image src="/images/tiktok.svg" />
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/instagram.png" />
+						</div>
+						<div role="button" className="h-8 w-8">
+							<Image src="/images/tiktok.png" />
+						</div>
 					</div>
 					<div className="p-6 sm:px-12">
 						<section
@@ -130,8 +134,14 @@ const Home = () => {
 						</section>
 						<section className="space-y-2 py-7 font-semibold text-black">
 							<h2 className="text-xl font-semibold md:text-2xl">Businesses</h2>
-							<div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-								{businesses?.map((item, index) => <BusinessCard key={index} business={item} />)}
+							<div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-x-12 lg:grid-cols-4">
+								{businesses?.map((item, index) => (
+									<BusinessCard
+										key={index}
+										business={item}
+										editable={item.ownerId === clerkUser?.id}
+									/>
+								))}
 							</div>
 						</section>
 					</div>

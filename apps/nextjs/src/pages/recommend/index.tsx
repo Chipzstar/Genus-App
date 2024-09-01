@@ -98,11 +98,11 @@ const Resources = () => {
 								<span className="text-dark text-lg font-semibold italic">
 									Posted by {resource.author.firstname}
 								</span>
-								<div className="flex flex-wrap space-x-2">
+								<div className="flex flex-wrap">
 									{resource.tags.map((tag, index) => (
 										<span
 											key={index}
-											className="inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
+											className="mb-1 mr-2 inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
 										>
 											#{tag}
 										</span>

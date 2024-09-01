@@ -13,8 +13,9 @@ import { Button } from "@genus/ui/button";
 import { Checkbox } from "@genus/ui/checkbox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
 import { Input } from "@genus/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { profileSchema } from "@genus/validators";
-import { hobbies } from "@genus/validators/constants";
+import { genders, hobbies } from "@genus/validators/constants";
 
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
@@ -77,6 +78,8 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 		defaultValues: {
 			firstname: profile.firstname,
 			lastname: profile.lastname,
+			gender: profile.gender,
+			age: profile.age,
 			hobbies_interests: profile.hobbyInterests.map(item => item.slug)
 		},
 		resolver: zodResolver(profileSchema)
@@ -89,7 +92,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 	return (
 		<Form {...form}>
 			<form id="profile-form" className="flex flex-col px-6 py-8 lg:p-8" onSubmit={form.handleSubmit(onSubmit)}>
-				<section className="grid gap-x-12 gap-y-4 md:grid-cols-2">
+				<section className="grid gap-x-4 gap-y-4 sm:gap-x-12 md:grid-cols-2">
 					<FormField
 						control={form.control}
 						name="firstname"
@@ -111,6 +114,52 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 								<FormLabel>Last Name</FormLabel>
 								<FormControl>
 									<Input className="bg-background text-black" {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="gender"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Gender</FormLabel>
+								<Select onValueChange={field.onChange} defaultValue={field.value}>
+									<FormControl>
+										<SelectTrigger className="rounded-xl bg-background text-black">
+											<SelectValue placeholder="Select your gender" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{genders.map(gender => (
+											<SelectItem key={gender} value={gender}>
+												{formatString(gender)}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="age"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Age</FormLabel>
+								<FormControl>
+									<Input
+										defaultValue={field.value}
+										placeholder="Please enter your age"
+										{...field}
+										type="number"
+										className="rounded-xl bg-background text-black"
+										onPaste={e => {
+											e.preventDefault();
+											return false;
+										}}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

@@ -1,13 +1,16 @@
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import type { GetServerSideProps } from "next/types";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { createServerSideHelpers } from "@trpc/react-query/server";
+import { ChevronRight } from "lucide-react";
 import { useDebounceValue } from "usehooks-ts";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
+import { Card, CardContent } from "@genus/ui/card";
 import { career_interests } from "@genus/validators/constants";
 
 import { BackButton } from "~/components/BackButton";
@@ -53,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const Resources = () => {
 	const [search, setSearch] = useState("");
+	const router = useRouter();
 	const { data } = trpc.resource.getResources.useQuery(undefined, {
 		onSuccess: data => {
 			setResources(data);
@@ -89,26 +93,38 @@ const Resources = () => {
 						</Link>
 					</nav>
 					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
-					<div className="genus-scrollbar flex max-h-120 flex-col overflow-y-scroll text-black">
+					<div className="genus-scrollbar flex max-h-120 flex-col space-y-3 overflow-y-scroll text-black sm:pr-2">
 						{debouncedResources.map((resource, index) => (
-							<div key={index} className="flex flex-col space-y-1 px-0 py-3">
-								<span className="text-xl font-bold capitalize tracking-tight sm:text-2xl">
-									{resource.name}
-								</span>
-								<span className="text-dark text-lg font-semibold italic">
-									Posted by {resource.author.firstname}
-								</span>
-								<div className="flex flex-wrap">
-									{resource.tags.map((tag, index) => (
-										<span
-											key={index}
-											className="mb-1 mr-2 inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
-										>
-											#{tag}
+							<Card
+								key={index}
+								role="button"
+								className="transition-colors hover:bg-accent"
+								onClick={() => {
+									void router.push(`${PATHS.RECOMMEND}/${resource.resourceId}`);
+								}}
+							>
+								<CardContent className="flex items-center justify-between p-4">
+									<div className="flex flex-col space-y-2">
+										<span className="text-xl font-bold capitalize tracking-tight sm:text-2xl">
+											{resource.name}
 										</span>
-									))}
-								</div>
-							</div>
+										<span className="text-dark text-lg font-semibold italic">
+											Posted by {resource.author.firstname}
+										</span>
+										<div className="flex flex-wrap">
+											{resource.tags.map((tag, tagIndex) => (
+												<span
+													key={tagIndex}
+													className="mb-1 mr-2 inline-block rounded-sm bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600"
+												>
+													#{tag}
+												</span>
+											))}
+										</div>
+									</div>
+									<ChevronRight className="h-6 w-6 text-muted-foreground" />
+								</CardContent>
+							</Card>
 						))}
 					</div>
 				</div>

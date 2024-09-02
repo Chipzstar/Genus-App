@@ -18,7 +18,11 @@ interface Props<T = z.infer<typeof careerInterestsSchema>> {
 
 const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames, withFilter = true }: Props<T>) => (
 	<div className="flex items-center justify-between space-x-10 py-6">
-		<div className={cn("flex sm:w-64", classNames)}>
+		<div
+			className={cn("flex sm:w-64", classNames, {
+				"sm:w-full": !withFilter
+			})}
+		>
 			<Input
 				value={value}
 				onChange={onChange}

@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	await helpers.business.all.prefetch();
+	await helpers.user.getUsers.prefetch();
 
 	return {
 		props: {

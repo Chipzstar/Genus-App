@@ -90,7 +90,7 @@ const MemberProfile = () => {
 						<section className="space-y-2 py-3 font-semibold text-black">
 							<h2 className="text-xl font-semibold md:text-2xl">Interests</h2>
 							<div className="grid grid-cols-3 gap-3 md:grid-cols-5">
-								{hobbyInterests?.map(({ hobbyInterest, index }) => (
+								{hobbyInterests?.map(({ hobbyInterest }, index) => (
 									<div
 										role="button"
 										key={index}

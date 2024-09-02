@@ -142,7 +142,7 @@ const BusinessDetails = () => {
 							</div>
 							<div className="flex flex-col space-y-2">
 								<h3 className="text-xl font-semibold text-black">{owner}</h3>
-								<Link href={`${PATHS.BUSINESS}/${business.slug}/profile`}>
+								<Link href={`${PATHS.MEMBERS}/${business.ownerId}/profile`}>
 									<span className="text-lg font-bold text-primary underline">View Profile</span>
 								</Link>
 							</div>

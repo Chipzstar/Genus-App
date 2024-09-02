@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const Home = () => {
 	const router = useRouter();
 	const { user: clerkUser } = useUser();
-	const { isLoading, data: user } = trpc.user.getByClerkId.useQuery();
+	const { isLoading, data: user } = trpc.user.getCurrent.useQuery();
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
 	const { data: businesses } = trpc.business.all.useQuery();
 

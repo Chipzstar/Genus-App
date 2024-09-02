@@ -25,14 +25,23 @@ import { career_interests, hobbies } from "@genus/validators/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-	getById: protectedProcedure.input(z.number()).query(async ({ ctx, input }) => {
+	getByClerkId: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
 		// return ctx.db.query.user.findFirst({ where: eq(user.id, 76) });
-		return (await ctx.db.select().from(user).where(eq(user.id, input)))[0];
+		try {
+			const dbUser = await ctx.db.select().from(user).where(eq(user.clerkId, input.userId));
+			if (!dbUser[0]) {
+				throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+			}
+			return dbUser[0];
+		} catch (err) {
+			console.error(err);
+			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
+		}
 	}),
 	getUsers: protectedProcedure.query(async ({ ctx, input }) => {
 		return await ctx.db.select().from(user);
 	}),
-	getByClerkId: protectedProcedure.query(async ({ ctx }) => {
+	getCurrent: protectedProcedure.query(async ({ ctx }) => {
 		try {
 			const fields = {
 				firstname: user.firstname,

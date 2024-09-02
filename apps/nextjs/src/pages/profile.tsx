@@ -93,7 +93,7 @@ const UserProfilePage = () => {
 	const imageSrc = `${user?.imageUrl}?${params.toString()}`;
 
 	// TRPC queries
-	const { isLoading, data: profile } = trpc.user.getByClerkId.useQuery(undefined, {
+	const { isLoading, data: profile } = trpc.user.getCurrent.useQuery(undefined, {
 		onError(err) {
 			toast.error("Error", {
 				description: err.message,
@@ -107,7 +107,7 @@ const UserProfilePage = () => {
 				description: "Your profile has been updated.",
 				duration: 3000
 			});
-			setTimeout(() => void utils.user.getByClerkId.invalidate(), 300);
+			setTimeout(() => void utils.user.getCurrent.invalidate(), 300);
 		}
 	});
 
@@ -195,7 +195,7 @@ const UserProfilePage = () => {
 				<div className="profile-form mb-4 flex flex-col bg-white pb-8 lg:pb-0">
 					<div className="mx-auto h-full w-full max-w-3xl">
 						<EditProfile
-							profile={profile!}
+							profile={profile}
 							updateUserProfile={updateUserProfile}
 							startUpload={startUpload}
 						/>

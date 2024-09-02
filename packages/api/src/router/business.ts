@@ -34,22 +34,6 @@ export const businessRouter = createTRPCRouter({
 			return [];
 		}
 	}),
-	getBusinessOwner: protectedProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
-		try {
-			const dbBusiness = await ctx.db.query.business.findFirst({ where: eq(business.slug, input.slug) });
-			if (!dbBusiness) {
-				throw new TRPCError({ code: "NOT_FOUND", message: "Business not found" });
-			}
-			const dbUser = await ctx.db.query.user.findFirst({ where: eq(user.clerkId, dbBusiness.ownerId) });
-			if (!dbUser) {
-				throw new TRPCError({ code: "NOT_FOUND", message: "Owner not found" });
-			}
-			return dbUser;
-		} catch (err) {
-			console.error(err);
-			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to get business owner" });
-		}
-	}),
 	createBusiness: protectedProcedure.input(CreateBusinessSchema).mutation(async ({ ctx, input }) => {
 		try {
 			const dbUser = await ctx.db.query.user.findFirst({ where: eq(user.clerkId, ctx.auth.userId) });

@@ -1,6 +1,7 @@
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import type { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { User } from "lucide-react";
@@ -15,6 +16,7 @@ import { BackButton } from "~/components/BackButton";
 import SearchFilterPanel from "~/components/SearchFilterPanel";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
+import { PATHS } from "~/utils";
 import type { RouterOutputs } from "~/utils/trpc";
 import { trpc } from "~/utils/trpc";
 
@@ -52,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 
 const MembersDirectory = () => {
+	const router = useRouter();
 	const [search, setSearch] = useState("");
 	const { data } = trpc.user.getUsers.useQuery(undefined, {
 		onSuccess: data => {
@@ -97,7 +100,12 @@ const MembersDirectory = () => {
 					/>
 					<div className="genus-scrollbar grid flex-col gap-y-3 overflow-y-scroll text-black lg:grid-cols-2">
 						{debouncedMembers.map((member, index) => (
-							<div key={index} className="flex items-center space-x-2">
+							<div
+								role="button"
+								key={index}
+								className="flex items-center space-x-2"
+								onClick={() => router.push(`${PATHS.MEMBERS}/${member.clerkId}/profile`)}
+							>
 								<Avatar className="h-10 w-10 lg:h-10 lg:w-10">
 									<AvatarImage src={String(member.imageUrl)} alt="Avatar Thumbnail"></AvatarImage>
 									<AvatarFallback className="bg-neutral-100">

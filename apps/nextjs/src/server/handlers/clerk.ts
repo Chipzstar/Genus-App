@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/server";
 import shortHash from "shorthash2";
 import { UTApi } from "uploadthing/server";
@@ -11,7 +11,7 @@ const utapi = new UTApi();
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
-		const posthogUser = posthog.identify({
+		posthog.identify({
 			distinctId: String(payload.id),
 			properties: {
 				email: payload.email_addresses[0]?.email_address,
@@ -36,12 +36,8 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 
 		if (!dbUser) throw new Error("Could not create user");
 
-		// log.info("-----------------------------------------------");
-		// log.debug("New user!!", dbUser);
-		// log.info("-----------------------------------------------");
 		return {
-			dbUser,
-			posthogUser
+			dbUser
 		};
 	} catch (err: any) {
 		console.error(err);
@@ -88,9 +84,15 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					ut_url: uploadedFile.data.url
 				}
 			});
-			// log.info("-----------------------------------------------");
-			// log.debug("Updated clerk user!!", clerkUser);
-			// log.info("-----------------------------------------------");
+			posthog.capture({
+				distinctId: dbUser.email,
+				event: "User Image Updated",
+				properties: {
+					userId: String(clerkUser.id),
+					imageKey: uploadedFile?.data.key,
+					imageUrl: uploadedFile?.data.url
+				}
+			});
 		}
 
 		const shouldUpdate = Boolean(
@@ -117,9 +119,13 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					.where(eq(user.clerkId, payload.id))
 					.returning()
 			)[0];
-		// log.info("-----------------------------------------------");
-		// log.debug("Updated user!!", dbUser);
-		// log.info("-----------------------------------------------");
+		posthog.capture({
+			distinctId: dbUser.email,
+			event: "User Updated",
+			properties: {
+				...dbUser
+			}
+		});
 		return dbUser;
 	} catch (err: any) {
 		console.error(err);

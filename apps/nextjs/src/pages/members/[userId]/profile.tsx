@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		})
 	});
 
-	ctx.params && (await helpers.business.getBusinessBySlug.prefetch({ slug: ctx.params.slug as string }));
+	ctx.params && (await helpers.user.getByClerkId.prefetch({ userId: ctx.params.userId as string }));
 
 	return {
 		props: {
@@ -47,10 +47,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	};
 };
 
-const BusinessOwnerProfile = () => {
+const MemberProfile = () => {
 	const router = useRouter();
-	const slug = router.query.slug as string;
-	const { isLoading, data: user } = trpc.business.getBusinessOwner.useQuery({ slug });
+	const userId = router.query.userId as string;
+	const { isLoading, data: user } = trpc.user.getByClerkId.useQuery({ userId });
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
 	const { data: businesses } = trpc.business.all.useQuery();
 
@@ -114,7 +114,7 @@ const BusinessOwnerProfile = () => {
 	);
 };
 
-BusinessOwnerProfile.getLayout = function getLayout(
+MemberProfile.getLayout = function getLayout(
 	page: ReactElement,
 	props: {
 		userId: string;
@@ -123,4 +123,4 @@ BusinessOwnerProfile.getLayout = function getLayout(
 	return <AppLayout userId={props.userId}>{page}</AppLayout>;
 };
 
-export default BusinessOwnerProfile;
+export default MemberProfile;

@@ -125,7 +125,15 @@ const ResourceDetails = () => {
 
 				<div className="my-8 space-y-2 px-4">
 					<h2 className="text-xl font-semibold italic text-black">Url</h2>
-					<div className="text-lg text-black">{resource.url ?? "N/A"}</div>
+					<div className="text-lg text-black">
+						{resource.url ? (
+							<Link href={resource.url} target="_blank">
+								{resource.url}
+							</Link>
+						) : (
+							"N/A"
+						)}
+					</div>
 				</div>
 
 				<div className="my-8 space-y-2 px-4">

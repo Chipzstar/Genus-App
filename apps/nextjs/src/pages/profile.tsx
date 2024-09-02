@@ -33,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = getServerSidePropsHelper;
 const UserProfilePage = () => {
 	const { signOut } = useAuth();
 	const { user } = useClerk();
-	const [mode, setValue] = useViewEditToggle();
 	const posthog = usePostHog();
 	const utils = trpc.useUtils();
 	const { files, updateFile } = useFileContext();
@@ -134,7 +133,6 @@ const UserProfilePage = () => {
 	const fileTypes = permittedFileInfo?.config ? Object.keys(permittedFileInfo?.config) : [];
 
 	const { getRootProps, getInputProps } = useDropzone({
-		disabled: mode === "view",
 		onDrop,
 		accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
 		maxFiles: 1
@@ -162,10 +160,7 @@ const UserProfilePage = () => {
 								</Button>
 							</SignedIn>
 						</div>
-						<div
-							{...getRootProps()}
-							className={cn("relative inline-block rounded-full", { "cursor-pointer": mode === "edit" })}
-						>
+						<div {...getRootProps()} className={cn("relative inline-block cursor-pointer rounded-full")}>
 							<input {...getInputProps()} />
 							<Avatar className="h-28 w-28">
 								<AvatarImage
@@ -179,11 +174,7 @@ const UserProfilePage = () => {
 							</Avatar>
 							<div
 								className={cn(
-									"absolute bottom-2 right-2 inline-flex h-6 w-6 items-center" +
-										" justify-center rounded-full bg-white",
-									{
-										hidden: mode === "view"
-									}
+									"absolute bottom-2 right-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white"
 								)}
 							>
 								<Pencil color="black" size={14} />
@@ -207,7 +198,6 @@ const UserProfilePage = () => {
 							profile={profile!}
 							updateUserProfile={updateUserProfile}
 							startUpload={startUpload}
-							resetMode={() => setValue("view")}
 						/>
 					</div>
 				</div>

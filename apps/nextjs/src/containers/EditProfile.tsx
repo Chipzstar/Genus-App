@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import type { UserResource } from "@clerk/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { profileSchema } from "@genus/validators";
-import { genders, hobbies } from "@genus/validators/constants";
+import { genders, hobbies, role_sectors } from "@genus/validators/constants";
 
 import { useFileContext } from "~/context/FileContext";
 import { formatString } from "~/utils";
@@ -31,10 +31,9 @@ interface Props {
 	startUpload: (files: File[], input?: any) => Promise<ClientUploadedFileData<any>[] | undefined>;
 	profile: UserProfile;
 	updateUserProfile: any;
-	resetMode: () => void;
 }
 
-export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile, resetMode }) => {
+export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile }) => {
 	const { files } = useFileContext();
 	const clerk = useClerk();
 	const [loading, setLoading] = useState(false);
@@ -60,7 +59,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 						});
 					}
 				}
-				setTimeout(resetMode, 300);
+				// setTimeout(resetMode, 300);
 			} catch (err) {
 				console.error(err);
 				toast.error("Error!", {
@@ -71,15 +70,16 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 				setLoading(false);
 			}
 		},
-		[updateUserProfile, files, startUpload, resetMode, clerk.user, isMobile]
+		[updateUserProfile, files, startUpload, clerk.user, isMobile]
 	);
 
 	const form = useForm<FormValues>({
 		defaultValues: {
 			firstname: profile.firstname,
 			lastname: profile.lastname,
-			gender: profile.gender,
+			gender: profile.gender!,
 			age: profile.age,
+			role_sector: profile.roleSector!,
 			hobbies_interests: profile.hobbyInterests.map(item => item.slug)
 		},
 		resolver: zodResolver(profileSchema)
@@ -88,6 +88,10 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 	const isDisabled = useMemo(() => {
 		return !form.formState.isDirty && !files.length;
 	}, [files.length, form.formState.isDirty]);
+
+	useEffect(() => {
+		console.log(form.formState.errors);
+	}, [form.formState.errors]);
 
 	return (
 		<Form {...form}>
@@ -165,6 +169,35 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 							</FormItem>
 						)}
 					/>
+					<div className="md:col-span-2">
+						<FormField
+							control={form.control}
+							name="role_sector"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Role</FormLabel>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger className="rounded-xl bg-background text-black">
+												<SelectValue placeholder="Select your role" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{role_sectors?.map((role, index) => {
+												if (role)
+													return (
+														<SelectItem key={index} value={role}>
+															{formatString(role)}
+														</SelectItem>
+													);
+											})}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 					<div className="order-last col-span-2 row-span-2 md:order-none">
 						<FormField
 							control={form.control}
@@ -175,7 +208,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 									<FormDescription className="text-neutral-600">
 										Select all that apply
 									</FormDescription>
-									<div className="flex flex-row flex-wrap items-center space-x-2 space-y-2">
+									<div className="grid grid-cols-3 flex-row flex-wrap items-center space-y-2 lg:grid-cols-4">
 										{hobbies.map((item, index) => (
 											<FormField
 												key={index}
@@ -202,7 +235,7 @@ export const EditProfile: FC<Props> = ({ startUpload, profile, updateUserProfile
 																	}}
 																/>
 															</FormControl>
-															<FormLabel className="whitespace-nowrap font-normal">
+															<FormLabel className="truncate whitespace-nowrap font-normal">
 																{formatString(item)}
 															</FormLabel>
 														</FormItem>

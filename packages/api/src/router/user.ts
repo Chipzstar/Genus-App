@@ -16,9 +16,11 @@ import {
 	broadCourseCategorySchema,
 	careerInterestsSchema,
 	completionYearSchema,
+	gendersSchema,
+	profileSchema,
 	universitiesSchema
 } from "@genus/validators";
-import { career_interests } from "@genus/validators/constants";
+import { career_interests, hobbies } from "@genus/validators/constants";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -92,78 +94,62 @@ export const userRouter = createTRPCRouter({
 			throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 		}
 	}),
-	updateProfile: protectedProcedure
-		.input(
-			z.object({
-				firstname: z.string(),
-				lastname: z.string(),
-				university: universitiesSchema,
-				broad_degree_course: broadCourseCategorySchema,
-				degree_name: z.string(),
-				completion_year: completionYearSchema,
-				career_interests: careerInterestsSchema
-					.array()
-					.nonempty({ message: "Please select at least one career interest" })
-			})
-		)
-		.mutation(async ({ ctx, input }) => {
-			try {
-				const dbUser = (
-					await ctx.db
-						.update(user)
-						.set({
-							firstname: input.firstname,
-							lastname: input.lastname,
-							university: input.university,
-							broadDegreeCourse: input.broad_degree_course,
-							degreeName: input.degree_name,
-							completionYear: Number(input.completion_year)
-						})
-						.where(eq(user.clerkId, ctx.auth.userId))
-						.returning()
-				)[0];
-
-				if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
-
-				const allSlugs = await ctx.db.query.careerInterest.findMany();
-
-				const activeSlugs = (
-					await ctx.db.query.careerInterestToUser.findMany({
-						where: eq(careerInterestToUser.userId, dbUser.id),
-						with: {
-							careerInterest: true
-						}
+	updateProfile: protectedProcedure.input(profileSchema).mutation(async ({ ctx, input }) => {
+		try {
+			const dbUser = (
+				await ctx.db
+					.update(user)
+					.set({
+						firstname: input.firstname,
+						lastname: input.lastname,
+						gender: input.gender,
+						age: input.age
 					})
-				).map(({ careerInterest }) => careerInterest);
+					.where(eq(user.clerkId, ctx.auth.userId))
+					.returning()
+			)[0];
 
-				// add the user to the relevant career interest record
-				await Promise.all(
-					career_interests.map(_slug => {
-						let careerInterestId = allSlugs.find(({ slug }) => slug === _slug)!.id;
-						// check if user added a new career interest that isn't already active
-						if (!activeSlugs.some(({ slug }) => slug === _slug) && input.career_interests.includes(_slug)) {
-							db.insert(careerInterestToUser)
-								.values({
-									userId: dbUser.id,
-									careerInterestId
-								})
-								.then(result => console.log(`${_slug} assigned to user ${dbUser.clerkId}`));
-						}
-						// check if user removed an existing career interest that was already active
-						else if (
-							activeSlugs.some(({ slug }) => slug === _slug) &&
-							!input.career_interests.includes(_slug)
-						) {
-							db.delete(careerInterestToUser)
-								.where(eq(careerInterestToUser.careerInterestId, careerInterestId))
-								.then(result => console.log(`${_slug} unassigned from user ${dbUser.clerkId}}`));
-						}
-					})
-				);
-				return dbUser;
-			} catch (e: any) {
-				console.log(e);
-				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });
-			}
-		})
+			if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+
+			const allSlugs = await ctx.db.query.hobbyInterest.findMany();
+
+			const activeSlugs = (
+				await ctx.db.query.hobbyInterestToUser.findMany({
+					where: eq(hobbyInterestToUser.userId, dbUser.id),
+					with: {
+						hobbyInterest: true
+					}
+				})
+			).map(({ hobbyInterest }) => hobbyInterest);
+
+			// add the user to the relevant hobby interest record
+			await Promise.all(
+				hobbies.map(_slug => {
+					let hobbyInterestId = allSlugs.find(({ slug }) => slug === _slug)!.id;
+					// check if user added a new hobby interest that isn't already active
+					if (!activeSlugs.some(({ slug }) => slug === _slug) && input.hobbies_interests.includes(_slug)) {
+						db.insert(hobbyInterestToUser)
+							.values({
+								userId: dbUser.id,
+								hobbyInterestId
+							})
+							.then(result => console.log(`${_slug} assigned to user ${dbUser.clerkId}`));
+					}
+					// check if user removed an existing hobby interest that was already active
+					else if (
+						activeSlugs.some(({ slug }) => slug === _slug) &&
+						!input.hobbies_interests.includes(_slug)
+					) {
+						db.delete(hobbyInterestToUser)
+							.where(eq(hobbyInterestToUser.hobbyInterestId, hobbyInterestId))
+							.then(result => console.log(`${_slug} unassigned from user ${dbUser.clerkId}}`));
+					}
+				})
+			);
+			return dbUser;
+		} catch (e: any) {
+			console.log(e);
+			throw new TRPCError({ code: "BAD_REQUEST", message: e.message });
+		}
+	})
 });

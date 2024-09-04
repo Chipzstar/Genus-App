@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	});
 
 	// await helpers.user.getHobbyInterests.prefetch(userId);
-	await helpers.business.getAll.prefetch();
+	await helpers.business.all.prefetch();
 
 	return {
 		props: {

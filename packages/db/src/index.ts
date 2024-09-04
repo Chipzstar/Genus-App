@@ -30,7 +30,7 @@ export const connectionString = [
 
 const sql = neon(connectionString);
 
-const db = drizzle(sql, { schema: { ..._schema, ..._relations } });
+const db = drizzle(sql, { schema: { ..._schema, ..._relations }, logger: false });
 
 export type DrizzleClient = typeof db;
 

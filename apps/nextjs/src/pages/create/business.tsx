@@ -5,6 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AvatarIcon } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react";
+import { usePostHog } from "posthog-js/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -46,6 +47,7 @@ const NewBusiness = () => {
 	const { user } = useUser();
 	const [newAdmin, setNewAdmin] = useState("");
 	const { mutateAsync } = trpc.business.createBusiness.useMutation();
+	const posthog = usePostHog();
 
 	const form = useForm<CreateBusiness>({
 		defaultValues: {
@@ -67,21 +69,25 @@ const NewBusiness = () => {
 			console.log(files);
 			if (files[0]) {
 				form.setValue("logoUrl", files[0].url);
+				posthog.capture("Business Profile Upload Success", files[0]);
 			}
 			console.log("uploaded successfully!");
 		},
 		onUploadError: err => {
 			console.log(err);
-			console.log(err.message);
+			console.log(err.cause);
 			console.log("error occurred while uploading");
-			toast.error("Error!", {
-				// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-				description: "There was an error uploading your image." + err?.cause,
+			toast.error("There was an error uploading your image", {
+				description: err.message ?? "",
 				duration: 5000
+			});
+			posthog.capture("Business Profile Upload Error", {
+				...err
 			});
 		},
 		onUploadBegin: filename => {
 			console.log("UPLOAD HAS BEGUN", filename);
+			posthog.capture("Business Profile Upload Started", filename);
 		}
 	});
 

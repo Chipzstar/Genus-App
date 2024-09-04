@@ -84,7 +84,7 @@ const BusinessDetails = () => {
 						<div className="w-full">
 							<Image
 								src={business.logoUrl}
-								className="h-40 w-full"
+								className="h-64 w-full"
 								alt="overlay"
 								width="100%"
 								style={{
@@ -93,7 +93,7 @@ const BusinessDetails = () => {
 								}}
 							/>
 						</div>
-						<div className="absolute top-24 z-10 mb-4 flex h-28 w-28 items-center justify-center">
+						<div className="absolute top-16 z-10 mb-4 flex flex-col items-center justify-center">
 							<div className="relative inline-block cursor-pointer">
 								<Avatar className="h-28 w-28">
 									<AvatarImage className="relative" src={business.logoUrl} alt="Avatar Thumbnail" />
@@ -102,15 +102,14 @@ const BusinessDetails = () => {
 									</AvatarFallback>
 								</Avatar>
 							</div>
-						</div>
-
-						<div className="flex justify-center">
-							<Input
-								value={business.name}
-								readOnly
-								placeholder="Business Name"
-								className="mb-4 mt-20 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
-							/>
+							<div className="flex justify-center">
+								<Input
+									value={business.name}
+									readOnly
+									placeholder="Business Name"
+									className="mb-4 w-full border-none bg-transparent text-center text-2xl font-bold focus-visible:ring-0 md:text-3xl"
+								/>
+							</div>
 						</div>
 					</div>
 

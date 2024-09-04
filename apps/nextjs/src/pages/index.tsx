@@ -73,7 +73,7 @@ const Home = () => {
 				<Loader />
 			) : (
 				<div className="mx-auto max-w-3xl">
-					<section className="relative flex w-full flex-col items-center justify-center bg-gradient-to-tr from-secondary-300/[0.85] from-5% via-primary via-15% to-secondary-300 to-100% py-6 text-white">
+					<section className="profile-gradient relative flex w-full flex-col items-center justify-center py-6 text-white">
 						<div
 							className="absolute right-3 top-3"
 							role="button"

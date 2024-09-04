@@ -12,7 +12,6 @@ import { transformer } from "@genus/api/transformer";
 import { Avatar, AvatarFallback, AvatarImage } from "@genus/ui/avatar";
 import { Input } from "@genus/ui/input";
 
-import { BusinessCard } from "~/components/BusinessCard";
 import Loader from "~/components/Loader";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";

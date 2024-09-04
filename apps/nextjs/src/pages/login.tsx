@@ -131,7 +131,7 @@ const Login: NextPageWithAuthLayout = () => {
 				<div className="line-clamp-2 w-screen max-w-96 text-balance text-center sm:py-5">
 					<span className="text-2xl font-semibold">
 						Arc 2.0 <br />
-						Community Hub!
+						Talent Hub!
 					</span>
 				</div>
 			</header>

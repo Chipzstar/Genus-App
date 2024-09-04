@@ -47,12 +47,12 @@ export const BusinessCard: FC<{
 			<div
 				onClick={() => router.push(`${PATHS.BUSINESS}/${slug}`)}
 				role="button"
-				className="relative w-36 overflow-clip"
+				className="relative h-36 w-36 overflow-clip"
 				style={{
 					borderRadius: "35px"
 				}}
 			>
-				<Image src={logoUrl ?? "/images/logo.png"} width="100%" />
+				<Image src={logoUrl ?? "/images/logo.png"} width="100%" height="100%" />
 				<div
 					className="absolute bottom-0 z-10 flex h-14 w-full flex-col bg-gray-400/50 px-3 pt-2 text-white"
 					style={{

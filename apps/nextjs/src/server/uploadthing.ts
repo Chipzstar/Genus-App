@@ -1,17 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import type { FileRouter } from "uploadthing/next-legacy";
 import { createUploadthing } from "uploadthing/next-legacy";
+import { UploadThingError } from "uploadthing/server";
 
 import { db, eq, user } from "@genus/db";
 
 const f = createUploadthing();
 
 function defineMiddleware(authMsg: string) {
-	return async ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
+	return async ({ req }: { req: NextApiRequest }) => {
 		const { userId } = getAuth(req);
 		console.log({ userId });
-		if (!userId) throw new Error(authMsg);
+		if (!userId) throw new UploadThingError(authMsg);
 		return { userId };
 	};
 }

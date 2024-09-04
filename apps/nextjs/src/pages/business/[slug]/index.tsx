@@ -92,9 +92,10 @@ const BusinessDetails = () => {
 									opacity: 0.5
 								}}
 							/>
+							<div className="profile-gradient h-40"></div>
 						</div>
-						<div className="absolute top-24 z-10 mb-4 flex h-28 w-28 items-center justify-center">
-							<div className="relative inline-block cursor-pointer">
+						<div className="absolute top-24 z-20 mb-4 flex w-full max-w-3xl flex-col items-center justify-center">
+							<div className="relative inline-block">
 								<Avatar className="h-28 w-28">
 									<AvatarImage className="relative" src={business.logoUrl} alt="Avatar Thumbnail" />
 									<AvatarFallback className="bg-neutral-300">
@@ -102,15 +103,14 @@ const BusinessDetails = () => {
 									</AvatarFallback>
 								</Avatar>
 							</div>
-						</div>
-
-						<div className="flex justify-center">
-							<Input
-								value={business.name}
-								readOnly
-								placeholder="Business Name"
-								className="mb-4 mt-20 w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
-							/>
+							<div className="flex justify-center">
+								<Input
+									value={business.name}
+									readOnly
+									placeholder="Business Name"
+									className="mb-4 w-full border-none bg-transparent text-center text-2xl font-bold text-white focus-visible:ring-0 md:text-3xl"
+								/>
+							</div>
 						</div>
 					</div>
 

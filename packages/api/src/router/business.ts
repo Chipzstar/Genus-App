@@ -111,11 +111,9 @@ export const businessRouter = createTRPCRouter({
 		.input(z.object({ ownerId: z.string(), ignoreSlug: z.string() }))
 		.query(async ({ ctx, input }) => {
 			try {
-				const dbBusinesses = ctx.db.query.business.findMany({
+				return ctx.db.query.business.findMany({
 					where: and(eq(business.ownerId, input.ownerId), ne(business.slug, input.ignoreSlug))
 				});
-				console.log(dbBusinesses);
-				return dbBusinesses;
 			} catch (err) {
 				console.error(err);
 			}

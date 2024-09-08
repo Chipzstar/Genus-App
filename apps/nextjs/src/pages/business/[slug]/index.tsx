@@ -52,8 +52,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const BusinessDetails = () => {
 	const router = useRouter();
 	const slug = router.query.slug as string;
-	const [owner, setOwner] = React.useState<string>("");
-	const [ownerAvatar, setOwnerAvatar] = React.useState<string>("");
 	const { isLoading, data: business } = trpc.business.getBusinessBySlug.useQuery(
 		{ slug },
 		{
@@ -71,6 +69,8 @@ const BusinessDetails = () => {
 		},
 		{ enabled: !!business }
 	);
+	const [owner, setOwner] = React.useState<string>(`${business?.owner.firstname} ${business?.owner.lastname}` ?? "");
+	const [ownerAvatar, setOwnerAvatar] = React.useState<string>(business?.owner.imageUrl ?? "");
 
 	if (isLoading) return <Loader />;
 

@@ -82,21 +82,6 @@ const ResourceDetails = () => {
 					</div>
 				</div>
 
-				<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-					<div role="button" className="h-8 w-8">
-						<Image src="/images/instagram.png" />
-					</div>
-					<div role="button" className="h-8 w-8">
-						<Image src="/images/tiktok.png" />
-					</div>
-					<div role="button" className="h-8 w-8">
-						<Image src="/images/youtube.png" />
-					</div>
-					<div role="button" className="h-8 w-8">
-						<Image src="/images/email.png" />
-					</div>
-				</section>
-
 				<div className="my-4 space-y-6 px-4">
 					<h2 className="text-xl font-semibold italic text-black">Posted By</h2>
 					<div className="flex items-center space-x-5">
@@ -127,7 +112,7 @@ const ResourceDetails = () => {
 					<div className="text-lg text-black">
 						{resource.url ? (
 							<Link href={resource.url} target="_blank">
-								{resource.url}
+								<span className="italic underline">{resource.url}</span>
 							</Link>
 						) : (
 							"N/A"

@@ -55,7 +55,7 @@ const Home = () => {
 	const { user: clerkUser } = useUser();
 	const { isLoading, data: user } = trpc.user.getCurrent.useQuery();
 	const { data: hobbyInterests } = trpc.user.getHobbyInterests.useQuery(user?.id, { enabled: !!user });
-	const { data: businesses } = trpc.business.all.useQuery();
+	const { data: businesses } = trpc.business.byOwner.useQuery();
 
 	const params = new URLSearchParams();
 
@@ -121,7 +121,7 @@ const Home = () => {
 						<section className="space-y-2 py-3 font-semibold text-black">
 							<h2 className="text-xl font-semibold md:text-2xl">Interests</h2>
 							<div className="grid grid-cols-3 gap-3 md:grid-cols-5">
-								{hobbyInterests?.map(({ hobbyInterest, index }) => (
+								{hobbyInterests?.map(({ hobbyInterest }, index) => (
 									<div
 										key={index}
 										role="button"

@@ -409,6 +409,7 @@ export const referral = pgTable(
 		};
 	}
 );
+
 export const business = pgTable(
 	"business",
 	{
@@ -430,6 +431,9 @@ export const business = pgTable(
 			.default(sql`'{}'::text[]`)
 			.array()
 			.notNull(),
+		tiktok: varchar("tiktok", { length: 191 }).default(""),
+		instagram: varchar("instagram", { length: 191 }).default(""),
+		linkedin: varchar("linkedin", { length: 191 }).default(""),
 		socialHandles: text("socialHandles")
 			.default(sql`'{}'::text[]`)
 			.array()
@@ -467,6 +471,7 @@ export const resource = pgTable(
 		};
 	}
 );
+
 export const skillset = pgTable(
 	"skillset",
 	{

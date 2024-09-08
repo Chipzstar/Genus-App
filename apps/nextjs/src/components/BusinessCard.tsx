@@ -19,7 +19,7 @@ export const BusinessCard: FC<{
 		onSuccess(data) {
 			console.log(data);
 			toast.success(`${data.name} is now ${data.isPublic ? "visible" : "hidden"}`);
-			void utils.business.all.invalidate();
+			void utils.business.invalidate();
 		}
 	});
 	const router = useRouter();

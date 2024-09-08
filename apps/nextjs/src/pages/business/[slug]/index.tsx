@@ -102,7 +102,7 @@ const BusinessDetails = () => {
 									</AvatarFallback>
 								</Avatar>
 							</div>
-							<div className="flex justify-center">
+							<div className="flex justify-center bg-gray-400/50">
 								<Input
 									value={business.name}
 									readOnly
@@ -114,18 +114,34 @@ const BusinessDetails = () => {
 					</div>
 
 					<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/instagram.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/tiktok.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/youtube.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/email.png" />
-						</div>
+						{business.instagram && (
+							<Link href={business.instagram} target="_blank">
+								<div className="h-8 w-8">
+									<Image src="/images/instagram.png" />
+								</div>
+							</Link>
+						)}
+						{business.tiktok && (
+							<Link href={business.tiktok} target="_blank">
+								<div className="h-8 w-8">
+									<Image src="/images/tiktok.png" />
+								</div>
+							</Link>
+						)}
+						{business.linkedin && (
+							<Link href={business.linkedin} target="_blank">
+								<div role="button" className="h-8 w-8">
+									<Image src="/images/youtube.png" />
+								</div>
+							</Link>
+						)}
+						{business.websiteUrl && (
+							<Link href={`mailto:${business.websiteUrl}`} target="_blank">
+								<div role="button" className="h-8 w-8">
+									<Image src="/images/email.png" />
+								</div>
+							</Link>
+						)}
 					</section>
 
 					<div className="my-4 space-y-6 px-4">

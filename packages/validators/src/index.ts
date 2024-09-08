@@ -187,6 +187,7 @@ export const CreateBusinessSchema = z.object({
 		.string()
 		.min(10, "Description must have at least 10 characters")
 		.nonempty({ message: "Description is required" }),
+	url: z.union([z.string().url(), z.string().email()]).optional(),
 	tags: z.array(z.string()).nonempty("At least one tag is required"),
 	admins: z.array(z.string()).nonempty("At least one admin is required"),
 	logoUrl: z.string().url(),

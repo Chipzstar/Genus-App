@@ -4,23 +4,23 @@ import type { z } from "zod";
 import { cn } from "@genus/ui";
 import { Input } from "@genus/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
-import { careerInterestsSchema } from "@genus/validators";
+import { hobbiesInterestsSchema } from "@genus/validators";
 
 import { formatString } from "~/utils";
 
-interface Props<T = z.infer<typeof careerInterestsSchema>> {
+interface Props<T = z.infer<typeof hobbiesInterestsSchema>> {
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	categories: T[] | readonly T[];
 	classNames?: string;
-	withFilter?: boolean;
+	filterValues?: (key: string) => void;
 }
 
-const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames, withFilter = true }: Props<T>) => (
+const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames, filterValues }: Props<T>) => (
 	<div className="flex items-center justify-between space-x-10 py-6">
 		<div
 			className={cn("flex sm:w-64", classNames, {
-				"sm:w-full": !withFilter
+				"sm:w-full": !filterValues
 			})}
 		>
 			<Input
@@ -30,19 +30,19 @@ const SearchFilterPanel = <T,>({ value, onChange, categories = [], classNames, w
 				placeholder="Search"
 			/>
 		</div>
-		{withFilter && (
+		{filterValues && (
 			<div className="flex sm:w-64">
-				<Select>
+				<Select onValueChange={value => filterValues(value)}>
 					<SelectTrigger className="rounded-3xl bg-neutral-100 font-semibold text-black">
 						<SelectValue defaultValue="all" placeholder="Filter" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							<SelectItem value="all">All types</SelectItem>
+							<SelectItem value="all">All tags</SelectItem>
 							{categories.map((item, index) => {
-								const parsed = careerInterestsSchema.safeParse(item);
+								const parsed = hobbiesInterestsSchema.safeParse(item);
 								const formattedItem = parsed.success
-									? formatString(parsed.data, "category")
+									? formatString(parsed.data)
 									: formatString(String(item), "default");
 								return (
 									<SelectItem key={index} value={String(item)}>

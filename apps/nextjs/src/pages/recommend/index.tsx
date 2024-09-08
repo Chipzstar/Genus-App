@@ -11,7 +11,6 @@ import { useDebounceValue } from "usehooks-ts";
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
 import { Card, CardContent } from "@genus/ui/card";
-import { career_interests } from "@genus/validators/constants";
 
 import { BackButton } from "~/components/BackButton";
 import SearchFilterPanel from "~/components/SearchFilterPanel";
@@ -56,9 +55,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const Resources = () => {
 	const [search, setSearch] = useState("");
+	const [categories, setCategories] = useState<string[]>([]);
 	const router = useRouter();
 	const { data } = trpc.resource.getResources.useQuery(undefined, {
 		onSuccess: data => {
+			setCategories([...new Set(data.flatMap(r => r.tags))].slice(0, 10));
 			setResources(data);
 		}
 	});
@@ -78,6 +79,13 @@ const Resources = () => {
 		[data]
 	);
 
+	const filterResources = useCallback(
+		(key: string) => {
+			setResources(data?.filter(r => r.tags.includes(key)) ?? []);
+		},
+		[data]
+	);
+
 	return (
 		<div className="page-container overflow-y-hidden">
 			<TopNav />
@@ -92,7 +100,12 @@ const Resources = () => {
 							<span className="text-base font-bold text-primary underline sm:text-2xl">Create Post</span>
 						</Link>
 					</nav>
-					<SearchFilterPanel value={search} onChange={handleChange} categories={career_interests} />
+					<SearchFilterPanel
+						value={search}
+						onChange={handleChange}
+						categories={categories}
+						filterValues={filterResources}
+					/>
 					<div className="genus-scrollbar flex max-h-120 flex-col space-y-3 overflow-y-scroll text-black sm:pr-2">
 						{debouncedResources.map((resource, index) => (
 							<Card

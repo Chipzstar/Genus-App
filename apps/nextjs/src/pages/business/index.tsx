@@ -8,7 +8,6 @@ import { useDebounceValue } from "usehooks-ts";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
-import { career_interests } from "@genus/validators/constants";
 
 import { BackButton } from "~/components/BackButton";
 import { BusinessCard } from "~/components/BusinessCard";
@@ -54,7 +53,13 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 const BusinessDirectory = () => {
 	const [search, setSearch] = useState("");
-	const { data } = trpc.business.all.useQuery();
+	const [categories, setCategories] = useState<string[]>([]);
+	const { data } = trpc.business.all.useQuery(undefined, {
+		onSuccess(data: Businesses) {
+			setCategories([...new Set(data.flatMap(r => r.tags))].slice(0, 10));
+			setBusinesses(data);
+		}
+	});
 	const [businesses, setBusinesses] = useState<Businesses>(data ?? []);
 	const [debouncedBusinesses] = useDebounceValue<Businesses>(businesses, 500);
 
@@ -67,6 +72,13 @@ const BusinessDirectory = () => {
 						return r.name.toLowerCase().includes(event.target.value.toLowerCase());
 					}) ?? prev
 			);
+		},
+		[data]
+	);
+
+	const filterBusinesses = useCallback(
+		(key: string) => {
+			setBusinesses(data?.filter(r => r.tags.includes(key)) ?? []);
 		},
 		[data]
 	);
@@ -92,8 +104,9 @@ const BusinessDirectory = () => {
 					<SearchFilterPanel
 						value={search}
 						onChange={handleChange}
-						categories={career_interests}
+						categories={categories}
 						classNames="sm:w-full"
+						filterValues={filterBusinesses}
 					/>
 					<div className="genus-scrollbar grid grid-cols-2 flex-col gap-4 overflow-y-scroll text-black sm:grid-cols-3 lg:grid-cols-4">
 						{debouncedBusinesses.map((business, index) => (

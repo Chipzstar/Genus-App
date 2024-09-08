@@ -5,6 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AvatarIcon } from "@nextui-org/react";
 import { useDropzone } from "@uploadthing/react";
+import { Plus } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -29,7 +30,7 @@ import Loader from "~/components/Loader";
 import { useFileContext } from "~/context/FileContext";
 import AppLayout from "~/layout/AppLayout";
 import TopNav from "~/layout/TopNav";
-import { getInitials } from "~/utils";
+import { getInitials, parseURL } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import { useUploadThing } from "~/utils/uploadthing";
 
@@ -53,6 +54,7 @@ const NewBusiness = () => {
 		defaultValues: {
 			title: "",
 			description: "",
+			url: undefined,
 			tags: [],
 			admins: [],
 			tiktok: "",
@@ -87,7 +89,7 @@ const NewBusiness = () => {
 		},
 		onUploadBegin: filename => {
 			console.log("UPLOAD HAS BEGUN", filename);
-			posthog.capture("Business Profile Upload Started", filename);
+			posthog.capture("Business Profile Upload Started", { filename });
 		}
 	});
 
@@ -209,18 +211,32 @@ const NewBusiness = () => {
 									</div>
 								))}
 							</div>
-							<Input
-								value={newAdmin}
-								onChange={e => setNewAdmin(e.target.value)}
-								placeholder="Add new admin"
-								className="mb-4 w-full border-none bg-transparent text-lg font-semibold text-gray-500 focus-visible:ring-0"
-								onKeyDown={e => {
-									if (e.key === "Enter") {
+							<div className="flex space-x-2">
+								<Input
+									value={newAdmin}
+									onChange={e => setNewAdmin(e.target.value)}
+									placeholder="Add new admin"
+									className="mb-4 w-fit border-none bg-transparent text-lg font-semibold text-gray-500 focus-visible:ring-0"
+									onKeyDown={e => {
+										if (e.key === "Enter" && newAdmin) {
+											form.setValue("admins", [...admins, newAdmin]);
+											setNewAdmin("");
+										}
+									}}
+								/>
+								<Button
+									variant="primary"
+									disabled={!newAdmin}
+									size="iconSmall"
+									className="rounded-lg"
+									onClick={() => {
 										form.setValue("admins", [...admins, newAdmin]);
 										setNewAdmin("");
-									}
-								}}
-							/>
+									}}
+								>
+									<Plus className="h-4 w-4" />
+								</Button>
+							</div>
 						</div>
 
 						<FormField
@@ -280,6 +296,27 @@ const NewBusiness = () => {
 						/>
 						<FormField
 							control={form.control}
+							name="url"
+							render={({ field }) => (
+								<FormItem className="mb-4 ">
+									<FormLabel htmlFor="url" className="text-lg font-semibold">
+										Business Email / URL
+									</FormLabel>
+									<Textarea
+										value={field.value}
+										onChange={e =>
+											field.onChange(e.target.value === "" ? undefined : e.target.value)
+										}
+										id="url"
+										placeholder="Email / URL"
+										className="mt-2 w-full border-gray-900 bg-transparent"
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="tiktok"
 							render={({ field }) => (
 								<FormItem className="mb-4 ">
@@ -288,9 +325,9 @@ const NewBusiness = () => {
 									</Label>
 									<Input
 										value={field.value}
-										onChange={e => field.onChange(e.target.value)}
+										onChange={e => field.onChange(parseURL(e.target.value))}
 										id="social-media"
-										placeholder="@business"
+										placeholder="tiktok.com/@username"
 										className="mt-2 w-full border-gray-900 bg-transparent text-black"
 									/>
 								</FormItem>
@@ -306,9 +343,9 @@ const NewBusiness = () => {
 									</Label>
 									<Input
 										value={field.value}
-										onChange={e => field.onChange(e.target.value)}
+										onChange={e => field.onChange(parseURL(e.target.value))}
 										id="social-media"
-										placeholder="@business"
+										placeholder="instagram.com/@username"
 										className="mt-2 w-full border-gray-900 bg-transparent text-black"
 									/>
 								</FormItem>
@@ -324,9 +361,9 @@ const NewBusiness = () => {
 									</Label>
 									<Input
 										value={field.value}
-										onChange={e => field.onChange(e.target.value)}
+										onChange={e => field.onChange(parseURL(e.target.value))}
 										id="social-media"
-										placeholder="@business"
+										placeholder="linkedin.com/in/@username"
 										className="mt-2 w-full border-gray-900 bg-transparent text-black"
 									/>
 								</FormItem>

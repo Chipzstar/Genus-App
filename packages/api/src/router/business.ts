@@ -11,7 +11,22 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const businessRouter = createTRPCRouter({
 	all: protectedProcedure.query(async ({ ctx }) => {
 		try {
-			return (await ctx.db.query.business.findMany()) ?? [];
+			return (
+				(await ctx.db.query.business.findMany({
+					where: eq(business.isPublic, true)
+				})) ?? []
+			);
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}),
+	byOwner: protectedProcedure.input(z.object({ userId: z.string() }).optional()).query(async ({ ctx, input }) => {
+		try {
+			const userId = input ? input.userId : ctx.auth.userId;
+			return await ctx.db.query.business.findMany({
+				where: eq(business.ownerId, userId)
+			});
 		} catch (err) {
 			console.error(err);
 			return [];
@@ -41,6 +56,7 @@ export const businessRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
 			}
 			console.log(input);
+			const other = input.other?.split(",") ?? [];
 			const dbBusiness = await ctx.db
 				.insert(business)
 				.values({
@@ -51,7 +67,11 @@ export const businessRouter = createTRPCRouter({
 					description: input.description,
 					tags: input.tags,
 					logoUrl: input.logoUrl,
-					socialHandles: [input.linkedIn, input.twitter, input.instagram, input.other],
+					url: input.url,
+					tiktok: input?.tiktok,
+					instagram: input?.instagram,
+					linkedIn: input?.linkedIn,
+					socialHandles: [input.linkedIn, input.tiktok, input.instagram, ...other],
 					admins: input.admins.slice(1) ?? []
 				})
 				.returning();

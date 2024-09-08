@@ -52,8 +52,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 const ResourceDetails = () => {
 	const router = useRouter();
 	const resourceId = router.query.id as string;
-	const [author, setAuthor] = React.useState<string>("");
-	const [authorAvatar, setAuthorAvatar] = React.useState<string>("");
 	const { isLoading, data: resource } = trpc.resource.getResourceById.useQuery(resourceId, {
 		onSuccess: data => {
 			const { firstname, lastname, imageUrl } = data.author;
@@ -61,6 +59,10 @@ const ResourceDetails = () => {
 			if (imageUrl) setAuthorAvatar(imageUrl);
 		}
 	});
+	const [author, setAuthor] = React.useState<string>(
+		`${resource?.author.firstname} ${resource?.author.lastname}` ?? ""
+	);
+	const [authorAvatar, setAuthorAvatar] = React.useState<string>(resource?.author.imageUrl ?? "");
 
 	if (isLoading) return <Loader />;
 

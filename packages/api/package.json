@@ -10,15 +10,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@axiomhq/winston": "1.0.0-rc.2",
     "@genus/db": "workspace:^0.1.0",
     "@genus/validators": "workspace:^0.1.0",
     "@trpc/client": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "dayjs": "^1.11.10",
-    "posthog-node": "^3.6.3",
+    "posthog-node": "^4.2.0",
     "superjson": "^1.9.1",
-    "winston": "^3.11.0",
     "zod": "^3.18.0"
   },
   "devDependencies": {

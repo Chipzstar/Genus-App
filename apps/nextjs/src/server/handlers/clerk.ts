@@ -146,11 +146,13 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id!));
 		if (user) {
-			// log.info("-----------------------------------------------");
-			// log.debug("User deleted!!", dbUser);
-			// log.info("-----------------------------------------------");
+			posthog.capture({
+				distinctId: dbUser.email,
+				event: "User Deleted",
+				properties: dbUser
+			});
 		}
-		return;
+		return dbUser;
 	} catch (err: any) {
 		console.error(err);
 		return err?.meta ? err.meta.cause : err.message;

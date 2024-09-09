@@ -1,18 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import type { FileRouter } from "uploadthing/next-legacy";
 import { createUploadthing } from "uploadthing/next-legacy";
-import { UTApi } from "uploadthing/server";
+import { UploadThingError } from "uploadthing/server";
 
 import { db, eq, user } from "@genus/db";
 
-export const utapi = new UTApi();
 const f = createUploadthing();
 
 function defineMiddleware(authMsg: string) {
-	return async ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => {
+	return async ({ req }: { req: NextApiRequest }) => {
 		const { userId } = getAuth(req);
-		if (!userId) throw new Error(authMsg);
+		console.log({ userId });
+		if (!userId) throw new UploadThingError(authMsg);
 		return { userId };
 	};
 }
@@ -70,9 +70,20 @@ export const ourFileRouter = {
 				imageKey: file.key,
 				imageUrl: file.url
 			};
+		}),
+	businessFileUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 1 } })
+		.middleware(defineMiddleware("This user is not logged in."))
+		.onUploadComplete(async ({ metadata, file }) => {
+			// This code RUNS ON YOUR SERVER after upload
+			console.log("Upload complete for userId:", metadata.userId);
+			console.log("file key", file.key);
+			console.log("file url", file.url);
+			return { uploadedBy: metadata?.userId ?? "anonymous" };
 		})
 } as FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
 
 export type ProfileUploader = OurFileRouter["profileUploader"];
+
+export type BusinessFileUploader = OurFileRouter["businessFileUploader"];

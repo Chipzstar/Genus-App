@@ -9,62 +9,39 @@ import { toast } from "sonner";
 import type { z } from "zod";
 
 import { Button } from "@genus/ui/button";
-import { Checkbox } from "@genus/ui/checkbox";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@genus/ui/form";
+import { Form, FormField, FormItem, FormLabel } from "@genus/ui/form";
 import type { Option } from "@genus/ui/multi-select";
 import { MultiSelect } from "@genus/ui/multi-select";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@genus/ui/select";
 import { useStepper } from "@genus/ui/stepper";
 import { signupStep3Schema } from "@genus/validators";
-import {
-	career_interests,
-	companies,
-	experience_types,
-	skillsets,
-	working_environment_types
-} from "@genus/validators/constants";
-import { decryptString } from "@genus/validators/helpers";
+import { hobbies } from "@genus/validators/constants";
+import { decryptString, prettyPrint } from "@genus/validators/helpers";
 
 import { env } from "~/env";
-import WaitingList from "~/modals/WaitingList";
 import { formatString, PATHS } from "~/utils";
 import { trpc } from "~/utils/trpc";
 import type { UserState } from "~/utils/types";
 
-const company_options: Option[] = companies.map(company => ({
-	label: company
+const hobby_interest_options: Option[] = hobbies.map(hobby => ({
+	label: hobby
 		.split("_")
 		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" "),
-	value: company
-}));
-
-const skillset_options: Option[] = skillsets.map(skillset => ({
-	label: skillset
-		.split("_")
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" "),
-	value: skillset
+	value: hobby
 }));
 
 const { NEXT_PUBLIC_AXIOM_TOKEN } = env;
 
 const Step3: FC = () => {
 	const { query, replace } = useRouter();
-	const [open, setOpen] = useState(false);
 	const { isLoaded, signIn, setActive } = useSignIn();
 	const { context } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const { mutateAsync: updateUser } = trpc.auth.updateUserStep3.useMutation();
-	const { mutateAsync: checkUserActive } = trpc.auth.checkUserActive.useMutation();
 
 	const form = useForm<z.infer<typeof signupStep3Schema>>({
 		defaultValues: {
-			career_interests: [],
-			company_interests: [],
-			skillsets: [],
-			work_environment: undefined,
-			experience_type: undefined
+			hobbies_interests: []
 		},
 		resolver: zodResolver(signupStep3Schema)
 	});
@@ -83,11 +60,11 @@ const Step3: FC = () => {
 				return null;
 			}
 			// check if the user is active
-			if (!(await checkUserActive({ email }))) {
+			/*if (!(await checkUserActive({ email }))) {
 				setOpen(true);
 				setTimeout(() => void replace(PATHS.LOGIN), 1500);
 				return null;
-			}
+			}*/
 			const result = await signIn.create({
 				identifier: email,
 				password
@@ -117,16 +94,15 @@ const Step3: FC = () => {
 		async (values: z.infer<typeof signupStep3Schema>) => {
 			// ✅ This will be type-safe and validated.
 			const email = context?.email ?? query.email;
+			console.log(email);
 			setLoading(true);
 			try {
 				const user = await updateUser({
 					...values,
 					email
 				});
-				setOpen(true);
-				setTimeout(() => void replace(PATHS.LOGIN), 5000);
-				return null;
-				//await handleLogin(email, decryptString(user.tempPassword, NEXT_PUBLIC_AXIOM_TOKEN));
+				prettyPrint(user);
+				await handleLogin(email, decryptString(user.tempPassword, NEXT_PUBLIC_AXIOM_TOKEN));
 			} catch (error: any) {
 				console.log(error);
 				toast.error("Uh oh! Something went wrong.", {
@@ -141,76 +117,71 @@ const Step3: FC = () => {
 
 	return (
 		<>
-			<WaitingList open={open} onClose={() => setOpen(false)} />
-			<div className="flex w-full flex-col space-y-12 md:w-1/2">
+			<div className="flex h-full w-full flex-col space-y-12 md:w-1/2 md:justify-center">
 				<div className="mt-12 text-balance text-center font-semibold sm:mt-0 sm:gap-y-4">
 					<span className="text-2.5xl sm:text-4xl sm:leading-tight">
-						Career experiences personalised for <span className="underline">you.</span>
+						Third-spaces and communities for <span className="underline">you.</span>
 					</span>
 				</div>
 				<Form {...form}>
 					<form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
-						<section className="grid w-full grid-cols-1 gap-x-12 gap-y-4 sm:gap-y-8 lg:grid-cols-2">
-							<div className="mx-auto lg:col-span-2">
-								<FormField
-									control={form.control}
-									name="career_interests"
-									render={() => (
-										<FormItem>
-											<FormLabel>Career interests</FormLabel>
-											<FormDescription className="text-neutral-600">
-												Select all that apply
-											</FormDescription>
-											<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-												{career_interests.map((item, index) => (
-													<FormField
-														key={index}
-														control={form.control}
-														name="career_interests"
-														render={({ field }) => {
+						<section className="grid w-full grid-cols-1 gap-x-12 gap-y-4 sm:gap-y-8">
+							<FormField
+								control={form.control}
+								name="hobbies_interests"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Hobbies & Interests</FormLabel>
+										<div className="flex flex-col items-center space-y-7">
+											{/*{fields.map((field, index) => (
+												<Select
+													key={field.id}
+													value={values[index]}
+													onValueChange={val => {
+														append(val);
+													}}
+												>
+													<FormControl>
+														<SelectTrigger className="rounded-xl">
+															<SelectValue placeholder="Select your hobby" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent>
+														{hobby_interest_options?.map((hobby, index) => {
+															if (hobby)
+																return (
+																	<SelectItem key={index} value={hobby.value}>
+																		{formatString(hobby.label)}
+																	</SelectItem>
+																);
+														})}
+													</SelectContent>
+												</Select>
+											))}
+											<Select
+												value={values[values.length]}
+												onValueChange={val => {
+													console.log(val);
+													append(val);
+												}}
+											>
+												<FormControl>
+													<SelectTrigger className="rounded-xl">
+														<SelectValue placeholder="Add your hobby" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{hobbies?.map((hobby, index) => {
+														if (hobby)
 															return (
-																<FormItem
-																	key={index}
-																	className="flex flex-row items-start space-x-3 space-y-0"
-																>
-																	<FormControl>
-																		<Checkbox
-																			checked={field.value?.includes(item)}
-																			onCheckedChange={(checked: boolean) => {
-																				return checked
-																					? field.onChange([
-																							...field.value,
-																							item
-																						])
-																					: field.onChange(
-																							field.value?.filter(
-																								value => value !== item
-																							)
-																						);
-																			}}
-																		/>
-																	</FormControl>
-																	<FormLabel className="whitespace-nowrap font-normal">
-																		{formatString(item)}
-																	</FormLabel>
-																</FormItem>
+																<SelectItem key={index} value={hobby}>
+																	{formatString(hobby)}
+																</SelectItem>
 															);
-														}}
-													/>
-												))}
-											</div>
-											<FormMessage className="text-red-500/75" />
-										</FormItem>
-									)}
-								/>
-							</div>
-							<FormField
-								control={form.control}
-								name="company_interests"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Company interests</FormLabel>
-										<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+													})}
+												</SelectContent>
+											</Select>
+											*/}
 											<MultiSelect
 												value={field.value.map(value => ({
 													label: formatString(value),
@@ -218,8 +189,8 @@ const Step3: FC = () => {
 												}))}
 												maxSelected={5}
 												onChange={options => field.onChange(options.map(o => o.value))}
-												defaultOptions={company_options}
-												placeholder="Select up to 5 companies"
+												defaultOptions={hobby_interest_options}
+												placeholder="Select up to 5 hobbies & interests"
 												emptyIndicator={
 													<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
 														no results found.
@@ -227,86 +198,11 @@ const Step3: FC = () => {
 												}
 											/>
 										</div>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="work_environment"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Preferred working environment</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
-											<FormControl>
-												<SelectTrigger className="rounded-xl">
-													<SelectValue placeholder="Select your work environment type" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												{working_environment_types.map(type => (
-													<SelectItem key={type} value={type}>
-														{formatString(type.toLowerCase())}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="skillsets"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Skillsets</FormLabel>
-										<div className="space-y-2 sm:flex sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-											<MultiSelect
-												value={field.value.map(value => ({
-													label: formatString(value),
-													value
-												}))}
-												maxSelected={5}
-												onChange={options => field.onChange(options.map(o => o.value))}
-												defaultOptions={skillset_options}
-												placeholder="Select up to 5 skills"
-												emptyIndicator={
-													<p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-														no results found.
-													</p>
-												}
-											/>
-										</div>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="experience_type"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Experience Type</FormLabel>
-										<Select onValueChange={field.onChange} defaultValue={field.value}>
-											<FormControl>
-												<SelectTrigger className="rounded-xl">
-													<SelectValue placeholder="Select your experience type" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												{experience_types.map(type => (
-													<SelectItem key={type} value={type}>
-														{formatString(type.toLowerCase())}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
 									</FormItem>
 								)}
 							/>
 						</section>
 						<div className="flex flex-col items-center space-y-5 pt-6 sm:pt-12">
-							<div className="text-pretty text-center text-2xl font-semibold sm:text-3xl sm:leading-tight">
-								<span>Share your ANONYMOUS review</span>
-							</div>
 							<div>
 								<Button
 									loading={loading}
@@ -316,7 +212,7 @@ const Step3: FC = () => {
 									radius="xl"
 									className="text-lg font-semibold sm:text-xl"
 								>
-									Join our waiting list!
+									Continue
 								</Button>
 							</div>
 						</div>

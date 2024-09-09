@@ -116,20 +116,22 @@ const Login: NextPageWithAuthLayout = () => {
 	);
 
 	return (
-		<div className="flex grow flex-col items-center justify-center gap-12 px-4 py-8 sm:py-0">
+		<div className="flex grow flex-col items-center justify-center gap-y-8 px-4 py-8 sm:gap-y-3 sm:py-0">
 			<header className="relative flex w-2/3 flex-col items-center space-y-3 sm:min-h-[250px] sm:w-1/2 sm:space-y-0 lg:w-2/3">
-				<span className="text-2xl font-semibold sm:text-3xl">Welcome to</span>
+				<img src="/images/powered-by-genus-white.png" alt="powered-by-genus" className="w-32" />
+				<span className="text-2xl font-semibold sm:pb-3 sm:text-3xl">Welcome to the</span>
 				<img
-					src="/images/white-logo.png"
+					src="/images/arc2.0-avatar.png"
 					alt="genus-white"
-					className="mt-0.5 sm:h-48 sm:w-96"
+					className="mt-0.5 h-36 w-36 sm:h-48 sm:w-96"
 					style={{
 						objectFit: "contain"
 					}}
 				/>
-				<div className="line-clamp-2 w-screen max-w-96 text-balance py-5 text-center">
-					<span className="text-lg font-semibold sm:text-xl">
-						ONE step away from the <span className="underline">REAL</span> internship insights
+				<div className="line-clamp-2 w-screen max-w-96 text-balance text-center sm:py-5">
+					<span className="text-2xl font-semibold">
+						Arc 2.0 <br />
+						Talent Hub!
 					</span>
 				</div>
 			</header>

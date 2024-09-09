@@ -37,8 +37,9 @@ const Signup: NextPageWithAuthLayout = () => {
 	] satisfies StepItems[];
 
 	return (
-		<div className="flex grow flex-col items-center sm:gap-y-8">
+		<div className="md:h-container flex grow flex-col items-center sm:gap-y-8">
 			<Stepper
+				orientation="horizontal"
 				onClickStep={(step, setStep) => (NODE_ENV === "development" ? setStep(step) : undefined)}
 				initialStep={initialStep}
 				steps={steps}

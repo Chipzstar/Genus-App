@@ -1,18 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
+import { UTApi } from "uploadthing/server";
 
 import { prettyPrint } from "@genus/validators/helpers";
 
 import { cors, runMiddleware } from "~/pages/api/cors";
-import { utapi } from "~/server/uploadthing";
+
+const utapi = new UTApi();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
 		try {
 			await runMiddleware(req, res, cors);
 			const results = await utapi.listFiles({});
-			for (const result of results) {
-				prettyPrint(result);
-			}
+			prettyPrint(results);
 			res.status(400).json({ results });
 		} catch (error) {
 			console.error(error);

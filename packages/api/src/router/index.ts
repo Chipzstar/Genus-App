@@ -1,10 +1,12 @@
 import { createTRPCRouter } from "../trpc";
 import { authRouter } from "./auth";
+import { businessRouter } from "./business";
 import { commentRouter } from "./comment";
 import { companyRouter } from "./company";
 import { groupRouter } from "./group";
 import { messageRouter } from "./message";
 import { reactionRouter } from "./reaction";
+import { resourceRouter } from "./resource";
 import { reviewRouter } from "./review";
 import { threadRouter } from "./thread";
 import { userRouter } from "./user";
@@ -18,7 +20,9 @@ export const appRouter = createTRPCRouter({
 	comment: commentRouter,
 	reaction: reactionRouter,
 	company: companyRouter,
-	review: reviewRouter
+	review: reviewRouter,
+	business: businessRouter,
+	resource: resourceRouter
 });
 
 // export type definition of API

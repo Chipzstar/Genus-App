@@ -1,6 +1,5 @@
-import {withAxiom} from 'next-axiom'
-import createJiti from "jiti";
 import { fileURLToPath } from "node:url";
+import createJiti from "jiti";
 
 // @ts-check
 /**
@@ -13,33 +12,33 @@ createJiti(fileURLToPath(import.meta.url))("./src/env");
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: true,
-  swcMinify: true,
-  transpilePackages: ["@genus/api", "@genus/db", "@genus/ui", "genus/validators", "genus/email"],
-  // We already do linting on GH actions
-  eslint: {
-    ignoreDuringBuilds: !!process.env.CI,
-  },
-  typescript: {
-    ignoreBuildErrors: !!process.env.CI,
-  },
-  images: {
-    dangerouslyAllowSVG: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'utfs.io'
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.clerk.com'
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io'
-      }
-    ],
-  },
+	reactStrictMode: true,
+	swcMinify: true,
+	transpilePackages: ["@genus/api", "@genus/db", "@genus/ui", "genus/validators", "genus/email"],
+	// We already do linting on GH actions
+	eslint: {
+		ignoreDuringBuilds: !!process.env.CI
+	},
+	typescript: {
+		ignoreBuildErrors: !!process.env.CI
+	},
+	images: {
+		dangerouslyAllowSVG: true,
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "utfs.io"
+			},
+			{
+				protocol: "https",
+				hostname: "img.clerk.com"
+			},
+			{
+				protocol: "https",
+				hostname: "cdn.sanity.io"
+			}
+		]
+	}
 };
 
-export default withAxiom(config);
+export default config;

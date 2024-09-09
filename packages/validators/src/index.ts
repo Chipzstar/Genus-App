@@ -8,8 +8,10 @@ import {
 	ethnicities,
 	experience_types,
 	genders,
+	hobbies,
 	industries,
 	profile_types,
+	role_sectors,
 	skillsets,
 	universities,
 	university_years,
@@ -20,9 +22,13 @@ export const gendersSchema = z.enum(genders);
 
 export const ethnicitiesSchema = z.enum(ethnicities);
 
+export const roleSectorsSchema = z.enum(role_sectors);
+
 export const industrySchema = z.enum(industries);
 
 export const careerInterestsSchema = z.enum(career_interests);
+
+export const hobbiesInterestsSchema = z.enum(hobbies);
 
 export type Industry = z.infer<typeof industrySchema>;
 
@@ -88,20 +94,20 @@ export const signupBaseSchema = z.object({
 	confirmPassword: z.string(),
 	gender: gendersSchema,
 	ethnicity: ethnicitiesSchema,
-	university: universitiesSchema,
-	broad_degree_course: broadCourseCategorySchema,
-	degree_name: z
-		.string({ required_error: "Please enter your degree." })
-		.min(2, "Degree name must be at least 2 characters"),
-	current_year: currentYearSchema,
-	completion_year: completionYearSchema,
-	career_interests: z
-		.array(careerInterestsSchema)
-		.nonempty({ message: "Please select at least one career interest" }),
-	company_interests: z.array(companiesSchema).nonempty({ message: "Please select at least one company" }),
-	experience_type: experienceTypeSchema,
-	work_environment: workEnvironmentSchema,
-	skillsets: z.array(skillsetsSchema).nonempty({ message: "Please select at least one skillset" })
+	age: z.union([
+		z
+			.number()
+			.min(18, { message: "You must be at least 18 years old." })
+			.max(60, { message: "You must be at most 60 years old." }),
+		z
+			.string()
+			.transform(val => parseInt(val, 10))
+			.refine(val => !isNaN(val) && val >= 18 && val <= 60, {
+				message: "You must be between 18 and 60 years old."
+			})
+	]),
+	role_sector: roleSectorsSchema,
+	hobbies_interests: z.array(hobbiesInterestsSchema).nonempty({ message: "Please select at least one hobby" })
 });
 
 export const signupStep1Schema = signupBaseSchema
@@ -126,19 +132,12 @@ export const signupStep1Schema = signupBaseSchema
 export const signupStep2Schema = signupBaseSchema.pick({
 	gender: true,
 	ethnicity: true,
-	university: true,
-	broad_degree_course: true,
-	degree_name: true,
-	current_year: true,
-	completion_year: true
+	age: true,
+	role_sector: true
 });
 
 export const signupStep3Schema = signupBaseSchema.pick({
-	career_interests: true,
-	company_interests: true,
-	work_environment: true,
-	skillsets: true,
-	experience_type: true
+	hobbies_interests: true
 });
 
 export const forgotPasswordSchema = z.object({
@@ -170,8 +169,8 @@ export const profileSchema = signupBaseSchema.omit({
 	email: true,
 	password: true,
 	confirmPassword: true,
-	gender: true,
-	ethnicity: true
+	ethnicity: true,
+	username: true
 });
 
 export const referralEmailSchema = z.object({
@@ -181,3 +180,30 @@ export const referralEmailSchema = z.object({
 	referrerName: z.string(),
 	referrerEmail: z.string().email()
 });
+
+export const CreateBusinessSchema = z.object({
+	title: z.string().min(1, "Business name is required"),
+	description: z
+		.string()
+		.min(10, "Description must have at least 10 characters")
+		.nonempty({ message: "Description is required" }),
+	url: z.union([z.string().url(), z.string().email()]).optional(),
+	tags: z.array(z.string()).nonempty("At least one tag is required"),
+	admins: z.array(z.string()).nonempty("At least one admin is required"),
+	logoUrl: z.string().url(),
+	tiktok: z.string().optional(),
+	instagram: z.string().optional(),
+	linkedIn: z.string().optional(),
+	other: z.string().optional()
+});
+
+export const CreateResourceSchema = z.object({
+	title: z.string().min(1, "Resource title is required"),
+	description: z.string().min(0, "Description must have at least 10 characters").optional().nullable(),
+	url: z.string().url().optional(),
+	tags: z.array(z.string()).nonempty("At least one tag is required")
+});
+
+export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
+
+export type CreateResource = z.infer<typeof CreateResourceSchema>;

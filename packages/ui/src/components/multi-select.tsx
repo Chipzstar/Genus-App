@@ -105,7 +105,7 @@ function transToGroupOption(options: Option[], groupBy?: string) {
 		if (!groupOption[key]) {
 			groupOption[key] = [];
 		}
-		groupOption[key]!.push(option);
+		groupOption[key].push(option);
 	});
 	return groupOption;
 }
@@ -342,7 +342,7 @@ const MultiSelect = React.forwardRef<MultipleSelectorRef, MultipleSelectorProps>
 			>
 				<div
 					className={cn(
-						"group rounded-xl border border-input bg-[#4E809B] px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+						"group rounded-lg border border-input bg-[#4E809B] px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
 						className
 					)}
 				>

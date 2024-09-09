@@ -1,13 +1,14 @@
-import type { ReactNode} from "react";
+import type { ReactNode } from "react";
 import React, { useContext } from "react";
-import { toast } from 'sonner'
+import { toast } from "sonner";
 
 interface IFileContext {
 	files: File[];
+	setFiles: (files: File[]) => void;
 	updateFile: (updatedFiles: File[]) => void;
 }
 
-const EIGHT_MB = 8 * 1024 * 1024
+const EIGHT_MB = 8 * 1024 * 1024;
 
 const FileContext = React.createContext<IFileContext | undefined>(undefined);
 
@@ -20,7 +21,8 @@ export const FileProvider: React.FC<IFileProviderProps> = ({ children }) => {
 
 	const updateFile = (updatedFiles: File[]) => {
 		for (const file of updatedFiles) {
-			if(file.size >= EIGHT_MB) { // file size is greater than 8MB
+			if (file.size >= EIGHT_MB) {
+				// file size is greater than 8MB
 				toast.error("File Size Error", {
 					description: "The file size should not exceed 8MB.",
 					duration: 5000,
@@ -32,7 +34,7 @@ export const FileProvider: React.FC<IFileProviderProps> = ({ children }) => {
 		setFiles(updatedFiles);
 	};
 
-	return <FileContext.Provider value={{ files, updateFile }}>{children}</FileContext.Provider>;
+	return <FileContext.Provider value={{ files, setFiles, updateFile }}>{children}</FileContext.Provider>;
 };
 
 export const useFileContext = (): IFileContext => {

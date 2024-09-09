@@ -2,7 +2,7 @@ import { format, formatDistance } from "date-fns";
 import posthog from "posthog-js";
 import { z } from "zod";
 
-import type { careerInterestsSchema, Industry } from "@genus/validators";
+import type { Industry } from "@genus/validators";
 
 import type {
 	AddTempPasswordInput,
@@ -22,7 +22,13 @@ export const PATHS = {
 	PROFILE: "/profile",
 	NOTIFICATIONS: "/notifications",
 	GROUPS: "/groups",
-	RESOURCES: "/resources"
+	RESOURCES: "/resources",
+	CHURCH: "/church",
+	CREATE_BUSINESS: "/create/business",
+	MEMBERS: "/members",
+	BUSINESS: "/business",
+	RECOMMEND: "/recommend",
+	CREATE_RESOURCE: "/create/resource"
 };
 
 export type FormatType = "default" | "category";
@@ -71,6 +77,21 @@ export function sanitize(str: string) {
 
 export function timeout(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const parseURL = (url: string) => {
+	if (url && !url.includes("https://") && !url.includes("http://")) {
+		return `https://${url}`;
+	}
+
+	return url;
+};
+
+export function getInitials(str: string) {
+	return str
+		.split(" ")
+		.map(s => s[0])
+		.join("");
 }
 
 export function formatTimestamp(timestamp: string | Date, method = "default") {

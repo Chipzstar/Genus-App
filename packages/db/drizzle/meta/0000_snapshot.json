@@ -1,11 +1,11 @@
 {
-  "id": "0a2a3f61-bc98-4268-a630-78eb27edd19c",
+  "id": "30e6f313-87b3-468e-ae34-0a9b0be19e7e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
-    "public.careerInterest": {
-      "name": "careerInterest",
+    "public.business": {
+      "name": "business",
       "schema": "",
       "columns": {
         "id": {
@@ -14,17 +14,126 @@
           "primaryKey": true,
           "notNull": true
         },
-        "slug": {
-          "name": "slug",
-          "type": "careerinterest_slug",
-          "typeSchema": "public",
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "businessId": {
+          "name": "businessId",
+          "type": "varchar(191)",
           "primaryKey": false,
           "notNull": true
+        },
+        "ownerId": {
+          "name": "ownerId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "logoUrl": {
+          "name": "logoUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "websiteUrl": {
+          "name": "websiteUrl",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admins": {
+          "name": "admins",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tiktok": {
+          "name": "tiktok",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "instagram": {
+          "name": "instagram",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "linkedin": {
+          "name": "linkedin",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "socialHandles": {
+          "name": "socialHandles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isPublic": {
+          "name": "isPublic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "isDeleted": {
+          "name": "isDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {
-        "idx_49236_careerInterest_slug_key": {
-          "name": "idx_49236_careerInterest_slug_key",
+        "businessIdIdx": {
+          "name": "businessIdIdx",
+          "columns": [
+            "businessId"
+          ],
+          "isUnique": true
+        },
+        "businessSlugIdx": {
+          "name": "businessSlugIdx",
           "columns": [
             "slug"
           ],
@@ -35,34 +144,34 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.careerInterestToUser": {
-      "name": "careerInterestToUser",
+    "public.businessToUser": {
+      "name": "businessToUser",
       "schema": "",
       "columns": {
-        "careerInterestId": {
-          "name": "careerInterestId",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
         "userId": {
           "name": "userId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "businessId": {
+          "name": "businessId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "business_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MEMBER'"
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "careerInterestUserId": {
-          "name": "careerInterestUserId",
-          "columns": [
-            "careerInterestId",
-            "userId"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.comment": {
@@ -191,13 +300,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "category": {
-          "name": "category",
-          "type": "review_industry",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
         "description": {
           "name": "description",
           "type": "varchar(191)",
@@ -222,6 +324,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "category": {
+          "name": "category",
+          "type": "company_industry",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {
@@ -398,6 +507,73 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.hobbyInterest": {
+      "name": "hobbyInterest",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "hobbies_interests",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "slug_key": {
+          "name": "slug_key",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.hobbyInterestToUser": {
+      "name": "hobbyInterestToUser",
+      "schema": "",
+      "columns": {
+        "hobbyInterestId": {
+          "name": "hobbyInterestId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "hobbyInterestUserId": {
+          "name": "hobbyInterestUserId",
+          "columns": [
+            "hobbyInterestId",
+            "userId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.message": {
@@ -662,6 +838,80 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.resource": {
+      "name": "resource",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "resourceId": {
+          "name": "resourceId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "resourceIdIdx": {
+          "name": "resourceIdIdx",
+          "columns": [
+            "resourceId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.review": {
       "name": "review",
       "schema": "",
@@ -701,13 +951,6 @@
         "companyName": {
           "name": "companyName",
           "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "industry": {
-          "name": "industry",
-          "type": "review_industry",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -807,36 +1050,31 @@
           "name": "topSkills",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::text[]"
+          "notNull": true
         },
         "pros": {
           "name": "pros",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::text[]"
+          "notNull": true
         },
         "cons": {
           "name": "cons",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::text[]"
+          "notNull": true
         },
         "interviewQuestions": {
           "name": "interviewQuestions",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::text[]"
+          "notNull": true
         },
         "topResources": {
           "name": "topResources",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::text[]"
+          "notNull": true
         },
         "isDeleted": {
           "name": "isDeleted",
@@ -844,6 +1082,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "industry": {
+          "name": "industry",
+          "type": "company_industry",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {
@@ -1010,93 +1255,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.typeformWebhook": {
-      "name": "typeformWebhook",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "eventId": {
-          "name": "eventId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "eventType": {
-          "name": "eventType",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "typeformId": {
-          "name": "typeformId",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "num_questions": {
-          "name": "num_questions",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "num_answers": {
-          "name": "num_answers",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "url": {
-          "name": "url",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "isDeleted": {
-          "name": "isDeleted",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        }
-      },
-      "indexes": {
-        "typeFormWebhookEventIdIdx": {
-          "name": "typeFormWebhookEventIdIdx",
-          "columns": [
-            "eventId"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.user": {
       "name": "user",
       "schema": "",
@@ -1133,13 +1291,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "username": {
-          "name": "username",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
         "firstname": {
           "name": "firstname",
           "type": "varchar(191)",
@@ -1168,9 +1319,24 @@
           "notNull": false,
           "default": "'african'"
         },
-        "university": {
-          "name": "university",
-          "type": "varchar(191)",
+        "age": {
+          "name": "age",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 18
+        },
+        "roleSector": {
+          "name": "roleSector",
+          "type": "role_sector",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'robotics'"
+        },
+        "completionYear": {
+          "name": "completionYear",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -1180,33 +1346,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "university": {
+          "name": "university",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "degreeName": {
           "name": "degreeName",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "currentYear": {
-          "name": "currentYear",
-          "type": "user_currentyear",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "completionYear": {
-          "name": "completionYear",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "experienceType": {
-          "name": "experienceType",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "workPreference": {
-          "name": "workPreference",
           "type": "varchar(191)",
           "primaryKey": false,
           "notNull": false
@@ -1237,6 +1384,19 @@
           "notNull": true,
           "default": "'student'"
         },
+        "currentYear": {
+          "name": "currentYear",
+          "type": "user_currentyear",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experienceType": {
+          "name": "experienceType",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "onboardingStatus": {
           "name": "onboardingStatus",
           "type": "user_onboardingstatus",
@@ -1244,6 +1404,26 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'background_info'"
+        },
+        "tempPassword": {
+          "name": "tempPassword",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "workPreference": {
+          "name": "workPreference",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": false
         },
         "isActive": {
           "name": "isActive",
@@ -1258,13 +1438,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
-        },
-        "tempPassword": {
-          "name": "tempPassword",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
         }
       },
       "indexes": {
@@ -1289,25 +1462,23 @@
     }
   },
   "enums": {
-    "public.careerinterest_slug": {
-      "name": "careerinterest_slug",
+    "public.business_role": {
+      "name": "business_role",
       "schema": "public",
       "values": [
-        "banking_finance",
-        "law",
-        "consulting",
-        "tech"
+        "ADMIN",
+        "MEMBER"
       ]
     },
-    "public.review_industry": {
-      "name": "review_industry",
+    "public.company_industry": {
+      "name": "company_industry",
       "schema": "public",
       "values": [
-        "banking_finance",
+        "other",
         "law",
-        "consulting",
         "tech",
-        "other"
+        "consulting",
+        "banking_finance"
       ]
     },
     "public.groupuser_role": {
@@ -1319,6 +1490,26 @@
         "MEMBER"
       ]
     },
+    "public.hobbies_interests": {
+      "name": "hobbies_interests",
+      "schema": "public",
+      "values": [
+        "reading",
+        "writing",
+        "music",
+        "art",
+        "socialising",
+        "sports",
+        "cooking",
+        "dancing",
+        "property",
+        "traveling",
+        "photography",
+        "gaming",
+        "hiking",
+        "other"
+      ]
+    },
     "public.message_type": {
       "name": "message_type",
       "schema": "public",
@@ -1326,6 +1517,54 @@
         "NORMAL",
         "EVENT",
         "ANNOUNCEMENT"
+      ]
+    },
+    "public.role_sector": {
+      "name": "role_sector",
+      "schema": "public",
+      "values": [
+        "accounting",
+        "aerospace",
+        "agriculture",
+        "arts_fashion_creatives",
+        "business_management",
+        "charities_voluntary_sector",
+        "commerce",
+        "construction",
+        "consulting_professional_services",
+        "design",
+        "distribution",
+        "economics",
+        "education_teaching",
+        "electronics",
+        "energy_utilities_mining",
+        "engineering",
+        "entrepreneurial_startups",
+        "finance_banking",
+        "food_fmcg",
+        "forestry",
+        "healthcare_pharmaceuticals_biotechnology",
+        "hospitality_leisure",
+        "infrastructure",
+        "international_development",
+        "insurance",
+        "journalism_communications",
+        "law_legal_services",
+        "media_entertainment",
+        "politics_government",
+        "production",
+        "public_sector",
+        "recruitment_human_resources",
+        "retail",
+        "robotics",
+        "sales_advertising_marketing",
+        "security",
+        "sport",
+        "sustainability_esg",
+        "technology_data_science_ict",
+        "telecommunications",
+        "trade",
+        "transport"
       ]
     },
     "public.skillset_slug": {
@@ -1364,7 +1603,6 @@
         "modelling",
         "commercial_awareness",
         "enterprise_and_entrepreneurial_skills",
-        "customer_service",
         "design",
         "videography_&_photography"
       ]
@@ -1377,6 +1615,10 @@
         "2nd_year",
         "3rd_year",
         "4th_year",
+        "Graduate",
+        "Postgraduate",
+        "PHD",
+        "Other",
         "graduate",
         "postgraduate",
         "phd",
@@ -1432,6 +1674,10 @@
       "name": "user_profiletype",
       "schema": "public",
       "values": [
+        "STUDENT",
+        "ADMIN",
+        "EXPERT",
+        "GRADUATE",
         "student",
         "graduate",
         "admin",

@@ -28,29 +28,21 @@ const ViewProfile = ({ profile }: { profile: UserProfile | undefined }) => {
 	return (
 		<section className="flex h-full grow flex-col bg-white p-6">
 			<div className="mb-4 flex flex-col">
-				<span className="text-lg font-bold text-primary sm:text-xl">University</span>
-				<span className="text-sm text-black sm:text-base md:text-lg">{formatString(profile?.university)}</span>
-			</div>
-			{profile?.profileType !== "admin" && (
-				<div className="mb-4 flex flex-col">
-					<span className="text-lg font-bold text-primary sm:text-xl">Broad Degree Category</span>
-					<span className="text-sm text-black sm:text-base md:text-lg">
-						{formatString(profile?.broadDegreeCourse)}
-					</span>
-				</div>
-			)}
-			<div className="mb-4 flex flex-col">
-				<span className="text-lg font-bold text-primary sm:text-xl">Degree</span>
-				<span className="text-sm text-black sm:text-base md:text-lg">{formatString(profile?.degreeName)}</span>
+				<span className="text-lg font-bold text-primary sm:text-xl">Name</span>
+				<span className="text-sm text-black sm:text-base md:text-lg">{`${profile?.firstname} ${profile?.lastname}`}</span>
 			</div>
 			<div className="mb-4 flex flex-col">
-				<span className="text-lg font-bold text-primary sm:text-xl">Completion Year</span>
-				<span className="text-sm text-black sm:text-base md:text-lg">{profile?.completionYear}</span>
+				<span className="text-lg font-bold text-primary sm:text-xl">Age</span>
+				<span className="text-sm text-black sm:text-base md:text-lg">{profile?.age}</span>
 			</div>
 			<div className="mb-4 flex flex-col">
-				<span className="text-lg font-bold text-primary sm:text-xl">Career Interests</span>
+				<span className="text-lg font-bold text-primary sm:text-xl">Role Sector</span>
+				<span className="text-sm text-black sm:text-base md:text-lg">{formatString(profile?.roleSector)}</span>
+			</div>
+			<div className="mb-4 flex flex-col">
+				<span className="text-lg font-bold text-primary sm:text-xl">Hobby Interests</span>
 				<span className="text-sm text-black sm:text-base md:text-lg">
-					{profile?.careerInterests?.map(item => formatString(item.slug)).join(", ")}
+					{profile?.hobbyInterests?.map(item => formatString(item.slug)).join(", ")}
 				</span>
 			</div>
 			<div className="flex h-10 grow flex-col items-center justify-center sm:h-32">

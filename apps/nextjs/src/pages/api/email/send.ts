@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next/types";
 import { nanoid } from "nanoid";
-import { log } from "next-axiom";
 import { Resend } from "resend";
 
 import { db, referral } from "@genus/db";
@@ -39,8 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json(error);
 		}
 
-		if (data) log.info("Email status:", data);
-
 		const refereeEmails: ReferralSchema = recipients.reduce(
 			(prev, email, index) => {
 				const key = `refereeEmail${index + 1}`;
@@ -67,8 +64,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 
 		prettyPrint(entry);
-		log.info(`Referral email sent to ${recipients.join(", ")}`);
-		log.info(`Extra raffle entry for ${referrerEmail}`, entry);
+		// log.info(`Referral email sent to ${recipients.join(", ")}`);
+		// log.info(`Extra raffle entry for ${referrerEmail}`, entry);
 		// res.status(200).json({});
 		res.status(200).json(data);
 	} catch (err) {

@@ -22,7 +22,7 @@ const AppLayout = ({ children }: PropsWithChildren<Props>) => {
 			<ChatwootWidget token={NEXT_PUBLIC_CHATWOOT_TOKEN} />
 			<main
 				className={cx(
-					"m-auto min-h-screen overflow-y-hidden bg-gradient-to-r from-primary to-secondary-300 text-white",
+					"m-auto min-h-screen overflow-y-hidden bg-gradient-to-r from-primary to-secondary-300",
 					fontSans.className
 				)}
 			>

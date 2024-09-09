@@ -14,9 +14,9 @@ import {
 	varchar
 } from "drizzle-orm/pg-core";
 
-export const careerinterest_slug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const company_industry = pgEnum("company_industry", ["other", "law", "tech", "consulting", "banking_finance"]);
 export const groupuser_role = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
+export const businessuser_role = pgEnum("business_role", ["ADMIN", "MEMBER"]);
 export const message_type = pgEnum("message_type", ["NORMAL", "EVENT", "ANNOUNCEMENT"]);
 export const skillset_slug = pgEnum("skillset_slug", [
 	"written_communication",
@@ -51,9 +51,52 @@ export const skillset_slug = pgEnum("skillset_slug", [
 	"modelling",
 	"commercial_awareness",
 	"enterprise_and_entrepreneurial_skills",
-	"customer_service",
 	"design",
 	"videography_&_photography"
+]);
+export const role_sector = pgEnum("role_sector", [
+	"accounting",
+	"aerospace",
+	"agriculture",
+	"arts_fashion_creatives",
+	"business_management",
+	"charities_voluntary_sector",
+	"commerce",
+	"construction",
+	"consulting_professional_services",
+	"design",
+	"distribution",
+	"economics",
+	"education_teaching",
+	"electronics",
+	"energy_utilities_mining",
+	"engineering",
+	"entrepreneurial_startups",
+	"finance_banking",
+	"food_fmcg",
+	"forestry",
+	"healthcare_pharmaceuticals_biotechnology",
+	"hospitality_leisure",
+	"infrastructure",
+	"international_development",
+	"insurance",
+	"journalism_communications",
+	"law_legal_services",
+	"media_entertainment",
+	"politics_government",
+	"production",
+	"public_sector",
+	"recruitment_human_resources",
+	"retail",
+	"robotics",
+	"sales_advertising_marketing",
+	"security",
+	"sport",
+	"sustainability_esg",
+	"technology_data_science_ict",
+	"telecommunications",
+	"trade",
+	"transport"
 ]);
 export const user_currentyear = pgEnum("user_currentyear", [
 	"1st_year",
@@ -108,6 +151,23 @@ export const user_profiletype = pgEnum("user_profiletype", [
 	"expert"
 ]);
 
+export const hobbies_interests_slug = pgEnum("hobbies_interests", [
+	"reading",
+	"writing",
+	"music",
+	"art",
+	"socialising",
+	"sports",
+	"cooking",
+	"dancing",
+	"property",
+	"traveling",
+	"photography",
+	"gaming",
+	"hiking",
+	"other"
+]);
+
 export const group = pgTable(
 	"group",
 	{
@@ -137,6 +197,9 @@ export const user = pgTable(
 		firstname: varchar("firstname", { length: 191 }).notNull(),
 		lastname: varchar("lastname", { length: 191 }).notNull(),
 		gender: user_gender("gender").default("female"),
+		ethnicity: user_ethnicity("ethnicity").default("african"),
+		age: integer("age").default(23).default(18).notNull(),
+		roleSector: role_sector("roleSector").default("robotics"),
 		completionYear: integer("completionYear"),
 		broadDegreeCourse: varchar("broadDegreeCourse", { length: 191 }),
 		university: varchar("university", { length: 191 }),
@@ -145,15 +208,14 @@ export const user = pgTable(
 		imageUrl: varchar("imageUrl", { length: 191 }),
 		clerkImageHash: varchar("clerkImageHash", { length: 191 }),
 		profileType: user_profiletype("profileType").default("student").notNull(),
-		ethnicity: user_ethnicity("ethnicity").default("african"),
 		currentYear: user_currentyear("currentYear"),
 		experienceType: varchar("experienceType", { length: 191 }),
 		onboardingStatus: user_onboardingstatus("onboardingStatus").default("background_info").notNull(),
-		isActive: boolean("isActive").default(true).notNull(),
-		isDeleted: boolean("isDeleted").default(false).notNull(),
 		tempPassword: varchar("tempPassword", { length: 191 }).default("").notNull(),
 		username: varchar("username", { length: 191 }).default("").notNull(),
-		workPreference: varchar("workPreference", { length: 191 })
+		workPreference: varchar("workPreference", { length: 191 }),
+		isActive: boolean("isActive").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull()
 	},
 	table => {
 		return {
@@ -209,15 +271,16 @@ export const thread = pgTable(
 	}
 );
 
-export const careerInterest = pgTable(
-	"careerInterest",
+export const hobbyInterest = pgTable(
+	"hobbyInterest",
 	{
 		id: serial("id").primaryKey().notNull(),
-		slug: careerinterest_slug("slug").notNull()
+		slug: hobbies_interests_slug("slug").notNull(),
+		name: varchar("name", { length: 191 }).notNull()
 	},
 	table => {
 		return {
-			idx_49236_careerInterest_slug_key: uniqueIndex("idx_49236_careerInterest_slug_key").on(table.slug)
+			industrySlug_idx: uniqueIndex("slug_key").on(table.slug)
 		};
 	}
 );
@@ -305,29 +368,7 @@ export const company = pgTable(
 	table => {
 		return {
 			dIdx: uniqueIndex("companyIdIdx").on(table.companyId),
-			lugIdx: uniqueIndex("companySlugIdx").on(table.slug)
-		};
-	}
-);
-
-export const typeformWebhook = pgTable(
-	"typeformWebhook",
-	{
-		id: serial("id").primaryKey().notNull(),
-		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-		eventId: varchar("eventId", { length: 191 }).notNull(),
-		eventType: varchar("eventType", { length: 191 }).notNull(),
-		typeformId: varchar("typeformId", { length: 191 }).notNull(),
-		title: varchar("title", { length: 191 }).notNull(),
-		num_questions: integer("num_questions").notNull(),
-		num_answers: integer("num_answers").notNull(),
-		url: varchar("url", { length: 191 }),
-		isDeleted: boolean("isDeleted").default(false).notNull()
-	},
-	table => {
-		return {
-			typeFormWebhookEventIdIdx: uniqueIndex("typeFormWebhookEventIdIdx").on(table.eventId)
+			slugIdx: uniqueIndex("companySlugIdx").on(table.slug)
 		};
 	}
 );
@@ -351,6 +392,68 @@ export const referral = pgTable(
 	table => {
 		return {
 			dIdx: uniqueIndex("referralIdIdx").on(table.referralId)
+		};
+	}
+);
+
+export const business = pgTable(
+	"business",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		businessId: varchar("businessId", { length: 191 }).notNull(),
+		ownerId: varchar("ownerId", { length: 191 }).notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		slug: varchar("slug", { length: 191 }).notNull(),
+		description: varchar("description", { length: 191 }).notNull(),
+		logoUrl: varchar("logoUrl", { length: 191 }),
+		websiteUrl: varchar("websiteUrl", { length: 191 }),
+		admins: text("admins")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		tags: text("tags")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		tiktok: varchar("tiktok", { length: 191 }).default(""),
+		instagram: varchar("instagram", { length: 191 }).default(""),
+		linkedin: varchar("linkedin", { length: 191 }).default(""),
+		socialHandles: text("socialHandles")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		isPublic: boolean("isPublic").default(true).notNull(),
+		isDeleted: boolean("isDeleted").default(false).notNull()
+	},
+	table => {
+		return {
+			businessIdIdx: uniqueIndex("businessIdIdx").on(table.businessId),
+			businessSlugIdx: uniqueIndex("businessSlugIdx").on(table.slug)
+		};
+	}
+);
+
+export const resource = pgTable(
+	"resource",
+	{
+		id: serial("id").primaryKey().notNull(),
+		createdAt: timestamp("createdAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+		resourceId: varchar("resourceId", { length: 191 }).notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		authorId: varchar("authorId", { length: 191 }).notNull(),
+		description: varchar("description", { length: 191 }),
+		tags: text("tags")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		url: varchar("url", { length: 191 })
+	},
+	table => {
+		return {
+			resourceIdIdx: uniqueIndex("resourceIdIdx").on(table.resourceId)
 		};
 	}
 );
@@ -393,33 +496,32 @@ export const review = pgTable(
 		division: varchar("division", { length: 191 }),
 		region: varchar("region", { length: 191 }).notNull(),
 		topTip: varchar("topTip", { length: 191 }).default("").notNull(),
-		topSkills: text("topSkills").default("{}").array().notNull(),
-		pros: text("pros").default("{}").array().notNull(),
-		cons: text("cons").default("{}").array().notNull(),
-		interviewQuestions: text("interviewQuestions").default("{}").array().notNull(),
-		topResources: text("topResources").default("{}").array().notNull(),
+		topSkills: text("topSkills")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		pros: text("pros")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		cons: text("cons")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		interviewQuestions: text("interviewQuestions")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
+		topResources: text("topResources")
+			.default(sql`'{}'::text[]`)
+			.array()
+			.notNull(),
 		isDeleted: boolean("isDeleted").default(false).notNull(),
 		industry: company_industry("industry").notNull()
 	},
 	table => {
 		return {
 			dIdx: uniqueIndex("reviewIdIdx").on(table.reviewId)
-		};
-	}
-);
-
-export const careerInterestToUser = pgTable(
-	"careerInterestToUser",
-	{
-		careerInterestId: integer("careerInterestId").notNull(),
-		userId: integer("userId").notNull()
-	},
-	table => {
-		return {
-			careerInterestUserId: primaryKey({
-				columns: [table.careerInterestId, table.userId],
-				name: "careerInterestUserId"
-			})
 		};
 	}
 );
@@ -449,3 +551,25 @@ export const skillsetToUser = pgTable(
 		};
 	}
 );
+
+export const hobbyInterestToUser = pgTable(
+	"hobbyInterestToUser",
+	{
+		hobbyInterestId: integer("hobbyInterestId").notNull(),
+		userId: integer("userId").notNull()
+	},
+	table => {
+		return {
+			hobbyInterestIdUserId: primaryKey({
+				columns: [table.hobbyInterestId, table.userId],
+				name: "hobbyInterestUserId"
+			})
+		};
+	}
+);
+
+export const businessToUser = pgTable("businessToUser", {
+	userId: integer("userId").notNull(),
+	businessId: integer("businessId").notNull(),
+	role: businessuser_role("role").default("MEMBER").notNull()
+});

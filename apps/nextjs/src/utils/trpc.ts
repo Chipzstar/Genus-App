@@ -14,7 +14,7 @@ const { NODE_ENV } = env;
 const getBaseUrl = () => {
 	if (typeof window !== "undefined") return ""; // browser should use relative url
 	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-	return `http://localhost:3001`; // dev SSR should use localhost
+	return `http://localhost:3002`; // dev SSR should use localhost
 };
 
 export const trpc = createTRPCNext<AppRouter>({

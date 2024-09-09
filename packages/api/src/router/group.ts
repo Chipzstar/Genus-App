@@ -65,16 +65,12 @@ export const groupRouter = createTRPCRouter({
 						thread: true
 					}
 				});
-				ctx.logger.info("********************************************");
-				ctx.logger.debug("Group messages!!", messages);
-				ctx.logger.info("********************************************");
 				return {
 					group: dbGroup,
 					messages
 				};
 			} catch (err: any) {
 				console.error(err);
-				ctx.logger.error("Something went wrong!", err);
 				throw new TRPCError({
 					code: "NOT_FOUND",
 					message: "Group not found!",
@@ -119,7 +115,6 @@ export const groupRouter = createTRPCRouter({
 					.returning();
 			} catch (err: any) {
 				console.error(err);
-				ctx.logger.error("Something went wrong!", err);
 				throw new TRPCError({
 					code: "INTERNAL_SERVER_ERROR",
 					message: "Oops, something went wrong!",

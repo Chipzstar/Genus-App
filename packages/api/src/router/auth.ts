@@ -2,23 +2,13 @@ import { TRPCError } from "@trpc/server";
 import { sql } from "drizzle-orm";
 import * as z from "zod";
 
-import {
-	and,
-	careerInterestToUser,
-	companyToUser,
-	db,
-	eq,
-	inArray,
-	skillset,
-	skillsetToUser,
-	user,
-	type careerInterest
-} from "@genus/db";
+import { and, db, eq, hobbyInterest, hobbyInterestToUser, inArray, user } from "@genus/db";
 import { signupStep2Schema, signupStep3Schema } from "@genus/validators";
-import { CAREER_INTERESTS, companies } from "@genus/validators/constants";
-import { checkProfileType, encryptString } from "@genus/validators/helpers";
+import { encryptString } from "@genus/validators/helpers";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
+
+type InsertHobbyInterestUser = typeof hobbyInterestToUser.$inferInsert;
 
 const getUserByEmail = db
 	.select()
@@ -78,7 +68,6 @@ export const authRouter = createTRPCRouter({
 				return !!dbUser;
 			} catch (err) {
 				console.error(err);
-				ctx.logger.error(err);
 				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: err.message });
 			}
 		}),
@@ -124,12 +113,8 @@ export const authRouter = createTRPCRouter({
 					.set({
 						gender: input.gender,
 						ethnicity: input.ethnicity,
-						university: input.university,
-						broadDegreeCourse: input.broad_degree_course,
-						degreeName: input.degree_name,
-						currentYear: input.current_year,
-						completionYear: Number(input.completion_year),
-						profileType: checkProfileType(input.current_year),
+						age: input.age,
+						roleSector: input.role_sector,
 						onboardingStatus: "career_info"
 					})
 					.where(eq(user.email, input.email));
@@ -150,49 +135,19 @@ export const authRouter = createTRPCRouter({
 
 				if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "No user found with that email" });
 
-				// insert the new career interests
-				const careerInterestQueries = input.career_interests.map(slug => {
+				// insert the new hobbies & interests
+				const dbHobbyInterests = await ctx.db.query.hobbyInterest.findMany({
+					where: inArray(hobbyInterest.slug, input.hobbies_interests)
+				});
+
+				const hobbyInterestInsertQueries: InsertHobbyInterestUser[] = dbHobbyInterests.map(({ id }) => {
 					return {
-						careerInterestId: CAREER_INTERESTS[slug],
+						hobbyInterestId: id,
 						userId: dbUser.id
 					};
 				});
-				await ctx.db.insert(careerInterestToUser).values(careerInterestQueries).onConflictDoNothing();
-
-				// insert the new skillsets
-				const dbSkillsets = await ctx.db.query.skillset.findMany({
-					where: inArray(skillset.slug, input.skillsets)
-				});
-				const skillsetQueries = dbSkillsets.map(({ id }) => {
-					return {
-						skillsetId: id,
-						userId: dbUser.id
-					};
-				});
-				await ctx.db.insert(skillsetToUser).values(skillsetQueries);
-
-				// insert the new companies
-				const companyQueries = input.company_interests.map(company => {
-					const companyId = companies.indexOf(company) + 1; // + 1 to account array indexing starting at 0
-					return {
-						companyId,
-						userId: dbUser.id
-					};
-				});
-				await ctx.db.insert(companyToUser).values(companyQueries).onConflictDoNothing();
-
-				const updatedUser = await ctx.db
-					.update(user)
-					.set({
-						experienceType: input.experience_type,
-						workPreference: input.work_environment,
-						onboardingStatus: "completed"
-					})
-					.where(eq(user.email, input.email))
-					.returning();
-				if (!updatedUser[0])
-					throw new TRPCError({ code: "NOT_FOUND", message: "No user found with that email" });
-				return updatedUser[0];
+				await ctx.db.insert(hobbyInterestToUser).values(hobbyInterestInsertQueries);
+				return dbUser;
 			} catch (e: any) {
 				console.log(e);
 				throw new TRPCError({ code: "BAD_REQUEST", message: e.message });

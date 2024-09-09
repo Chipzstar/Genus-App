@@ -5,15 +5,18 @@
 import { relations } from "drizzle-orm/relations";
 
 import {
-	careerInterest,
-	careerInterestToUser,
+	business,
+	businessToUser,
 	comment,
 	company,
 	companyToUser,
 	group,
 	groupUser,
+	hobbyInterest,
+	hobbyInterestToUser,
 	message,
 	reaction,
+	resource,
 	review,
 	skillset,
 	skillsetToUser,
@@ -105,7 +108,23 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 	threads: many(thread),
 	groupUsers: many(groupUser),
 	companies: many(companyToUser),
-	careerInterests: many(careerInterestToUser)
+	hobbies: many(hobbyInterestToUser),
+	resources: many(resource)
+}));
+
+export const businessRelations = relations(business, ({ one, many }) => ({
+	businessMembers: many(businessToUser),
+	owner: one(user, {
+		fields: [business.ownerId],
+		references: [user.clerkId]
+	})
+}));
+
+export const resourceRelations = relations(resource, ({ one, many }) => ({
+	author: one(user, {
+		fields: [resource.authorId],
+		references: [user.clerkId]
+	})
 }));
 
 export const companyRelations = relations(company, ({ one, many }) => ({
@@ -120,23 +139,8 @@ export const reviewRelations = relations(review, ({ one, many }) => ({
 	})
 }));
 
-export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
-	users: many(careerInterestToUser)
-}));
-
 export const skillsetRelations = relations(skillset, ({ one, many }) => ({
 	users: many(skillsetToUser)
-}));
-
-export const careerInterestToUserRelations = relations(careerInterestToUser, ({ one }) => ({
-	user: one(user, {
-		fields: [careerInterestToUser.userId],
-		references: [user.id]
-	}),
-	careerInterest: one(careerInterest, {
-		fields: [careerInterestToUser.careerInterestId],
-		references: [careerInterest.id]
-	})
 }));
 
 export const skillsetToUserRelations = relations(skillsetToUser, ({ one }) => ({
@@ -158,5 +162,27 @@ export const companyToUserRelations = relations(companyToUser, ({ one }) => ({
 	company: one(company, {
 		fields: [companyToUser.companyId],
 		references: [company.id]
+	})
+}));
+
+export const hobbyInterestToUserRelations = relations(hobbyInterestToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [hobbyInterestToUser.userId],
+		references: [user.id]
+	}),
+	hobbyInterest: one(hobbyInterest, {
+		fields: [hobbyInterestToUser.hobbyInterestId],
+		references: [hobbyInterest.id]
+	})
+}));
+
+export const businessToUserRelations = relations(businessToUser, ({ one }) => ({
+	user: one(user, {
+		fields: [businessToUser.userId],
+		references: [user.id]
+	}),
+	business: one(business, {
+		fields: [businessToUser.businessId],
+		references: [business.id]
 	})
 }));

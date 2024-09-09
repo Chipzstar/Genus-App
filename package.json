@@ -7,6 +7,7 @@
     "clean": "rm -rf node_modules pnpm-lock.yaml",
     "clean:workspaces": "turbo clean",
     "db:generate": "turbo db:generate",
+    "db:seed": "turbo db:seed",
     "db:push": "turbo db:push",
     "db:studio": "turbo db:studio",
     "dev": "turbo dev --parallel",
@@ -16,7 +17,7 @@
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "FIXME:lint": "turbo lint && manypkg check",
     "type-check": "turbo type-check",
-    "vercel:dev": "dotenv -e .env -- vercel dev -p 3001",
+    "vercel:dev": "dotenv -e .env -- vercel dev -p 3002",
     "vercel:build": "dotenv -e .env -- vercel build"
   },
   "dependencies": {

@@ -1,17 +1,17 @@
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import type { DeletedObjectJSON, UserJSON, UserWebhookEvent } from "@clerk/nextjs/server";
-import { log } from "next-axiom";
 import shortHash from "shorthash2";
+import { UTApi } from "uploadthing/server";
 
 import { posthog } from "@genus/api";
 import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
 
-import { utapi } from "~/server/uploadthing";
+const utapi = new UTApi();
 
 export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 	try {
 		const payload = event.data as UserJSON;
-		const posthogUser = posthog.identify({
+		posthog.identify({
 			distinctId: String(payload.id),
 			properties: {
 				email: payload.email_addresses[0]?.email_address,
@@ -19,8 +19,8 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 				lastname: payload.last_name
 			}
 		});
-		const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
-		log.info("Feature flag", { waitingListEnabled });
+		// const waitingListEnabled = await posthog.isFeatureEnabled("waiting-list", String(payload.id));
+		// log.info("Feature flag", { waitingListEnabled });
 		// create the user
 		await db.insert(user).values({
 			clerkId: String(payload.id),
@@ -29,23 +29,19 @@ export const createNewUser = async ({ event }: { event: UserWebhookEvent }) => {
 			lastname: payload.last_name,
 			username: payload.unsafe_metadata.username as string,
 			tempPassword: payload.unsafe_metadata.tempPassword as string,
-			isActive: !waitingListEnabled
+			isActive: true
 		});
 
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id)))[0];
 
 		if (!dbUser) throw new Error("Could not create user");
 
-		log.info("-----------------------------------------------");
-		log.debug("New user!!", dbUser);
-		log.info("-----------------------------------------------");
 		return {
-			dbUser,
-			posthogUser
+			dbUser
 		};
 	} catch (err: any) {
 		console.error(err);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		throw err;
 	}
 };
@@ -75,7 +71,6 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 			const fileUrl = payload.image_url;
 			uploadedFile = await utapi.uploadFilesFromUrl(fileUrl);
 		}
-		if (uploadedFile?.data) log.debug("Uploaded image data for " + payload.id, uploadedFile.data);
 
 		// if a new image was uploaded, delete the old one
 		if (uploadedFile?.data) {
@@ -89,9 +84,15 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					ut_url: uploadedFile.data.url
 				}
 			});
-			log.info("-----------------------------------------------");
-			log.debug("Updated clerk user!!", clerkUser);
-			log.info("-----------------------------------------------");
+			posthog.capture({
+				distinctId: dbUser.email,
+				event: "User Image Updated",
+				properties: {
+					userId: String(clerkUser.id),
+					imageKey: uploadedFile?.data.key,
+					imageUrl: uploadedFile?.data.url
+				}
+			});
 		}
 
 		const shouldUpdate = Boolean(
@@ -118,13 +119,17 @@ export const updateUser = async ({ event }: { event: UserWebhookEvent }) => {
 					.where(eq(user.clerkId, payload.id))
 					.returning()
 			)[0];
-		log.info("-----------------------------------------------");
-		log.debug("Updated user!!", dbUser);
-		log.info("-----------------------------------------------");
+		posthog.capture({
+			distinctId: dbUser.email,
+			event: "User Updated",
+			properties: {
+				...dbUser
+			}
+		});
 		return dbUser;
 	} catch (err: any) {
 		console.error(err);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		throw err;
 	}
 };
@@ -143,14 +148,14 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		// delete the user in db
 		await db.delete(user).where(eq(user.clerkId, payload.id!));
 		if (user) {
-			log.info("-----------------------------------------------");
-			log.debug("User deleted!!", dbUser);
-			log.info("-----------------------------------------------");
+			// log.info("-----------------------------------------------");
+			// log.debug("User deleted!!", dbUser);
+			// log.info("-----------------------------------------------");
 		}
 		return;
 	} catch (err: any) {
 		console.error(err.meta);
-		log.error(err.message, err);
+		// log.error(err.message, err);
 		return err.meta.cause;
 	}
 };

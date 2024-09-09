@@ -2,7 +2,6 @@ import type { IncomingHttpHeaders } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
 import { buffer } from "micro";
-import { log } from "next-axiom";
 import type { WebhookRequiredHeaders } from "svix";
 import { Webhook } from "svix";
 
@@ -29,7 +28,7 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
 			// See https://docs.svix.com/receiving/verifying-payloads/how
 			// Validate the incoming data and return 400 if it's not what is expected
 			const payload = (await buffer(req)).toString();
-			log.info(payload);
+			// log.info(payload);
 			const headers = req.headers;
 			const wh = new Webhook(webhookSecret);
 			let event: WebhookEvent | null = null;
@@ -54,7 +53,7 @@ export default async function handler(req: NextApiRequestWithSvixRequiredHeaders
 		} catch (error: any) {
 			// Catch and log errors - return a 500 with a message
 			console.error(error);
-			log.error(error.message, error);
+			// log.error(error.message, error);
 			return res.status(500).send({ error: error, message: "Server error!" });
 		}
 	} else {

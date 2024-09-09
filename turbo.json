@@ -28,14 +28,21 @@
       ],
       "cache": false
     },
+    "db:seed": {
+      "cache": true
+    },
     "dev": {
       "persistent": true,
       "cache": false
     },
+    "@genus/nextjs#build": {
+      "dependsOn": [
+        "@genus/db#db:seed"
+      ]
+    },
     "build": {
       "dependsOn": [
-        "^build",
-        "^db:generate"
+        "^build"
       ],
       "outputs": [
         ".next/**",

@@ -1,53 +1,36 @@
 import type { FC } from "react";
 import React from "react";
 import { useRouter } from "next/router";
-import { SignedIn, useAuth } from "@clerk/nextjs";
 import type { NavbarSlots, SlotsToClasses } from "@nextui-org/react";
 import { Navbar, NavbarBrand } from "@nextui-org/react";
-import { usePostHog } from "posthog-js/react";
-
-import { Button } from "@genus/ui/button";
 
 import { PATHS } from "~/utils";
 
 interface Props {
 	classNames?: SlotsToClasses<NavbarSlots>;
-	imagePath?: string;
 }
 
-const TopNav: FC<Props> = ({ classNames = {}, imagePath = "/images/white-logo.png" }: Props) => {
+const TopNav: FC<Props> = ({ classNames = {} }: Props) => {
 	const router = useRouter();
-	const { signOut } = useAuth();
-	const posthog = usePostHog();
 	return (
 		<Navbar
 			classNames={{
-				brand: "w-full flex justify-center items-center",
+				base: "mb-4",
 				...classNames
 			}}
 		>
-			<NavbarBrand role="button" onClick={() => router.push(PATHS.HOME)}>
+			<NavbarBrand role="button" onClick={() => router.push(PATHS.CHURCH)}>
 				<img
-					src={imagePath}
+					src="/images/arc2.0-banner.png"
 					alt="genus-white"
-					className="mx-auto mb-1.5"
+					className="mx-auto"
 					style={{
 						objectFit: "contain"
 					}}
 					width={100}
-					height={61}
 				/>
 				<div className="absolute right-4">
-					<SignedIn>
-						<Button
-							size="sm"
-							onClick={e => {
-								void signOut().then(() => posthog.reset());
-							}}
-						>
-							Logout
-						</Button>
-					</SignedIn>
+					<img src="/images/powered-by-genus.png" alt="powered-by-genus" width={150} />
 				</div>
 			</NavbarBrand>
 		</Navbar>

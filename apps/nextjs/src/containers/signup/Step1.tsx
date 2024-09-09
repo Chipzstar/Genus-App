@@ -5,7 +5,6 @@ import { useClerk, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "@uploadthing/react";
 import { Mail, User } from "lucide-react";
-import posthog from "posthog-js";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -36,14 +35,14 @@ const Step1: FC<Props> = () => {
 	const { setContext, nextStep } = useStepper<UserState>();
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setCodeVerification] = useState(false);
-	const clerk = useClerk();
 	const [files, setFiles] = useState<File[]>([]);
 	const onDrop = useCallback((acceptedFile: File[]) => {
 		setFiles(acceptedFile);
 	}, []);
 
 	// HOOKS
-	const { isLoaded, signUp } = useSignUp();
+	const { isLoaded, signUp, setActive } = useSignUp();
+	const clerk = useClerk();
 
 	const form = useForm<z.infer<typeof signupStep1Schema>>({
 		defaultValues: {
@@ -172,8 +171,9 @@ const Step1: FC<Props> = () => {
 							clerk
 						);
 					}
+					setActive({ session: null });
 					nextStep();
-					void clerk.signOut().then(() => posthog.reset());
+					void clerk.signOut();
 				}, 1000);
 			} catch (err: any) {
 				setLoading(false);

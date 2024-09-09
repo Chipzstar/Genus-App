@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { buildClerkProps, getAuth } from "@clerk/nextjs/server";
 import { AvatarIcon, Image } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
+import { MessageCircleIcon, MessagesSquare } from "lucide-react";
 
 import { appRouter, createContextInner } from "@genus/api";
 import { transformer } from "@genus/api/transformer";
@@ -74,11 +75,20 @@ const Home = () => {
 			) : (
 				<div className="mx-auto max-w-3xl">
 					<section className="profile-gradient relative flex w-full flex-col items-center justify-center py-6 text-white">
-						<div
-							className="absolute right-3 top-3"
-							role="button"
-							onClick={() => router.push(PATHS.PROFILE)}
-						>
+						<div className="absolute left-3 top-3 sm:left-4 sm:top-4">
+							<div
+								role="button"
+								className="flex h-10 grow flex-col items-center justify-center"
+								onClick={() => {
+									// @ts-expect-error chatwoot popup
+									window.$chatwoot.toggle("open");
+								}}
+							>
+								{/*<MessageCircleIcon size={32} className="mr-3" />*/}
+								<MessagesSquare size={35} className="mr-3" />
+							</div>
+						</div>
+						<div className="absolute right-3 top-3 sm:right-4 sm:top-4">
 							<img
 								src="/images/cog-white.png"
 								alt="cog-wheel-white"

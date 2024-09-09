@@ -13,7 +13,7 @@ const Church = () => {
 	return (
 		<div className="page-container overflow-y-hidden">
 			<TopNav />
-			<div className="mx-auto max-w-xl">
+			<div className="mx-auto max-w-3xl">
 				<section className="flex w-full flex-col items-center justify-center bg-gradient-radial from-primary from-25% to-secondary-300 py-6">
 					<div className="flex h-32 w-32">
 						<Image src="/images/arc2.0-avatar.png" width="100%" height="100%" />

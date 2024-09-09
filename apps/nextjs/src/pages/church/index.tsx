@@ -1,5 +1,6 @@
 import React from "react";
 import type { ReactElement } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Image } from "@nextui-org/image";
 
@@ -13,7 +14,7 @@ const Church = () => {
 		<div className="page-container overflow-y-hidden">
 			<TopNav />
 			<div className="mx-auto max-w-xl">
-				<section className="bg-gradient-radial flex w-full flex-col items-center justify-center from-primary from-25% to-secondary-300 py-6">
+				<section className="flex w-full flex-col items-center justify-center bg-gradient-radial from-primary from-25% to-secondary-300 py-6">
 					<div className="flex h-32 w-32">
 						<Image src="/images/arc2.0-avatar.png" width="100%" height="100%" />
 					</div>
@@ -26,18 +27,25 @@ const Church = () => {
 				</section>
 				<div className="flex h-full w-full flex-col space-y-8 text-center">
 					<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5] py-1">
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/instagram.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/tiktok.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/youtube.png" />
-						</div>
-						<div role="button" className="h-8 w-8">
-							<Image src="/images/email.png" />
-						</div>
+						<Link href="https://www.instagram.com/arc2uk/?hl=en" target="_blank" rel="noopener noreferrer">
+							<div className="h-8 w-8">
+								<Image src="/images/instagram.png" />
+							</div>
+						</Link>
+						<Link
+							href="https://m.youtube.com/channel/UCWtCb3ntEOJydQMsbPjUYyQ"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<div className="h-8 w-8">
+								<Image src="/images/youtube.png" />
+							</div>
+						</Link>
+						<Link href="mailto:admin@arcglobalchurches.com" target="_blank" rel="noopener noreferrer">
+							<div role="button" className="h-8 w-8">
+								<Image src="/images/email.png" />
+							</div>
+						</Link>
 					</section>
 
 					<section className="flex flex-col px-5">

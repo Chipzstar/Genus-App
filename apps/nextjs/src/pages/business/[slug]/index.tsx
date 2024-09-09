@@ -115,28 +115,28 @@ const BusinessDetails = () => {
 
 					<section className="flex w-full items-center justify-center gap-x-12 bg-[#F5F5F5]">
 						{business.instagram && (
-							<Link href={business.instagram} target="_blank">
+							<Link href={business.instagram} target="_blank" rel="noopener noreferrer">
 								<div className="h-8 w-8">
 									<Image src="/images/instagram.png" />
 								</div>
 							</Link>
 						)}
 						{business.tiktok && (
-							<Link href={business.tiktok} target="_blank">
+							<Link href={business.tiktok} target="_blank" rel="noopener noreferrer">
 								<div className="h-8 w-8">
 									<Image src="/images/tiktok.png" />
 								</div>
 							</Link>
 						)}
 						{business.linkedin && (
-							<Link href={business.linkedin} target="_blank">
+							<Link href={business.linkedin} target="_blank" rel="noopener noreferrer">
 								<div role="button" className="h-8 w-8">
 									<Image src="/images/youtube.png" />
 								</div>
 							</Link>
 						)}
 						{business.websiteUrl && (
-							<Link href={`mailto:${business.websiteUrl}`} target="_blank">
+							<Link href={`mailto:${business.websiteUrl}`} target="_blank" rel="noopener noreferrer">
 								<div role="button" className="h-8 w-8">
 									<Image src="/images/email.png" />
 								</div>

@@ -131,7 +131,13 @@ export const authRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			try {
-				const dbUser = (await ctx.db.select().from(user).where(eq(user.email, input.email)))[0];
+				const dbUser = (
+					await ctx.db
+						.update(user)
+						.set({ onboardingStatus: "completed" })
+						.where(eq(user.email, input.email))
+						.returning()
+				)[0];
 
 				if (!dbUser) throw new TRPCError({ code: "NOT_FOUND", message: "No user found with that email" });
 

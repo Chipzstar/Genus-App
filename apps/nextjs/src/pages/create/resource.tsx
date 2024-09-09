@@ -94,7 +94,7 @@ const NewResource = () => {
 											<Input
 												{...field}
 												placeholder="Recommendation"
-												className="w-full border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
+												className="w-fit border-none bg-transparent text-center text-2xl font-bold text-black focus-visible:ring-0 md:text-3xl"
 											/>
 											<FormMessage className="text-center" />
 										</FormItem>

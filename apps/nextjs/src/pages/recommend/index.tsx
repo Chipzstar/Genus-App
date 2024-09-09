@@ -92,7 +92,7 @@ const Resources = () => {
 			<div className="flex h-full flex-col p-6 sm:px-12 sm:pt-12">
 				<div className="mx-auto  w-full max-w-3xl">
 					<nav className="flex grow items-center justify-between">
-						<section className="flex items-center space-x-4">
+						<section className="flex items-center space-x-4 md:space-x-8">
 							<BackButton />
 							<header className="text-2xl font-bold text-black sm:text-4xl">Recommend</header>
 						</section>

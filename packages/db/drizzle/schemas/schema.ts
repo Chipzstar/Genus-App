@@ -14,7 +14,6 @@ import {
 	varchar
 } from "drizzle-orm/pg-core";
 
-export const careerinterest_slug = pgEnum("careerinterest_slug", ["law", "tech", "consulting", "banking_finance"]);
 export const company_industry = pgEnum("company_industry", ["other", "law", "tech", "consulting", "banking_finance"]);
 export const groupuser_role = pgEnum("groupuser_role", ["ADMIN", "EXPERT", "MEMBER"]);
 export const businessuser_role = pgEnum("business_role", ["ADMIN", "MEMBER"]);
@@ -272,19 +271,6 @@ export const thread = pgTable(
 	}
 );
 
-export const careerInterest = pgTable(
-	"careerInterest",
-	{
-		id: serial("id").primaryKey().notNull(),
-		slug: careerinterest_slug("slug").notNull()
-	},
-	table => {
-		return {
-			idx_49236_careerInterest_slug_key: uniqueIndex("idx_49236_careerInterest_slug_key").on(table.slug)
-		};
-	}
-);
-
 export const hobbyInterest = pgTable(
 	"hobbyInterest",
 	{
@@ -536,22 +522,6 @@ export const review = pgTable(
 	table => {
 		return {
 			dIdx: uniqueIndex("reviewIdIdx").on(table.reviewId)
-		};
-	}
-);
-
-export const careerInterestToUser = pgTable(
-	"careerInterestToUser",
-	{
-		careerInterestId: integer("careerInterestId").notNull(),
-		userId: integer("userId").notNull()
-	},
-	table => {
-		return {
-			careerInterestUserId: primaryKey({
-				columns: [table.careerInterestId, table.userId],
-				name: "careerInterestUserId"
-			})
 		};
 	}
 );

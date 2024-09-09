@@ -7,8 +7,6 @@ import { relations } from "drizzle-orm/relations";
 import {
 	business,
 	businessToUser,
-	careerInterest,
-	careerInterestToUser,
 	comment,
 	company,
 	companyToUser,
@@ -110,7 +108,6 @@ export const usersRelations = relations(user, ({ one, many }) => ({
 	threads: many(thread),
 	groupUsers: many(groupUser),
 	companies: many(companyToUser),
-	careerInterests: many(careerInterestToUser),
 	hobbies: many(hobbyInterestToUser),
 	resources: many(resource)
 }));
@@ -142,23 +139,8 @@ export const reviewRelations = relations(review, ({ one, many }) => ({
 	})
 }));
 
-export const careerInterestRelations = relations(careerInterest, ({ one, many }) => ({
-	users: many(careerInterestToUser)
-}));
-
 export const skillsetRelations = relations(skillset, ({ one, many }) => ({
 	users: many(skillsetToUser)
-}));
-
-export const careerInterestToUserRelations = relations(careerInterestToUser, ({ one }) => ({
-	user: one(user, {
-		fields: [careerInterestToUser.userId],
-		references: [user.id]
-	}),
-	careerInterest: one(careerInterest, {
-		fields: [careerInterestToUser.careerInterestId],
-		references: [careerInterest.id]
-	})
 }));
 
 export const skillsetToUserRelations = relations(skillsetToUser, ({ one }) => ({

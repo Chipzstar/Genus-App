@@ -88,7 +88,11 @@ const Home = () => {
 								<MessagesSquare size={35} className="mr-3" />
 							</div>
 						</div>
-						<div className="absolute right-3 top-3 sm:right-4 sm:top-4">
+						<div
+							className="absolute right-3 top-3 sm:right-4 sm:top-4"
+							role="button"
+							onClick={() => router.push(PATHS.PROFILE)}
+						>
 							<img
 								src="/images/cog-white.png"
 								alt="cog-wheel-white"

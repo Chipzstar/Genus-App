@@ -4,7 +4,7 @@ import shortHash from "shorthash2";
 import { UTApi } from "uploadthing/server";
 
 import { posthog } from "@genus/api";
-import { careerInterestToUser, db, eq, groupUser, reaction, user } from "@genus/db";
+import { db, eq, groupUser, reaction, user } from "@genus/db";
 
 const utapi = new UTApi();
 
@@ -140,8 +140,6 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		// check if the user exists in the db
 		const dbUser = (await db.select().from(user).where(eq(user.clerkId, payload.id!)))[0];
 		if (!dbUser) throw new Error("Could not find user");
-		// disconnect any career interests
-		await db.delete(careerInterestToUser).where(eq(careerInterestToUser.userId, dbUser.id));
 		// delete any entities in the DB that link directly to the user
 		await db.delete(groupUser).where(eq(groupUser.userId, payload.id!));
 		await db.delete(reaction).where(eq(reaction.authorId, payload.id!));
@@ -154,8 +152,7 @@ export const deleteUser = async ({ event }: { event: UserWebhookEvent }) => {
 		}
 		return;
 	} catch (err: any) {
-		console.error(err.meta);
-		// log.error(err.message, err);
-		return err.meta.cause;
+		console.error(err);
+		return err?.meta ? err.meta.cause : err.message;
 	}
 };
